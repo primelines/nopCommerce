@@ -36,11 +36,6 @@ public static partial class TokenGroupNames
     public static string OrderNoteTokens => "Order note tokens";
 
     /// <summary>
-    /// Represents tokens with information about the recurring payment
-    /// </summary>
-    public static string RecurringPaymentTokens => "Recurring payment tokens";
-
-    /// <summary>
     /// Represents tokens with information about the newsletter subscription
     /// </summary>
     public static string SubscriptionTokens => "Newsletter subscription tokens";

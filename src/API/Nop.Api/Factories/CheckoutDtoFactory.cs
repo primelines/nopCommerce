@@ -1,4 +1,4 @@
-using Nop.Core;
+﻿using Nop.Core;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
@@ -473,7 +473,7 @@ public partial class CheckoutDtoFactory : ICheckoutDtoFactory
         var store = await _storeContext.GetCurrentStoreAsync();
 
         //reward points
-        if (_rewardPointsSettings.Enabled && !await _shoppingCartService.ShoppingCartIsRecurringAsync(cart))
+        if (_rewardPointsSettings.Enabled)
         {
             var shoppingCartTotal = await _orderTotalCalculationService.GetShoppingCartTotalAsync(cart, true, false);
             if (shoppingCartTotal.redeemedRewardPoints > 0)
@@ -496,9 +496,6 @@ public partial class CheckoutDtoFactory : ICheckoutDtoFactory
             .ToListAsync();
         foreach (var pm in paymentMethods)
         {
-            if (await _shoppingCartService.ShoppingCartIsRecurringAsync(cart) && pm.RecurringPaymentType == RecurringPaymentType.NotSupported)
-                continue;
-
             var pmModel = new CheckoutPaymentMethodDto.PaymentMethodDto
             {
                 Name = await _localizationService.GetLocalizedFriendlyNameAsync(pm, (await _workContext.GetWorkingLanguageAsync()).Id),

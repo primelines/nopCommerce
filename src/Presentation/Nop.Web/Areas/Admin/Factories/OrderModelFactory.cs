@@ -342,13 +342,6 @@ public partial class OrderModelFactory : IOrderModelFactory
                 .FormatOrderPriceAsync(orderItem.PriceExclTax, order.CurrencyRate, order.CustomerCurrencyCode,
                     _orderSettings.DisplayCustomerCurrencyOnOrders, primaryStoreCurrency, languageId, false, true);
 
-            //recurring info
-            if (product.IsRecurring)
-            {
-                orderItemModel.RecurringInfo = string.Format(await _localizationService.GetResourceAsync("Admin.Orders.Products.RecurringPeriod"),
-                    product.RecurringCycleLength, await _localizationService.GetLocalizedEnumAsync(product.RecurringCyclePeriod));
-            }
-
             //rental info
             if (product.IsRental)
             {
@@ -618,8 +611,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         model.PrimaryStoreCurrencyCode = (await _currencyService.GetCurrencyByIdAsync(_currencySettings.PrimaryStoreCurrencyId))?.CurrencyCode;
         model.MaxAmountToRefund = order.OrderTotal - order.RefundedAmount;
 
-        //recurring payment record
-        model.RecurringPaymentId = (await _orderService.SearchRecurringPaymentsAsync(initialOrderId: order.Id, showHidden: true)).FirstOrDefault()?.Id ?? 0;
     }
 
     /// <summary>

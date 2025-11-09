@@ -516,7 +516,6 @@ public partial class BaseNopTest
         services.AddTransient<IProductReviewModelFactory, ProductReviewModelFactory>();
         services.AddTransient<IReportModelFactory, ReportModelFactory>();
         services.AddTransient<IQueuedEmailModelFactory, QueuedEmailModelFactory>();
-        services.AddTransient<IRecurringPaymentModelFactory, RecurringPaymentModelFactory>();
         services.AddTransient<IReturnRequestModelFactory, ReturnRequestModelFactory>();
         services.AddTransient<IReviewTypeModelFactory, ReviewTypeModelFactory>();
         services.AddTransient<IScheduleTaskModelFactory, ScheduleTaskModelFactory>();

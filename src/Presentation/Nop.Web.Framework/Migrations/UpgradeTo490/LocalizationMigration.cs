@@ -297,8 +297,6 @@ public class LocalizationMigration : MigrationBase
 
             //#1266
             ["Account.CustomerOrders.Period"] = "Orders from",
-            ["Account.CustomerRecurringPayments"] = "Recurring payments",
-            ["Account.CustomerRecurringPayments.NoPayments"] = "No payments",
             ["Enums.Nop.Core.Domain.Orders.OrderHistoryPeriods.All"] = "all time",
             ["Enums.Nop.Core.Domain.Orders.OrderHistoryPeriods.Day"] = "the past day",
             ["Enums.Nop.Core.Domain.Orders.OrderHistoryPeriods.Week"] = "the past week",

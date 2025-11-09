@@ -4095,8 +4095,6 @@ public partial class ProductController : BaseAdminController
                 //set default values for the new model
                 MaximumCustomerEnteredPrice = 1000,
                 MaxNumberOfDownloads = 10,
-                RecurringCycleLength = 100,
-                RecurringTotalCycles = 10,
                 RentalPriceLength = 1,
                 NotifyAdminForQuantityBelow = 1,
                 OrderMinimumQuantity = 1,

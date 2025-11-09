@@ -297,35 +297,10 @@ public partial class OrderProcessingService : IOrderProcessingService
         //tax display type
         details.CustomerTaxDisplayType = await _customerService.GetCustomerTaxDisplayTypeAsync(details.Customer);
 
-        //recurring or standard shopping cart?
-        details.IsRecurringShoppingCart = await _shoppingCartService.ShoppingCartIsRecurringAsync(details.Cart);
-        if (!details.IsRecurringShoppingCart)
-            return details;
-
-        await PrepareAndValidateRecurringShoppingAsync(details, processPaymentRequest);
 
         return details;
+
     }
-
-    /// <summary>
-    /// Prepare and validate recurring shopping cart
-    /// </summary>
-    /// <param name="details">PlaceOrder container</param>
-    /// <param name="processPaymentRequest">payment info holder</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    /// <exception cref="NopException">Validation problems</exception>
-    protected virtual async Task PrepareAndValidateRecurringShoppingAsync(PlaceOrderContainer details, ProcessPaymentRequest processPaymentRequest)
-    {
-        var (recurringCyclesError, recurringCycleLength, recurringCyclePeriod, recurringTotalCycles) = await _shoppingCartService.GetRecurringCycleInfoAsync(details.Cart);
-
-        if (!string.IsNullOrEmpty(recurringCyclesError))
-            throw new NopException(recurringCyclesError);
-
-        processPaymentRequest.RecurringCycleLength = recurringCycleLength;
-        processPaymentRequest.RecurringCyclePeriod = recurringCyclePeriod;
-        processPaymentRequest.RecurringTotalCycles = recurringTotalCycles;
-    }
-
     /// <summary>
     /// Prepare and validate all totals
     ///
@@ -570,131 +545,6 @@ public partial class OrderProcessingService : IOrderProcessingService
         details.CustomerLanguage = await _languageService.GetLanguageByIdAsync(details.Customer.LanguageId ?? 0);
         if (details.CustomerLanguage == null || !details.CustomerLanguage.Published || !await _storeMappingService.AuthorizeAsync(details.CustomerLanguage))
             details.CustomerLanguage = await _workContext.GetWorkingLanguageAsync();
-    }
-
-    /// <summary>
-    /// Prepare details to place order based on the recurring payment.
-    /// </summary>
-    /// <param name="processPaymentRequest">Process payment request</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the details
-    /// </returns>
-    protected virtual async Task<PlaceOrderContainer> PrepareRecurringOrderDetailsAsync(ProcessPaymentRequest processPaymentRequest)
-    {
-        var details = new PlaceOrderContainer
-        {
-            IsRecurringShoppingCart = true,
-            //load initial order
-            InitialOrder = processPaymentRequest.InitialOrder
-        };
-
-        if (details.InitialOrder == null)
-            throw new ArgumentException("Initial order is not set for recurring payment");
-
-        processPaymentRequest.PaymentMethodSystemName = details.InitialOrder.PaymentMethodSystemName;
-
-        //customer
-        details.Customer = await _customerService.GetCustomerByIdAsync(processPaymentRequest.CustomerId);
-        if (details.Customer == null)
-            throw new ArgumentException("Customer is not set");
-
-        //affiliate
-        var affiliate = await _affiliateService.GetAffiliateByIdAsync(details.Customer.AffiliateId);
-        if (affiliate != null && affiliate.Active && !affiliate.Deleted)
-            details.AffiliateId = affiliate.Id;
-
-        //check whether customer is guest
-        if (await _customerService.IsGuestAsync(details.Customer) && !_orderSettings.AnonymousCheckoutAllowed)
-            throw new NopException("Anonymous checkout is not allowed");
-
-        //customer currency
-        details.CustomerCurrencyCode = details.InitialOrder.CustomerCurrencyCode;
-        details.CustomerCurrencyRate = details.InitialOrder.CurrencyRate;
-
-        //customer language
-        details.CustomerLanguage = await _languageService.GetLanguageByIdAsync(details.InitialOrder.CustomerLanguageId);
-        if (details.CustomerLanguage == null || !details.CustomerLanguage.Published)
-            details.CustomerLanguage = await _workContext.GetWorkingLanguageAsync();
-
-        //billing address
-        if (details.InitialOrder.BillingAddressId == 0)
-            throw new NopException("Billing address is not available");
-
-        var billingAddress = await _addressService.GetAddressByIdAsync(details.InitialOrder.BillingAddressId);
-
-        details.BillingAddress = _addressService.CloneAddress(billingAddress);
-        if (await _countryService.GetCountryByAddressAsync(billingAddress) is Country billingCountry && !billingCountry.AllowsBilling)
-            throw new NopException($"Country '{billingCountry.Name}' is not allowed for billing");
-
-        //checkout attributes
-        details.CheckoutAttributesXml = details.InitialOrder.CheckoutAttributesXml;
-        details.CheckoutAttributeDescription = details.InitialOrder.CheckoutAttributeDescription;
-
-        //tax display type
-        details.CustomerTaxDisplayType = details.InitialOrder.CustomerTaxDisplayType;
-
-        //sub total
-        details.OrderSubTotalInclTax = details.InitialOrder.OrderSubtotalInclTax;
-        details.OrderSubTotalExclTax = details.InitialOrder.OrderSubtotalExclTax;
-        details.OrderSubTotalDiscountExclTax = details.InitialOrder.OrderSubTotalDiscountExclTax;
-        details.OrderSubTotalDiscountInclTax = details.InitialOrder.OrderSubTotalDiscountInclTax;
-
-        //shipping info
-        if (details.InitialOrder.ShippingStatus != ShippingStatus.ShippingNotRequired)
-        {
-            details.PickupInStore = details.InitialOrder.PickupInStore;
-            if (!details.PickupInStore)
-            {
-                if (!details.InitialOrder.ShippingAddressId.HasValue || await _addressService.GetAddressByIdAsync(details.InitialOrder.ShippingAddressId.Value) is not Address shippingAddress)
-                    throw new NopException("Shipping address is not available");
-
-                //clone shipping address
-                details.ShippingAddress = _addressService.CloneAddress(shippingAddress);
-                if (await _countryService.GetCountryByAddressAsync(details.ShippingAddress) is Country shippingCountry && !shippingCountry.AllowsShipping)
-                    throw new NopException($"Country '{shippingCountry.Name}' is not allowed for shipping");
-            }
-            else if (details.InitialOrder.PickupAddressId.HasValue && await _addressService.GetAddressByIdAsync(details.InitialOrder.PickupAddressId.Value) is Address pickupAddress)
-                details.PickupAddress = _addressService.CloneAddress(pickupAddress);
-
-            details.ShippingMethodName = details.InitialOrder.ShippingMethod;
-            details.ShippingRateComputationMethodSystemName = details.InitialOrder.ShippingRateComputationMethodSystemName;
-            details.ShippingStatus = ShippingStatus.NotYetShipped;
-        }
-        else
-            details.ShippingStatus = ShippingStatus.ShippingNotRequired;
-
-        //shipping total
-        details.OrderShippingTotalInclTax = details.InitialOrder.OrderShippingInclTax;
-        details.OrderShippingTotalExclTax = details.InitialOrder.OrderShippingExclTax;
-
-        //payment total
-        details.PaymentAdditionalFeeInclTax = details.InitialOrder.PaymentMethodAdditionalFeeInclTax;
-        details.PaymentAdditionalFeeExclTax = details.InitialOrder.PaymentMethodAdditionalFeeExclTax;
-
-        //tax total
-        details.OrderTaxTotal = details.InitialOrder.OrderTax;
-
-        //tax rates
-        details.TaxRates = details.InitialOrder.TaxRates;
-
-        //VAT number
-        details.VatNumber = details.InitialOrder.VatNumber;
-
-        //discount history (the same)
-        foreach (var duh in await _discountService.GetAllDiscountUsageHistoryAsync(orderId: details.InitialOrder.Id))
-        {
-            var d = await _discountService.GetDiscountByIdAsync(duh.DiscountId);
-            if (d != null)
-                details.AppliedDiscounts.Add(d);
-        }
-
-        //order total
-        details.OrderDiscountAmount = details.InitialOrder.OrderDiscount;
-        details.OrderTotal = details.InitialOrder.OrderTotal;
-        processPaymentRequest.OrderTotal = details.OrderTotal;
-
-        return details;
     }
 
     /// <summary>
@@ -1206,47 +1056,6 @@ public partial class OrderProcessingService : IOrderProcessingService
     }
 
     /// <summary>
-    /// Create recurring payment (the first payment)
-    /// </summary>
-    /// <param name="processPaymentRequest">Process payment request</param>
-    /// <param name="order">Order</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task CreateFirstRecurringPaymentAsync(ProcessPaymentRequest processPaymentRequest, Order order)
-    {
-        var rp = new RecurringPayment
-        {
-            CycleLength = processPaymentRequest.RecurringCycleLength,
-            CyclePeriod = processPaymentRequest.RecurringCyclePeriod,
-            TotalCycles = processPaymentRequest.RecurringTotalCycles,
-            StartDateUtc = DateTime.UtcNow,
-            IsActive = true,
-            CreatedOnUtc = DateTime.UtcNow,
-            InitialOrderId = order.Id
-        };
-        await _orderService.InsertRecurringPaymentAsync(rp);
-
-        switch (await _paymentService.GetRecurringPaymentTypeAsync(processPaymentRequest.PaymentMethodSystemName))
-        {
-            case RecurringPaymentType.NotSupported:
-                //not supported
-                break;
-            case RecurringPaymentType.Manual:
-                await _orderService.InsertRecurringPaymentHistoryAsync(new RecurringPaymentHistory
-                {
-                    RecurringPaymentId = rp.Id,
-                    CreatedOnUtc = DateTime.UtcNow,
-                    OrderId = order.Id
-                });
-                break;
-            case RecurringPaymentType.Automatic:
-                //will be created later (process is automated)
-                break;
-            default:
-                break;
-        }
-    }
-
-    /// <summary>
     /// Move shopping cart items to order items
     /// </summary>
     /// <param name="details">Place order container</param>
@@ -1378,18 +1187,6 @@ public partial class OrderProcessingService : IOrderProcessingService
             if (!_paymentPluginManager.IsPluginActive(paymentMethod))
                 throw new NopException("Payment method is not active");
 
-            if (details.IsRecurringShoppingCart)
-            {
-                //recurring cart
-                processPaymentResult = (await _paymentService.GetRecurringPaymentTypeAsync(processPaymentRequest.PaymentMethodSystemName)) switch
-                {
-                    RecurringPaymentType.NotSupported => throw new NopException("Recurring payments are not supported by selected payment method"),
-                    RecurringPaymentType.Manual or
-                        RecurringPaymentType.Automatic => await _paymentService.ProcessRecurringPaymentAsync(processPaymentRequest),
-                    _ => throw new NopException("Not supported recurring payment type"),
-                };
-            }
-            else
                 //standard cart
                 processPaymentResult = await _paymentService.ProcessPaymentAsync(processPaymentRequest);
         }
@@ -1572,9 +1369,6 @@ public partial class OrderProcessingService : IOrderProcessingService
                     //gift card usage history
                     await SaveGiftCardUsageHistoryAsync(placeOrderContainer, order);
 
-                    //recurring orders
-                    if (placeOrderContainer.IsRecurringShoppingCart)
-                        await CreateFirstRecurringPaymentAsync(processPaymentRequest, order);
 
                     //notifications
                     await SendNotificationsAndSaveNotesAsync(order);
@@ -1784,7 +1578,7 @@ public partial class OrderProcessingService : IOrderProcessingService
 
         //check whether the order wasn't cancelled before
         //if it already was cancelled, then there's no need to make the following adjustments
-        //(such as reward points, inventory, recurring payments)
+        //(such as reward points, inventory)
         //they already was done when cancelling the order
         if (order.OrderStatus != OrderStatus.Cancelled)
         {
@@ -1792,11 +1586,6 @@ public partial class OrderProcessingService : IOrderProcessingService
             await ReturnBackRedeemedRewardPointsAsync(order);
             //reduce (cancel) back reward points (previously awarded for this order)
             await ReduceRewardPointsAsync(order);
-
-            //cancel recurring payments
-            var recurringPayments = await _orderService.SearchRecurringPaymentsAsync(initialOrderId: order.Id);
-            foreach (var rp in recurringPayments)
-                await CancelRecurringPaymentAsync(rp);
 
             //Adjust inventory for already shipped shipments
             //only products with "use multiple warehouses"
@@ -1815,351 +1604,6 @@ public partial class OrderProcessingService : IOrderProcessingService
 
         //now delete an order
         await _orderService.DeleteOrderAsync(order);
-    }
-
-    /// <summary>
-    /// Process next recurring payment
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <param name="paymentResult">Process payment result (info about last payment for automatic recurring payments)</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the collection of errors
-    /// </returns>
-    public virtual async Task<IEnumerable<string>> ProcessNextRecurringPaymentAsync(RecurringPayment recurringPayment, ProcessPaymentResult paymentResult = null)
-    {
-        ArgumentNullException.ThrowIfNull(recurringPayment);
-
-        try
-        {
-            if (!recurringPayment.IsActive)
-                throw new NopException("Recurring payment is not active");
-
-            var initialOrder = await _orderService.GetOrderByIdAsync(recurringPayment.InitialOrderId)
-                               ?? throw new NopException("Initial order could not be loaded");
-
-            var customer = await _customerService.GetCustomerByIdAsync(initialOrder.CustomerId)
-                           ?? throw new NopException("Customer could not be loaded");
-
-            if (await GetNextPaymentDateAsync(recurringPayment) is null)
-                throw new NopException("Next payment date could not be calculated");
-
-            //payment info
-            var processPaymentRequest = new ProcessPaymentRequest
-            {
-                StoreId = initialOrder.StoreId,
-                CustomerId = customer.Id,
-                OrderGuid = Guid.NewGuid(),
-                InitialOrder = initialOrder,
-                RecurringCycleLength = recurringPayment.CycleLength,
-                RecurringCyclePeriod = recurringPayment.CyclePeriod,
-                RecurringTotalCycles = recurringPayment.TotalCycles
-            };
-
-            processPaymentRequest.CustomValues.FillByXml(initialOrder.CustomValuesXml);
-
-            //prepare order details
-            var details = await PrepareRecurringOrderDetailsAsync(processPaymentRequest);
-
-            ProcessPaymentResult processPaymentResult;
-            //skip payment workflow if order total equals zero
-            var skipPaymentWorkflow = details.OrderTotal == decimal.Zero;
-            if (!skipPaymentWorkflow)
-            {
-                var paymentMethod = await _paymentPluginManager
-                                        .LoadPluginBySystemNameAsync(processPaymentRequest.PaymentMethodSystemName, customer, initialOrder.StoreId)
-                                    ?? throw new NopException("Payment method couldn't be loaded");
-
-                if (!_paymentPluginManager.IsPluginActive(paymentMethod))
-                    throw new NopException("Payment method is not active");
-
-                //Old credit card info
-                if (details.InitialOrder.AllowStoringCreditCardNumber)
-                {
-                    processPaymentRequest.CreditCardType = _encryptionService.DecryptText(details.InitialOrder.CardType);
-                    processPaymentRequest.CreditCardName = _encryptionService.DecryptText(details.InitialOrder.CardName);
-                    processPaymentRequest.CreditCardNumber = _encryptionService.DecryptText(details.InitialOrder.CardNumber);
-                    processPaymentRequest.CreditCardCvv2 = _encryptionService.DecryptText(details.InitialOrder.CardCvv2);
-                    try
-                    {
-                        processPaymentRequest.CreditCardExpireMonth = Convert.ToInt32(_encryptionService.DecryptText(details.InitialOrder.CardExpirationMonth));
-                        processPaymentRequest.CreditCardExpireYear = Convert.ToInt32(_encryptionService.DecryptText(details.InitialOrder.CardExpirationYear));
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
-                }
-
-                //payment type
-                processPaymentResult = (await _paymentService.GetRecurringPaymentTypeAsync(processPaymentRequest.PaymentMethodSystemName)) switch
-                {
-                    RecurringPaymentType.NotSupported => throw new NopException("Recurring payments are not supported by selected payment method"),
-                    RecurringPaymentType.Manual => await _paymentService.ProcessRecurringPaymentAsync(processPaymentRequest),
-                    //payment is processed on payment gateway site, info about last transaction in paymentResult parameter
-                    RecurringPaymentType.Automatic => paymentResult ?? new ProcessPaymentResult(),
-                    _ => throw new NopException("Not supported recurring payment type"),
-                };
-            }
-            else
-                processPaymentResult = paymentResult ?? new ProcessPaymentResult { NewPaymentStatus = PaymentStatus.Paid };
-
-            if (processPaymentResult == null)
-                throw new NopException("processPaymentResult is not available");
-
-            if (processPaymentResult.Success)
-            {
-                //save order details
-                var order = await SaveOrderDetailsAsync(processPaymentRequest, processPaymentResult, details);
-
-                foreach (var orderItem in await _orderService.GetOrderItemsAsync(details.InitialOrder.Id))
-                {
-                    //save item
-                    var newOrderItem = new OrderItem
-                    {
-                        OrderItemGuid = Guid.NewGuid(),
-                        OrderId = order.Id,
-                        ProductId = orderItem.ProductId,
-                        UnitPriceInclTax = orderItem.UnitPriceInclTax,
-                        UnitPriceExclTax = orderItem.UnitPriceExclTax,
-                        PriceInclTax = orderItem.PriceInclTax,
-                        PriceExclTax = orderItem.PriceExclTax,
-                        OriginalProductCost = orderItem.OriginalProductCost,
-                        AttributeDescription = orderItem.AttributeDescription,
-                        AttributesXml = orderItem.AttributesXml,
-                        Quantity = orderItem.Quantity,
-                        DiscountAmountInclTax = orderItem.DiscountAmountInclTax,
-                        DiscountAmountExclTax = orderItem.DiscountAmountExclTax,
-                        DownloadCount = 0,
-                        IsDownloadActivated = false,
-                        LicenseDownloadId = 0,
-                        ItemWeight = orderItem.ItemWeight,
-                        RentalStartDateUtc = orderItem.RentalStartDateUtc,
-                        RentalEndDateUtc = orderItem.RentalEndDateUtc
-                    };
-
-                    await _orderService.InsertOrderItemAsync(newOrderItem);
-
-                    var product = await _productService.GetProductByIdAsync(orderItem.ProductId);
-
-                    //gift cards
-                    await AddGiftCardsAsync(product, orderItem.AttributesXml, orderItem.Quantity, newOrderItem, amount: orderItem.UnitPriceExclTax);
-
-                    //inventory
-                    await _productService.AdjustInventoryAsync(product, -orderItem.Quantity, orderItem.AttributesXml,
-                        string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.PlaceOrder"), order.Id));
-                }
-
-                //discount usage history
-                await SaveDiscountUsageHistoryAsync(details, order);
-
-                //notifications
-                await SendNotificationsAndSaveNotesAsync(order);
-
-                //raise event       
-                await _eventPublisher.PublishAsync(new OrderPlacedEvent(order));
-
-                //check order status
-                await CheckOrderStatusAsync(order);
-
-                if (order.PaymentStatus == PaymentStatus.Paid)
-                    await ProcessOrderPaidAsync(order);
-
-                //last payment succeeded
-                recurringPayment.LastPaymentFailed = false;
-
-                //next recurring payment
-                await _orderService.InsertRecurringPaymentHistoryAsync(new RecurringPaymentHistory
-                {
-                    RecurringPaymentId = recurringPayment.Id,
-                    CreatedOnUtc = DateTime.UtcNow,
-                    OrderId = order.Id
-                });
-
-                await _orderService.UpdateRecurringPaymentAsync(recurringPayment);
-
-                return new List<string>();
-            }
-
-            //log errors
-            var logError = processPaymentResult.Errors.Aggregate("Error while processing recurring order. ",
-                (current, next) => $"{current}Error {processPaymentResult.Errors.IndexOf(next) + 1}: {next}. ");
-            await _logger.ErrorAsync(logError, customer: customer);
-
-            if (!processPaymentResult.RecurringPaymentFailed)
-                return processPaymentResult.Errors;
-
-            //set flag that last payment failed
-            recurringPayment.LastPaymentFailed = true;
-            await _orderService.UpdateRecurringPaymentAsync(recurringPayment);
-
-            if (_paymentSettings.CancelRecurringPaymentsAfterFailedPayment)
-            {
-                //cancel recurring payment
-                var errors = (await CancelRecurringPaymentAsync(recurringPayment)).ToList();
-                foreach (var error in errors)
-                {
-                    await _logger.ErrorAsync(error);
-                }
-
-                //notify a customer about cancelled payment
-                await _workflowMessageService.SendRecurringPaymentCancelledCustomerNotificationAsync(recurringPayment, initialOrder.CustomerLanguageId);
-            }
-            else
-                //notify a customer about failed payment
-                await _workflowMessageService.SendRecurringPaymentFailedCustomerNotificationAsync(recurringPayment, initialOrder.CustomerLanguageId);
-
-            return processPaymentResult.Errors;
-        }
-        catch (Exception exc)
-        {
-            await _logger.ErrorAsync($"Error while processing recurring order. {exc.Message}", exc);
-            throw;
-        }
-    }
-
-    /// <summary>
-    /// Cancels a recurring payment
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<IList<string>> CancelRecurringPaymentAsync(RecurringPayment recurringPayment)
-    {
-        ArgumentNullException.ThrowIfNull(recurringPayment);
-
-        var initialOrder = await _orderService.GetOrderByIdAsync(recurringPayment.InitialOrderId);
-        if (initialOrder == null)
-            return new List<string> { "Initial order could not be loaded" };
-
-        var request = new CancelRecurringPaymentRequest();
-        CancelRecurringPaymentResult result = null;
-        try
-        {
-            request.Order = initialOrder;
-            result = await _paymentService.CancelRecurringPaymentAsync(request);
-            if (result.Success)
-            {
-                //update recurring payment
-                recurringPayment.IsActive = false;
-                await _orderService.UpdateRecurringPaymentAsync(recurringPayment);
-
-                //add a note
-                await _orderService.InsertOrderNoteAsync(new OrderNote
-                {
-                    OrderId = initialOrder.Id,
-                    Note = "Recurring payment has been cancelled",
-                    DisplayToCustomer = false,
-                    CreatedOnUtc = DateTime.UtcNow
-                });
-
-                //notify a store owner
-                await _workflowMessageService
-                    .SendRecurringPaymentCancelledStoreOwnerNotificationAsync(recurringPayment,
-                        _localizationSettings.DefaultAdminLanguageId);
-            }
-        }
-        catch (Exception exc)
-        {
-            result ??= new CancelRecurringPaymentResult();
-            result.AddError($"Error: {exc.Message}. Full exception: {exc}");
-        }
-
-        //process errors
-        var error = string.Empty;
-        for (var i = 0; i < result.Errors.Count; i++)
-        {
-            error += $"Error {i}: {result.Errors[i]}";
-            if (i != result.Errors.Count - 1)
-                error += ". ";
-        }
-
-        if (string.IsNullOrEmpty(error))
-            return result.Errors;
-
-        //add a note
-        await _orderService.InsertOrderNoteAsync(new OrderNote
-        {
-            OrderId = initialOrder.Id,
-            Note = $"Unable to cancel recurring payment. {error}",
-            DisplayToCustomer = false,
-            CreatedOnUtc = DateTime.UtcNow
-        });
-
-        //log it
-        var logError = $"Error cancelling recurring payment. Order #{initialOrder.Id}. Error: {error}";
-        await _logger.InsertLogAsync(LogLevel.Error, logError, logError);
-        return result.Errors;
-    }
-
-    /// <summary>
-    /// Gets a value indicating whether a customer can cancel recurring payment
-    /// </summary>
-    /// <param name="customerToValidate">Customer</param>
-    /// <param name="recurringPayment">Recurring Payment</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the value indicating whether a customer can cancel recurring payment
-    /// </returns>
-    public virtual async Task<bool> CanCancelRecurringPaymentAsync(Customer customerToValidate, RecurringPayment recurringPayment)
-    {
-        if (recurringPayment is null)
-            return false;
-
-        if (customerToValidate is null)
-            return false;
-
-        var initialOrder = await _orderService.GetOrderByIdAsync(recurringPayment.InitialOrderId);
-        if (initialOrder is null)
-            return false;
-
-        var customer = await _customerService.GetCustomerByIdAsync(initialOrder.CustomerId);
-        if (customer is null)
-            return false;
-
-        if (initialOrder.OrderStatus == OrderStatus.Cancelled)
-            return false;
-
-        if (!await _customerService.IsAdminAsync(customerToValidate))
-            if (customer.Id != customerToValidate.Id)
-                return false;
-
-        if (await GetNextPaymentDateAsync(recurringPayment) is null)
-            return false;
-
-        return true;
-    }
-
-    /// <summary>
-    /// Gets a value indicating whether a customer can retry last failed recurring payment
-    /// </summary>
-    /// <param name="customer">Customer</param>
-    /// <param name="recurringPayment">Recurring Payment</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains true if a customer can retry payment; otherwise false
-    /// </returns>
-    public virtual async Task<bool> CanRetryLastRecurringPaymentAsync(Customer customer, RecurringPayment recurringPayment)
-    {
-        if (recurringPayment == null || customer == null)
-            return false;
-
-        var order = await _orderService.GetOrderByIdAsync(recurringPayment.InitialOrderId);
-
-        if (order is null)
-            return false;
-
-        var orderCustomer = await _customerService.GetCustomerByIdAsync(order.CustomerId);
-
-        if (order.OrderStatus == OrderStatus.Cancelled)
-            return false;
-
-        if (!recurringPayment.LastPaymentFailed || await _paymentService.GetRecurringPaymentTypeAsync(order.PaymentMethodSystemName) != RecurringPaymentType.Manual)
-            return false;
-
-        if (orderCustomer == null || (!await _customerService.IsAdminAsync(customer) && orderCustomer.Id != customer.Id))
-            return false;
-
-        return true;
     }
 
     /// <summary>
@@ -2347,11 +1791,6 @@ public partial class OrderProcessingService : IOrderProcessingService
         //delete gift card usage history
         if (_orderSettings.DeleteGiftCardUsageHistory)
             await _giftCardService.DeleteGiftCardUsageHistoryAsync(order);
-
-        //cancel recurring payments
-        var recurringPayments = await _orderService.SearchRecurringPaymentsAsync(initialOrderId: order.Id);
-        foreach (var rp in recurringPayments)
-            await CancelRecurringPaymentAsync(rp);
 
         //Adjust inventory for already shipped shipments
         //only products with "use multiple warehouses"
@@ -3189,64 +2628,6 @@ public partial class OrderProcessingService : IOrderProcessingService
     }
 
     /// <summary>
-    /// Gets the next payment date
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<DateTime?> GetNextPaymentDateAsync(RecurringPayment recurringPayment)
-    {
-        ArgumentNullException.ThrowIfNull(recurringPayment);
-
-        if (!recurringPayment.IsActive)
-            return null;
-
-        var historyCollection = await _orderService.GetRecurringPaymentHistoryAsync(recurringPayment);
-        if (historyCollection.Count >= recurringPayment.TotalCycles)
-            return null;
-
-        //result
-        DateTime? result = null;
-
-        //calculate next payment date
-        if (historyCollection.Any())
-        {
-            result = recurringPayment.CyclePeriod switch
-            {
-                RecurringProductCyclePeriod.Days => recurringPayment.StartDateUtc.AddDays((double)recurringPayment.CycleLength * historyCollection.Count),
-                RecurringProductCyclePeriod.Weeks => recurringPayment.StartDateUtc.AddDays((double)(7 * recurringPayment.CycleLength) * historyCollection.Count),
-                RecurringProductCyclePeriod.Months => recurringPayment.StartDateUtc.AddMonths(recurringPayment.CycleLength * historyCollection.Count),
-                RecurringProductCyclePeriod.Years => recurringPayment.StartDateUtc.AddYears(recurringPayment.CycleLength * historyCollection.Count),
-                _ => throw new NopException("Not supported cycle period"),
-            };
-        }
-        else
-        {
-            if (recurringPayment.TotalCycles > 0)
-                result = recurringPayment.StartDateUtc;
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Gets the cycles remaining
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<int> GetCyclesRemainingAsync(RecurringPayment recurringPayment)
-    {
-        ArgumentNullException.ThrowIfNull(recurringPayment);
-
-        var historyCollection = await _orderService.GetRecurringPaymentHistoryAsync(recurringPayment);
-
-        var result = recurringPayment.TotalCycles - historyCollection.Count;
-        if (result < 0)
-            result = 0;
-
-        return result;
-    }
-
-    /// <summary>
     /// Gets process payment request
     /// </summary>
     /// <returns>
@@ -3383,16 +2764,6 @@ public partial class OrderProcessingService : IOrderProcessingService
         /// Selected pickup address
         /// </summary>
         public Address PickupAddress { get; set; }
-
-        /// <summary>
-        /// Is recurring shopping cart
-        /// </summary>
-        public bool IsRecurringShoppingCart { get; set; }
-
-        /// <summary>
-        /// Initial order (used with recurring payments)
-        /// </summary>
-        public Order InitialOrder { get; set; }
 
         /// <summary>
         /// Checkout attributes

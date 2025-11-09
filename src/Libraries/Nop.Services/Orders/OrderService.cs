@@ -29,8 +29,6 @@ public partial class OrderService : IOrderService
     protected readonly IRepository<OrderNote> _orderNoteRepository;
     protected readonly IRepository<Product> _productRepository;
     protected readonly IRepository<ProductWarehouseInventory> _productWarehouseInventoryRepository;
-    protected readonly IRepository<RecurringPayment> _recurringPaymentRepository;
-    protected readonly IRepository<RecurringPaymentHistory> _recurringPaymentHistoryRepository;
     protected readonly IShipmentService _shipmentService;
     private static readonly char[] _separator = [';'];
 
@@ -47,8 +45,6 @@ public partial class OrderService : IOrderService
         IRepository<OrderNote> orderNoteRepository,
         IRepository<Product> productRepository,
         IRepository<ProductWarehouseInventory> productWarehouseInventoryRepository,
-        IRepository<RecurringPayment> recurringPaymentRepository,
-        IRepository<RecurringPaymentHistory> recurringPaymentHistoryRepository,
         IShipmentService shipmentService)
     {
         _htmlFormatter = htmlFormatter;
@@ -60,8 +56,6 @@ public partial class OrderService : IOrderService
         _orderNoteRepository = orderNoteRepository;
         _productRepository = productRepository;
         _productWarehouseInventoryRepository = productWarehouseInventoryRepository;
-        _recurringPaymentRepository = recurringPaymentRepository;
-        _recurringPaymentHistoryRepository = recurringPaymentHistoryRepository;
         _shipmentService = shipmentService;
     }
 
@@ -844,131 +838,6 @@ public partial class OrderService : IOrderService
     public virtual async Task InsertOrderNoteAsync(OrderNote orderNote)
     {
         await _orderNoteRepository.InsertAsync(orderNote);
-    }
-
-    #endregion
-
-    #region Recurring payments
-
-    /// <summary>
-    /// Deletes a recurring payment
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeleteRecurringPaymentAsync(RecurringPayment recurringPayment)
-    {
-        await _recurringPaymentRepository.DeleteAsync(recurringPayment);
-    }
-
-    /// <summary>
-    /// Gets a recurring payment
-    /// </summary>
-    /// <param name="recurringPaymentId">The recurring payment identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the recurring payment
-    /// </returns>
-    public virtual async Task<RecurringPayment> GetRecurringPaymentByIdAsync(int recurringPaymentId)
-    {
-        return await _recurringPaymentRepository.GetByIdAsync(recurringPaymentId, cache => default);
-    }
-
-    /// <summary>
-    /// Inserts a recurring payment
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertRecurringPaymentAsync(RecurringPayment recurringPayment)
-    {
-        await _recurringPaymentRepository.InsertAsync(recurringPayment);
-    }
-
-    /// <summary>
-    /// Updates the recurring payment
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateRecurringPaymentAsync(RecurringPayment recurringPayment)
-    {
-        await _recurringPaymentRepository.UpdateAsync(recurringPayment);
-    }
-
-    /// <summary>
-    /// Search recurring payments
-    /// </summary>
-    /// <param name="storeId">The store identifier; 0 to load all records</param>
-    /// <param name="customerId">The customer identifier; 0 to load all records</param>
-    /// <param name="initialOrderId">The initial order identifier; 0 to load all records</param>
-    /// <param name="initialOrderStatus">Initial order status identifier; null to load all records</param>
-    /// <param name="pageIndex">Page index</param>
-    /// <param name="pageSize">Page size</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the recurring payments
-    /// </returns>
-    public virtual async Task<IPagedList<RecurringPayment>> SearchRecurringPaymentsAsync(int storeId = 0,
-        int customerId = 0, int initialOrderId = 0, OrderStatus? initialOrderStatus = null,
-        int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
-    {
-        int? initialOrderStatusId = null;
-        if (initialOrderStatus.HasValue)
-            initialOrderStatusId = (int)initialOrderStatus.Value;
-
-        var query1 = from rp in _recurringPaymentRepository.Table
-            join o in _orderRepository.Table on rp.InitialOrderId equals o.Id
-            join c in _customerRepository.Table on o.CustomerId equals c.Id
-            where
-                !rp.Deleted &&
-                (showHidden || !o.Deleted) &&
-                (showHidden || !c.Deleted) &&
-                (showHidden || rp.IsActive) &&
-                (customerId == 0 || o.CustomerId == customerId) &&
-                (storeId == 0 || o.StoreId == storeId) &&
-                (initialOrderId == 0 || o.Id == initialOrderId) &&
-                (!initialOrderStatusId.HasValue || initialOrderStatusId.Value == 0 ||
-                 o.OrderStatusId == initialOrderStatusId.Value)
-            select rp.Id;
-
-        var query2 = from rp in _recurringPaymentRepository.Table
-            where query1.Contains(rp.Id)
-            orderby rp.StartDateUtc, rp.Id
-            select rp;
-
-        var recurringPayments = await query2.ToPagedListAsync(pageIndex, pageSize);
-
-        return recurringPayments;
-    }
-
-    #endregion
-
-    #region Recurring payments history
-
-    /// <summary>
-    /// Gets a recurring payment history
-    /// </summary>
-    /// <param name="recurringPayment">The recurring payment</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    public virtual async Task<IList<RecurringPaymentHistory>> GetRecurringPaymentHistoryAsync(RecurringPayment recurringPayment)
-    {
-        ArgumentNullException.ThrowIfNull(recurringPayment);
-
-        return await _recurringPaymentHistoryRepository.Table
-            .Where(rph => rph.RecurringPaymentId == recurringPayment.Id)
-            .ToListAsync();
-    }
-
-    /// <summary>
-    /// Inserts a recurring payment history entry
-    /// </summary>
-    /// <param name="recurringPaymentHistory">Recurring payment history entry</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertRecurringPaymentHistoryAsync(RecurringPaymentHistory recurringPaymentHistory)
-    {
-        await _recurringPaymentHistoryRepository.InsertAsync(recurringPaymentHistory);
     }
 
     #endregion

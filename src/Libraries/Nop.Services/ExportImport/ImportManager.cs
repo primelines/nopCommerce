@@ -1260,8 +1260,6 @@ public partial class ImportManager : IImportManager
             manager.SetSelectList("LowStockActivity",
                 await LowStockActivity.Nothing.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("BackorderMode", await BackorderMode.NoBackorders.ToSelectListAsync(useLocalization: false));
-            manager.SetSelectList("RecurringCyclePeriod",
-                await RecurringProductCyclePeriod.Days.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("RentalPricePeriod", await RentalPricePeriod.Days.ToSelectListAsync(useLocalization: false));
 
             manager.SetSelectList("Vendor",
@@ -2276,18 +2274,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "UserAgreementText":
                         product.UserAgreementText = property.StringValue;
-                        break;
-                    case "IsRecurring":
-                        product.IsRecurring = property.BooleanValue;
-                        break;
-                    case "RecurringCycleLength":
-                        product.RecurringCycleLength = property.IntValue;
-                        break;
-                    case "RecurringCyclePeriod":
-                        product.RecurringCyclePeriodId = property.IntValue;
-                        break;
-                    case "RecurringTotalCycles":
-                        product.RecurringTotalCycles = property.IntValue;
                         break;
                     case "IsRental":
                         product.IsRental = property.BooleanValue;

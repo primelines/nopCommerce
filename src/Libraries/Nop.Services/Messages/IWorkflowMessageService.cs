@@ -334,40 +334,6 @@ public partial interface IWorkflowMessageService
     /// The task result contains the queued email identifier
     /// </returns>
     Task<IList<int>> SendNewOrderNoteAddedCustomerNotificationAsync(OrderNote orderNote, int languageId);
-
-    /// <summary>
-    /// Sends a "Recurring payment cancelled" notification to a store owner
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <param name="languageId">Message language identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the queued email identifier
-    /// </returns>
-    Task<IList<int>> SendRecurringPaymentCancelledStoreOwnerNotificationAsync(RecurringPayment recurringPayment, int languageId);
-
-    /// <summary>
-    /// Sends a "Recurring payment cancelled" notification to a customer
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <param name="languageId">Message language identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the queued email identifier
-    /// </returns>
-    Task<IList<int>> SendRecurringPaymentCancelledCustomerNotificationAsync(RecurringPayment recurringPayment, int languageId);
-
-    /// <summary>
-    /// Sends a "Recurring payment failed" notification to a customer
-    /// </summary>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <param name="languageId">Message language identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the queued email identifier
-    /// </returns>
-    Task<IList<int>> SendRecurringPaymentFailedCustomerNotificationAsync(RecurringPayment recurringPayment, int languageId);
-
     #endregion
 
     #region Newsletter workflow

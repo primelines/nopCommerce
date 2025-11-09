@@ -637,14 +637,6 @@ public partial class CustomerModelFactory : ICustomerModelFactory
             ItemClass = "customer-orders"
         });
 
-        model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
-        {
-            RouteName = NopRouteNames.Standard.CUSTOMER_RECURRING_PAYMENTS,
-            Title = await _localizationService.GetResourceAsync("Account.CustomerRecurringPayments"),
-            Tab = (int)CustomerNavigationEnum.RecurringPayments,
-            ItemClass = "customer-recurring-payments"
-        });
-
         var store = await _storeContext.GetCurrentStoreAsync();
         var customer = await _workContext.GetCurrentCustomerAsync();
 

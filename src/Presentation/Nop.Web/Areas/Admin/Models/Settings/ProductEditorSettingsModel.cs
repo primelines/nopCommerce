@@ -87,9 +87,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.DownloadableProduct")]
     public bool DownloadableProduct { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.RecurringProduct")]
-    public bool RecurringProduct { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.IsRental")]
     public bool IsRental { get; set; }
 

@@ -63,14 +63,6 @@ public partial interface IMessageTokenProvider
     Task AddOrderNoteTokensAsync(IList<Token> tokens, OrderNote orderNote);
 
     /// <summary>
-    /// Add recurring payment tokens
-    /// </summary>
-    /// <param name="tokens">List of already added tokens</param>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddRecurringPaymentTokensAsync(IList<Token> tokens, RecurringPayment recurringPayment);
-
-    /// <summary>
     /// Add return request tokens
     /// </summary>
     /// <param name="tokens">List of already added tokens</param>

@@ -444,9 +444,6 @@ public partial class ShoppingCartController : BasePublicController
         if (string.IsNullOrWhiteSpace(giftcardcouponcode))
             return await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.WrongGiftCard");
 
-        if (await _shoppingCartService.ShoppingCartIsRecurringAsync(cart))
-            return await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.DontWorkWithAutoshipProducts");
-
         var giftCard = (await _giftCardService.GetAllGiftCardsAsync(giftCardCouponCode: giftcardcouponcode)).FirstOrDefault();
 
         if (giftCard == null || !await _giftCardService.IsGiftCardValidAsync(giftCard))

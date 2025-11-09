@@ -146,21 +146,6 @@ public static partial class MessageTemplateSystemNames
     /// </summary>
     public const string NEW_ORDER_NOTE_ADDED_CUSTOMER_NOTIFICATION = "Customer.NewOrderNote";
 
-    /// <summary>
-    /// Represents system name of notification store owner about cancelled recurring order
-    /// </summary>
-    public const string RECURRING_PAYMENT_CANCELLED_STORE_OWNER_NOTIFICATION = "RecurringPaymentCancelled.StoreOwnerNotification";
-
-    /// <summary>
-    /// Represents system name of notification customer about cancelled recurring order
-    /// </summary>
-    public const string RECURRING_PAYMENT_CANCELLED_CUSTOMER_NOTIFICATION = "RecurringPaymentCancelled.CustomerNotification";
-
-    /// <summary>
-    /// Represents system name of notification customer about failed payment for the recurring payments
-    /// </summary>
-    public const string RECURRING_PAYMENT_FAILED_CUSTOMER_NOTIFICATION = "RecurringPaymentFailed.CustomerNotification";
-
     #endregion
 
     #region Newsletter

@@ -44,8 +44,6 @@ public partial class DefaultPermissionConfigManager : IPermissionConfigManager
         new ("Admin area. Shipments. Create, edit, delete", StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE, nameof(StandardPermission.Orders), NopCustomerDefaults.AdministratorsRoleName, NopCustomerDefaults.VendorsRoleName),
         new ("Admin area. Return requests. View", StandardPermission.Orders.RETURN_REQUESTS_VIEW, nameof(StandardPermission.Orders), NopCustomerDefaults.AdministratorsRoleName),
         new ("Admin area. Return requests. Create, edit, delete", StandardPermission.Orders.RETURN_REQUESTS_CREATE_EDIT_DELETE, nameof(StandardPermission.Orders), NopCustomerDefaults.AdministratorsRoleName),
-        new ("Admin area. Recurring payments. View", StandardPermission.Orders.RECURRING_PAYMENTS_VIEW, nameof(StandardPermission.Orders), NopCustomerDefaults.AdministratorsRoleName),
-        new ("Admin area. Recurring payments. Create, edit, delete", StandardPermission.Orders.RECURRING_PAYMENTS_CREATE_EDIT_DELETE, nameof(StandardPermission.Orders), NopCustomerDefaults.AdministratorsRoleName),
         new ("Admin area. Gift cards. View", StandardPermission.Orders.GIFT_CARDS_VIEW, nameof(StandardPermission.Orders), NopCustomerDefaults.AdministratorsRoleName),
         new ("Admin area. Gift cards. Create, edit, delete", StandardPermission.Orders.GIFT_CARDS_CREATE_EDIT_DELETE, nameof(StandardPermission.Orders), NopCustomerDefaults.AdministratorsRoleName),
 

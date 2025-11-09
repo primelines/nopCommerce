@@ -318,23 +318,4 @@ public partial interface IShoppingCartService
     /// </returns>
     Task<bool> ShoppingCartRequiresShippingAsync(IList<ShoppingCartItem> shoppingCart);
 
-    /// <summary>
-    /// Gets a value indicating whether shopping cart is recurring
-    /// </summary>
-    /// <param name="shoppingCart">Shopping cart</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    Task<bool> ShoppingCartIsRecurringAsync(IList<ShoppingCartItem> shoppingCart);
-
-    /// <summary>
-    /// Get a recurring cycle information
-    /// </summary>
-    /// <param name="shoppingCart">Shopping cart</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the error (if exists); otherwise, empty string
-    /// </returns>
-    Task<(string error, int cycleLength, RecurringProductCyclePeriod cyclePeriod, int totalCycles)> GetRecurringCycleInfoAsync(IList<ShoppingCartItem> shoppingCart);
 }

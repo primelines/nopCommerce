@@ -329,7 +329,6 @@ public partial class GdprService : IGdprService
         //ignore Log
         //ignore PollVotingRecord
         //ignore ProductReviewHelpfulness
-        //ignore RecurringPayment 
         //ignore ReturnRequest
         //ignore RewardPointsHistory
         //and we do not delete orders

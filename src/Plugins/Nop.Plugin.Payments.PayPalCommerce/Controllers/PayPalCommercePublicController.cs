@@ -348,65 +348,6 @@ public class PayPalCommercePublicController : BasePublicController
 
     #endregion
 
-    [HttpPost]
-    public async Task<IActionResult> CreateSetupToken()
-    {
-        var model = await _modelFactory.PrepareSetupTokenModelAsync();
-        if (model.LoginIsRequired)
-            return Json(new { redirect = Url.RouteUrl(NopRouteNames.General.LOGIN, new { returnUrl = Url.RouteUrl(NopRouteNames.General.CART) }) });
-
-        if (!model.CheckoutIsEnabled)
-            return Json(new { redirect = Url.RouteUrl(NopRouteNames.General.CART) });
-
-        if (!string.IsNullOrEmpty(model.Error))
-            return ErrorJson(model.Error);
-
-        return Json(new { status = model.Status, redirect = model.PayerActionUrl });
-    }
-
-    public async Task<IActionResult> ApproveToken(string approvalTokenId)
-    {
-        if (string.IsNullOrEmpty(approvalTokenId))
-            approvalTokenId = _webHelper.QueryString<string>("approval_token_id");
-
-        //create new recurring order
-        var orderModel = await _modelFactory.PrepareRecurringOrderModelAsync(approvalTokenId);
-        if (orderModel.LoginIsRequired)
-            return RedirectToRoute(NopRouteNames.General.LOGIN, new { returnUrl = Url.RouteUrl(NopRouteNames.General.CART) });
-
-        if (!orderModel.CheckoutIsEnabled)
-            return RedirectToRoute(NopRouteNames.General.CART);
-
-        if (!string.IsNullOrEmpty(orderModel.Error))
-        {
-            _notificationService.ErrorNotification(orderModel.Error);
-            return RedirectToRoute(NopRouteNames.General.CART);
-        }
-
-        //order is created, let's approve it
-        var liabilityShift = string.Empty;
-        var approvedModel = await _modelFactory.PrepareOrderApprovedModelAsync(orderModel.OrderId, liabilityShift);
-
-        if (!string.IsNullOrEmpty(approvedModel.Error))
-        {
-            _notificationService.ErrorNotification(approvedModel.Error);
-            return RedirectToRoute(NopRouteNames.General.CART);
-        }
-
-        //order is approved but the customer must confirm it before (if not yet completed)
-        if (!approvedModel.PayNow)
-            return RedirectToRoute(PayPalCommerceDefaults.Route.ConfirmOrder, new { orderId = approvedModel.OrderId, liabilityShift = liabilityShift });
-
-        //or pay it right now
-        var completedModel = await _modelFactory.PrepareOrderCompletedModelAsync(orderModel.OrderId, liabilityShift);
-        if (!string.IsNullOrEmpty(completedModel.Error))
-        {
-            _notificationService.ErrorNotification(completedModel.Error);
-            return RedirectToRoute(NopRouteNames.General.CART);
-        }
-
-        return RedirectToRoute(NopRouteNames.Standard.CHECKOUT_COMPLETED, new { orderId = completedModel.OrderId });
-    }
 
     #region Payment tokens
 

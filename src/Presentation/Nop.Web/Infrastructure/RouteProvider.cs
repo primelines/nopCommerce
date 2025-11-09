@@ -103,10 +103,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"{lang}/order/history/{{limit?}}/page/{{pageNumber:min(0)}}",
             defaults: new { controller = "Order", action = "CustomerOrders" });
 
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Standard.CUSTOMER_RECURRING_PAYMENTS,
-            pattern: $"{lang}/customer/recurringpayments",
-            defaults: new { controller = "Order", action = "CustomerRecurringPayments" });
-
         //contact us
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.General.CONTACT_US,
             pattern: $"{lang}/contactus",

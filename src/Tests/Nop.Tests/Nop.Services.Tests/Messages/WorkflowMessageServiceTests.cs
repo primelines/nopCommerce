@@ -36,7 +36,6 @@ public class WorkflowMessageServiceTests : ServiceTest
     private Shipment _shipment;
     private IList<MessageTemplate> _allMessageTemplates;
     private OrderNote _orderNote;
-    private RecurringPayment _recurringPayment;
     private NewsLetterSubscription _subscription;
     private Product _product;
     private OrderItem _orderItem;
@@ -79,7 +78,6 @@ public class WorkflowMessageServiceTests : ServiceTest
         _vendor = await vendorService.GetVendorByIdAsync(1);
         _shipment = await shipmentService.GetShipmentByIdAsync(1);
         _orderNote = await orderService.GetOrderNoteByIdAsync(1);
-        _recurringPayment = new RecurringPayment { InitialOrderId = _order.Id, IsActive = true };
         _subscription = new NewsLetterSubscription { Active = true, Email = NopTestsDefaults.AdminEmail, LanguageId = 1 };
         _product = await productService.GetProductByIdAsync(1);
         _returnRequest = new ReturnRequest { CustomerId = _customer.Id, OrderItemId = _orderItem.Id };
@@ -312,27 +310,6 @@ public class WorkflowMessageServiceTests : ServiceTest
     {
         await CheckData(async () =>
             await _workflowMessageService.SendNewOrderNoteAddedCustomerNotificationAsync(_orderNote, 1));
-    }
-
-    [Test]
-    public async Task CanSendRecurringPaymentCancelledStoreOwnerNotification()
-    {
-        await CheckData(async () =>
-            await _workflowMessageService.SendRecurringPaymentCancelledStoreOwnerNotificationAsync(_recurringPayment, 1));
-    }
-
-    [Test]
-    public async Task CanSendRecurringPaymentCancelledCustomerNotification()
-    {
-        await CheckData(async () =>
-            await _workflowMessageService.SendRecurringPaymentCancelledCustomerNotificationAsync(_recurringPayment, 1));
-    }
-
-    [Test]
-    public async Task CanSendRecurringPaymentFailedCustomerNotification()
-    {
-        await CheckData(async () =>
-            await _workflowMessageService.SendRecurringPaymentFailedCustomerNotificationAsync(_recurringPayment, 1));
     }
 
     #endregion

@@ -31,8 +31,6 @@ public partial class StandardPermission
         public const string SHIPMENTS_CREATE_EDIT_DELETE = $"{nameof(Orders)}.ShipmentsCreateEditDelete";
         public const string RETURN_REQUESTS_VIEW = $"{nameof(Orders)}.ReturnRequestsView";
         public const string RETURN_REQUESTS_CREATE_EDIT_DELETE = $"{nameof(Orders)}.ReturnRequestsCreateEditDelete";
-        public const string RECURRING_PAYMENTS_VIEW = $"{nameof(Orders)}.RecurringPaymentsView";
-        public const string RECURRING_PAYMENTS_CREATE_EDIT_DELETE = $"{nameof(Orders)}.RecurringPaymentsCreateEditDelete";
         public const string GIFT_CARDS_VIEW = $"{nameof(Orders)}.GiftCardsView";
         public const string GIFT_CARDS_CREATE_EDIT_DELETE = $"{nameof(Orders)}.GiftCardsCreateEditDelete";
     }

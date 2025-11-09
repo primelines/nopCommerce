@@ -18,12 +18,6 @@ public class CreateSetupTokenRequest : IAuthorizedRequest
     public Payer Customer { get; set; }
 
     /// <summary>
-    /// Gets or sets the vaulted payment method details.
-    /// </summary>
-    [JsonProperty(PropertyName = "payment_source")]
-    public RecurringPaymentSource PaymentSource { get; set; }
-
-    /// <summary>
     /// Gets the request path
     /// </summary>
     [JsonIgnore]

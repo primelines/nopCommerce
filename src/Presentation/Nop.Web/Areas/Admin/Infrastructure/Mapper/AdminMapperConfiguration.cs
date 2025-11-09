@@ -568,7 +568,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(entity => entity.NotApprovedTotalReviews, options => options.Ignore())
             .ForMember(entity => entity.ParentGroupedProductId, options => options.Ignore())
             .ForMember(entity => entity.ProductType, options => options.Ignore())
-            .ForMember(entity => entity.RecurringCyclePeriod, options => options.Ignore())
             .ForMember(entity => entity.RentalPricePeriod, options => options.Ignore())
             .ForMember(entity => entity.UpdatedOnUtc, options => options.Ignore());
 
@@ -1491,34 +1490,7 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
     /// </summary>
     protected virtual void CreatePaymentsMaps()
     {
-        CreateMap<IPaymentMethod, PaymentMethodModel>()
-            .ForMember(model => model.RecurringPaymentType, options => options.Ignore());
-
-        CreateMap<RecurringPayment, RecurringPaymentModel>()
-            .ForMember(model => model.CustomerId, options => options.Ignore())
-            .ForMember(model => model.InitialOrderId, options => options.Ignore())
-            .ForMember(model => model.NextPaymentDate, options => options.Ignore())
-            .ForMember(model => model.StartDate, options => options.Ignore())
-            .ForMember(model => model.CyclePeriodStr, options => options.Ignore())
-            .ForMember(model => model.PaymentType, options => options.Ignore())
-            .ForMember(model => model.CanCancelRecurringPayment, options => options.Ignore())
-            .ForMember(model => model.CustomerEmail, options => options.Ignore())
-            .ForMember(model => model.RecurringPaymentHistorySearchModel, options => options.Ignore())
-            .ForMember(model => model.CyclesRemaining, options => options.Ignore());
-
-        CreateMap<RecurringPaymentModel, RecurringPayment>()
-            .ForMember(entity => entity.StartDateUtc, options => options.Ignore())
-            .ForMember(entity => entity.Deleted, options => options.Ignore())
-            .ForMember(entity => entity.CreatedOnUtc, options => options.Ignore())
-            .ForMember(entity => entity.CyclePeriod, options => options.Ignore())
-            .ForMember(entity => entity.InitialOrderId, options => options.Ignore());
-
-        CreateMap<RecurringPaymentHistory, RecurringPaymentHistoryModel>()
-            .ForMember(model => model.CreatedOn, options => options.Ignore())
-            .ForMember(model => model.OrderStatus, options => options.Ignore())
-            .ForMember(model => model.PaymentStatus, options => options.Ignore())
-            .ForMember(model => model.ShippingStatus, options => options.Ignore())
-            .ForMember(model => model.CustomOrderNumber, options => options.Ignore());
+        CreateMap<IPaymentMethod, PaymentMethodModel>();
     }
 
     /// <summary>

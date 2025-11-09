@@ -1202,35 +1202,12 @@ public partial class ShoppingCartService : IShoppingCartService
         if (shoppingCart.Count > _shoppingCartSettings.MaximumShoppingCartItems)
             warnings.Add(string.Format(await _localizationService.GetResourceAsync("ShoppingCart.MaximumShoppingCartItems"), _shoppingCartSettings.MaximumShoppingCartItems));
 
-        var hasStandardProducts = false;
-        var hasRecurringProducts = false;
-
         foreach (var sci in shoppingCart)
         {
             var product = await _productService.GetProductByIdAsync(sci.ProductId);
             if (product == null)
             {
                 warnings.Add(string.Format(await _localizationService.GetResourceAsync("ShoppingCart.CannotLoadProduct"), sci.ProductId));
-                return warnings;
-            }
-
-            if (product.IsRecurring)
-                hasRecurringProducts = true;
-            else
-                hasStandardProducts = true;
-        }
-
-        //don't mix standard and recurring products
-        if (hasStandardProducts && hasRecurringProducts)
-            warnings.Add(await _localizationService.GetResourceAsync("ShoppingCart.CannotMixStandardAndAutoshipProducts"));
-
-        //recurring cart validation
-        if (hasRecurringProducts)
-        {
-            var cyclesError = (await GetRecurringCycleInfoAsync(shoppingCart)).error;
-            if (!string.IsNullOrEmpty(cyclesError))
-            {
-                warnings.Add(cyclesError);
                 return warnings;
             }
         }
@@ -1931,77 +1908,6 @@ public partial class ShoppingCartService : IShoppingCartService
     public virtual async Task<bool> ShoppingCartRequiresShippingAsync(IList<ShoppingCartItem> shoppingCart)
     {
         return await shoppingCart.AnyAwaitAsync(async shoppingCartItem => await _shippingService.IsShipEnabledAsync(shoppingCartItem));
-    }
-
-    /// <summary>
-    /// Gets a value indicating whether shopping cart is recurring
-    /// </summary>
-    /// <param name="shoppingCart">Shopping cart</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    public virtual async Task<bool> ShoppingCartIsRecurringAsync(IList<ShoppingCartItem> shoppingCart)
-    {
-        ArgumentNullException.ThrowIfNull(shoppingCart);
-
-        if (!shoppingCart.Any())
-            return false;
-
-        return await _productService.HasAnyRecurringProductAsync(shoppingCart.Select(sci => sci.ProductId).ToArray());
-    }
-
-    /// <summary>
-    /// Get a recurring cycle information
-    /// </summary>
-    /// <param name="shoppingCart">Shopping cart</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the error (if exists); otherwise, empty string. Cycle length. Cycle period. Total cycles
-    /// </returns>
-    public virtual async Task<(string error, int cycleLength, RecurringProductCyclePeriod cyclePeriod, int totalCycles)> GetRecurringCycleInfoAsync(IList<ShoppingCartItem> shoppingCart)
-    {
-        var rezCycleLength = 0;
-        RecurringProductCyclePeriod rezCyclePeriod = 0;
-        var rezTotalCycles = 0;
-
-        int? cycleLength = null;
-        RecurringProductCyclePeriod? cyclePeriod = null;
-        int? totalCycles = null;
-
-        var conflictError = await _localizationService.GetResourceAsync("ShoppingCart.ConflictingShipmentSchedules");
-
-        foreach (var sci in shoppingCart)
-        {
-            var product = await _productService.GetProductByIdAsync(sci.ProductId) ?? throw new NopException($"Product (Id={sci.ProductId}) cannot be loaded");
-
-            if (!product.IsRecurring)
-                continue;
-
-            //cycle length
-            if (cycleLength.HasValue && cycleLength.Value != product.RecurringCycleLength)
-                return (conflictError, rezCycleLength, rezCyclePeriod, rezTotalCycles);
-            cycleLength = product.RecurringCycleLength;
-
-            //cycle period
-            if (cyclePeriod.HasValue && cyclePeriod.Value != product.RecurringCyclePeriod)
-                return (conflictError, rezCycleLength, rezCyclePeriod, rezTotalCycles);
-            cyclePeriod = product.RecurringCyclePeriod;
-
-            //total cycles
-            if (totalCycles.HasValue && totalCycles.Value != product.RecurringTotalCycles)
-                return (conflictError, rezCycleLength, rezCyclePeriod, rezTotalCycles);
-            totalCycles = product.RecurringTotalCycles;
-        }
-
-        if (!cycleLength.HasValue)
-            return (string.Empty, rezCycleLength, rezCyclePeriod, rezTotalCycles);
-
-        rezCycleLength = cycleLength.Value;
-        rezCyclePeriod = cyclePeriod.Value;
-        rezTotalCycles = totalCycles.Value;
-
-        return (string.Empty, rezCycleLength, rezCyclePeriod, rezTotalCycles);
     }
 
     #endregion

@@ -435,13 +435,12 @@ public class ExportManagerTests : ServiceTest
             { "BasepriceBaseUnit", "BasepriceBaseUnitId" },
             { "SKU", "Sku" },
             { "DownloadActivationType", "DownloadActivationTypeId" },
-            { "RecurringCyclePeriod", "RecurringCyclePeriodId" },
             { "RentalPricePeriod", "RentalPricePeriodId" }
         };
 
         var ignore = new List<string> { "Categories", "Manufacturers", "AdminComment",
             "ProductType", "BackorderMode", "DownloadActivationType", "GiftCardType", "LowStockActivity",
-            "ManageInventoryMethod", "RecurringCyclePeriod", "RentalPricePeriod", "ProductCategories",
+            "ManageInventoryMethod", "RentalPricePeriod", "ProductCategories",
             "ProductManufacturers", "ProductPictures", "ProductReviews", "ProductSpecificationAttributes",
             "ProductTags", "ProductAttributeMappings", "ProductAttributeCombinations", "TierPrices",
             "AppliedDiscounts", "ProductWarehouseInventory", "ApprovedRatingSum", "NotApprovedRatingSum",
@@ -468,7 +467,6 @@ public class ExportManagerTests : ServiceTest
         manager.SetSelectList("ManageInventoryMethod", await ManageInventoryMethod.DontManageStock.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("LowStockActivity", await LowStockActivity.Nothing.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("BackorderMode", await BackorderMode.NoBackorders.ToSelectListAsync(useLocalization: false));
-        manager.SetSelectList("RecurringCyclePeriod", await RecurringProductCyclePeriod.Days.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("RentalPricePeriod", await RentalPricePeriod.Days.ToSelectListAsync(useLocalization: false));
 
         var vendors = await _vendorService.GetAllVendorsAsync(showHidden: true);

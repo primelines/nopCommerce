@@ -262,45 +262,6 @@ public partial class OrderModelFactory : IOrderModelFactory
     }
 
     /// <summary>
-    /// Prepare the customer recurring payment list model
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the customer recurring payment list model
-    /// </returns>
-    public virtual async Task<CustomerRecurringPaymentListModel> PrepareCustomerRecurringPaymentListModelAsync()
-    {
-        var model = new CustomerRecurringPaymentListModel();
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var store = await _storeContext.GetCurrentStoreAsync();
-
-        var recurringPayments = await _orderService.SearchRecurringPaymentsAsync(store.Id,
-            customer.Id);
-        foreach (var recurringPayment in recurringPayments)
-        {
-            var order = await _orderService.GetOrderByIdAsync(recurringPayment.InitialOrderId);
-
-            var recurringPaymentModel = new CustomerRecurringPaymentModel
-            {
-                Id = recurringPayment.Id,
-                StartDate = (await _dateTimeHelper.ConvertToUserTimeAsync(recurringPayment.StartDateUtc, DateTimeKind.Utc)).ToString(),
-                CycleInfo = $"{recurringPayment.CycleLength} {await _localizationService.GetLocalizedEnumAsync(recurringPayment.CyclePeriod)}",
-                NextPayment = await _orderProcessingService.GetNextPaymentDateAsync(recurringPayment) is DateTime nextPaymentDate ? (await _dateTimeHelper.ConvertToUserTimeAsync(nextPaymentDate, DateTimeKind.Utc)).ToString() : "",
-                TotalCycles = recurringPayment.TotalCycles,
-                CyclesRemaining = await _orderProcessingService.GetCyclesRemainingAsync(recurringPayment),
-                InitialOrderId = order.Id,
-                InitialOrderNumber = order.CustomOrderNumber,
-                CanCancel = await _orderProcessingService.CanCancelRecurringPaymentAsync(customer, recurringPayment),
-                CanRetryLastPayment = await _orderProcessingService.CanRetryLastRecurringPaymentAsync(customer, recurringPayment)
-            };
-
-            model.RecurringPayments.Add(recurringPaymentModel);
-        }
-
-        return model;
-    }
-
-    /// <summary>
     /// Prepare the order details model
     /// </summary>
     /// <param name="order">Order</param>

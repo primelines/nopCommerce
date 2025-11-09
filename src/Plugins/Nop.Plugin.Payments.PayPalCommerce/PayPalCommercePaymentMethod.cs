@@ -150,45 +150,6 @@ public class PayPalCommercePaymentMethod : BasePlugin, IPaymentMethod, IWidgetPl
     }
 
     /// <summary>
-    /// Process recurring payment
-    /// </summary>
-    /// <param name="processPaymentRequest">Payment info required for an order processing</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the process payment result
-    /// </returns>
-    public async Task<ProcessPaymentResult> ProcessRecurringPaymentAsync(ProcessPaymentRequest processPaymentRequest)
-    {
-        //we process an initial order separately
-        if (processPaymentRequest.InitialOrder is null)
-            return new();
-
-        var (_, error) = await _serviceManager.ProcessNextRecurringPaymentAsync(_settings, processPaymentRequest);
-        if (!string.IsNullOrEmpty(error))
-            return new() { Errors = new[] { error }, RecurringPaymentFailed = true };
-
-        //request succeeded
-        return new();
-    }
-
-    /// <summary>
-    /// Cancels a recurring payment
-    /// </summary>
-    /// <param name="cancelPaymentRequest">Request</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    public async Task<CancelRecurringPaymentResult> CancelRecurringPaymentAsync(CancelRecurringPaymentRequest cancelPaymentRequest)
-    {
-        var (_, error) = await _serviceManager.CancelRecurringPaymentAsync(_settings, cancelPaymentRequest.Order);
-        if (!string.IsNullOrEmpty(error))
-            return new() { Errors = new[] { error } };
-
-        return new();
-    }
-
-    /// <summary>
     /// Returns a value indicating whether payment method should be hidden during checkout
     /// </summary>
     /// <param name="cart">Shoping cart</param>
@@ -562,10 +523,6 @@ public class PayPalCommercePaymentMethod : BasePlugin, IPaymentMethod, IWidgetPl
     /// </summary>
     public bool SupportPartiallyRefund => true;
 
-    /// <summary>
-    /// Gets a recurring payment type of payment method
-    /// </summary>
-    public RecurringPaymentType RecurringPaymentType => RecurringPaymentType.Manual;
 
     /// <summary>
     /// Gets a payment method type

@@ -314,17 +314,6 @@ public partial class MessageTokenProvider : IMessageTokenProvider
                     }
                 },
 
-                //recurring payment tokens
-                {
-                    TokenGroupNames.RecurringPaymentTokens,
-                    new[]
-                    {
-                        "%RecurringPayment.ID%",
-                        "%RecurringPayment.CancelAfterFailedPayment%",
-                        "%RecurringPayment.RecurringPaymentType%"
-                    }
-                },
-
                 //newsletter subscription tokens
                 {
                     TokenGroupNames.SubscriptionTokens,
@@ -1204,24 +1193,6 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     }
 
     /// <summary>
-    /// Add recurring payment tokens
-    /// </summary>
-    /// <param name="tokens">List of already added tokens</param>
-    /// <param name="recurringPayment">Recurring payment</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddRecurringPaymentTokensAsync(IList<Token> tokens, RecurringPayment recurringPayment)
-    {
-        tokens.Add(new Token("RecurringPayment.ID", recurringPayment.Id));
-        tokens.Add(new Token("RecurringPayment.CancelAfterFailedPayment",
-            recurringPayment.LastPaymentFailed && _paymentSettings.CancelRecurringPaymentsAfterFailedPayment));
-        if (await _orderService.GetOrderByIdAsync(recurringPayment.InitialOrderId) is Order order)
-            tokens.Add(new Token("RecurringPayment.RecurringPaymentType", (await _paymentService.GetRecurringPaymentTypeAsync(order.PaymentMethodSystemName)).ToString()));
-
-        //event notification
-        await _eventPublisher.EntityTokensAddedAsync(recurringPayment, tokens);
-    }
-
-    /// <summary>
     /// Add return request tokens
     /// </summary>
     /// <param name="tokens">List of already added tokens</param>
@@ -1659,10 +1630,6 @@ public partial class MessageTokenProvider : IMessageTokenProvider
             MessageTemplateSystemNames.ORDER_REFUNDED_CUSTOMER_NOTIFICATION => [TokenGroupNames.StoreTokens, TokenGroupNames.OrderTokens, TokenGroupNames.RefundedOrderTokens, TokenGroupNames.CustomerTokens],
 
             MessageTemplateSystemNames.NEW_ORDER_NOTE_ADDED_CUSTOMER_NOTIFICATION => [TokenGroupNames.StoreTokens, TokenGroupNames.OrderNoteTokens, TokenGroupNames.OrderTokens, TokenGroupNames.CustomerTokens],
-
-            MessageTemplateSystemNames.RECURRING_PAYMENT_CANCELLED_STORE_OWNER_NOTIFICATION or
-            MessageTemplateSystemNames.RECURRING_PAYMENT_CANCELLED_CUSTOMER_NOTIFICATION or
-            MessageTemplateSystemNames.RECURRING_PAYMENT_FAILED_CUSTOMER_NOTIFICATION => [TokenGroupNames.StoreTokens, TokenGroupNames.OrderTokens, TokenGroupNames.CustomerTokens, TokenGroupNames.RecurringPaymentTokens],
 
             MessageTemplateSystemNames.NEWSLETTER_SUBSCRIPTION_ACTIVATION_MESSAGE or
             MessageTemplateSystemNames.NEWSLETTER_SUBSCRIPTION_DEACTIVATION_MESSAGE => [TokenGroupNames.StoreTokens, TokenGroupNames.SubscriptionTokens],

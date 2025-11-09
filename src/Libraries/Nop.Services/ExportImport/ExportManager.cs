@@ -1291,10 +1291,6 @@ public partial class ExportManager : IExportManager
             await xmlWriter.WriteStringAsync("SampleDownloadId", product.SampleDownloadId, await IgnoreExportProductPropertyAsync(p => p.DownloadableProduct));
             await xmlWriter.WriteStringAsync("HasUserAgreement", product.HasUserAgreement, await IgnoreExportProductPropertyAsync(p => p.DownloadableProduct));
             await xmlWriter.WriteStringAsync("UserAgreementText", product.UserAgreementText, await IgnoreExportProductPropertyAsync(p => p.DownloadableProduct));
-            await xmlWriter.WriteStringAsync("IsRecurring", product.IsRecurring, await IgnoreExportProductPropertyAsync(p => p.RecurringProduct));
-            await xmlWriter.WriteStringAsync("RecurringCycleLength", product.RecurringCycleLength, await IgnoreExportProductPropertyAsync(p => p.RecurringProduct));
-            await xmlWriter.WriteStringAsync("RecurringCyclePeriodId", product.RecurringCyclePeriodId, await IgnoreExportProductPropertyAsync(p => p.RecurringProduct));
-            await xmlWriter.WriteStringAsync("RecurringTotalCycles", product.RecurringTotalCycles, await IgnoreExportProductPropertyAsync(p => p.RecurringProduct));
             await xmlWriter.WriteStringAsync("IsRental", product.IsRental, await IgnoreExportProductPropertyAsync(p => p.IsRental));
             await xmlWriter.WriteStringAsync("RentalPriceLength", product.RentalPriceLength, await IgnoreExportProductPropertyAsync(p => p.IsRental));
             await xmlWriter.WriteStringAsync("RentalPricePeriodId", product.RentalPricePeriodId, await IgnoreExportProductPropertyAsync(p => p.IsRental));
@@ -1651,14 +1647,6 @@ public partial class ExportManager : IExportManager
             new PropertyByName<Product>("SampleDownloadId", (p, _) => p.SampleDownloadId, await IgnoreExportProductPropertyAsync(p => p.DownloadableProduct)),
             new PropertyByName<Product>("HasUserAgreement", (p, _) => p.HasUserAgreement, await IgnoreExportProductPropertyAsync(p => p.DownloadableProduct)),
             new PropertyByName<Product>("UserAgreementText", (p, _) => p.UserAgreementText, await IgnoreExportProductPropertyAsync(p => p.DownloadableProduct)),
-            new PropertyByName<Product>("IsRecurring", (p, _) => p.IsRecurring, await IgnoreExportProductPropertyAsync(p => p.RecurringProduct)),
-            new PropertyByName<Product>("RecurringCycleLength", (p, _) => p.RecurringCycleLength, await IgnoreExportProductPropertyAsync(p => p.RecurringProduct)),
-            new PropertyByName<Product>("RecurringCyclePeriod", (p, _) => p.RecurringCyclePeriodId, await IgnoreExportProductPropertyAsync(p => p.RecurringProduct))
-            {
-                DropDownElements = await RecurringProductCyclePeriod.Days.ToSelectListAsync(useLocalization: false),
-                AllowBlank = true
-            },
-            new PropertyByName<Product>("RecurringTotalCycles", (p, _) => p.RecurringTotalCycles, await IgnoreExportProductPropertyAsync(p => p.RecurringProduct)),
             new PropertyByName<Product>("IsRental", (p, _) => p.IsRental, await IgnoreExportProductPropertyAsync(p => p.IsRental)),
             new PropertyByName<Product>("RentalPriceLength", (p, _) => p.RentalPriceLength, await IgnoreExportProductPropertyAsync(p => p.IsRental)),
             new PropertyByName<Product>("RentalPricePeriod", (p, _) => p.RentalPricePeriodId, await IgnoreExportProductPropertyAsync(p => p.IsRental))

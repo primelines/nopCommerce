@@ -215,14 +215,6 @@ public partial class AdminMenu : IAdminMenu
                         },
                         new()
                         {
-                            SystemName = "Recurring payments",
-                            Title = await _localizationService.GetResourceAsync("Admin.RecurringPayments"),
-                            PermissionNames = new List<string> { StandardPermission.Orders.RECURRING_PAYMENTS_VIEW },
-                            Url = GetMenuItemUrl("RecurringPayment", "List"),
-                            IconClass = "far fa-dot-circle"
-                        },
-                        new()
-                        {
                             SystemName = "Gift cards",
                             Title = await _localizationService.GetResourceAsync("Admin.GiftCards"),
                             PermissionNames = new List<string> { StandardPermission.Orders.GIFT_CARDS_VIEW },

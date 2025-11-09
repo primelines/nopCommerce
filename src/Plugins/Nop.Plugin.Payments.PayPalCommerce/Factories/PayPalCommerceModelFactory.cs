@@ -501,61 +501,6 @@ public class PayPalCommerceModelFactory
         return model;
     }
 
-    /// <summary>
-    /// Prepare the setup token model
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the setup token model
-    /// </returns>
-    public async Task<SetupTokenModel> PrepareSetupTokenModelAsync()
-    {
-        var model = new SetupTokenModel();
-        (model.CheckoutIsEnabled, model.LoginIsRequired, _) = await _serviceManager.CheckoutIsEnabledAsync();
-
-        var (paymentToken, error) = await _serviceManager.CreateSetupTokenAsync(_settings);
-        if (!string.IsNullOrEmpty(error) || paymentToken is null)
-        {
-            model.Error = string.IsNullOrEmpty(error)
-                ? await _localizationService.GetResourceAsync("Plugins.Payments.PayPalCommerce.Order.Error")
-                : error;
-            return model;
-        }
-
-        model.Status = paymentToken.Status;
-        model.PayerActionUrl = paymentToken.PayerActionUrl;
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare the recurring order model
-    /// </summary>
-    /// <param name="setupTokenId">Setup token id</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the recurring order model
-    /// </returns>
-    public async Task<RecurringOrderModel> PrepareRecurringOrderModelAsync(string setupTokenId)
-    {
-        var model = new RecurringOrderModel();
-        (model.CheckoutIsEnabled, model.LoginIsRequired, _) = await _serviceManager.CheckoutIsEnabledAsync();
-
-        var (order, error) = await _serviceManager.CreateRecurringOrderAsync(_settings, setupTokenId);
-        if (!string.IsNullOrEmpty(error) || order is null)
-        {
-            model.Error = string.IsNullOrEmpty(error)
-                ? await _localizationService.GetResourceAsync("Plugins.Payments.PayPalCommerce.Order.Error")
-                : error;
-            return model;
-        }
-
-        model.OrderId = order.Id;
-        model.Status = order.Status;
-
-        return model;
-    }
-
     #endregion
 
     #region Payment tokens

@@ -419,11 +419,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
             });
         }
 
-        //recurring info
-        if (product.IsRecurring)
-            cartItemModel.RecurringInfo = string.Format(await _localizationService.GetResourceAsync("ShoppingCart.RecurringPeriod"),
-                product.RecurringCycleLength, await _localizationService.GetLocalizedEnumAsync(product.RecurringCyclePeriod));
-
         //rental info
         if (product.IsRental)
         {
@@ -558,11 +553,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
                 Selected = sci.Quantity == qty
             });
         }
-
-        //recurring info
-        if (product.IsRecurring)
-            cartItemModel.RecurringInfo = string.Format(await _localizationService.GetResourceAsync("ShoppingCart.RecurringPeriod"),
-                product.RecurringCycleLength, await _localizationService.GetLocalizedEnumAsync(product.RecurringCyclePeriod));
 
         //rental info
         if (product.IsRental)
@@ -940,8 +930,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
             .ToList();
         foreach (var pm in buttonPaymentMethods)
         {
-            if (await _shoppingCartService.ShoppingCartIsRecurringAsync(cart) && pm.RecurringPaymentType == RecurringPaymentType.NotSupported)
-                continue;
 
             var viewComponent = pm.GetPublicViewComponent();
             model.ButtonPaymentMethodViewComponents.Add(viewComponent);

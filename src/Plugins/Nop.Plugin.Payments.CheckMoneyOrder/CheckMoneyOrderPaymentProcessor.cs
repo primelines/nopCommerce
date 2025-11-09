@@ -145,32 +145,6 @@ public class CheckMoneyOrderPaymentProcessor : BasePlugin, IPaymentMethod
     }
 
     /// <summary>
-    /// Process recurring payment
-    /// </summary>
-    /// <param name="processPaymentRequest">Payment info required for an order processing</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the process payment result
-    /// </returns>
-    public Task<ProcessPaymentResult> ProcessRecurringPaymentAsync(ProcessPaymentRequest processPaymentRequest)
-    {
-        return Task.FromResult(new ProcessPaymentResult { Errors = new[] { "Recurring payment not supported" } });
-    }
-
-    /// <summary>
-    /// Cancels a recurring payment
-    /// </summary>
-    /// <param name="cancelPaymentRequest">Request</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    public Task<CancelRecurringPaymentResult> CancelRecurringPaymentAsync(CancelRecurringPaymentRequest cancelPaymentRequest)
-    {
-        return Task.FromResult(new CancelRecurringPaymentResult { Errors = new[] { "Recurring payment not supported" } });
-    }
-
-    /// <summary>
     /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
     /// </summary>
     /// <param name="order">Order</param>
@@ -310,11 +284,6 @@ public class CheckMoneyOrderPaymentProcessor : BasePlugin, IPaymentMethod
     /// Gets a value indicating whether void is supported
     /// </summary>
     public bool SupportVoid => false;
-
-    /// <summary>
-    /// Gets a recurring payment type of payment method
-    /// </summary>
-    public RecurringPaymentType RecurringPaymentType => RecurringPaymentType.NotSupported;
 
     /// <summary>
     /// Gets a payment method type

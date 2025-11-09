@@ -1423,23 +1423,16 @@ public partial class ShoppingCartController : BasePublicController
         await ParseAndSaveCheckoutAttributesAsync(cart, form);
 
         var model = new ShoppingCartDto();
-        if (!await _shoppingCartService.ShoppingCartIsRecurringAsync(cart))
+
+        if (!string.IsNullOrWhiteSpace(giftcardcouponcode))
         {
-            if (!string.IsNullOrWhiteSpace(giftcardcouponcode))
+            var giftCard = (await _giftCardService.GetAllGiftCardsAsync(giftCardCouponCode: giftcardcouponcode)).FirstOrDefault();
+            var isGiftCardValid = giftCard != null && await _giftCardService.IsGiftCardValidAsync(giftCard);
+            if (isGiftCardValid)
             {
-                var giftCard = (await _giftCardService.GetAllGiftCardsAsync(giftCardCouponCode: giftcardcouponcode)).FirstOrDefault();
-                var isGiftCardValid = giftCard != null && await _giftCardService.IsGiftCardValidAsync(giftCard);
-                if (isGiftCardValid)
-                {
-                    await _customerService.ApplyGiftCardCouponCodeAsync(customer, giftcardcouponcode);
-                    model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.Applied");
-                    model.GiftCardBox.IsApplied = true;
-                }
-                else
-                {
-                    model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.WrongGiftCard");
-                    model.GiftCardBox.IsApplied = false;
-                }
+                await _customerService.ApplyGiftCardCouponCodeAsync(customer, giftcardcouponcode);
+                model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.Applied");
+                model.GiftCardBox.IsApplied = true;
             }
             else
             {
@@ -1449,9 +1442,10 @@ public partial class ShoppingCartController : BasePublicController
         }
         else
         {
-            model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.DontWorkWithAutoshipProducts");
+            model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.WrongGiftCard");
             model.GiftCardBox.IsApplied = false;
         }
+
 
         model = await _shoppingCartModelFactory.PrepareShoppingCartDtoAsync(model, cart);
         return Ok(model);

@@ -131,10 +131,6 @@ public partial record OrderModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.Orders.Fields.Edit.OrderTotal")]
     public decimal OrderTotalValue { get; set; }
 
-    //associated recurring payment id
-    [NopResourceDisplayName("Admin.Orders.Fields.RecurringPayment")]
-    public int RecurringPaymentId { get; set; }
-
     //order status
     [NopResourceDisplayName("Admin.Orders.Fields.OrderStatus")]
     public string OrderStatus { get; set; }

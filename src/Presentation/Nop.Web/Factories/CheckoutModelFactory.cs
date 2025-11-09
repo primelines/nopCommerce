@@ -461,7 +461,7 @@ public partial class CheckoutModelFactory : ICheckoutModelFactory
         var store = await _storeContext.GetCurrentStoreAsync();
 
         //reward points
-        if (_rewardPointsSettings.Enabled && !await _shoppingCartService.ShoppingCartIsRecurringAsync(cart))
+        if (_rewardPointsSettings.Enabled)
         {
             var shoppingCartTotal = await _orderTotalCalculationService.GetShoppingCartTotalAsync(cart, true, false);
             if (shoppingCartTotal.redeemedRewardPoints > 0)
@@ -484,9 +484,6 @@ public partial class CheckoutModelFactory : ICheckoutModelFactory
             .ToListAsync();
         foreach (var pm in paymentMethods)
         {
-            if (await _shoppingCartService.ShoppingCartIsRecurringAsync(cart) && pm.RecurringPaymentType == RecurringPaymentType.NotSupported)
-                continue;
-
             var pmModel = new CheckoutPaymentMethodModel.PaymentMethodModel
             {
                 Name = await _localizationService.GetLocalizedFriendlyNameAsync(pm, (await _workContext.GetWorkingLanguageAsync()).Id),

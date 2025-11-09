@@ -257,18 +257,6 @@ public class MySqlDateTimeWithPrecisionMigration : ForwardOnlyMigration
             .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(QueuedEmail), nameof(QueuedEmail.SentOnUtc)))
             .AsCustom("datetime(6)")
             .Nullable();
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(RecurringPayment)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(RecurringPayment), nameof(RecurringPayment.CreatedOnUtc)))
-            .AsCustom("datetime(6)");
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(RecurringPayment)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(RecurringPayment), nameof(RecurringPayment.StartDateUtc)))
-            .AsCustom("datetime(6)");
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(RecurringPaymentHistory)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(RecurringPaymentHistory), nameof(RecurringPaymentHistory.CreatedOnUtc)))
-            .AsCustom("datetime(6)");
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(ReturnRequest)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(ReturnRequest), nameof(ReturnRequest.CreatedOnUtc)))
-            .AsCustom("datetime(6)");
         Alter.Table(NameCompatibilityManager.GetTableName(typeof(ReturnRequest)))
             .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(ReturnRequest), nameof(ReturnRequest.UpdatedOnUtc)))
             .AsCustom("datetime(6)");

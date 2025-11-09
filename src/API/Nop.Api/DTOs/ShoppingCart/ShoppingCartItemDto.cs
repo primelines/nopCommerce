@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Api.Framework.Dtos;
 using Nop.Api.DTOs.Media;
@@ -73,10 +73,6 @@ public partial record ShoppingCartItemDto : BaseNopEntityDto
 
     [JsonProperty("attribute_info")]
     public string AttributeInfo { get; set; }
-
-
-    [JsonProperty("recurring_info")]
-    public string RecurringInfo { get; set; }
 
 
     [JsonProperty("rental_info")]

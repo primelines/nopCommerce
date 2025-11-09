@@ -528,7 +528,6 @@ public class LocalizationMigration : MigrationBase
             ["Admin.Documentation.Reference.Orders"] = "Learn more about <a target=\"_blank\" href=\"{0}\">orders</a>",
             ["Admin.Documentation.Reference.ShippingManagement"] = "Learn more about <a target=\"_blank\" href=\"{0}\">shipping management</a>",
             ["Admin.Documentation.Reference.ReturnRequests"] = "Learn more about <a target=\"_blank\" href=\"{0}\">return requests</a>",
-            ["Admin.Documentation.Reference.RecurringPayments"] = "Learn more about <a target=\"_blank\" href=\"{0}\">recurring products</a>",
             ["Admin.Documentation.Reference.ShoppingCartsAndWishlists"] = "Learn more about <a target=\"_blank\" href=\"{0}\">shopping carts and wishlists</a>",
             ["Admin.Documentation.Reference.GiftCards"] = "Learn more about <a target=\"_blank\" href=\"{0}\">gift cards</a>",
             ["Admin.Documentation.Reference.Customers"] = "Learn more about <a target=\"_blank\" href=\"{0}\">customers</a>",

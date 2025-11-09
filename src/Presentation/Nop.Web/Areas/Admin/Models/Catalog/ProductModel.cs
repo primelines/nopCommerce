@@ -197,18 +197,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.UserAgreementText")]
     public string UserAgreementText { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsRecurring")]
-    public bool IsRecurring { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RecurringCycleLength")]
-    public int RecurringCycleLength { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RecurringCyclePeriod")]
-    public int RecurringCyclePeriodId { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RecurringTotalCycles")]
-    public int RecurringTotalCycles { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsRental")]
     public bool IsRental { get; set; }
 

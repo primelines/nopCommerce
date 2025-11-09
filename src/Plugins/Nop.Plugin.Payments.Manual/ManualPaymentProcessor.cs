@@ -160,53 +160,6 @@ public class ManualPaymentProcessor : BasePlugin, IPaymentMethod
     }
 
     /// <summary>
-    /// Process recurring payment
-    /// </summary>
-    /// <param name="processPaymentRequest">Payment info required for an order processing</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the process payment result
-    /// </returns>
-    public Task<ProcessPaymentResult> ProcessRecurringPaymentAsync(ProcessPaymentRequest processPaymentRequest)
-    {
-        var result = new ProcessPaymentResult
-        {
-            AllowStoringCreditCardNumber = true
-        };
-        switch (_manualPaymentSettings.TransactMode)
-        {
-            case TransactMode.Pending:
-                result.NewPaymentStatus = PaymentStatus.Pending;
-                break;
-            case TransactMode.Authorize:
-                result.NewPaymentStatus = PaymentStatus.Authorized;
-                break;
-            case TransactMode.AuthorizeAndCapture:
-                result.NewPaymentStatus = PaymentStatus.Paid;
-                break;
-            default:
-                result.AddError("Not supported transaction type");
-                break;
-        }
-
-        return Task.FromResult(result);
-    }
-
-    /// <summary>
-    /// Cancels a recurring payment
-    /// </summary>
-    /// <param name="cancelPaymentRequest">Request</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    public Task<CancelRecurringPaymentResult> CancelRecurringPaymentAsync(CancelRecurringPaymentRequest cancelPaymentRequest)
-    {
-        //always success
-        return Task.FromResult(new CancelRecurringPaymentResult());
-    }
-
-    /// <summary>
     /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
     /// </summary>
     /// <param name="order">Order</param>
@@ -369,11 +322,6 @@ public class ManualPaymentProcessor : BasePlugin, IPaymentMethod
     /// Gets a value indicating whether void is supported
     /// </summary>
     public bool SupportVoid => false;
-
-    /// <summary>
-    /// Gets a recurring payment type of payment method
-    /// </summary>
-    public RecurringPaymentType RecurringPaymentType => RecurringPaymentType.Manual;
 
     /// <summary>
     /// Gets a payment method type

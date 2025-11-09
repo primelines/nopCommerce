@@ -113,7 +113,6 @@ public class AclMigration : Migration
         insertMappings("ManageCurrentCarts", StandardPermission.Orders.CURRENT_CARTS_MANAGE);
         insertMappings("ManageOrders", StandardPermission.Orders.ORDERS_VIEW, StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE, StandardPermission.Orders.ORDERS_IMPORT_EXPORT, StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE, StandardPermission.Orders.SHIPMENTS_VIEW, StandardPermission.Reports.BESTSELLERS, StandardPermission.Reports.PRODUCTS_NEVER_PURCHASED);
         insertMappings("SalesSummaryReport", StandardPermission.Reports.SALES_SUMMARY);
-        insertMappings("ManageRecurringPayments", StandardPermission.Orders.RECURRING_PAYMENTS_CREATE_EDIT_DELETE, StandardPermission.Orders.RECURRING_PAYMENTS_VIEW);
         insertMappings("ManageGiftCards", StandardPermission.Orders.GIFT_CARDS_CREATE_EDIT_DELETE, StandardPermission.Orders.GIFT_CARDS_VIEW);
         insertMappings("ManageReturnRequests", StandardPermission.Orders.RETURN_REQUESTS_CREATE_EDIT_DELETE, StandardPermission.Orders.RETURN_REQUESTS_VIEW);
         insertMappings("OrderCountryReport", StandardPermission.Reports.COUNTRY_SALES);

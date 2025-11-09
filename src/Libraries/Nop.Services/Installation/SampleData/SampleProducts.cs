@@ -141,21 +141,6 @@ public partial class SampleProducts
         public bool HasUserAgreement { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the product is recurring
-        /// </summary>
-        public bool IsRecurring { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cycle length
-        /// </summary>
-        public int RecurringCycleLength { get; set; }
-
-        /// <summary>
-        /// Gets or sets the total cycles
-        /// </summary>
-        public int RecurringTotalCycles { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the product is rental
         /// </summary>
         public bool IsRental { get; set; }
@@ -310,12 +295,6 @@ public partial class SampleProducts
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public ManageInventoryMethod ManageInventoryMethod { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cycle period for recurring products
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public RecurringProductCyclePeriod RecurringCyclePeriod { get; set; }
 
         /// <summary>
         /// Gets or sets the period for rental products

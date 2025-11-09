@@ -202,11 +202,6 @@ public static partial class NopRouteNames
         public const string CUSTOMER_PRODUCT_REVIEWS_PAGED = "CustomerProductReviewsPaged";
 
         /// <summary>
-        /// Gets the customer recurring payments route name
-        /// </summary>
-        public const string CUSTOMER_RECURRING_PAYMENTS = "CustomerRecurringPayments";
-
-        /// <summary>
         /// Gets the change currency route name
         /// </summary>
         public const string CHANGE_CURRENCY = "ChangeCurrency";

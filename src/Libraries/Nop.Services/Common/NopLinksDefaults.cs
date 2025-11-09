@@ -137,11 +137,6 @@ public static partial class NopLinksDefaults
         public static string ReturnRequests => "https://docs.nopcommerce.com/running-your-store/order-management/return-requests.html";
 
         /// <summary>
-        /// Gets a URL of the recurring payments docs page
-        /// </summary>
-        public static string RecurringPayments => "https://docs.nopcommerce.com/running-your-store/catalog/products/recurring-products.html";
-
-        /// <summary>
         /// Gets a URL of the shopping carts and wishlists docs page
         /// </summary>
         public static string ShoppingCartsAndWishlists => "https://docs.nopcommerce.com/running-your-store/order-management/shopping-carts-and-wishlists.html";

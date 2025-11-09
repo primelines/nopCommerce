@@ -905,8 +905,6 @@ public partial class ProductModelFactory : IProductModelFactory
         {
             model.MaximumCustomerEnteredPrice = 1000;
             model.MaxNumberOfDownloads = 10;
-            model.RecurringCycleLength = 100;
-            model.RecurringTotalCycles = 10;
             model.RentalPriceLength = 1;
             model.StockQuantity = 10000;
             model.NotifyAdminForQuantityBelow = 1;

@@ -729,10 +729,7 @@ public partial class OrderTotalCalculationService : IOrderTotalCalculationServic
     protected virtual async Task<decimal> AppliedGiftCardsAsync(IList<ShoppingCartItem> cart, List<AppliedGiftCard> appliedGiftCards,
         Customer customer, decimal resultTemp)
     {
-        if (await _shoppingCartService.ShoppingCartIsRecurringAsync(cart))
-            return resultTemp;
 
-        //we don't apply gift cards for recurring products
         var giftCards = await _giftCardService.GetActiveGiftCardsAppliedByCustomerAsync(customer);
         if (giftCards == null)
             return resultTemp;

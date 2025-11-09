@@ -210,26 +210,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public string UserAgreementText { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the product is recurring
-    /// </summary>
-    public bool IsRecurring { get; set; }
-
-    /// <summary>
-    /// Gets or sets the cycle length
-    /// </summary>
-    public int RecurringCycleLength { get; set; }
-
-    /// <summary>
-    /// Gets or sets the cycle period
-    /// </summary>
-    public int RecurringCyclePeriodId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the total cycles
-    /// </summary>
-    public int RecurringTotalCycles { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the product is rental
     /// </summary>
     public bool IsRental { get; set; }
@@ -584,15 +564,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     {
         get => (ManageInventoryMethod)ManageInventoryMethodId;
         set => ManageInventoryMethodId = (int)value;
-    }
-
-    /// <summary>
-    /// Gets or sets the cycle period for recurring products
-    /// </summary>
-    public RecurringProductCyclePeriod RecurringCyclePeriod
-    {
-        get => (RecurringProductCyclePeriod)RecurringCyclePeriodId;
-        set => RecurringCyclePeriodId = (int)value;
     }
 
     /// <summary>

@@ -76,8 +76,6 @@ public partial record WishlistModel : BaseNopModel
 
         public string AttributeInfo { get; set; }
 
-        public string RecurringInfo { get; set; }
-
         public string RentalInfo { get; set; }
 
         public bool AllowItemEditing { get; set; }

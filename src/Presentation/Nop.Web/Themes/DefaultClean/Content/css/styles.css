@@ -7558,11 +7558,6 @@ label, label + * {
     vertical-align: top;
   }
 
-  .recurring-payments {
-    width: 100% !important;
-    margin: 20px 0 !important;
-  }
-
 
   /*** SHOPPING CART ***/
 
