@@ -1,0 +1,21 @@
+namespace Nop.Api.Framework.Dtos.AdminAreaTour;
+
+/// <summary>
+/// Represents tour step names
+/// </summary>
+public enum TourStep
+{
+    GeneralSettings,
+    Store,
+    ShippingProviders,
+    ShippingManual,
+    PaymentMethods,
+    PaymentPayPal,
+    TaxProviders,
+    TaxManual,
+    Product,
+    EmailAccountList,
+    EmailAccount,
+    TopicList,
+    Topic
+}

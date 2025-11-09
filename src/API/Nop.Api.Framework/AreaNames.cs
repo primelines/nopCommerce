@@ -1,0 +1,13 @@
+﻿namespace Nop.Api.Framework;
+
+/// <summary>
+/// Represents a list of area names
+/// </summary>
+public static class AreaNames
+{
+    /// <summary>
+    /// Admin area
+    /// </summary>
+    public const string ADMIN = "Admin";
+    public const string VENDOR = "Vendor";
+}
