@@ -217,7 +217,7 @@ public partial class ProductModelFactory : IProductModelFactory
             minPossiblePrice = tmpMinPossiblePrice;
         }
 
-        if (minPriceProduct == null || minPriceProduct.CustomerEntersPrice)
+        if (minPriceProduct == null)
             return;
 
         if (minPriceProduct.CallForPrice &&
@@ -421,13 +421,6 @@ public partial class ProductModelFactory : IProductModelFactory
                 DateTime.UtcNow;
 
             model.PreOrderAvailabilityStartDateTimeUtc = product.PreOrderAvailabilityStartDateTimeUtc;
-        }
-
-        if (product.CustomerEntersPrice)
-        {
-            model.CustomerEntersPrice = true;
-
-            return model;
         }
 
         if (product.CallForPrice &&
@@ -859,20 +852,6 @@ public partial class ProductModelFactory : IProductModelFactory
                     (await _dateTimeHelper.ConvertToUserTimeAsync(model.PreOrderAvailabilityStartDateTimeUtc.Value)).ToString("D");
             }
         }
-
-        //customer entered price
-        model.CustomerEntersPrice = product.CustomerEntersPrice;
-        if (!model.CustomerEntersPrice)
-            return model;
-
-        var currentCurrency = await _workContext.GetWorkingCurrencyAsync();
-        var minimumCustomerEnteredPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(product.MinimumCustomerEnteredPrice, currentCurrency);
-        var maximumCustomerEnteredPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(product.MaximumCustomerEnteredPrice, currentCurrency);
-
-        model.CustomerEnteredPrice = updatecartitem != null ? updatecartitem.CustomerEnteredPrice : minimumCustomerEnteredPrice;
-        model.CustomerEnteredPriceRange = string.Format(await _localizationService.GetResourceAsync("Products.EnterProductPrice.Range"),
-            await _priceFormatter.FormatPriceAsync(minimumCustomerEnteredPrice, false, false),
-            await _priceFormatter.FormatPriceAsync(maximumCustomerEnteredPrice, false, false));
 
         return model;
     }

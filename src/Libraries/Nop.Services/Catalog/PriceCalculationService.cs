@@ -230,10 +230,6 @@ public partial class PriceCalculationService : IPriceCalculationService
         var appliedDiscounts = new List<Discount>();
         var appliedDiscountAmount = decimal.Zero;
 
-        //we don't apply discounts to products with price entered by a customer
-        if (product.CustomerEntersPrice)
-            return (appliedDiscountAmount, appliedDiscounts);
-
         //discounts are disabled
         if (_catalogSettings.IgnoreDiscounts)
             return (appliedDiscountAmount, appliedDiscounts);

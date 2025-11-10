@@ -347,9 +347,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
         //prices
         if (await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
         {
-            if (product.CustomerEntersPrice)
-                return;
-
             if (product.CallForPrice &&
                 //also check whether the current user is impersonated
                 (!_orderSettings.AllowAdminsToBuyCallForPriceProducts ||
@@ -572,7 +569,7 @@ public partial class ProductDtoFactory : IProductDtoFactory
                 minPossiblePrice = tmpMinPossiblePrice;
             }
 
-            if (minPriceProduct == null || minPriceProduct.CustomerEntersPrice)
+            if (minPriceProduct == null)
                 return;
 
             if (minPriceProduct.CallForPrice &&
@@ -769,64 +766,59 @@ public partial class ProductDtoFactory : IProductDtoFactory
         if (await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
         {
             model.HidePrices = false;
-            if (product.CustomerEntersPrice)
+
+            if (product.CallForPrice &&
+                //also check whether the current user is impersonated
+                (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
             {
-                model.CustomerEntersPrice = true;
+                model.CallForPrice = true;
             }
             else
             {
-                if (product.CallForPrice &&
-                    //also check whether the current user is impersonated
-                    (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
+                var customer = await _workContext.GetCurrentCustomerAsync();
+                var store = await _storeContext.GetCurrentStoreAsync();
+                var currentCurrency = await _workContext.GetWorkingCurrencyAsync();
+
+                var (oldPriceBase, _) = await _taxService.GetProductPriceAsync(product, product.OldPrice);
+
+                var (finalPriceWithoutDiscountBase, _) = await _taxService.GetProductPriceAsync(product, (await _priceCalculationService.GetFinalPriceAsync(product, customer, store, includeDiscounts: false)).finalPrice);
+                var (finalPriceWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, (await _priceCalculationService.GetFinalPriceAsync(product, customer, store)).finalPrice);
+
+                var oldPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(oldPriceBase, currentCurrency);
+                var finalPriceWithoutDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithoutDiscountBase, currentCurrency);
+                var finalPriceWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithDiscountBase, currentCurrency);
+
+                if (finalPriceWithoutDiscountBase != oldPriceBase && oldPriceBase > decimal.Zero)
                 {
-                    model.CallForPrice = true;
+                    model.OldPrice = await _priceFormatter.FormatPriceAsync(oldPrice);
+                    model.OldPriceValue = oldPrice;
                 }
-                else
+
+                model.Price = await _priceFormatter.FormatPriceAsync(finalPriceWithoutDiscount);
+
+                if (finalPriceWithoutDiscountBase != finalPriceWithDiscountBase)
                 {
-                    var customer = await _workContext.GetCurrentCustomerAsync();
-                    var store = await _storeContext.GetCurrentStoreAsync();
-                    var currentCurrency = await _workContext.GetWorkingCurrencyAsync();
-
-                    var (oldPriceBase, _) = await _taxService.GetProductPriceAsync(product, product.OldPrice);
-
-                    var (finalPriceWithoutDiscountBase, _) = await _taxService.GetProductPriceAsync(product, (await _priceCalculationService.GetFinalPriceAsync(product, customer, store, includeDiscounts: false)).finalPrice);
-                    var (finalPriceWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, (await _priceCalculationService.GetFinalPriceAsync(product, customer, store)).finalPrice);
-
-                    var oldPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(oldPriceBase, currentCurrency);
-                    var finalPriceWithoutDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithoutDiscountBase, currentCurrency);
-                    var finalPriceWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithDiscountBase, currentCurrency);
-
-                    if (finalPriceWithoutDiscountBase != oldPriceBase && oldPriceBase > decimal.Zero)
-                    {
-                        model.OldPrice = await _priceFormatter.FormatPriceAsync(oldPrice);
-                        model.OldPriceValue = oldPrice;
-                    }
-
-                    model.Price = await _priceFormatter.FormatPriceAsync(finalPriceWithoutDiscount);
-
-                    if (finalPriceWithoutDiscountBase != finalPriceWithDiscountBase)
-                    {
-                        model.PriceWithDiscount = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
-                        model.PriceWithDiscountValue = finalPriceWithDiscount;
-                    }
-
-                    model.PriceValue = finalPriceWithDiscount;
-
-                    //property for German market
-                    //we display tax/shipping info only with "shipping enabled" for this product
-                    //we also ensure this it's not free shipping
-                    model.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductDetailsPage
-                                                   && product.IsShipEnabled &&
-                                                   !product.IsFreeShipping;
-
-                    //PAngV baseprice (used in Germany)
-                    model.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase);
-                    model.BasePricePAngVValue = finalPriceWithDiscountBase;
-                    //currency code
-                    model.CurrencyCode = currentCurrency.CurrencyCode;
-
+                    model.PriceWithDiscount = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
+                    model.PriceWithDiscountValue = finalPriceWithDiscount;
                 }
+
+                model.PriceValue = finalPriceWithDiscount;
+
+                //property for German market
+                //we display tax/shipping info only with "shipping enabled" for this product
+                //we also ensure this it's not free shipping
+                model.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductDetailsPage
+                                               && product.IsShipEnabled &&
+                                               !product.IsFreeShipping;
+
+                //PAngV baseprice (used in Germany)
+                model.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase);
+                model.BasePricePAngVValue = finalPriceWithDiscountBase;
+                //currency code
+                model.CurrencyCode = currentCurrency.CurrencyCode;
+
             }
+
         }
         else
         {
@@ -905,20 +897,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
                     (await _dateTimeHelper.ConvertToUserTimeAsync(model.PreOrderAvailabilityStartDateTimeUtc.Value)).ToString("D");
             }
         }
-
-        //customer entered price
-        model.CustomerEntersPrice = product.CustomerEntersPrice;
-        if (!model.CustomerEntersPrice)
-            return model;
-
-        var currentCurrency = await _workContext.GetWorkingCurrencyAsync();
-        var minimumCustomerEnteredPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(product.MinimumCustomerEnteredPrice, currentCurrency);
-        var maximumCustomerEnteredPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(product.MaximumCustomerEnteredPrice, currentCurrency);
-
-        model.CustomerEnteredPrice = updatecartitem != null ? updatecartitem.CustomerEnteredPrice : minimumCustomerEnteredPrice;
-        model.CustomerEnteredPriceRange = string.Format(await _localizationService.GetResourceAsync("Products.EnterProductPrice.Range"),
-            await _priceFormatter.FormatPriceAsync(minimumCustomerEnteredPrice, false, false),
-            await _priceFormatter.FormatPriceAsync(maximumCustomerEnteredPrice, false, false));
 
         return model;
     }
@@ -1052,87 +1030,87 @@ public partial class ProductDtoFactory : IProductDtoFactory
                     case AttributeControlType.Checkboxes:
                     case AttributeControlType.ColorSquares:
                     case AttributeControlType.ImageSquares:
-                    {
-                        if (!string.IsNullOrEmpty(updatecartitem.AttributesXml))
                         {
-                            //clear default selection
-                            foreach (var item in attributeModel.Values)
-                                item.IsPreSelected = false;
-
-                            //select new values
-                            var selectedValues = await _productAttributeParser.ParseProductAttributeValuesAsync(updatecartitem.AttributesXml);
-                            foreach (var attributeValue in selectedValues)
+                            if (!string.IsNullOrEmpty(updatecartitem.AttributesXml))
+                            {
+                                //clear default selection
                                 foreach (var item in attributeModel.Values)
-                                    if (attributeValue.Id == item.Id)
-                                    {
-                                        item.IsPreSelected = true;
+                                    item.IsPreSelected = false;
 
-                                        //set customer entered quantity
-                                        if (attributeValue.CustomerEntersQty)
-                                            item.Quantity = attributeValue.Quantity;
-                                    }
+                                //select new values
+                                var selectedValues = await _productAttributeParser.ParseProductAttributeValuesAsync(updatecartitem.AttributesXml);
+                                foreach (var attributeValue in selectedValues)
+                                    foreach (var item in attributeModel.Values)
+                                        if (attributeValue.Id == item.Id)
+                                        {
+                                            item.IsPreSelected = true;
+
+                                            //set customer entered quantity
+                                            if (attributeValue.CustomerEntersQty)
+                                                item.Quantity = attributeValue.Quantity;
+                                        }
+                            }
                         }
-                    }
 
                         break;
                     case AttributeControlType.ReadonlyCheckboxes:
-                    {
-                        //values are already pre-set
-
-                        //set customer entered quantity
-                        if (!string.IsNullOrEmpty(updatecartitem.AttributesXml))
                         {
-                            foreach (var attributeValue in (await _productAttributeParser.ParseProductAttributeValuesAsync(updatecartitem.AttributesXml))
-                                     .Where(value => value.CustomerEntersQty))
+                            //values are already pre-set
+
+                            //set customer entered quantity
+                            if (!string.IsNullOrEmpty(updatecartitem.AttributesXml))
                             {
-                                var item = attributeModel.Values.FirstOrDefault(value => value.Id == attributeValue.Id);
-                                if (item != null)
-                                    item.Quantity = attributeValue.Quantity;
+                                foreach (var attributeValue in (await _productAttributeParser.ParseProductAttributeValuesAsync(updatecartitem.AttributesXml))
+                                         .Where(value => value.CustomerEntersQty))
+                                {
+                                    var item = attributeModel.Values.FirstOrDefault(value => value.Id == attributeValue.Id);
+                                    if (item != null)
+                                        item.Quantity = attributeValue.Quantity;
+                                }
                             }
                         }
-                    }
 
                         break;
                     case AttributeControlType.TextBox:
                     case AttributeControlType.MultilineTextbox:
-                    {
-                        if (!string.IsNullOrEmpty(updatecartitem.AttributesXml))
                         {
-                            var enteredText = _productAttributeParser.ParseValues(updatecartitem.AttributesXml, attribute.Id);
-                            if (enteredText.Any())
-                                attributeModel.DefaultValue = enteredText[0];
+                            if (!string.IsNullOrEmpty(updatecartitem.AttributesXml))
+                            {
+                                var enteredText = _productAttributeParser.ParseValues(updatecartitem.AttributesXml, attribute.Id);
+                                if (enteredText.Any())
+                                    attributeModel.DefaultValue = enteredText[0];
+                            }
                         }
-                    }
 
                         break;
                     case AttributeControlType.Datepicker:
-                    {
-                        //keep in mind my that the code below works only in the current culture
-                        var selectedDateStr = _productAttributeParser.ParseValues(updatecartitem.AttributesXml, attribute.Id);
-                        if (selectedDateStr.Any())
                         {
-                            if (DateTime.TryParseExact(selectedDateStr[0], "D", CultureInfo.CurrentCulture, DateTimeStyles.None, out var selectedDate))
+                            //keep in mind my that the code below works only in the current culture
+                            var selectedDateStr = _productAttributeParser.ParseValues(updatecartitem.AttributesXml, attribute.Id);
+                            if (selectedDateStr.Any())
                             {
-                                //successfully parsed
-                                attributeModel.SelectedDay = selectedDate.Day;
-                                attributeModel.SelectedMonth = selectedDate.Month;
-                                attributeModel.SelectedYear = selectedDate.Year;
+                                if (DateTime.TryParseExact(selectedDateStr[0], "D", CultureInfo.CurrentCulture, DateTimeStyles.None, out var selectedDate))
+                                {
+                                    //successfully parsed
+                                    attributeModel.SelectedDay = selectedDate.Day;
+                                    attributeModel.SelectedMonth = selectedDate.Month;
+                                    attributeModel.SelectedYear = selectedDate.Year;
+                                }
                             }
                         }
-                    }
 
                         break;
                     case AttributeControlType.FileUpload:
-                    {
-                        if (!string.IsNullOrEmpty(updatecartitem.AttributesXml))
                         {
-                            var downloadGuidStr = _productAttributeParser.ParseValues(updatecartitem.AttributesXml, attribute.Id).FirstOrDefault();
-                            _ = Guid.TryParse(downloadGuidStr, out var downloadGuid);
-                            var download = await _downloadService.GetDownloadByGuidAsync(downloadGuid);
-                            if (download != null)
-                                attributeModel.DefaultValue = download.DownloadGuid.ToString();
+                            if (!string.IsNullOrEmpty(updatecartitem.AttributesXml))
+                            {
+                                var downloadGuidStr = _productAttributeParser.ParseValues(updatecartitem.AttributesXml, attribute.Id).FirstOrDefault();
+                                _ = Guid.TryParse(downloadGuidStr, out var downloadGuid);
+                                var download = await _downloadService.GetDownloadByGuidAsync(downloadGuid);
+                                if (download != null)
+                                    attributeModel.DefaultValue = download.DownloadGuid.ToString();
+                            }
                         }
-                    }
 
                         break;
                     default:

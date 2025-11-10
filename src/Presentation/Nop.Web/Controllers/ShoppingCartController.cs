@@ -296,7 +296,7 @@ public partial class ShoppingCartController : BasePublicController
     }
 
     protected virtual async Task SaveItemAsync(ShoppingCartItem updatecartitem, List<string> addToCartWarnings, Product product,
-        ShoppingCartType cartType, string attributes, decimal customerEnteredPriceConverted,int quantity)
+        ShoppingCartType cartType, string attributes,int quantity)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
@@ -305,14 +305,14 @@ public partial class ShoppingCartController : BasePublicController
             //add to the cart
             addToCartWarnings.AddRange(await _shoppingCartService.AddToCartAsync(customer,
                 product, cartType, store.Id,
-                attributes, customerEnteredPriceConverted, quantity, true));
+                attributes, quantity, true));
         }
         else
         {
             var cart = await _shoppingCartService.GetShoppingCartAsync(customer, updatecartitem.ShoppingCartType, store.Id);
 
             var otherCartItemWithSameParameters = await _shoppingCartService.FindShoppingCartItemInTheCartAsync(
-                cart, updatecartitem.ShoppingCartType, product, attributes, customerEnteredPriceConverted);
+                cart, updatecartitem.ShoppingCartType, product, attributes);
             if (otherCartItemWithSameParameters != null &&
                 otherCartItemWithSameParameters.Id == updatecartitem.Id)
             {
@@ -321,7 +321,7 @@ public partial class ShoppingCartController : BasePublicController
             }
             //update existing item
             addToCartWarnings.AddRange(await _shoppingCartService.UpdateShoppingCartItemAsync(customer,
-                updatecartitem.Id, attributes, customerEnteredPriceConverted,
+                updatecartitem.Id, attributes,
                  quantity + (otherCartItemWithSameParameters?.Quantity ?? 0), true));
             if (otherCartItemWithSameParameters != null && !addToCartWarnings.Any())
             {
@@ -572,12 +572,6 @@ public partial class ShoppingCartController : BasePublicController
             return Json(new { redirect = redirectUrl });
         }
 
-        if (product.CustomerEntersPrice)
-        {
-            //cannot be added to the cart (requires a customer to enter price)
-            return Json(new { redirect = redirectUrl });
-        }
-
         var allowedQuantities = _productService.ParseAllowedQuantities(product);
         if (allowedQuantities.Length > 0)
         {
@@ -620,7 +614,7 @@ public partial class ShoppingCartController : BasePublicController
         var addToCartWarnings = await _shoppingCartService
             .GetShoppingCartItemWarningsAsync(customer, cartType,
                 product, store.Id, string.Empty,
-                decimal.Zero, quantityToValidate, false, shoppingCartItem?.Id ?? 0, true, false, false, false);
+                quantityToValidate, false, shoppingCartItem?.Id ?? 0, true, false, false, false);
         if (addToCartWarnings.Any())
         {
             //cannot be added to the cart
@@ -796,8 +790,6 @@ public partial class ShoppingCartController : BasePublicController
 
         var addToCartWarnings = new List<string>();
 
-        //customer entered price
-        var customerEnteredPriceConverted = await _productAttributeParser.ParseCustomerEnteredPriceAsync(product, form);
 
         //entered quantity
         var quantity = _productAttributeParser.ParseEnteredQuantity(product, form);
@@ -809,7 +801,7 @@ public partial class ShoppingCartController : BasePublicController
             //if the item to update is found, then we ignore the specified "shoppingCartTypeId" parameter
             updatecartitem.ShoppingCartType;
 
-        await SaveItemAsync(updatecartitem, addToCartWarnings, product, cartType, attributes, customerEnteredPriceConverted, quantity);
+        await SaveItemAsync(updatecartitem, addToCartWarnings, product, cartType, attributes, quantity);
 
         //return result
         return await GetProductToCartDetailsAsync(addToCartWarnings, cartType, product);
@@ -858,7 +850,7 @@ public partial class ShoppingCartController : BasePublicController
         var price = string.Empty;
         //base price
         var basepricepangv = string.Empty;
-        if (!product.CustomerEntersPrice && await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
+        if (await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
         {
             var currentStore = await _storeContext.GetCurrentStoreAsync();
             var currentCustomer = await _workContext.GetCurrentCustomerAsync();
@@ -868,7 +860,7 @@ public partial class ShoppingCartController : BasePublicController
                 currentCustomer,
                 currentStore,
                 ShoppingCartType.ShoppingCart,
-                1, attributeXml, 0, true);
+                1, attributeXml, true);
             var (finalPriceWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, finalPrice);
             var finalPriceWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithDiscountBase, await _workContext.GetWorkingCurrencyAsync());
             price = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
@@ -1232,7 +1224,7 @@ public partial class ShoppingCartController : BasePublicController
         {
             ItemId = cartItem.Item.Id,
             Warnings = await _shoppingCartService.UpdateShoppingCartItemAsync(customer,
-                cartItem.Item.Id, cartItem.Item.AttributesXml, cartItem.Item.CustomerEnteredPrice, cartItem.NewQuantity, true)
+                cartItem.Item.Id, cartItem.Item.AttributesXml, cartItem.NewQuantity, true)
         }).ToListAsync();
 
         //updated cart
@@ -1545,7 +1537,7 @@ public partial class ShoppingCartController : BasePublicController
                         if (int.TryParse(form[formKey], out var newQuantity))
                         {
                             var currSciWarnings = await _shoppingCartService.UpdateShoppingCartItemAsync(customer,
-                                sci.Id, sci.AttributesXml, sci.CustomerEnteredPrice,
+                                sci.Id, sci.AttributesXml, 
                                 newQuantity, true);
                             innerWarnings.Add(sci.Id, currSciWarnings);
                         }
@@ -1610,7 +1602,7 @@ public partial class ShoppingCartController : BasePublicController
                 var warnings = await _shoppingCartService.AddToCartAsync(customer,
                     product, ShoppingCartType.ShoppingCart,
                     store.Id,
-                    sci.AttributesXml, sci.CustomerEnteredPrice, sci.Quantity, true);
+                    sci.AttributesXml, sci.Quantity, true);
                 if (!warnings.Any())
                     countOfAddedItems++;
                 if (_shoppingCartSettings.MoveItemsFromWishlistToCart && //settings enabled

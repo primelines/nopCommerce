@@ -108,11 +108,6 @@ public partial class ProductEditorSettings : ISettings
     public bool OldPrice { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Customer enters price' field is shown
-    /// </summary>
-    public bool CustomerEntersPrice { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'PAngV' field is shown
     /// </summary>
     public bool PAngV { get; set; }

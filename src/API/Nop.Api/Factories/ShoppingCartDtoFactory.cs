@@ -479,7 +479,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
             product,
             sci.StoreId,
             sci.AttributesXml,
-            sci.CustomerEnteredPrice,
             sci.Quantity,
             false,
             sci.Id);
@@ -598,7 +597,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
             product,
             sci.StoreId,
             sci.AttributesXml,
-            sci.CustomerEnteredPrice,
             sci.Quantity,
             false,
             sci.Id);

@@ -480,7 +480,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
             product,
             sci.StoreId,
             sci.AttributesXml,
-            sci.CustomerEnteredPrice,
             sci.Quantity,
             false,
             sci.Id);
@@ -599,7 +598,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
             product,
             sci.StoreId,
             sci.AttributesXml,
-            sci.CustomerEnteredPrice,
             sci.Quantity,
             false,
             sci.Id);

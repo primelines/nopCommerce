@@ -903,7 +903,6 @@ public partial class ProductModelFactory : IProductModelFactory
         //set default values for the new model
         if (product == null)
         {
-            model.MaximumCustomerEnteredPrice = 1000;
             model.StockQuantity = 10000;
             model.NotifyAdminForQuantityBelow = 1;
             model.OrderMinimumQuantity = 1;

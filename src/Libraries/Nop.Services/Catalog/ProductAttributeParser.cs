@@ -888,35 +888,6 @@ public partial class ProductAttributeParser : IProductAttributeParser
     }
 
     /// <summary>
-    /// Parse a customer entered price of the product
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="form">Form</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the customer entered price of the product
-    /// </returns>
-    public virtual async Task<decimal> ParseCustomerEnteredPriceAsync(Product product, IFormCollection form)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-        ArgumentNullException.ThrowIfNull(form);
-
-        var customerEnteredPriceConverted = decimal.Zero;
-        if (product.CustomerEntersPrice)
-            foreach (var formKey in form.Keys)
-            {
-                if (formKey.Equals($"addtocart_{product.Id}.CustomerEnteredPrice", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (decimal.TryParse(form[formKey], out var customerEnteredPrice))
-                        customerEnteredPriceConverted = await _currencyService.ConvertToPrimaryStoreCurrencyAsync(customerEnteredPrice, await _workContext.GetWorkingCurrencyAsync());
-                    break;
-                }
-            }
-
-        return customerEnteredPriceConverted;
-    }
-
-    /// <summary>
     /// Parse a entered quantity of the product
     /// </summary>
     /// <param name="product">Product</param>

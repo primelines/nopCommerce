@@ -786,7 +786,6 @@ public class RfqService
                 StoreId = store.Id,
                 ProductId = quoteItem.ProductId,
                 AttributesXml = quoteItem.AttributesXml,
-                CustomerEnteredPrice = decimal.Zero,
                 Quantity = quoteItem.OfferedQty,
                 CreatedOnUtc = now,
                 UpdatedOnUtc = now,

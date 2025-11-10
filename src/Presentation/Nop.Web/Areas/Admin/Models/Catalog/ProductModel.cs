@@ -282,15 +282,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductCost")]
     public decimal ProductCost { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.CustomerEntersPrice")]
-    public bool CustomerEntersPrice { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MinimumCustomerEnteredPrice")]
-    public decimal MinimumCustomerEnteredPrice { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MaximumCustomerEnteredPrice")]
-    public decimal MaximumCustomerEnteredPrice { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.BasepriceEnabled")]
     public bool BasepriceEnabled { get; set; }
 

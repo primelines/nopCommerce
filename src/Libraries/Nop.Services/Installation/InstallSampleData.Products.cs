@@ -210,9 +210,6 @@ public partial class InstallationService
                 UpdatedOnUtc = DateTime.UtcNow,
                 IsGiftCard = sample.IsGiftCard,
                 GiftCardType = sample.GiftCardType,
-                CustomerEntersPrice = sample.CustomerEntersPrice,
-                MinimumCustomerEnteredPrice = sample.MinimumCustomerEnteredPrice,
-                MaximumCustomerEnteredPrice = sample.MaximumCustomerEnteredPrice,
             };
 
             if (!string.IsNullOrEmpty(sample.ProductAvailabilityRange))

@@ -5,9 +5,8 @@
 
 @inject IWorkContext workContext
 
-@if (!Model.CustomerEntersPrice)
-{
-    <div class="prices">
+
+<div class="prices">
         @if (Model.CallForPrice)
         {
             @*call for price*@
@@ -70,4 +69,4 @@
             }
         }
     </div>
-}
+

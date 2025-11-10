@@ -4,66 +4,62 @@ using Nop.Api.Framework.Dtos;
 namespace Nop.Api.DTOs.Catalog;
 
 
-  public partial record ProductPriceDto : BaseNopDto
-    {
-        /// <summary>
-        /// The currency (in 3-letter ISO 4217 format) of the offer price 
-        /// </summary>
+public partial record ProductPriceDto : BaseNopDto
+{
+    /// <summary>
+    /// The currency (in 3-letter ISO 4217 format) of the offer price 
+    /// </summary>
 
     [JsonProperty("currency_code")]
-        public string CurrencyCode { get; set; }
+    public string CurrencyCode { get; set; }
 
 
     [JsonProperty("old_price")]
-        public string OldPrice { get; set; }
+    public string OldPrice { get; set; }
 
     [JsonProperty("old_price_value")]
-        public decimal? OldPriceValue { get; set; }
+    public decimal? OldPriceValue { get; set; }
 
 
     [JsonProperty("price")]
-        public string Price { get; set; }
+    public string Price { get; set; }
 
     [JsonProperty("price_value")]
-        public decimal PriceValue { get; set; }
+    public decimal PriceValue { get; set; }
 
     [JsonProperty("price_with_discount")]
-        public string PriceWithDiscount { get; set; }
+    public string PriceWithDiscount { get; set; }
 
     [JsonProperty("price_with_discount_value")]
-        public decimal? PriceWithDiscountValue { get; set; }
-
-
-    [JsonProperty("customer_enters_price")]
-        public bool CustomerEntersPrice { get; set; }
+    public decimal? PriceWithDiscountValue { get; set; }
 
 
     [JsonProperty("call_for_price")]
-        public bool CallForPrice { get; set; }
+    public bool CallForPrice { get; set; }
 
 
     [JsonProperty("product_id")]
-        public int ProductId { get; set; }
+    public int ProductId { get; set; }
 
 
     [JsonProperty("hide_prices")]
-        public bool HidePrices { get; set; }
+    public bool HidePrices { get; set; }
 
-        /// <summary>
-        /// A value indicating whether we should display tax/shipping info (used in Germany)
-        /// </summary>
+    /// <summary>
+    /// A value indicating whether we should display tax/shipping info (used in Germany)
+    /// </summary>
 
     [JsonProperty("display_tax_shipping_info")]
-        public bool DisplayTaxShippingInfo { get; set; }
-        /// <summary>
-        /// PAngV baseprice (used in Germany)
-        /// </summary>
+    public bool DisplayTaxShippingInfo { get; set; }
+    /// <summary>
+    /// PAngV baseprice (used in Germany)
+    /// </summary>
 
     [JsonProperty("base_price_p_ang_v")]
-        public string BasePricePAngV { get; set; }
+    public string BasePricePAngV { get; set; }
 
     [JsonProperty("base_price_p_ang_v_value")]
-        public decimal? BasePricePAngVValue { get; set; }
+    public decimal? BasePricePAngVValue { get; set; }
 
-    }
+}
 

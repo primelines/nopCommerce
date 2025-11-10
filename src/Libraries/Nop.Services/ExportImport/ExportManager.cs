@@ -1313,9 +1313,6 @@ public partial class ExportManager : IExportManager
             await xmlWriter.WriteStringAsync("Price", product.Price);
             await xmlWriter.WriteStringAsync("OldPrice", product.OldPrice, await IgnoreExportProductPropertyAsync(p => p.OldPrice));
             await xmlWriter.WriteStringAsync("ProductCost", product.ProductCost, await IgnoreExportProductPropertyAsync(p => p.ProductCost));
-            await xmlWriter.WriteStringAsync("CustomerEntersPrice", product.CustomerEntersPrice, await IgnoreExportProductPropertyAsync(p => p.CustomerEntersPrice));
-            await xmlWriter.WriteStringAsync("MinimumCustomerEnteredPrice", product.MinimumCustomerEnteredPrice, await IgnoreExportProductPropertyAsync(p => p.CustomerEntersPrice));
-            await xmlWriter.WriteStringAsync("MaximumCustomerEnteredPrice", product.MaximumCustomerEnteredPrice, await IgnoreExportProductPropertyAsync(p => p.CustomerEntersPrice));
             await xmlWriter.WriteStringAsync("BasepriceEnabled", product.BasepriceEnabled, await IgnoreExportProductPropertyAsync(p => p.PAngV));
             await xmlWriter.WriteStringAsync("BasepriceAmount", product.BasepriceAmount, await IgnoreExportProductPropertyAsync(p => p.PAngV));
             await xmlWriter.WriteStringAsync("BasepriceUnitId", product.BasepriceUnitId, await IgnoreExportProductPropertyAsync(p => p.PAngV));
@@ -1675,9 +1672,6 @@ public partial class ExportManager : IExportManager
             new PropertyByName<Product>("Price", (p, _) => p.Price),
             new PropertyByName<Product>("OldPrice", (p, _) => p.OldPrice, await IgnoreExportProductPropertyAsync(p => p.OldPrice)),
             new PropertyByName<Product>("ProductCost", (p, _) => p.ProductCost, await IgnoreExportProductPropertyAsync(p => p.ProductCost)),
-            new PropertyByName<Product>("CustomerEntersPrice", (p, _) => p.CustomerEntersPrice, await IgnoreExportProductPropertyAsync(p => p.CustomerEntersPrice)),
-            new PropertyByName<Product>("MinimumCustomerEnteredPrice", (p, _) => p.MinimumCustomerEnteredPrice, await IgnoreExportProductPropertyAsync(p => p.CustomerEntersPrice)),
-            new PropertyByName<Product>("MaximumCustomerEnteredPrice", (p, _) => p.MaximumCustomerEnteredPrice, await IgnoreExportProductPropertyAsync(p => p.CustomerEntersPrice)),
             new PropertyByName<Product>("BasepriceEnabled", (p, _) => p.BasepriceEnabled, await IgnoreExportProductPropertyAsync(p => p.PAngV)),
             new PropertyByName<Product>("BasepriceAmount", (p, _) => p.BasepriceAmount, await IgnoreExportProductPropertyAsync(p => p.PAngV)),
             new PropertyByName<Product>("BasepriceUnit", (p, _) => p.BasepriceUnitId, await IgnoreExportProductPropertyAsync(p => p.PAngV))

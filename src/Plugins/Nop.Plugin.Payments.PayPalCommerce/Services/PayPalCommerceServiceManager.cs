@@ -1408,7 +1408,7 @@ public class PayPalCommerceServiceManager
 
                 var itemWarnings = await _shoppingCartService
                     .GetShoppingCartItemWarningsAsync(customer, item.ShoppingCartType, product, item.StoreId, item.AttributesXml,
-                    item.CustomerEnteredPrice, item.Quantity, false, item.Id);
+                    item.Quantity, false, item.Id);
                 if (itemWarnings.Any())
                     return itemWarnings;
             }

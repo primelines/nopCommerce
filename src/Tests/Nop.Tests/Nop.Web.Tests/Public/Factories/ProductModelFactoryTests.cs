@@ -200,11 +200,6 @@ public class ProductModelFactoryTests : WebTest
                 //prices
                 if (await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
                 {
-                    if (product.CustomerEntersPrice)
-                    {
-                        priceModel.CustomerEntersPrice = true;
-                        return;
-                    }
                     if (product.CallForPrice &&
                         //also check whether the current user is impersonated
                         (!_orderSettings.AllowAdminsToBuyCallForPriceProducts ||
@@ -414,12 +409,6 @@ public class ProductModelFactoryTests : WebTest
                         minPossiblePrice = tmpMinPossiblePrice;
                     }
 
-                    if (minPriceProduct == null || minPriceProduct.CustomerEntersPrice)
-                    {
-                        priceModel.CustomerEntersPrice = minPriceProduct?.CustomerEntersPrice ?? product.CustomerEntersPrice;
-                        return;
-                    }
-
                     if (minPriceProduct.CallForPrice &&
                         //also check whether the current user is impersonated
                         (!_orderSettings.AllowAdminsToBuyCallForPriceProducts ||
@@ -506,59 +495,56 @@ public class ProductModelFactoryTests : WebTest
             if (await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
             {
                 model.HidePrices = false;
-                if (product.CustomerEntersPrice)
-                    model.CustomerEntersPrice = true;
+
+                if (product.CallForPrice &&
+                    //also check whether the current user is impersonated
+                    (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
+                {
+                    model.CallForPrice = true;
+                }
                 else
                 {
-                    if (product.CallForPrice &&
-                        //also check whether the current user is impersonated
-                        (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
+                    var customer = await _workContext.GetCurrentCustomerAsync();
+                    var store = await _storeContext.GetCurrentStoreAsync();
+
+                    var (oldPriceBase, _) = await _taxService.GetProductPriceAsync(product, product.OldPrice);
+
+                    var (finalPriceWithoutDiscountBase, _) = await _taxService.GetProductPriceAsync(product, (await _priceCalculationService.GetFinalPriceAsync(product, customer, store, includeDiscounts: false)).finalPrice);
+                    var (finalPriceWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, (await _priceCalculationService.GetFinalPriceAsync(product, customer, store)).finalPrice);
+
+                    var oldPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(oldPriceBase, currentCurrency);
+                    var finalPriceWithoutDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithoutDiscountBase, currentCurrency);
+                    var finalPriceWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithDiscountBase, currentCurrency);
+
+                    if (finalPriceWithoutDiscountBase != oldPriceBase && oldPriceBase > decimal.Zero)
                     {
-                        model.CallForPrice = true;
+                        model.OldPrice = await _priceFormatter.FormatPriceAsync(oldPrice);
+                        model.OldPriceValue = oldPrice;
                     }
-                    else
+
+                    model.Price = await _priceFormatter.FormatPriceAsync(finalPriceWithoutDiscount);
+
+                    if (finalPriceWithoutDiscountBase != finalPriceWithDiscountBase)
                     {
-                        var customer = await _workContext.GetCurrentCustomerAsync();
-                        var store = await _storeContext.GetCurrentStoreAsync();
-
-                        var (oldPriceBase, _) = await _taxService.GetProductPriceAsync(product, product.OldPrice);
-
-                        var (finalPriceWithoutDiscountBase, _) = await _taxService.GetProductPriceAsync(product, (await _priceCalculationService.GetFinalPriceAsync(product, customer, store, includeDiscounts: false)).finalPrice);
-                        var (finalPriceWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, (await _priceCalculationService.GetFinalPriceAsync(product, customer, store)).finalPrice);
-
-                        var oldPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(oldPriceBase, currentCurrency);
-                        var finalPriceWithoutDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithoutDiscountBase, currentCurrency);
-                        var finalPriceWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithDiscountBase, currentCurrency);
-
-                        if (finalPriceWithoutDiscountBase != oldPriceBase && oldPriceBase > decimal.Zero)
-                        {
-                            model.OldPrice = await _priceFormatter.FormatPriceAsync(oldPrice);
-                            model.OldPriceValue = oldPrice;
-                        }
-
-                        model.Price = await _priceFormatter.FormatPriceAsync(finalPriceWithoutDiscount);
-
-                        if (finalPriceWithoutDiscountBase != finalPriceWithDiscountBase)
-                        {
-                            model.PriceWithDiscount = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
-                            model.PriceWithDiscountValue = finalPriceWithDiscount;
-                        }
-
-                        model.PriceValue = finalPriceWithDiscount;
-
-                        //property for German market
-                        //we display tax/shipping info only with "shipping enabled" for this product
-                        //we also ensure this it's not free shipping
-                        model.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductDetailsPage
-                                                       && product.IsShipEnabled &&
-                                                       !product.IsFreeShipping;
-
-                        //PAngV baseprice (used in Germany)
-                        model.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase);
-                        model.BasePricePAngVValue = finalPriceWithDiscountBase;
-
+                        model.PriceWithDiscount = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
+                        model.PriceWithDiscountValue = finalPriceWithDiscount;
                     }
+
+                    model.PriceValue = finalPriceWithDiscount;
+
+                    //property for German market
+                    //we display tax/shipping info only with "shipping enabled" for this product
+                    //we also ensure this it's not free shipping
+                    model.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductDetailsPage
+                                                    && product.IsShipEnabled &&
+                                                    !product.IsFreeShipping;
+
+                    //PAngV baseprice (used in Germany)
+                    model.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase);
+                    model.BasePricePAngVValue = finalPriceWithDiscountBase;
+
                 }
+                
             }
             else
             {

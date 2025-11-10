@@ -28,18 +28,6 @@ public partial record AddToCartDto : BaseNopDto
     [JsonProperty("allowed_quantities")]
     public List<SelectListItemDto> AllowedQuantities { get; set; }
 
-    //price entered by customers
-
-    [JsonProperty("customer_enters_price")]
-    public bool CustomerEntersPrice { get; set; }
-
-    [JsonProperty("customer_entered_price")]
-    public decimal CustomerEnteredPrice { get; set; }
-
-    [JsonProperty("customer_entered_price_range")]
-    public string CustomerEnteredPriceRange { get; set; }
-
-
     [JsonProperty("disable_buy_button")]
     public bool DisableBuyButton { get; set; }
 

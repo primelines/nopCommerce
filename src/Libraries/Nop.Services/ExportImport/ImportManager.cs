@@ -2340,15 +2340,6 @@ public partial class ImportManager : IImportManager
                     case "ProductCost":
                         product.ProductCost = property.DecimalValue;
                         break;
-                    case "CustomerEntersPrice":
-                        product.CustomerEntersPrice = property.BooleanValue;
-                        break;
-                    case "MinimumCustomerEnteredPrice":
-                        product.MinimumCustomerEnteredPrice = property.DecimalValue;
-                        break;
-                    case "MaximumCustomerEnteredPrice":
-                        product.MaximumCustomerEnteredPrice = property.DecimalValue;
-                        break;
                     case "BasepriceEnabled":
                         product.BasepriceEnabled = property.BooleanValue;
                         break;

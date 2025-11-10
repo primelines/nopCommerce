@@ -3093,12 +3093,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.Categories.NoCategoriesAvailable">
     <Value>No categories available.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.CustomerEntersPrice">
-    <Value>Customer enters price</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.CustomerEntersPrice.Hint">
-    <Value>An option indicating whether customer should enter price.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.DeliveryDate">
     <Value>Delivery date</Value>
   </LocaleResource>
@@ -3258,12 +3252,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.MarkAsNewStartDateTimeUtc.Hint">
     <Value>Set Product as New from Date in Coordinated Universal Time (UTC).</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MaximumCustomerEnteredPrice">
-    <Value>Maximum amount</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MaximumCustomerEnteredPrice.Hint">
-    <Value>Enter a maximum amount.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.MetaDescription">
     <Value>Meta description</Value>
   </LocaleResource>
@@ -3290,12 +3278,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.MinimumAgeToPurchase.ShouldBeGreaterThanZero">
     <Value>The minimum age for purchasing should be greater 0</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MinimumCustomerEnteredPrice">
-    <Value>Minimum amount</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MinimumCustomerEnteredPrice.Hint">
-    <Value>Enter a minimum amount.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.MinStockQuantity">
     <Value>Minimum stock qty</Value>
@@ -8760,9 +8742,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.CrossSellsProducts">
     <Value>Cross-sells products</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.CustomerEntersPrice">
-    <Value>Customer enters price</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.DeliveryDate">
     <Value>Delivery date</Value>
@@ -20467,9 +20446,6 @@
   </LocaleResource>
   <LocaleResource Name="ShoppingCart.CrossSells">
     <Value>Based on your selection, you may be interested in the following items</Value>
-  </LocaleResource>
-  <LocaleResource Name="ShoppingCart.CustomerEnteredPrice.RangeError">
-    <Value>The price must be from {0} to {1}</Value>
   </LocaleResource>
   <LocaleResource Name="ShoppingCart.DateOfBirthRequired">
     <Value>This product has age restrictions. Please specify your age in the account details.</Value>

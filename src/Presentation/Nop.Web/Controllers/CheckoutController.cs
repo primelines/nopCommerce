@@ -367,7 +367,6 @@ public partial class CheckoutController : BasePublicController
                 product,
                 sci.StoreId,
                 sci.AttributesXml,
-                sci.CustomerEnteredPrice,
                 sci.Quantity,
                 false,
                 sci.Id);

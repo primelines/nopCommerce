@@ -37,8 +37,6 @@ public partial record ProductPriceModel : BaseNopModel
     public string PriceWithDiscount { get; set; }
     public decimal? PriceWithDiscountValue { get; set; }
 
-    public bool CustomerEntersPrice { get; set; }
-
     public bool CallForPrice { get; set; }
 
     public int ProductId { get; set; }

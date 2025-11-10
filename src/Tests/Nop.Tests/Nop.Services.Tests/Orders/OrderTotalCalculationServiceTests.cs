@@ -50,7 +50,6 @@ public class OrderTotalCalculationServiceTests : ServiceTest
         {
             Name = "Product name 1",
             Price = productPrice,
-            CustomerEntersPrice = false,
             Published = true
         };
 

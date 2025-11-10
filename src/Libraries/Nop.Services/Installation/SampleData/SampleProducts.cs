@@ -181,21 +181,6 @@ public partial class SampleProducts
         public decimal OldPrice { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether a customer enters price
-        /// </summary>
-        public bool CustomerEntersPrice { get; set; }
-
-        /// <summary>
-        /// Gets or sets the minimum price entered by a customer
-        /// </summary>
-        public decimal MinimumCustomerEnteredPrice { get; set; }
-
-        /// <summary>
-        /// Gets or sets the maximum price entered by a customer
-        /// </summary>
-        public decimal MaximumCustomerEnteredPrice { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether this product is marked as new
         /// </summary>
         public bool MarkAsNew { get; set; }

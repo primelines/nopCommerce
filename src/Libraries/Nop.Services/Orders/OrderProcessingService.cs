@@ -471,8 +471,7 @@ public partial class OrderProcessingService : IOrderProcessingService
             var product = await _productService.GetProductByIdAsync(sci.ProductId);
 
             var sciWarnings = await _shoppingCartService.GetShoppingCartItemWarningsAsync(details.Customer,
-                sci.ShoppingCartType, product, processPaymentRequest.StoreId, sci.AttributesXml,
-                sci.CustomerEnteredPrice, sci.Quantity, false, sci.Id);
+                sci.ShoppingCartType, product, processPaymentRequest.StoreId, sci.AttributesXml, sci.Quantity, false, sci.Id);
             if (sciWarnings.Any())
                 throw new NopException(sciWarnings.Aggregate(string.Empty, (current, next) => $"{current}{next};"));
         }
@@ -1478,7 +1477,7 @@ public partial class OrderProcessingService : IOrderProcessingService
             var store = await _storeService.GetStoreByIdAsync(updatedShoppingCartItem.StoreId);
 
             updateOrderParameters.Warnings.AddRange(await _shoppingCartService.GetShoppingCartItemWarningsAsync(customer, updatedShoppingCartItem.ShoppingCartType,
-                product, updatedOrder.StoreId, updatedShoppingCartItem.AttributesXml, updatedShoppingCartItem.CustomerEnteredPrice,
+                product, updatedOrder.StoreId, updatedShoppingCartItem.AttributesXml,
                  updatedShoppingCartItem.Quantity, false, updatedShoppingCartItem.Id));
 
             updatedOrderItem.ItemWeight = await _shippingService.GetShoppingCartItemWeightAsync(updatedShoppingCartItem);
@@ -2501,7 +2500,6 @@ public partial class OrderProcessingService : IOrderProcessingService
             warnings.AddRange(await _shoppingCartService.AddToCartAsync(customer, product,
                 ShoppingCartType.ShoppingCart, order.StoreId,
                 orderItem.AttributesXml,
-                _taxSettings.PricesIncludeTax ? orderItem.UnitPriceInclTax : orderItem.UnitPriceExclTax,
                 orderItem.Quantity, false));
         }
 

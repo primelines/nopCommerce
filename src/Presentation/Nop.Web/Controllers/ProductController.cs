@@ -252,8 +252,6 @@ public partial class ProductController : BasePublicController
         };
 
         var addToCartWarnings = new List<string>();
-        //customer entered price
-        wrappedProduct.CustomerEnteredPrice = await _productAttributeParser.ParseCustomerEnteredPriceAsync(product, form);
 
         //entered quantity
         wrappedProduct.Quantity = _productAttributeParser.ParseEnteredQuantity(product, form);

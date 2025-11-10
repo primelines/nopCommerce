@@ -151,14 +151,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
         public int EnteredQuantity { get; set; }
         public string MinimumQuantityNotification { get; set; }
         public List<SelectListItem> AllowedQuantities { get; set; }
-
-        //price entered by customers
-        [NopResourceDisplayName("Products.EnterProductPrice")]
-        public bool CustomerEntersPrice { get; set; }
-        [NopResourceDisplayName("Products.EnterProductPrice")]
-        public decimal CustomerEnteredPrice { get; set; }
-        public string CustomerEnteredPriceRange { get; set; }
-
         public bool DisableBuyButton { get; set; }
         public bool DisableWishlistButton { get; set; }
 

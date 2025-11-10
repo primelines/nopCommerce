@@ -107,17 +107,6 @@ public partial interface IProductAttributeParser
     Task<IList<string>> GenerateAllCombinationsAsync(Product product, bool ignoreNonCombinableAttributes = false, IList<int> allowedAttributeIds = null);
 
     /// <summary>
-    /// Parse a customer entered price of the product
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="form">Form</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the customer entered price of the product
-    /// </returns>
-    Task<decimal> ParseCustomerEnteredPriceAsync(Product product, IFormCollection form);
-
-    /// <summary>
     /// Parse a entered quantity of the product
     /// </summary>
     /// <param name="product">Product</param>

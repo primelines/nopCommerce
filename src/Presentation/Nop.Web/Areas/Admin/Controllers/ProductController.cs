@@ -4069,7 +4069,6 @@ public partial class ProductController : BaseAdminController
                 StockQuantity = Quantity,
                 Published = IsPublished,
                 //set default values for the new model
-                MaximumCustomerEnteredPrice = 1000,
                 NotifyAdminForQuantityBelow = 1,
                 OrderMinimumQuantity = 1,
                 OrderMaximumQuantity = 10000,

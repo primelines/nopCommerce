@@ -72,9 +72,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.OldPrice")]
     public bool OldPrice { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.CustomerEntersPrice")]
-    public bool CustomerEntersPrice { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.PAngV")]
     public bool PAngV { get; set; }
 

@@ -36,11 +36,6 @@ public partial class ShoppingCartItem : BaseEntity
     public string AttributesXml { get; set; }
 
     /// <summary>
-    /// Gets or sets the price enter by a customer
-    /// </summary>
-    public decimal CustomerEnteredPrice { get; set; }
-
-    /// <summary>
     /// Gets or sets the quantity
     /// </summary>
     public int Quantity { get; set; }
