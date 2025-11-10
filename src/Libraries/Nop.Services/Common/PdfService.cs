@@ -365,8 +365,6 @@ public partial class PdfService : IPdfService
 
             notesResult.Add((createdOn, note));
 
-            //should we display a link to downloadable files here?
-            //I think, no. Anyway, PDFs are printable documents and links (files) are useful here
         }
 
         return notesResult;

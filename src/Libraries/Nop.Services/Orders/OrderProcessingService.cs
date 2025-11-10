@@ -1102,9 +1102,6 @@ public partial class OrderProcessingService : IOrderProcessingService
                 Quantity = sc.Quantity,
                 DiscountAmountInclTax = discountAmountInclTax.price,
                 DiscountAmountExclTax = discountAmountExclTax.price,
-                DownloadCount = 0,
-                IsDownloadActivated = false,
-                LicenseDownloadId = 0,
                 ItemWeight = itemWeight,
             };
 

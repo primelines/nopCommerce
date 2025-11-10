@@ -1011,14 +1011,11 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
 
                 var cartProductIds = cart.Select(ci => ci.ProductId).ToArray();
 
-                var downloadableProductsRequireRegistration =
-                    _customerSettings.RequireRegistrationForDownloadableProducts && await _productService.HasAnyDownloadableProductAsync(cartProductIds);
 
                 model.DisplayCheckoutButton = !_orderSettings.TermsOfServiceOnShoppingCartPage &&
                                               minOrderSubtotalAmountOk &&
                                               !checkoutAttributesExist &&
-                                              !(downloadableProductsRequireRegistration
-                                                && await _customerService.IsGuestAsync(customer));
+                                              !(await _customerService.IsGuestAsync(customer));
 
                 //products. sort descending (recently added products)
                 foreach (var sci in cart

@@ -297,11 +297,6 @@ public static partial class NopRouteNames
         public const string CUSTOMER_RETURN_REQUESTS = "CustomerReturnRequests";
 
         /// <summary>
-        /// Gets the customer downloadable products route name
-        /// </summary>
-        public const string CUSTOMER_DOWNLOADABLE_PRODUCTS = "CustomerDownloadableProducts";
-
-        /// <summary>
         /// Gets the customer back in stock subscriptions route name
         /// </summary>
         public const string CUSTOMER_BACK_IN_STOCK_SUBSCRIPTIONS = "CustomerBackInStockSubscriptions";

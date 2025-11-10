@@ -84,9 +84,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.IsGiftCard")]
     public bool IsGiftCard { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.DownloadableProduct")]
-    public bool DownloadableProduct { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.FreeShipping")]
     public bool FreeShipping { get; set; }
 

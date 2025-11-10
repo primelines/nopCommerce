@@ -560,7 +560,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(entity => entity.BackorderMode, options => options.Ignore())
             .ForMember(entity => entity.CreatedOnUtc, options => options.Ignore())
             .ForMember(entity => entity.Deleted, options => options.Ignore())
-            .ForMember(entity => entity.DownloadActivationType, options => options.Ignore())
             .ForMember(entity => entity.GiftCardType, options => options.Ignore())
             .ForMember(entity => entity.LowStockActivity, options => options.Ignore())
             .ForMember(entity => entity.ManageInventoryMethod, options => options.Ignore())
@@ -797,11 +796,11 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
         CreateMap<CustomerSettingsModel, CustomerSettings>()
             .ForMember(settings => settings.AvatarMaximumSizeBytes, options => options.Ignore())
             .ForMember(settings => settings.DeleteGuestTaskOlderThanMinutes, options => options.Ignore())
-            .ForMember(settings => settings.DownloadableProductsValidateUser, options => options.Ignore())
             .ForMember(settings => settings.HashedPasswordFormat, options => options.Ignore())
             .ForMember(settings => settings.OnlineCustomerMinutes, options => options.Ignore())
             .ForMember(settings => settings.SuffixDeletedCustomers, options => options.Ignore())
             .ForMember(settings => settings.LastActivityMinutes, options => options.Ignore())
+            .ForMember(settings => settings.AllowCustomersToCheckGiftCardBalance, options => options.Ignore())
             .ForMember(settings => settings.RequiredReLoginAfterPasswordChange, options => options.Ignore());
 
         CreateMap<MultiFactorAuthenticationSettings, MultiFactorAuthenticationSettingsModel>();

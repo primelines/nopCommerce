@@ -163,19 +163,9 @@ public partial class CustomerSettings : ISettings
     public bool NotifyNewCustomerRegistration { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to hide 'Downloadable products' tab on 'My account' page
-    /// </summary>
-    public bool HideDownloadableProductsTab { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether to hide 'Back in stock subscriptions' tab on 'My account' page
     /// </summary>
     public bool HideBackInStockSubscriptionsTab { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to validate user when downloading products
-    /// </summary>
-    public bool DownloadableProductsValidateUser { get; set; }
 
     /// <summary>
     /// Customer name formatting
@@ -226,11 +216,6 @@ public partial class CustomerSettings : ISettings
     /// Gets or sets a value indicating whether to force entering email twice
     /// </summary>
     public bool EnteringEmailTwice { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether registration is required for downloadable products
-    /// </summary>
-    public bool RequireRegistrationForDownloadableProducts { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to check gift card balance

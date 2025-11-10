@@ -434,7 +434,6 @@ public class ExportManagerTests : ServiceTest
             { "BasepriceUnit", "BasepriceUnitId" },
             { "BasepriceBaseUnit", "BasepriceBaseUnitId" },
             { "SKU", "Sku" },
-            { "DownloadActivationType", "DownloadActivationTypeId" }
         };
 
         var ignore = new List<string> { "Categories", "Manufacturers", "AdminComment",
@@ -444,7 +443,7 @@ public class ExportManagerTests : ServiceTest
             "ProductTags", "ProductAttributeMappings", "ProductAttributeCombinations", "TierPrices",
             "AppliedDiscounts", "ProductWarehouseInventory", "ApprovedRatingSum", "NotApprovedRatingSum",
             "ApprovedTotalReviews", "NotApprovedTotalReviews", "SubjectToAcl", "LimitedToStores", "Deleted",
-            "DownloadExpirationDays", "AvailableStartDateTimeUtc",
+             "AvailableStartDateTimeUtc",
             "AvailableEndDateTimeUtc", "DisplayOrder", "CreatedOnUtc", "UpdatedOnUtc", "ProductProductTagMappings",
             "DiscountProductMappings", "EntityCacheKey" };
 
@@ -462,7 +461,6 @@ public class ExportManagerTests : ServiceTest
 
         manager.SetSelectList("ProductType", await ProductType.SimpleProduct.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("GiftCardType", await GiftCardType.Virtual.ToSelectListAsync(useLocalization: false));
-        manager.SetSelectList("DownloadActivationType", await DownloadActivationType.Manually.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("ManageInventoryMethod", await ManageInventoryMethod.DontManageStock.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("LowStockActivity", await LowStockActivity.Nothing.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("BackorderMode", await BackorderMode.NoBackorders.ToSelectListAsync(useLocalization: false));

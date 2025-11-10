@@ -167,7 +167,6 @@ public partial class InstallationService
         {
             new() {Name = "Books", DisplayOrder = 1},
             new() {Name = "Electronics & Software", DisplayOrder = 5},
-            new() {Name = "Downloadable Products", DisplayOrder = 10},
             new() {Name = "Jewelry", DisplayOrder = 15},
             new() {Name = "Apparel", DisplayOrder = 20}
         };
@@ -1535,9 +1534,7 @@ public partial class InstallationService
             AllowViewingProfiles = false,
             NotifyFailedLoginAttempt = false,
             NotifyNewCustomerRegistration = false,
-            HideDownloadableProductsTab = false,
             HideBackInStockSubscriptionsTab = false,
-            DownloadableProductsValidateUser = false,
             CustomerNameFormat = CustomerNameFormat.ShowFirstName,
             FirstNameEnabled = true,
             FirstNameRequired = true,
@@ -1571,7 +1568,6 @@ public partial class InstallationService
             LastActivityMinutes = 15,
             SuffixDeletedCustomers = false,
             EnteringEmailTwice = false,
-            RequireRegistrationForDownloadableProducts = false,
             AllowCustomersToCheckGiftCardBalance = false,
             DeleteGuestTaskOlderThanMinutes = 1440,
             PhoneNumberValidationEnabled = false,
@@ -2066,7 +2062,6 @@ public partial class InstallationService
                 "/customer/addresses",
                 "/customer/changepassword",
                 "/customer/checkusernameavailability",
-                "/customer/downloadableproducts",
                 "/customer/info",
                 "/customer/productreviews",
                 "/deletepm",

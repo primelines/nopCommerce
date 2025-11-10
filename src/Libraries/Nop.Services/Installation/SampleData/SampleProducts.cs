@@ -116,31 +116,6 @@ public partial class SampleProducts
         public bool IsGiftCard { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the product is downloaded
-        /// </summary>
-        public bool IsDownload { get; set; }
-
-        /// <summary>
-        /// Gets or sets the download identifier
-        /// </summary>
-        public SampleDownload Download { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this downloadable product can be downloaded unlimited number of times
-        /// </summary>
-        public bool UnlimitedDownloads { get; set; }
-
-        /// <summary>
-        /// Gets or sets the sample download identifier
-        /// </summary>
-        public SampleDownload SampleDownload { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the product has user agreement
-        /// </summary>
-        public bool HasUserAgreement { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the entity is ship enabled
         /// </summary>
         public bool IsShipEnabled { get; set; }
@@ -261,12 +236,6 @@ public partial class SampleProducts
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public BackorderMode BackorderMode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the download activation type
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public DownloadActivationType DownloadActivationType { get; set; }
 
         /// <summary>
         /// Gets or sets the gift card type

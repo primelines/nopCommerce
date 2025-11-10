@@ -1837,9 +1837,6 @@ public partial class InstallationService
                 Quantity = oi.Quantity,
                 DiscountAmountInclTax = oi.DiscountAmountInclTax,
                 DiscountAmountExclTax = oi.DiscountAmountExclTax,
-                DownloadCount = oi.DownloadCount,
-                IsDownloadActivated = oi.IsDownloadActivated,
-                LicenseDownloadId = oi.LicenseDownloadId,
                 ItemWeight = oi.ItemWeight,
             }, oi)).ToListAsync()).ToListAsync()).SelectMany(p => p).ToList();
 

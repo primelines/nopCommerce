@@ -564,32 +564,6 @@ public partial class OrderService : IOrderService
     }
 
     /// <summary>
-    /// Gets all downloadable order items
-    /// </summary>
-    /// <param name="customerId">Customer identifier; null to load all records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the order items
-    /// </returns>
-    public virtual async Task<IList<OrderItem>> GetDownloadableOrderItemsAsync(int customerId)
-    {
-        if (customerId == 0)
-            throw new ArgumentOutOfRangeException(nameof(customerId));
-
-        var query = from orderItem in _orderItemRepository.Table
-            join o in _orderRepository.Table on orderItem.OrderId equals o.Id
-            join p in _productRepository.Table on orderItem.ProductId equals p.Id
-            where customerId == o.CustomerId &&
-                  p.IsDownload &&
-                  !o.Deleted
-            orderby o.CreatedOnUtc descending, orderItem.Id
-            select orderItem;
-
-        var orderItems = await query.ToListAsync();
-        return orderItems;
-    }
-
-    /// <summary>
     /// Delete an order item
     /// </summary>
     /// <param name="orderItem">The order item</param>
@@ -648,96 +622,6 @@ public partial class OrderService : IOrderService
             qtyCanBeAddedToShipmentTotal = 0;
 
         return qtyCanBeAddedToShipmentTotal;
-    }
-
-    /// <summary>
-    /// Gets a value indicating whether download is allowed
-    /// </summary>
-    /// <param name="orderItem">Order item to check</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the true if download is allowed; otherwise, false.
-    /// </returns>
-    public virtual async Task<bool> IsDownloadAllowedAsync(OrderItem orderItem)
-    {
-        if (orderItem is null)
-            return false;
-
-        var order = await GetOrderByIdAsync(orderItem.OrderId);
-        if (order == null || order.Deleted)
-            return false;
-
-        //order status
-        if (order.OrderStatus == OrderStatus.Cancelled)
-            return false;
-
-        var product = await _productService.GetProductByIdAsync(orderItem.ProductId);
-
-        if (product == null || !product.IsDownload)
-            return false;
-
-        //payment status
-        switch (product.DownloadActivationType)
-        {
-            case DownloadActivationType.WhenOrderIsPaid:
-                if (order.PaymentStatus == PaymentStatus.Paid && order.PaidDateUtc.HasValue)
-                {
-                    //expiration date
-                    if (product.DownloadExpirationDays.HasValue)
-                    {
-                        if (order.PaidDateUtc.Value.AddDays(product.DownloadExpirationDays.Value) > DateTime.UtcNow)
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
-
-                break;
-            case DownloadActivationType.Manually:
-                if (orderItem.IsDownloadActivated)
-                {
-                    //expiration date
-                    if (product.DownloadExpirationDays.HasValue)
-                    {
-                        if (order.CreatedOnUtc.AddDays(product.DownloadExpirationDays.Value) > DateTime.UtcNow)
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
-
-                break;
-            default:
-                break;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Gets a value indicating whether license download is allowed
-    /// </summary>
-    /// <param name="orderItem">Order item to check</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the true if license download is allowed; otherwise, false.
-    /// </returns>
-    public virtual async Task<bool> IsLicenseDownloadAllowedAsync(OrderItem orderItem)
-    {
-        if (orderItem == null)
-            return false;
-
-        return await IsDownloadAllowedAsync(orderItem) &&
-               orderItem.LicenseDownloadId.HasValue &&
-               orderItem.LicenseDownloadId > 0;
     }
 
     /// <summary>

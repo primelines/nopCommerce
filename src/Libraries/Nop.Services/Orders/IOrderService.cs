@@ -224,16 +224,6 @@ public partial interface IOrderService
     Task<OrderItem> GetOrderItemByGuidAsync(Guid orderItemGuid);
 
     /// <summary>
-    /// Gets all downloadable order items
-    /// </summary>
-    /// <param name="customerId">Customer identifier; null to load all records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the order items
-    /// </returns>
-    Task<IList<OrderItem>> GetDownloadableOrderItemsAsync(int customerId);
-
-    /// <summary>
     /// Delete an order item
     /// </summary>
     /// <param name="orderItem">The order item</param>
@@ -259,26 +249,6 @@ public partial interface IOrderService
     /// The task result contains the total number of already delivered items which can be added to new shipments
     /// </returns>
     Task<int> GetTotalNumberOfItemsCanBeAddedToShipmentAsync(OrderItem orderItem);
-
-    /// <summary>
-    /// Gets a value indicating whether download is allowed
-    /// </summary>
-    /// <param name="orderItem">Order item to check</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the true if download is allowed; otherwise, false.
-    /// </returns>
-    Task<bool> IsDownloadAllowedAsync(OrderItem orderItem);
-
-    /// <summary>
-    /// Gets a value indicating whether license download is allowed
-    /// </summary>
-    /// <param name="orderItem">Order item to check</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the true if license download is allowed; otherwise, false.
-    /// </returns>
-    Task<bool> IsLicenseDownloadAllowedAsync(OrderItem orderItem);
 
     /// <summary>
     /// Inserts a order item

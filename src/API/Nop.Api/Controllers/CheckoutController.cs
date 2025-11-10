@@ -332,10 +332,8 @@ public partial class CheckoutController : BasePublicController
             return NotFound(); // RedirectToRoute("ShoppingCart");
 
         var cartProductIds = cart.Select(ci => ci.ProductId).ToArray();
-        var downloadableProductsRequireRegistration =
-            _customerSettings.RequireRegistrationForDownloadableProducts && await _productService.HasAnyDownloadableProductAsync(cartProductIds);
 
-        if (await _customerService.IsGuestAsync(customer) && (!_orderSettings.AnonymousCheckoutAllowed || downloadableProductsRequireRegistration))
+        if (await _customerService.IsGuestAsync(customer) && (!_orderSettings.AnonymousCheckoutAllowed))
             return Challenge();
 
         //if we have only "button" payment methods available (displayed on the shopping cart page, not during checkout),

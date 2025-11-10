@@ -1302,10 +1302,8 @@ public partial class ShoppingCartController : BasePublicController
             return Error(); // RedirectToRoute("Checkout");
 
         var cartProductIds = cart.Select(ci => ci.ProductId).ToArray();
-        var downloadableProductsRequireRegistration =
-            _customerSettings.RequireRegistrationForDownloadableProducts && await _productService.HasAnyDownloadableProductAsync(cartProductIds);
 
-        if (!_orderSettings.AnonymousCheckoutAllowed || downloadableProductsRequireRegistration)
+        if (!_orderSettings.AnonymousCheckoutAllowed)
         {
             //verify user identity (it may be facebook login page, or google, or local)
             return Challenge();

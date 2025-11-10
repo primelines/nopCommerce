@@ -1486,7 +1486,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
             Gtin = product.Gtin,
             ManageInventoryMethod = product.ManageInventoryMethod,
             StockAvailability = await _productService.FormatStockMessageAsync(product, string.Empty),
-            HasSampleDownload = product.IsDownload && product.HasSampleDownload,
             DisplayDiscontinuedMessage = !product.Published && _catalogSettings.DisplayDiscontinuedMessageForUnpublishedProducts,
             AvailableEndDate = product.AvailableEndDateTimeUtc,
             VisibleIndividually = product.VisibleIndividually,

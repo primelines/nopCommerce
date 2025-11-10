@@ -51,11 +51,6 @@ public partial record OrderItemDto : BaseNopEntityDto
     [JsonProperty("vendor_name")]
     public string VendorName { get; set; }
 
-    //downloadable product properties
-
-    [JsonProperty("download_id")]
-    public int DownloadId { get; set; }
-
     [JsonProperty("license_id")]
     public int LicenseId { get; set; }
 }

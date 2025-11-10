@@ -65,8 +65,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
     public bool ShowVendor { get; set; }
     public VendorBriefInfoModel VendorModel { get; set; }
 
-    public bool HasSampleDownload { get; set; }
-
     public GiftCardModel GiftCard { get; set; }
 
     public bool IsShipEnabled { get; set; }

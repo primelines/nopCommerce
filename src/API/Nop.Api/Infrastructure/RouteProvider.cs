@@ -1,4 +1,4 @@
-using Nop.Services.Installation;
+﻿using Nop.Services.Installation;
 using Nop.Api.Framework.Mvc.Routing;
 
 namespace Nop.Api.Infrastructure;
@@ -344,10 +344,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
         endpointRouteBuilder.MapControllerRoute(name: "CustomerReturnRequests",
             pattern: $"{lang}/returnrequest/history",
             defaults: new { controller = "ReturnRequest", action = "CustomerReturnRequests" });
-
-        endpointRouteBuilder.MapControllerRoute(name: "CustomerDownloadableProducts",
-            pattern: $"{lang}/customer/downloadableproducts",
-            defaults: new { controller = "Customer", action = "DownloadableProducts" });
 
         endpointRouteBuilder.MapControllerRoute(name: "CustomerBackInStockSubscriptions",
             pattern: $"{lang}/backinstocksubscriptions/manage/{{pageNumber:int?}}",

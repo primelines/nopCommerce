@@ -1253,8 +1253,6 @@ public partial class ImportManager : IImportManager
 
             manager.SetSelectList("ProductType", await ProductType.SimpleProduct.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("GiftCardType", await GiftCardType.Virtual.ToSelectListAsync(useLocalization: false));
-            manager.SetSelectList("DownloadActivationType",
-                await DownloadActivationType.Manually.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("ManageInventoryMethod",
                 await ManageInventoryMethod.DontManageStock.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("LowStockActivity",
@@ -2245,33 +2243,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "AutomaticallyAddRequiredProducts":
                         product.AutomaticallyAddRequiredProducts = property.BooleanValue;
-                        break;
-                    case "IsDownload":
-                        product.IsDownload = property.BooleanValue;
-                        break;
-                    case "DownloadId":
-                        product.DownloadId = property.IntValue;
-                        break;
-                    case "UnlimitedDownloads":
-                        product.UnlimitedDownloads = property.BooleanValue;
-                        break;
-                    case "MaxNumberOfDownloads":
-                        product.MaxNumberOfDownloads = property.IntValue;
-                        break;
-                    case "DownloadActivationType":
-                        product.DownloadActivationTypeId = property.IntValue;
-                        break;
-                    case "HasSampleDownload":
-                        product.HasSampleDownload = property.BooleanValue;
-                        break;
-                    case "SampleDownloadId":
-                        product.SampleDownloadId = property.IntValue;
-                        break;
-                    case "HasUserAgreement":
-                        product.HasUserAgreement = property.BooleanValue;
-                        break;
-                    case "UserAgreementText":
-                        product.UserAgreementText = property.StringValue;
                         break;
                     case "IsShipEnabled":
                         product.IsShipEnabled = property.BooleanValue;

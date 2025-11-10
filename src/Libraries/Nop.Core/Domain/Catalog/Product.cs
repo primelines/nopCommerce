@@ -160,56 +160,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public bool AutomaticallyAddRequiredProducts { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the product is download
-    /// </summary>
-    public bool IsDownload { get; set; }
-
-    /// <summary>
-    /// Gets or sets the download identifier
-    /// </summary>
-    public int DownloadId { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether this downloadable product can be downloaded unlimited number of times
-    /// </summary>
-    public bool UnlimitedDownloads { get; set; }
-
-    /// <summary>
-    /// Gets or sets the maximum number of downloads
-    /// </summary>
-    public int MaxNumberOfDownloads { get; set; }
-
-    /// <summary>
-    /// Gets or sets the number of days during customers keeps access to the file.
-    /// </summary>
-    public int? DownloadExpirationDays { get; set; }
-
-    /// <summary>
-    /// Gets or sets the download activation type
-    /// </summary>
-    public int DownloadActivationTypeId { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the product has a sample download file
-    /// </summary>
-    public bool HasSampleDownload { get; set; }
-
-    /// <summary>
-    /// Gets or sets the sample download identifier
-    /// </summary>
-    public int SampleDownloadId { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the product has user agreement
-    /// </summary>
-    public bool HasUserAgreement { get; set; }
-
-    /// <summary>
-    /// Gets or sets the text of license agreement
-    /// </summary>
-    public string UserAgreementText { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the entity is ship enabled
     /// </summary>
     public bool IsShipEnabled { get; set; }
@@ -513,15 +463,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     {
         get => (BackorderMode)BackorderModeId;
         set => BackorderModeId = (int)value;
-    }
-
-    /// <summary>
-    /// Gets or sets the download activation type
-    /// </summary>
-    public DownloadActivationType DownloadActivationType
-    {
-        get => (DownloadActivationType)DownloadActivationTypeId;
-        set => DownloadActivationTypeId = (int)value;
     }
 
     /// <summary>

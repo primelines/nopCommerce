@@ -379,10 +379,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"{lang}/returnrequest/history",
             defaults: new { controller = "ReturnRequest", action = "CustomerReturnRequests" });
 
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Standard.CUSTOMER_DOWNLOADABLE_PRODUCTS,
-            pattern: $"{lang}/customer/downloadableproducts",
-            defaults: new { controller = "Customer", action = "DownloadableProducts" });
-
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Standard.CUSTOMER_BACK_IN_STOCK_SUBSCRIPTIONS,
             pattern: $"{lang}/backinstocksubscriptions/manage/{{pageNumber:int?}}",
             defaults: new { controller = "BackInStockSubscription", action = "CustomerSubscriptions" });

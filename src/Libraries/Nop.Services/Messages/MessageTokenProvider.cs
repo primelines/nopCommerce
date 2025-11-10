@@ -575,22 +575,6 @@ public partial class MessageTokenProvider : IMessageTokenProvider
 
             sb.AppendLine("<td style=\"padding: 0.6em 0.4em;text-align: left;\">" + WebUtility.HtmlEncode(productName));
 
-            //add download link
-            if (await _orderService.IsDownloadAllowedAsync(orderItem))
-            {
-                var downloadUrl = await RouteUrlAsync(order.StoreId, NopRouteNames.Standard.GET_DOWNLOAD, new { orderItemId = orderItem.OrderItemGuid });
-                var downloadLink = $"<a class=\"link\" href=\"{downloadUrl}\">{await _localizationService.GetResourceAsync("Messages.Order.Product(s).Download", languageId)}</a>";
-                sb.AppendLine("<br />");
-                sb.AppendLine(downloadLink);
-            }
-            //add download link
-            if (await _orderService.IsLicenseDownloadAllowedAsync(orderItem))
-            {
-                var licenseUrl = await RouteUrlAsync(order.StoreId, NopRouteNames.Standard.GET_LICENSE, new { orderItemId = orderItem.OrderItemGuid });
-                var licenseLink = $"<a class=\"link\" href=\"{licenseUrl}\">{await _localizationService.GetResourceAsync("Messages.Order.Product(s).License", languageId)}</a>";
-                sb.AppendLine("<br />");
-                sb.AppendLine(licenseLink);
-            }
             //attributes
             if (!string.IsNullOrEmpty(orderItem.AttributeDescription))
             {

@@ -89,26 +89,6 @@ public partial interface ICustomerModelFactory
     Task<CustomerAddressListModel> PrepareCustomerAddressListModelAsync();
 
     /// <summary>
-    /// Prepare the customer downloadable products model
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the customer downloadable products model
-    /// </returns>
-    Task<CustomerDownloadableProductsModel> PrepareCustomerDownloadableProductsModelAsync();
-
-    /// <summary>
-    /// Prepare the user agreement model
-    /// </summary>
-    /// <param name="orderItem">Order item</param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the user agreement model
-    /// </returns>
-    Task<UserAgreementModel> PrepareUserAgreementModelAsync(OrderItem orderItem, Product product);
-
-    /// <summary>
     /// Prepare the change password model
     /// </summary>
     /// <param name="customer">Customer</param>

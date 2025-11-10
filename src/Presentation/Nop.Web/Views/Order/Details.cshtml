@@ -498,18 +498,6 @@
                                                 @Html.Raw(item.AttributeInfo)
                                             </div>
                                         }
-                                        @if (item.DownloadId > 0)
-                                        {
-                                            <div class="download">
-                                                <a href="@Url.RouteUrl(NopRouteNames.Standard.GET_DOWNLOAD, new { orderItemId = item.OrderItemGuid })">@T("DownloadableProducts.Fields.Download")</a>
-                                            </div>
-                                        }
-                                        @if (item.LicenseId > 0)
-                                        {
-                                            <div class="download license">
-                                                <a href="@Url.RouteUrl(NopRouteNames.Standard.GET_LICENSE, new { orderItemId = item.OrderItemGuid })">@T("DownloadableProducts.Fields.DownloadLicense")</a>
-                                            </div>
-                                        }
                                         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderDetailsProductLine, additionalData = item })
                                     </td>
                                     @if (Model.ShowVendorName)

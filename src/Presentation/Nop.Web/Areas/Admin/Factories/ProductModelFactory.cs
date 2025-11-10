@@ -904,13 +904,11 @@ public partial class ProductModelFactory : IProductModelFactory
         if (product == null)
         {
             model.MaximumCustomerEnteredPrice = 1000;
-            model.MaxNumberOfDownloads = 10;
             model.StockQuantity = 10000;
             model.NotifyAdminForQuantityBelow = 1;
             model.OrderMinimumQuantity = 1;
             model.OrderMaximumQuantity = 10000;
             model.TaxCategoryId = _taxSettings.DefaultTaxCategoryId;
-            model.UnlimitedDownloads = true;
             model.IsShipEnabled = true;
             model.AllowCustomerReviews = true;
             model.Published = true;

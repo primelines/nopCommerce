@@ -1,4 +1,4 @@
-using Nop.Core.Domain.Catalog;
+﻿using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Api.DTOs.Customer;
@@ -87,26 +87,6 @@ public partial interface ICustomerDtoFactory
     /// The task result contains the customer address list model  
     /// </returns>
     Task<CustomerAddressListDto> PrepareCustomerAddressListDtoAsync();
-
-    /// <summary>
-    /// Prepare the customer downloadable products model
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the customer downloadable products model
-    /// </returns>
-    Task<CustomerDownloadableProductsDto> PrepareCustomerDownloadableProductsDtoAsync();
-
-    /// <summary>
-    /// Prepare the user agreement model
-    /// </summary>
-    /// <param name="orderItem">Order item</param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the user agreement model
-    /// </returns>
-    Task<UserAgreementDto> PrepareUserAgreementModelAsync(OrderItem orderItem, Product product);
 
     /// <summary>
     /// Prepare the change password model

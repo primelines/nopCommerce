@@ -107,10 +107,6 @@ public partial record ProductDetailsDto : BaseNopEntityDto
     public VendorBriefInfoDto Vendor { get; set; }
 
 
-    [JsonProperty("has_sample_download")]
-    public bool HasSampleDownload { get; set; }
-
-
     [JsonProperty("gift_card")]
     public GiftCardDto GiftCard { get; set; }
 

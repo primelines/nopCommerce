@@ -4266,10 +4266,6 @@ label, label + * {
   color: var(--dark-gray-color);
 }
 
-.downloadable-products-page table td {
-  color: var(--dark-gray-color);
-}
-
 .reward-points-overview {
   margin: 0 0 25px;
 }

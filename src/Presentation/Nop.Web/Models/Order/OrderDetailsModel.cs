@@ -114,10 +114,6 @@ public partial record OrderDetailsModel : BaseNopEntityModel
         public string AttributeInfo { get; set; }
 
         public string VendorName { get; set; }
-
-        //downloadable product properties
-        public int DownloadId { get; set; }
-        public int LicenseId { get; set; }
     }
 
     public partial record TaxRate : BaseNopModel

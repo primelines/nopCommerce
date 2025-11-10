@@ -1187,8 +1187,6 @@ public partial class ProductController : BaseAdminController
 
             //some previously used values
             var prevTotalStockQuantity = await _productService.GetTotalStockQuantityAsync(product);
-            var prevDownloadId = product.DownloadId;
-            var prevSampleDownloadId = product.SampleDownloadId;
             var previousStockQuantity = product.StockQuantity;
             var previousWarehouseId = product.WarehouseId;
             var previousProductType = product.ProductType;
@@ -1252,22 +1250,6 @@ public partial class ProductController : BaseAdminController
                 !product.Deleted)
             {
                 await _backInStockSubscriptionService.SendNotificationsToSubscribersAsync(product);
-            }
-
-            //delete an old "download" file (if deleted or updated)
-            if (prevDownloadId > 0 && prevDownloadId != product.DownloadId)
-            {
-                var prevDownload = await _downloadService.GetDownloadByIdAsync(prevDownloadId);
-                if (prevDownload != null)
-                    await _downloadService.DeleteDownloadAsync(prevDownload);
-            }
-
-            //delete an old "sample download" file (if deleted or updated)
-            if (prevSampleDownloadId > 0 && prevSampleDownloadId != product.SampleDownloadId)
-            {
-                var prevSampleDownload = await _downloadService.GetDownloadByIdAsync(prevSampleDownloadId);
-                if (prevSampleDownload != null)
-                    await _downloadService.DeleteDownloadAsync(prevSampleDownload);
             }
 
             //quantity change history
@@ -3643,12 +3625,6 @@ public partial class ProductController : BaseAdminController
             return Json(new { Result = await _localizationService.GetResourceAsync("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AssociatedProduct.GiftCard") });
         }
 
-        //downloadable product
-        if (associatedProduct.IsDownload)
-        {
-            return Json(new { Result = await _localizationService.GetResourceAsync("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AssociatedProduct.Downloadable") });
-        }
-
         return Json(new { Result = string.Empty });
     }
 
@@ -4094,12 +4070,10 @@ public partial class ProductController : BaseAdminController
                 Published = IsPublished,
                 //set default values for the new model
                 MaximumCustomerEnteredPrice = 1000,
-                MaxNumberOfDownloads = 10,
                 NotifyAdminForQuantityBelow = 1,
                 OrderMinimumQuantity = 1,
                 OrderMaximumQuantity = 10000,
                 TaxCategoryId = _defaultTaxCategoryId,
-                UnlimitedDownloads = true,
                 IsShipEnabled = true,
                 AllowCustomerReviews = true,
                 VisibleIndividually = true,

@@ -475,9 +475,7 @@ public class PayPalCommerceServiceManager
                 Description = CommonHelper.EnsureMaximumLength(product.ShortDescription, 127),
                 Sku = CommonHelper.EnsureMaximumLength(sku, 127),
                 Quantity = item.Quantity.ToString(),
-                Category = product.IsDownload
-                    ? CategoryType.DIGITAL_GOODS.ToString().ToUpper()
-                    : CategoryType.PHYSICAL_GOODS.ToString().ToUpper(),
+                Category = CategoryType.PHYSICAL_GOODS.ToString().ToUpper(),
                 Url = url,
                 ImageUrl = imageUrl,
                 UnitAmount = PrepareMoney(unitPriceExclTax, details.CurrencyCode)
@@ -1372,11 +1370,6 @@ public class PayPalCommerceServiceManager
             if (await _customerService.IsGuestAsync(customer))
             {
                 if (!_orderSettings.AnonymousCheckoutAllowed)
-                    return (true, true, cart);
-
-                var downloadableProductsRequireRegistration = _customerSettings.RequireRegistrationForDownloadableProducts &&
-                    await _productService.HasAnyDownloadableProductAsync(cart.Select(item => item.ProductId).ToArray());
-                if (downloadableProductsRequireRegistration)
                     return (true, true, cart);
             }
 

@@ -1642,41 +1642,6 @@ public partial class CustomerController : BasePublicController
 
     #endregion
 
-    #region My account / Downloadable products
-
-    public virtual async Task<IActionResult> DownloadableProducts()
-    {
-        if (!await _customerService.IsRegisteredAsync(await _workContext.GetCurrentCustomerAsync()))
-            return Challenge();
-
-        if (_customerSettings.HideDownloadableProductsTab)
-            return RedirectToRoute(NopRouteNames.General.CUSTOMER_INFO);
-
-        var model = await _customerModelFactory.PrepareCustomerDownloadableProductsModelAsync();
-
-        return View(model);
-    }
-
-    //ignore SEO friendly URLs checks
-    [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> UserAgreement(Guid orderItemId)
-    {
-        var orderItem = await _orderService.GetOrderItemByGuidAsync(orderItemId);
-        if (orderItem == null)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var product = await _productService.GetProductByIdAsync(orderItem.ProductId);
-
-        if (product == null || !product.HasUserAgreement)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var model = await _customerModelFactory.PrepareUserAgreementModelAsync(orderItem, product);
-
-        return View(model);
-    }
-
-    #endregion
-
     #region My account / Change password
 
     public virtual async Task<IActionResult> ChangePassword()

@@ -195,7 +195,6 @@ public partial record OrderModel : BaseNopEntityModel
     public IList<GiftCard> GiftCards { get; set; }
 
     //items
-    public bool HasDownloadableProducts { get; set; }
     public IList<OrderItemModel> Items { get; set; }
 
     //creation date

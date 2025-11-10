@@ -91,8 +91,6 @@ public static partial class PublicWidgetZones
     public static string CustomerChangePasswordTop => "customer_change_password_top";
     public static string CustomerCheckGiftCardBalanceBottom => "customer_check_gift_card_balance_bottom";
     public static string CustomerCheckGiftCardBalanceTop => "customer_check_gift_card_balance_top";
-    public static string CustomerDownloadableProductsBottom => "customer_downloadable_products_bottom";
-    public static string CustomerDownloadableProductsTop => "customer_downloadable_products_top";
     public static string CustomerForumSubscriptionsBottom => "customer_forum_subscriptions_bottom";
     public static string CustomerForumSubscriptionsTop => "customer_forum_subscriptions_top";
     public static string CustomerGdprToolsBottom => "customer_gdpr_tools_bottom";

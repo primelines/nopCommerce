@@ -363,17 +363,6 @@ public partial interface IProductService
     /// </returns>
     Task<string> FormatGtinAsync(Product product, string attributesXml = null);
 
-
-    /// <summary>
-    /// Gets the value whether the sequence contains downloadable products
-    /// </summary>
-    /// <param name="productIds">Product identifiers</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    Task<bool> HasAnyDownloadableProductAsync(int[] productIds);
-
     /// <summary>
     /// Gets the value whether the sequence contains gift card products
     /// </summary>

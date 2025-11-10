@@ -63,16 +63,6 @@ public partial record OrderItemModel : BaseNopEntityModel
 
     public IList<int> PurchasedGiftCardIds { get; set; }
 
-    public bool IsDownload { get; set; }
-
-    public int DownloadCount { get; set; }
-
-    public DownloadActivationType DownloadActivationType { get; set; }
-
-    public bool IsDownloadActivated { get; set; }
-
-    public Guid LicenseDownloadGuid { get; set; }
-
     #endregion
 
     #region Nested Classes

@@ -630,51 +630,6 @@ public partial class CopyProductService : ICopyProductService
     /// </returns>
     protected virtual async Task<Product> CopyBaseProductDataAsync(Product product, string newName, bool isPublished)
     {
-        //product download & sample download
-        var downloadId = product.DownloadId;
-        var sampleDownloadId = product.SampleDownloadId;
-        if (product.IsDownload)
-        {
-            var download = await _downloadService.GetDownloadByIdAsync(product.DownloadId);
-            if (download != null)
-            {
-                var downloadCopy = new Download
-                {
-                    DownloadGuid = Guid.NewGuid(),
-                    UseDownloadUrl = download.UseDownloadUrl,
-                    DownloadUrl = download.DownloadUrl,
-                    DownloadBinary = download.DownloadBinary,
-                    ContentType = download.ContentType,
-                    Filename = download.Filename,
-                    Extension = download.Extension,
-                    IsNew = download.IsNew
-                };
-                await _downloadService.InsertDownloadAsync(downloadCopy);
-                downloadId = downloadCopy.Id;
-            }
-
-            if (product.HasSampleDownload)
-            {
-                var sampleDownload = await _downloadService.GetDownloadByIdAsync(product.SampleDownloadId);
-                if (sampleDownload != null)
-                {
-                    var sampleDownloadCopy = new Download
-                    {
-                        DownloadGuid = Guid.NewGuid(),
-                        UseDownloadUrl = sampleDownload.UseDownloadUrl,
-                        DownloadUrl = sampleDownload.DownloadUrl,
-                        DownloadBinary = sampleDownload.DownloadBinary,
-                        ContentType = sampleDownload.ContentType,
-                        Filename = sampleDownload.Filename,
-                        Extension = sampleDownload.Extension,
-                        IsNew = sampleDownload.IsNew
-                    };
-                    await _downloadService.InsertDownloadAsync(sampleDownloadCopy);
-                    sampleDownloadId = sampleDownloadCopy.Id;
-                }
-            }
-        }
-
         var newSku = !string.IsNullOrWhiteSpace(product.Sku)
             ? string.Format(await _localizationService.GetResourceAsync("Admin.Catalog.Products.Copy.SKU.New"), product.Sku)
             : product.Sku;
@@ -706,16 +661,6 @@ public partial class CopyProductService : ICopyProductService
             RequireOtherProducts = product.RequireOtherProducts,
             RequiredProductIds = product.RequiredProductIds,
             AutomaticallyAddRequiredProducts = product.AutomaticallyAddRequiredProducts,
-            IsDownload = product.IsDownload,
-            DownloadId = downloadId,
-            UnlimitedDownloads = product.UnlimitedDownloads,
-            MaxNumberOfDownloads = product.MaxNumberOfDownloads,
-            DownloadExpirationDays = product.DownloadExpirationDays,
-            DownloadActivationType = product.DownloadActivationType,
-            HasSampleDownload = product.HasSampleDownload,
-            SampleDownloadId = sampleDownloadId,
-            HasUserAgreement = product.HasUserAgreement,
-            UserAgreementText = product.UserAgreementText,
             IsShipEnabled = product.IsShipEnabled,
             IsFreeShipping = product.IsFreeShipping,
             ShipSeparately = product.ShipSeparately,

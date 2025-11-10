@@ -128,11 +128,6 @@ public partial class ProductEditorSettings : ISettings
     public bool IsGiftCard { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Downloadable product' field is shown
-    /// </summary>
-    public bool DownloadableProduct { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Free shipping' field is shown
     /// </summary>
     public bool FreeShipping { get; set; }

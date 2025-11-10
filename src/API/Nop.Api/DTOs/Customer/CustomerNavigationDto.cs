@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Nop.Api.Framework.Dtos;
 
 namespace Nop.Api.DTOs.Customer;
@@ -44,7 +44,6 @@ public enum CustomerNavigationEnum
     Orders = 20,
     BackInStockSubscriptions = 30,
     ReturnRequests = 40,
-    DownloadableProducts = 50,
     RewardPoints = 60,
     ChangePassword = 70,
     Avatar = 80,

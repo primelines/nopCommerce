@@ -244,7 +244,6 @@ public class SettingMigration : MigrationBase
                 "/customer/addresses",
                 "/customer/changepassword",
                 "/customer/checkusernameavailability",
-                "/customer/downloadableproducts",
                 "/customer/info",
                 "/customer/productreviews",
                 "/deletepm",

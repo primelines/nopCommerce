@@ -245,6 +245,6 @@ public class CommonModelFactoryTests : BaseNopTest
         var model = await _commonModelFactory.PrepareRobotsTextFileAsync();
         model.Should().NotBeNullOrEmpty();
 
-        model.Trim().Split(Environment.NewLine).Length.Should().Be(165);
+        model.Trim().Split(Environment.NewLine).Length.Should().Be(163);
     }
 }

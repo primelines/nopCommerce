@@ -653,17 +653,6 @@ public partial class CustomerModelFactory : ICustomerModelFactory
             });
         }
 
-        if (!_customerSettings.HideDownloadableProductsTab)
-        {
-            model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
-            {
-                RouteName = NopRouteNames.Standard.CUSTOMER_DOWNLOADABLE_PRODUCTS,
-                Title = await _localizationService.GetResourceAsync("Account.DownloadableProducts"),
-                Tab = (int)CustomerNavigationEnum.DownloadableProducts,
-                ItemClass = "downloadable-products"
-            });
-        }
-
         if (!_customerSettings.HideBackInStockSubscriptionsTab)
         {
             model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
@@ -802,70 +791,6 @@ public partial class CustomerModelFactory : ICustomerModelFactory
             model.Addresses.Add(addressModel);
         }
         return model;
-    }
-
-    /// <summary>
-    /// Prepare the customer downloadable products model
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the customer downloadable products model
-    /// </returns>
-    public virtual async Task<CustomerDownloadableProductsModel> PrepareCustomerDownloadableProductsModelAsync()
-    {
-        var model = new CustomerDownloadableProductsModel();
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var items = await _orderService.GetDownloadableOrderItemsAsync(customer.Id);
-        foreach (var item in items)
-        {
-            var order = await _orderService.GetOrderByIdAsync(item.OrderId);
-            var product = await _productService.GetProductByIdAsync(item.ProductId);
-
-            var itemModel = new CustomerDownloadableProductsModel.DownloadableProductsModel
-            {
-                OrderItemGuid = item.OrderItemGuid,
-                OrderId = order.Id,
-                CustomOrderNumber = order.CustomOrderNumber,
-                CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(order.CreatedOnUtc, DateTimeKind.Utc),
-                ProductName = await _localizationService.GetLocalizedAsync(product, x => x.Name),
-                ProductSeName = await _urlRecordService.GetSeNameAsync(product),
-                ProductAttributes = item.AttributeDescription,
-                ProductId = item.ProductId
-            };
-            model.Items.Add(itemModel);
-
-            if (await _orderService.IsDownloadAllowedAsync(item))
-                itemModel.DownloadId = product.DownloadId;
-
-            if (await _orderService.IsLicenseDownloadAllowedAsync(item))
-                itemModel.LicenseId = item.LicenseDownloadId ?? 0;
-        }
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare the user agreement model
-    /// </summary>
-    /// <param name="orderItem">Order item</param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the user agreement model
-    /// </returns>
-    public virtual Task<UserAgreementModel> PrepareUserAgreementModelAsync(OrderItem orderItem, Product product)
-    {
-        ArgumentNullException.ThrowIfNull(orderItem);
-
-        ArgumentNullException.ThrowIfNull(product);
-
-        var model = new UserAgreementModel
-        {
-            UserAgreementText = product.UserAgreementText,
-            OrderItemGuid = orderItem.OrderItemGuid
-        };
-
-        return Task.FromResult(model);
     }
 
     /// <summary>

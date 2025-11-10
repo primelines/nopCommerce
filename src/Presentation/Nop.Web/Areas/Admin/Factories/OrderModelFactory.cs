@@ -288,10 +288,6 @@ public partial class OrderModelFactory : IOrderModelFactory
                 ProductId = orderItem.ProductId,
                 ProductName = product.Name,
                 Quantity = orderItem.Quantity,
-                IsDownload = product.IsDownload,
-                DownloadCount = orderItem.DownloadCount,
-                DownloadActivationType = product.DownloadActivationType,
-                IsDownloadActivated = orderItem.IsDownloadActivated,
                 UnitPriceInclTaxValue = orderItem.UnitPriceInclTax,
                 UnitPriceExclTaxValue = orderItem.UnitPriceExclTax,
                 DiscountInclTaxValue = orderItem.DiscountAmountInclTax,
@@ -308,13 +304,6 @@ public partial class OrderModelFactory : IOrderModelFactory
             //picture
             var orderItemPicture = await _pictureService.GetProductPictureAsync(product, orderItem.AttributesXml);
             (orderItemModel.PictureThumbnailUrl, _) = await _pictureService.GetPictureUrlAsync(orderItemPicture, 75);
-
-            //license file
-            if (orderItem.LicenseDownloadId.HasValue)
-            {
-                orderItemModel.LicenseDownloadGuid = (await _downloadService
-                    .GetDownloadByIdAsync(orderItem.LicenseDownloadId.Value))?.DownloadGuid ?? Guid.Empty;
-            }
 
             var languageId = (await _workContext.GetWorkingLanguageAsync()).Id;
 
@@ -1177,7 +1166,6 @@ public partial class OrderModelFactory : IOrderModelFactory
 
             //prepare order items
             await PrepareOrderItemModelsAsync(model.Items, order);
-            model.HasDownloadableProducts = model.Items.Any(item => item.IsDownload);
 
             //prepare payment info
             await PrepareOrderModelPaymentInfoAsync(model, order);
@@ -1195,31 +1183,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         model.TaxDisplayType = _taxSettings.TaxDisplayType;
 
         return model;
-    }
-
-    /// <summary>
-    /// Prepare upload license model
-    /// </summary>
-    /// <param name="model">Upload license model</param>
-    /// <param name="order">Order</param>
-    /// <param name="orderItem">Order item</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the upload license model
-    /// </returns>
-    public virtual Task<UploadLicenseModel> PrepareUploadLicenseModelAsync(UploadLicenseModel model, Order order, OrderItem orderItem)
-    {
-        ArgumentNullException.ThrowIfNull(model);
-
-        ArgumentNullException.ThrowIfNull(order);
-
-        ArgumentNullException.ThrowIfNull(orderItem);
-
-        model.LicenseDownloadId = orderItem.LicenseDownloadId ?? 0;
-        model.OrderId = order.Id;
-        model.OrderItemId = orderItem.Id;
-
-        return Task.FromResult(model);
     }
 
     /// <summary>

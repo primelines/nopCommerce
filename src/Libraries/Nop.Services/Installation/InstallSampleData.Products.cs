@@ -210,10 +210,6 @@ public partial class InstallationService
                 UpdatedOnUtc = DateTime.UtcNow,
                 IsGiftCard = sample.IsGiftCard,
                 GiftCardType = sample.GiftCardType,
-                IsDownload = sample.IsDownload,
-                DownloadActivationType = sample.DownloadActivationType,
-                UnlimitedDownloads = sample.UnlimitedDownloads,
-                HasUserAgreement = sample.HasUserAgreement,
                 CustomerEntersPrice = sample.CustomerEntersPrice,
                 MinimumCustomerEnteredPrice = sample.MinimumCustomerEnteredPrice,
                 MaximumCustomerEnteredPrice = sample.MaximumCustomerEnteredPrice,
@@ -224,39 +220,6 @@ public partial class InstallationService
 
             if (!string.IsNullOrEmpty(sample.DeliveryDate))
                 product.DeliveryDateId = await getDeliveryDateId(sample.DeliveryDate);
-
-            if (sample.Download != null)
-            {
-                var download = new Download
-                {
-                    DownloadGuid = Guid.NewGuid(),
-                    ContentType = sample.Download.ContentType,
-                    DownloadBinary = await _fileProvider.ReadAllBytesAsync(sampleDownloadsPath + sample.Download.DownloadFileName),
-                    Extension = sample.Download.Extension,
-                    Filename = sample.Download.Filename,
-                    IsNew = sample.Download.IsNew
-                };
-                await downloadService.InsertDownloadAsync(download);
-
-                product.DownloadId = download.Id;
-            }
-
-            if (sample.SampleDownload != null)
-            {
-                var download = new Download
-                {
-                    DownloadGuid = Guid.NewGuid(),
-                    ContentType = sample.SampleDownload.ContentType,
-                    DownloadBinary = await _fileProvider.ReadAllBytesAsync(sampleDownloadsPath + sample.SampleDownload.DownloadFileName),
-                    Extension = sample.SampleDownload.Extension,
-                    Filename = sample.SampleDownload.Filename,
-                    IsNew = sample.SampleDownload.IsNew
-                };
-                await downloadService.InsertDownloadAsync(download);
-
-                product.HasSampleDownload = true;
-                product.DownloadId = download.Id;
-            }
 
             allProducts.Add(product);
 

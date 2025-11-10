@@ -1544,20 +1544,6 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Gets the value whether the sequence contains downloadable products
-    /// </summary>
-    /// <param name="productIds">Product identifiers</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    public virtual async Task<bool> HasAnyDownloadableProductAsync(int[] productIds)
-    {
-        return await _productRepository.Table
-            .AnyAsync(p => productIds.Contains(p.Id) && p.IsDownload);
-    }
-
-    /// <summary>
     /// Gets the value whether the sequence contains gift card products
     /// </summary>
     /// <param name="productIds">Product identifiers</param>

@@ -574,12 +574,6 @@ public partial class OrderModelFactory : IOrderModelFactory
                 orderItemModel.SubTotalValue = priceExclTaxInCustomerCurrency;
             }
 
-            //downloadable products
-            if (await _orderService.IsDownloadAllowedAsync(orderItem))
-                orderItemModel.DownloadId = product.DownloadId;
-            if (await _orderService.IsLicenseDownloadAllowedAsync(orderItem))
-                orderItemModel.LicenseId = orderItem.LicenseDownloadId ?? 0;
-
             if (_orderSettings.ShowProductThumbnailInOrderDetailsPage)
             {
                 orderItemModel.Picture = await PrepareOrderItemPictureModelAsync(orderItem, _mediaSettings.OrderThumbPictureSize, true, orderItemModel.ProductName);

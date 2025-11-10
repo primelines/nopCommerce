@@ -1711,52 +1711,6 @@ public partial class CustomerController : BasePublicController
 
     #endregion
 
-    #region My account / Downloadable products
-
-    [HttpGet]
-    [Route("DownloadableProducts", Name = "DownloadableProducts")]
-    [ProducesResponseType(typeof(CustomerDownloadableProductsDto), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public virtual async Task<IActionResult> DownloadableProducts()
-    {
-        if (!await _customerService.IsRegisteredAsync(await _workContext.GetCurrentCustomerAsync()))
-            return Challenge();
-
-        if (_customerSettings.HideDownloadableProductsTab)
-            return RedirectToRoute("CustomerInfo");
-
-        var model = await _customerModelFactory.PrepareCustomerDownloadableProductsDtoAsync();
-
-        return Ok(model);
-    }
-
-    //ignore SEO friendly URLs checks
-    [CheckLanguageSeoCode(ignore: true)]
-    [HttpGet]
-    [Route("UserAgreement", Name = "UserAgreement")]
-    [ProducesResponseType(typeof(UserAgreementDto), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public virtual async Task<IActionResult> UserAgreement([FromQuery] Guid orderItemId)
-    {
-        var orderItem = await _orderService.GetOrderItemByGuidAsync(orderItemId);
-        if (orderItem == null)
-            return NotFound();
-
-        var product = await _productService.GetProductByIdAsync(orderItem.ProductId);
-
-        if (product == null || !product.HasUserAgreement)
-            return Error();
-
-        var model = await _customerModelFactory.PrepareUserAgreementModelAsync(orderItem, product);
-
-        return Ok(model);
-    }
-
-    #endregion
-
     #region My account / Change password
 
     [HttpGet]

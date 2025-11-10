@@ -164,40 +164,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.AutomaticallyAddRequiredProducts")]
     public bool AutomaticallyAddRequiredProducts { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsDownload")]
-    public bool IsDownload { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.Download")]
-    [UIHint("Download")]
-    public int DownloadId { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.UnlimitedDownloads")]
-    public bool UnlimitedDownloads { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MaxNumberOfDownloads")]
-    public int MaxNumberOfDownloads { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.DownloadExpirationDays")]
-    [UIHint("Int32Nullable")]
-    public int? DownloadExpirationDays { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.DownloadActivationType")]
-    public int DownloadActivationTypeId { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.HasSampleDownload")]
-    public bool HasSampleDownload { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.SampleDownload")]
-    [UIHint("Download")]
-    public int SampleDownloadId { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.HasUserAgreement")]
-    public bool HasUserAgreement { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.UserAgreementText")]
-    public string UserAgreementText { get; set; }
-
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsShipEnabled")]
     public bool IsShipEnabled { get; set; }
 
