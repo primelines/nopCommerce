@@ -434,13 +434,12 @@ public class ExportManagerTests : ServiceTest
             { "BasepriceUnit", "BasepriceUnitId" },
             { "BasepriceBaseUnit", "BasepriceBaseUnitId" },
             { "SKU", "Sku" },
-            { "DownloadActivationType", "DownloadActivationTypeId" },
-            { "RentalPricePeriod", "RentalPricePeriodId" }
+            { "DownloadActivationType", "DownloadActivationTypeId" }
         };
 
         var ignore = new List<string> { "Categories", "Manufacturers", "AdminComment",
             "ProductType", "BackorderMode", "DownloadActivationType", "GiftCardType", "LowStockActivity",
-            "ManageInventoryMethod", "RentalPricePeriod", "ProductCategories",
+            "ManageInventoryMethod", "ProductCategories",
             "ProductManufacturers", "ProductPictures", "ProductReviews", "ProductSpecificationAttributes",
             "ProductTags", "ProductAttributeMappings", "ProductAttributeCombinations", "TierPrices",
             "AppliedDiscounts", "ProductWarehouseInventory", "ApprovedRatingSum", "NotApprovedRatingSum",
@@ -467,7 +466,6 @@ public class ExportManagerTests : ServiceTest
         manager.SetSelectList("ManageInventoryMethod", await ManageInventoryMethod.DontManageStock.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("LowStockActivity", await LowStockActivity.Nothing.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("BackorderMode", await BackorderMode.NoBackorders.ToSelectListAsync(useLocalization: false));
-        manager.SetSelectList("RentalPricePeriod", await RentalPricePeriod.Days.ToSelectListAsync(useLocalization: false));
 
         var vendors = await _vendorService.GetAllVendorsAsync(showHidden: true);
         manager.SetSelectList("Vendor", vendors.Select(v => v as BaseEntity).ToSelectList(p => (p as Vendor)?.Name ?? string.Empty));

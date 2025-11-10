@@ -154,12 +154,6 @@
                                         dataDictGiftCard.TemplateInfo.HtmlFieldPrefix = $"giftcard_{variant.Id}";
                                         @await Html.PartialAsync("_GiftCardInfo", variant.GiftCard, dataDictGiftCard)
                                     }
-                                    <!--rental info-->
-                                    @{
-                                        var dataDictRental = new ViewDataDictionary(ViewData);
-                                        dataDictRental.TemplateInfo.HtmlFieldPrefix = $"rental_{variant.Id}";
-                                        @await Html.PartialAsync("_RentalInfo", variant, dataDictRental)
-                                    }
                                     <!--price & add to cart-->
                                     @{
                                         var dataDictPrice = new ViewDataDictionary(ViewData);

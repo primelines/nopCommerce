@@ -472,7 +472,7 @@ public partial class OrderProcessingService : IOrderProcessingService
 
             var sciWarnings = await _shoppingCartService.GetShoppingCartItemWarningsAsync(details.Customer,
                 sci.ShoppingCartType, product, processPaymentRequest.StoreId, sci.AttributesXml,
-                sci.CustomerEnteredPrice, sci.RentalStartDateUtc, sci.RentalEndDateUtc, sci.Quantity, false, sci.Id);
+                sci.CustomerEnteredPrice, sci.Quantity, false, sci.Id);
             if (sciWarnings.Any())
                 throw new NopException(sciWarnings.Aggregate(string.Empty, (current, next) => $"{current}{next};"));
         }
@@ -1106,8 +1106,6 @@ public partial class OrderProcessingService : IOrderProcessingService
                 IsDownloadActivated = false,
                 LicenseDownloadId = 0,
                 ItemWeight = itemWeight,
-                RentalStartDateUtc = sc.RentalStartDateUtc,
-                RentalEndDateUtc = sc.RentalEndDateUtc
             };
 
             await _orderService.InsertOrderItemAsync(orderItem);
@@ -1484,7 +1482,7 @@ public partial class OrderProcessingService : IOrderProcessingService
 
             updateOrderParameters.Warnings.AddRange(await _shoppingCartService.GetShoppingCartItemWarningsAsync(customer, updatedShoppingCartItem.ShoppingCartType,
                 product, updatedOrder.StoreId, updatedShoppingCartItem.AttributesXml, updatedShoppingCartItem.CustomerEnteredPrice,
-                updatedShoppingCartItem.RentalStartDateUtc, updatedShoppingCartItem.RentalEndDateUtc, updatedShoppingCartItem.Quantity, false, updatedShoppingCartItem.Id));
+                 updatedShoppingCartItem.Quantity, false, updatedShoppingCartItem.Id));
 
             updatedOrderItem.ItemWeight = await _shippingService.GetShoppingCartItemWeightAsync(updatedShoppingCartItem);
             updatedOrderItem.OriginalProductCost = await _priceCalculationService.GetProductCostAsync(product, updatedShoppingCartItem.AttributesXml);
@@ -1554,8 +1552,6 @@ public partial class OrderProcessingService : IOrderProcessingService
                 CustomerId = order.CustomerId,
                 ProductId = item.ProductId,
                 Quantity = item.Id == updatedOrderItemId ? updateOrderParameters.Quantity : item.Quantity,
-                RentalEndDateUtc = item.RentalEndDateUtc,
-                RentalStartDateUtc = item.RentalStartDateUtc,
                 ShoppingCartType = ShoppingCartType.ShoppingCart,
                 StoreId = order.StoreId
             }).ToList();
@@ -2509,7 +2505,6 @@ public partial class OrderProcessingService : IOrderProcessingService
                 ShoppingCartType.ShoppingCart, order.StoreId,
                 orderItem.AttributesXml,
                 _taxSettings.PricesIncludeTax ? orderItem.UnitPriceInclTax : orderItem.UnitPriceExclTax,
-                orderItem.RentalStartDateUtc, orderItem.RentalEndDateUtc,
                 orderItem.Quantity, false));
         }
 

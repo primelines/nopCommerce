@@ -335,9 +335,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
         //compare products
         priceModel.DisableAddToCompareListButton = !_catalogSettings.CompareProductsEnabled;
 
-        //rental
-        priceModel.IsRental = product.IsRental;
-
         //pre-order
         if (product.AvailableForPreOrder)
         {
@@ -377,7 +374,7 @@ public partial class ProductDtoFactory : IProductDtoFactory
                     var customerRoleIds = await _customerService.GetCustomerRoleIdsAsync(customer);
                     var cacheKey = _staticCacheManager
                         .PrepareKeyForDefaultCache(NopCatalogDefaults.ProductMultiplePriceCacheKey, product, customerRoleIds, store);
-                    if (!_catalogSettings.CacheProductPrices || product.IsRental)
+                    if (!_catalogSettings.CacheProductPrices)
                         cacheKey.CacheTime = 0;
 
                     var cachedPrice = await _staticCacheManager.GetAsync(cacheKey, async () =>
@@ -407,7 +404,7 @@ public partial class ProductDtoFactory : IProductDtoFactory
                             if (combination?.OverriddenPrice.HasValue ?? false)
                             {
                                 (var priceWithoutDiscount, var priceWithDiscount, _, _) = await _priceCalculationService
-                                    .GetFinalPriceAsync(product, customer, store, combination.OverriddenPrice.Value, decimal.Zero, true, 1, null, null);
+                                    .GetFinalPriceAsync(product, customer, store, combination.OverriddenPrice.Value, decimal.Zero, true, 1);
                                 prices.Add((priceWithoutDiscount, priceWithDiscount));
                             }
                             else
@@ -505,13 +502,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
                     ? string.Format(await _localizationService.GetResourceAsync("Products.PriceRangeFrom"), price)
                     : price;
                 priceModel.PriceValue = finalPriceWithDiscount;
-
-                if (product.IsRental)
-                {
-                    //rental product
-                    priceModel.OldPrice = await _priceFormatter.FormatRentalProductPeriodAsync(product, priceModel.OldPrice);
-                    priceModel.Price = await _priceFormatter.FormatRentalProductPeriodAsync(product, priceModel.Price);
-                }
 
                 //property for German market
                 //we display tax/shipping info only with "shipping enabled" for this product
@@ -835,14 +825,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
                     //currency code
                     model.CurrencyCode = currentCurrency.CurrencyCode;
 
-                    //rental
-                    if (product.IsRental)
-                    {
-                        model.IsRental = true;
-                        var priceStr = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
-                        model.RentalPrice = await _priceFormatter.FormatRentalProductPeriodAsync(product, priceStr);
-                        model.RentalPriceValue = finalPriceWithDiscount;
-                    }
                 }
             }
         }
@@ -923,8 +905,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
                     (await _dateTimeHelper.ConvertToUserTimeAsync(model.PreOrderAvailabilityStartDateTimeUtc.Value)).ToString("D");
             }
         }
-        //rental
-        model.IsRental = product.IsRental;
 
         //customer entered price
         model.CustomerEntersPrice = product.CustomerEntersPrice;
@@ -1668,18 +1648,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
 
         //manufacturers
         model.ProductManufacturers = await PrepareProductManufacturerDtosAsync(product);
-
-        //rental products
-        if (product.IsRental)
-        {
-            model.IsRental = true;
-            //set already entered dates attributes (if we're going to update the existing shopping cart item)
-            if (updatecartitem != null)
-            {
-                model.RentalStartDate = updatecartitem.RentalStartDateUtc;
-                model.RentalEndDate = updatecartitem.RentalEndDateUtc;
-            }
-        }
 
         //estimate shipping
         if (_shippingSettings.EstimateShippingProductPageEnabled && !model.IsFreeShipping)

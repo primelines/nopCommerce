@@ -19,11 +19,6 @@ public partial class ProductValidator : BaseNopValidator<ProductModel>
             .Length(0, NopSeoDefaults.SearchEngineNameLength)
             .WithMessageAwait(localizationService.GetResourceAsync("Admin.SEO.SeName.MaxLengthValidation"), NopSeoDefaults.SearchEngineNameLength);
 
-        RuleFor(x => x.RentalPriceLength)
-            .GreaterThan(0)
-            .WithMessageAwait(localizationService.GetResourceAsync("Admin.Catalog.Products.Fields.RentalPriceLength.ShouldBeGreaterThanZero"))
-            .When(x => x.IsRental);
-
         RuleFor(x => x.MinimumAgeToPurchase)
             .GreaterThan(0)
             .WithMessageAwait(localizationService.GetResourceAsync("Admin.Catalog.Products.Fields.MinimumAgeToPurchase.ShouldBeGreaterThanZero"))

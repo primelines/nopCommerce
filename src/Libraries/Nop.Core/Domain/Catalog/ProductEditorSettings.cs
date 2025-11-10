@@ -133,11 +133,6 @@ public partial class ProductEditorSettings : ISettings
     public bool DownloadableProduct { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Is rental' field is shown
-    /// </summary>
-    public bool IsRental { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Free shipping' field is shown
     /// </summary>
     public bool FreeShipping { get; set; }

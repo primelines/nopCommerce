@@ -30,8 +30,6 @@ public partial record ShipmentItemModel : BaseNopEntityModel
 
     public string AttributeInfo { get; set; }
 
-    public string RentalInfo { get; set; }
-
     public bool ShipSeparately { get; set; }
 
     //weight of one item (product)

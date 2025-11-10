@@ -272,7 +272,7 @@ public partial class ProductModelFactory : IProductModelFactory
             var customerRoleIds = await _customerService.GetCustomerRoleIdsAsync(customer);
             var cacheKey = _staticCacheManager
                 .PrepareKeyForDefaultCache(NopCatalogDefaults.ProductMultiplePriceCacheKey, product, customerRoleIds, store);
-            if (!_catalogSettings.CacheProductPrices || product.IsRental)
+            if (!_catalogSettings.CacheProductPrices)
                 cacheKey.CacheTime = 0;
 
             //try to cache the min price
@@ -298,7 +298,7 @@ public partial class ProductModelFactory : IProductModelFactory
                     if (combination?.OverriddenPrice.HasValue ?? false)
                     {
                         var (priceWithoutDiscount, priceWithDiscount, _, _) = await _priceCalculationService
-                            .GetFinalPriceAsync(product, customer, store, combination.OverriddenPrice.Value, decimal.Zero, true, 1, null, null);
+                            .GetFinalPriceAsync(product, customer, store, combination.OverriddenPrice.Value, decimal.Zero, true, 1);
                         prices.Add((priceWithoutDiscount, priceWithDiscount));
                         continue;
                     }
@@ -511,16 +511,6 @@ public partial class ProductModelFactory : IProductModelFactory
         model.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductBoxes
             && product.IsShipEnabled
             && !product.IsFreeShipping;
-
-        if (product.IsRental)
-        {
-            model.IsRental = true;
-            model.OldPrice = await _priceFormatter.FormatRentalProductPeriodAsync(product, model.OldPrice);
-            model.Price = await _priceFormatter.FormatRentalProductPeriodAsync(product, model.Price);
-            var priceStr = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
-            model.RentalPrice = await _priceFormatter.FormatRentalProductPeriodAsync(product, priceStr);
-            model.RentalPriceValue = finalPriceWithDiscount;
-        }
 
         //PAngV default base price (used in Germany)
         model.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase);
@@ -869,8 +859,6 @@ public partial class ProductModelFactory : IProductModelFactory
                     (await _dateTimeHelper.ConvertToUserTimeAsync(model.PreOrderAvailabilityStartDateTimeUtc.Value)).ToString("D");
             }
         }
-        //rental
-        model.IsRental = product.IsRental;
 
         //customer entered price
         model.CustomerEntersPrice = product.CustomerEntersPrice;
@@ -1614,18 +1602,6 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //manufacturers
         model.ProductManufacturers = await PrepareProductManufacturerModelsAsync(product);
-
-        //rental products
-        if (product.IsRental)
-        {
-            model.IsRental = true;
-            //set already entered dates attributes (if we're going to update the existing shopping cart item)
-            if (updatecartitem != null)
-            {
-                model.RentalStartDate = updatecartitem.RentalStartDateUtc;
-                model.RentalEndDate = updatecartitem.RentalEndDateUtc;
-            }
-        }
 
         //estimate shipping
         if (_shippingSettings.EstimateShippingProductPageEnabled && !model.IsFreeShipping)

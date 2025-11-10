@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Nop.Api.Framework.Dtos;
 using Nop.Api.DTOs.Media;
 
@@ -47,10 +47,6 @@ public partial record OrderItemDto : BaseNopEntityDto
 
     [JsonProperty("attribute_info")]
     public string AttributeInfo { get; set; }
-
-    [JsonProperty("rental_info")]
-    public string RentalInfo { get; set; }
-
 
     [JsonProperty("vendor_name")]
     public string VendorName { get; set; }

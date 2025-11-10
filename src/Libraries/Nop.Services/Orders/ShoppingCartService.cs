@@ -145,8 +145,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// <param name="product">Product</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="customerEnteredPrice">Price entered by a customer</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the shopping cart item is equal
@@ -154,9 +152,7 @@ public partial class ShoppingCartService : IShoppingCartService
     protected virtual async Task<bool> ShoppingCartItemIsEqualAsync(ShoppingCartItem shoppingCartItem,
         Product product,
         string attributesXml,
-        decimal customerEnteredPrice,
-        DateTime? rentalStartDate,
-        DateTime? rentalEndDate)
+        decimal customerEnteredPrice)
     {
         if (shoppingCartItem.ProductId != product.Id)
             return false;
@@ -188,13 +184,7 @@ public partial class ShoppingCartService : IShoppingCartService
                 return false;
         }
 
-        if (!product.IsRental)
-            return true;
-
-        //rental products
-        var rentalInfoEqual = shoppingCartItem.RentalStartDateUtc == rentalStartDate && shoppingCartItem.RentalEndDateUtc == rentalEndDate;
-
-        return rentalInfoEqual;
+        return false;
     }
 
     /// <summary>
@@ -997,7 +987,7 @@ public partial class ShoppingCartService : IShoppingCartService
                 var totalQty = quantity * attributeValue.Quantity;
                 var associatedProductWarnings = await GetShoppingCartItemWarningsAsync(customer,
                     shoppingCartType, associatedProduct, store.Id,
-                    string.Empty, decimal.Zero, null, null, totalQty, false, shoppingCartItemId);
+                    string.Empty, decimal.Zero, totalQty, false, shoppingCartItemId);
 
                 var productAttribute = await _productAttributeService.GetProductAttributeByIdAsync(productAttributeMapping.ProductAttributeId);
 
@@ -1069,63 +1059,6 @@ public partial class ShoppingCartService : IShoppingCartService
     }
 
     /// <summary>
-    /// Validates shopping cart item for rental products
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the warnings
-    /// </returns>
-    public virtual async Task<IList<string>> GetRentalProductWarningsAsync(Product product,
-        DateTime? rentalStartDate = null, DateTime? rentalEndDate = null)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        var warnings = new List<string>();
-
-        if (!product.IsRental)
-            return warnings;
-
-        if (!rentalStartDate.HasValue)
-        {
-            warnings.Add(await _localizationService.GetResourceAsync("ShoppingCart.Rental.EnterStartDate"));
-            return warnings;
-        }
-
-        if (!rentalEndDate.HasValue)
-        {
-            warnings.Add(await _localizationService.GetResourceAsync("ShoppingCart.Rental.EnterEndDate"));
-            return warnings;
-        }
-
-        if (rentalStartDate.Value.CompareTo(rentalEndDate.Value) > 0)
-        {
-            warnings.Add(await _localizationService.GetResourceAsync("ShoppingCart.Rental.StartDateLessEndDate"));
-            return warnings;
-        }
-
-        //allowed start date should be the future date
-        //we should compare rental start date with a store local time
-        //but we what if a store works in distinct timezones? how we should handle it? skip it for now
-        //we also ignore hours (anyway not supported yet)
-        //today
-        var nowDtInStoreTimeZone = _dateTimeHelper.ConvertToUserTime(DateTime.Now, TimeZoneInfo.Local, _dateTimeHelper.DefaultStoreTimeZone);
-        var todayDt = new DateTime(nowDtInStoreTimeZone.Year, nowDtInStoreTimeZone.Month, nowDtInStoreTimeZone.Day);
-        var todayDtUtc = _dateTimeHelper.ConvertToUtcTime(todayDt, _dateTimeHelper.DefaultStoreTimeZone);
-        //dates are entered in store timezone (e.g. like in hotels)
-        var startDateUtc = _dateTimeHelper.ConvertToUtcTime(rentalStartDate.Value, _dateTimeHelper.DefaultStoreTimeZone);
-        //but we what if dates should be entered in a customer timezone?
-        //DateTime startDateUtc = _dateTimeHelper.ConvertToUtcTime(rentalStartDate.Value, _dateTimeHelper.CurrentTimeZone);
-        if (todayDtUtc.CompareTo(startDateUtc) <= 0)
-            return warnings;
-
-        warnings.Add(await _localizationService.GetResourceAsync("ShoppingCart.Rental.StartDateShouldBeFuture"));
-        return warnings;
-    }
-
-    /// <summary>
     /// Validates shopping cart item
     /// </summary>
     /// <param name="customer">Customer</param>
@@ -1134,8 +1067,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// <param name="storeId">Store identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="customerEnteredPrice">Customer entered price</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
     /// <param name="quantity">Quantity</param>
     /// <param name="addRequiredProducts">Whether to add required products</param>
     /// <param name="shoppingCartItemId">Shopping cart identifier; pass 0 if it's a new item</param>
@@ -1143,7 +1074,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// <param name="getAttributesWarnings">A value indicating whether we should validate product attributes</param>
     /// <param name="getGiftCardWarnings">A value indicating whether we should validate gift card properties</param>
     /// <param name="getRequiredProductWarnings">A value indicating whether we should validate required products (products which require other products to be added to the cart)</param>
-    /// <param name="getRentalWarnings">A value indicating whether we should validate rental properties</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the warnings
@@ -1151,11 +1081,9 @@ public partial class ShoppingCartService : IShoppingCartService
     public virtual async Task<IList<string>> GetShoppingCartItemWarningsAsync(Customer customer, ShoppingCartType shoppingCartType,
         Product product, int storeId,
         string attributesXml, decimal customerEnteredPrice,
-        DateTime? rentalStartDate = null, DateTime? rentalEndDate = null,
         int quantity = 1, bool addRequiredProducts = true, int shoppingCartItemId = 0,
         bool getStandardWarnings = true, bool getAttributesWarnings = true,
-        bool getGiftCardWarnings = true, bool getRequiredProductWarnings = true,
-        bool getRentalWarnings = true)
+        bool getGiftCardWarnings = true, bool getRequiredProductWarnings = true)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -1176,10 +1104,6 @@ public partial class ShoppingCartService : IShoppingCartService
         //required products
         if (getRequiredProductWarnings)
             warnings.AddRange(await GetRequiredProductWarningsAsync(customer, shoppingCartType, product, storeId, quantity, addRequiredProducts, shoppingCartItemId));
-
-        //rental products
-        if (getRentalWarnings)
-            warnings.AddRange(await GetRentalProductWarningsAsync(product, rentalStartDate, rentalEndDate));
 
         return warnings;
     }
@@ -1392,8 +1316,6 @@ public partial class ShoppingCartService : IShoppingCartService
             shoppingCartItem.Quantity,
             shoppingCartItem.AttributesXml,
             shoppingCartItem.CustomerEnteredPrice,
-            shoppingCartItem.RentalStartDateUtc,
-            shoppingCartItem.RentalEndDateUtc,
             includeDiscounts);
     }
 
@@ -1407,8 +1329,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// <param name="quantity">Quantity</param>
     /// <param name="attributesXml">Product attributes (XML format)</param>
     /// <param name="customerEnteredPrice">Customer entered price (if specified)</param>
-    /// <param name="rentalStartDate">Rental start date (null for not rental products)</param>
-    /// <param name="rentalEndDate">Rental end date (null for not rental products)</param>
     /// <param name="includeDiscounts">A value indicating whether include discounts or not for price computation</param>
     /// <returns>
     /// A task that represents the asynchronous operation
@@ -1421,7 +1341,6 @@ public partial class ShoppingCartService : IShoppingCartService
         int quantity,
         string attributesXml,
         decimal customerEnteredPrice,
-        DateTime? rentalStartDate, DateTime? rentalEndDate,
         bool includeDiscounts)
     {
         ArgumentNullException.ThrowIfNull(product);
@@ -1442,9 +1361,7 @@ public partial class ShoppingCartService : IShoppingCartService
                 combination.OverriddenPrice.Value,
                 decimal.Zero,
                 includeDiscounts,
-                quantity,
-                product.IsRental ? rentalStartDate : null,
-                product.IsRental ? rentalEndDate : null);
+                quantity);
         }
         else
         {
@@ -1494,9 +1411,7 @@ public partial class ShoppingCartService : IShoppingCartService
                     store,
                     attributesTotalPrice,
                     includeDiscounts,
-                    qty,
-                    product.IsRental ? rentalStartDate : null,
-                    product.IsRental ? rentalEndDate : null);
+                    qty);
             }
         }
 
@@ -1515,8 +1430,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// <param name="product">Product</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="customerEnteredPrice">Price entered by a customer</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the found shopping cart item
@@ -1525,15 +1438,13 @@ public partial class ShoppingCartService : IShoppingCartService
         ShoppingCartType shoppingCartType,
         Product product,
         string attributesXml = "",
-        decimal customerEnteredPrice = decimal.Zero,
-        DateTime? rentalStartDate = null,
-        DateTime? rentalEndDate = null)
+        decimal customerEnteredPrice = decimal.Zero)
     {
         ArgumentNullException.ThrowIfNull(shoppingCart);
         ArgumentNullException.ThrowIfNull(product);
 
         return await shoppingCart.Where(sci => sci.ShoppingCartType == shoppingCartType)
-            .FirstOrDefaultAwaitAsync(async sci => await ShoppingCartItemIsEqualAsync(sci, product, attributesXml, customerEnteredPrice, rentalStartDate, rentalEndDate));
+            .FirstOrDefaultAwaitAsync(async sci => await ShoppingCartItemIsEqualAsync(sci, product, attributesXml, customerEnteredPrice));
     }
 
     /// <summary>
@@ -1545,8 +1456,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// <param name="storeId">Store identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="customerEnteredPrice">The price enter by a customer</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
     /// <param name="quantity">Quantity</param>
     /// <param name="addRequiredProducts">Whether to add required products</param>
     /// <param name="wishlistId">Wishlist identifier; pass null if it's default wishlist</param>
@@ -1557,7 +1466,6 @@ public partial class ShoppingCartService : IShoppingCartService
     public virtual async Task<IList<string>> AddToCartAsync(Customer customer, Product product,
         ShoppingCartType shoppingCartType, int storeId, string attributesXml = null,
         decimal customerEnteredPrice = decimal.Zero,
-        DateTime? rentalStartDate = null, DateTime? rentalEndDate = null,
         int quantity = 1, bool addRequiredProducts = true, int? wishlistId = null)
     {
         ArgumentNullException.ThrowIfNull(customer);
@@ -1595,8 +1503,7 @@ public partial class ShoppingCartService : IShoppingCartService
         var cart = await GetShoppingCartAsync(customer, shoppingCartType, storeId);
 
         var shoppingCartItem = await FindShoppingCartItemInTheCartAsync(cart,
-            shoppingCartType, product, attributesXml, customerEnteredPrice,
-            rentalStartDate, rentalEndDate);
+            shoppingCartType, product, attributesXml, customerEnteredPrice);
 
         if (shoppingCartItem != null)
         {
@@ -1610,7 +1517,7 @@ public partial class ShoppingCartService : IShoppingCartService
 
             warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, shoppingCartType, product,
                 storeId, attributesXml,
-                customerEnteredPrice, rentalStartDate, rentalEndDate,
+                customerEnteredPrice, 
                 newQuantity, addRequiredProducts, shoppingCartItem.Id));
 
             if (warnings.Any())
@@ -1627,7 +1534,6 @@ public partial class ShoppingCartService : IShoppingCartService
             //new shopping cart item
             warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, shoppingCartType, product,
                 storeId, attributesXml, customerEnteredPrice,
-                rentalStartDate, rentalEndDate,
                 quantity, addRequiredProducts));
 
             if (warnings.Any())
@@ -1671,8 +1577,6 @@ public partial class ShoppingCartService : IShoppingCartService
                 AttributesXml = attributesXml,
                 CustomerEnteredPrice = customerEnteredPrice,
                 Quantity = quantity,
-                RentalStartDateUtc = rentalStartDate,
-                RentalEndDateUtc = rentalEndDate,
                 CreatedOnUtc = now,
                 UpdatedOnUtc = now,
                 CustomerId = customer.Id
@@ -1742,8 +1646,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// <param name="shoppingCartItemId">Shopping cart item identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="customerEnteredPrice">New customer entered price</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
     /// <param name="quantity">New shopping cart item quantity</param>
     /// <param name="resetCheckoutData">A value indicating whether to reset checkout data</param>
     /// <returns>
@@ -1753,7 +1655,6 @@ public partial class ShoppingCartService : IShoppingCartService
     public virtual async Task<IList<string>> UpdateShoppingCartItemAsync(Customer customer,
         int shoppingCartItemId, string attributesXml,
         decimal customerEnteredPrice,
-        DateTime? rentalStartDate = null, DateTime? rentalEndDate = null,
         int quantity = 1, bool resetCheckoutData = true)
     {
         ArgumentNullException.ThrowIfNull(customer);
@@ -1778,8 +1679,7 @@ public partial class ShoppingCartService : IShoppingCartService
             //check warnings
             warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, shoppingCartItem.ShoppingCartType,
                 product, shoppingCartItem.StoreId,
-                attributesXml, customerEnteredPrice,
-                rentalStartDate, rentalEndDate, quantity, false, shoppingCartItemId));
+                attributesXml, customerEnteredPrice,quantity, false, shoppingCartItemId));
             if (warnings.Any())
                 return warnings;
 
@@ -1787,8 +1687,6 @@ public partial class ShoppingCartService : IShoppingCartService
             shoppingCartItem.Quantity = quantity;
             shoppingCartItem.AttributesXml = attributesXml;
             shoppingCartItem.CustomerEnteredPrice = customerEnteredPrice;
-            shoppingCartItem.RentalStartDateUtc = rentalStartDate;
-            shoppingCartItem.RentalEndDateUtc = rentalEndDate;
             shoppingCartItem.UpdatedOnUtc = DateTime.UtcNow;
 
             await _sciRepository.UpdateAsync(shoppingCartItem);
@@ -1824,7 +1722,7 @@ public partial class ShoppingCartService : IShoppingCartService
         var product = await _productService.GetProductByIdAsync(shoppingCartItemFrom.ProductId);
         var cart = await GetShoppingCartAsync(customer, shoppingCartItemFrom.ShoppingCartType, shoppingCartItemFrom.StoreId, product.Id, customWishlistId: wishlistId);
 
-        var shoppingCartItemTo = await cart.FirstOrDefaultAwaitAsync(async sci => await ShoppingCartItemIsEqualAsync(sci, product, shoppingCartItemFrom.AttributesXml, shoppingCartItemFrom.CustomerEnteredPrice, shoppingCartItemFrom.RentalStartDateUtc, shoppingCartItemFrom.RentalEndDateUtc));
+        var shoppingCartItemTo = await cart.FirstOrDefaultAwaitAsync(async sci => await ShoppingCartItemIsEqualAsync(sci, product, shoppingCartItemFrom.AttributesXml, shoppingCartItemFrom.CustomerEnteredPrice));
 
         if (shoppingCartItemTo != null)
         {
@@ -1869,8 +1767,7 @@ public partial class ShoppingCartService : IShoppingCartService
             var product = await _productService.GetProductByIdAsync(sci.ProductId);
 
             await AddToCartAsync(toCustomer, product, sci.ShoppingCartType, sci.StoreId,
-                sci.AttributesXml, sci.CustomerEnteredPrice,
-                sci.RentalStartDateUtc, sci.RentalEndDateUtc, sci.Quantity, false);
+                sci.AttributesXml, sci.CustomerEnteredPrice, sci.Quantity, false);
         }
 
         for (var i = 0; i < fromCart.Count; i++)

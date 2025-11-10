@@ -46,11 +46,6 @@ public partial record ProductPriceOverviewDto : BaseNopDto
         [JsonProperty("pre_order_availability_start_date_time_utc")]
         public DateTime? PreOrderAvailabilityStartDateTimeUtc { get; set; }
 
-
-        [JsonProperty("is_rental")]
-        public bool IsRental { get; set; }
-
-
         [JsonProperty("force_redirection_after_adding_to_cart")]
         public bool ForceRedirectionAfterAddingToCart { get; set; }
 

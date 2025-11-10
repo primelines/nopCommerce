@@ -370,7 +370,6 @@ public class AdminModelFactory
         model.ProductId = product.Id;
         model.QuoteId = quote.Id;
         model.Name = product.Name;
-        model.IsRental = product.IsRental;
         model.ProductType = product.ProductType;
 
         var presetQty = 1;

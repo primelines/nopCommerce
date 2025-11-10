@@ -120,28 +120,6 @@ public class PriceFormatterTests : ServiceTest
         var formatEmptyCurrency = await _priceFormatter.FormatPriceAsync(100M, true, emptyCurrencyCode, _enLangId, false);
         formatEmptyCurrency.Should().NotBeNull();
     }
-    [Test]
-    public async Task CanFormatRentalProductPriceForDays()
-    {
-        //create or fetch a rental product with a known price
-        var rentalProduct = new Product
-        {
-            IsRental = true,
-            RentalPricePeriod = RentalPricePeriod.Days,
-            RentalPriceLength = 5 
-        };
-
-        var productPrice = 50M; 
-        var formattedRentalPrice = await _priceFormatter.FormatRentalProductPeriodAsync(rentalProduct, productPrice.ToString());
-
-        //assert that the formatted rental price for days is not null or empty
-        formattedRentalPrice.Should().NotBeNullOrEmpty();
-
-        //assert that the formatted rental price contains the expected details
-        formattedRentalPrice.Should().Contain("50"); 
-        formattedRentalPrice.Should().Contain("5"); 
-        formattedRentalPrice.Should().Contain("day");
-    }
 
     [Test]
     public void FormatBasePrice_WhenProductIsNull_ReturnsNull()

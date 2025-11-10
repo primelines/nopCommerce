@@ -895,8 +895,6 @@ public partial class PdfService : IPdfService
         foreach (var product in products)
         {
             var priceStr = $"{product.Price:0.00} {(await _currencyService.GetCurrencyByIdAsync(_currencySettings.PrimaryStoreCurrencyId)).CurrencyCode}";
-            if (product.IsRental)
-                priceStr = await _priceFormatter.FormatRentalProductPeriodAsync(product, priceStr);
 
             var rawDescription = await _localizationService.GetLocalizedAsync(product, x => x.FullDescription, lang.Id);
 

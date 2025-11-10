@@ -188,9 +188,6 @@ public class ProductModelFactoryTests : WebTest
                 //compare products
                 priceModel.DisableAddToCompareListButton = !_catalogSettings.CompareProductsEnabled;
 
-                //rental
-                priceModel.IsRental = product.IsRental;
-
                 //pre-order
                 if (product.AvailableForPreOrder)
                 {
@@ -232,7 +229,7 @@ public class ProductModelFactoryTests : WebTest
                             var customerRoleIds = await _customerService.GetCustomerRoleIdsAsync(customer);
                             var cacheKey = _staticCacheManager
                                 .PrepareKeyForDefaultCache(NopCatalogDefaults.ProductMultiplePriceCacheKey, product, customerRoleIds, store);
-                            if (!_catalogSettings.CacheProductPrices || product.IsRental)
+                            if (!_catalogSettings.CacheProductPrices )
                                 cacheKey.CacheTime = 0;
 
                             var cachedPrice = await _staticCacheManager.GetAsync(cacheKey, async () =>
@@ -262,7 +259,7 @@ public class ProductModelFactoryTests : WebTest
                                     if (combination?.OverriddenPrice.HasValue ?? false)
                                     {
                                         (var priceWithoutDiscount, var priceWithDiscount, _, _) = await _priceCalculationService
-                                            .GetFinalPriceAsync(product, customer, store, combination.OverriddenPrice.Value, decimal.Zero, true, 1, null, null);
+                                            .GetFinalPriceAsync(product, customer, store, combination.OverriddenPrice.Value, decimal.Zero, true, 1);
                                         prices.Add((priceWithoutDiscount, priceWithDiscount));
                                     }
                                     else
@@ -354,13 +351,6 @@ public class ProductModelFactoryTests : WebTest
                             : price;
                         priceModel.PriceValue = finalPriceWithDiscount;
 
-                        if (product.IsRental)
-                        {
-                            //rental product
-                            priceModel.OldPrice = await _priceFormatter.FormatRentalProductPeriodAsync(product, priceModel.OldPrice);
-                            priceModel.RentalPrice = priceModel.Price = await _priceFormatter.FormatRentalProductPeriodAsync(product, priceModel.Price);
-                            priceModel.RentalPriceValue = finalPriceWithDiscount;
-                        }
 
                         //property for German market
                         //we display tax/shipping info only with "shipping enabled" for this product
@@ -567,14 +557,6 @@ public class ProductModelFactoryTests : WebTest
                         model.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase);
                         model.BasePricePAngVValue = finalPriceWithDiscountBase;
 
-                        //rental
-                        if (product.IsRental)
-                        {
-                            model.IsRental = true;
-                            var priceStr = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
-                            model.Price = model.RentalPrice = await _priceFormatter.FormatRentalProductPeriodAsync(product, priceStr);
-                            model.RentalPriceValue = finalPriceWithDiscount;
-                        }
                     }
                 }
             }

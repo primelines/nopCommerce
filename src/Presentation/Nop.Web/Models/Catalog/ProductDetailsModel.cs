@@ -74,10 +74,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
     public bool FreeShippingNotificationEnabled { get; set; }
     public string DeliveryDate { get; set; }
 
-    public bool IsRental { get; set; }
-    public DateTime? RentalStartDate { get; set; }
-    public DateTime? RentalEndDate { get; set; }
-
     public DateTime? AvailableEndDate { get; set; }
 
     public ManageInventoryMethod ManageInventoryMethod { get; set; }
@@ -167,9 +163,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
 
         public bool DisableBuyButton { get; set; }
         public bool DisableWishlistButton { get; set; }
-
-        //rental
-        public bool IsRental { get; set; }
 
         //pre-order
         public bool AvailableForPreOrder { get; set; }

@@ -1582,13 +1582,10 @@ public partial class OrderController : BaseAdminController
         //attributes
         var attributesXml = await _productAttributeParser.ParseProductAttributesAsync(product, form, warnings);
 
-        //rental product
-        _productAttributeParser.ParseRentalDates(product, form, out var rentalStartDate, out var rentalEndDate);
 
         //warnings
         warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(customer, ShoppingCartType.ShoppingCart, product, model.Quantity, attributesXml));
         warnings.AddRange(await _shoppingCartService.GetShoppingCartItemGiftCardWarningsAsync(ShoppingCartType.ShoppingCart, product, attributesXml));
-        warnings.AddRange(await _shoppingCartService.GetRentalProductWarningsAsync(product, rentalStartDate, rentalEndDate));
         if (!warnings.Any())
         {
             //no errors
@@ -1620,8 +1617,6 @@ public partial class OrderController : BaseAdminController
                 IsDownloadActivated = false,
                 LicenseDownloadId = 0,
                 ItemWeight = itemWeight,
-                RentalStartDateUtc = rentalStartDate,
-                RentalEndDateUtc = rentalEndDate
             };
 
             await _orderService.InsertOrderItemAsync(orderItem);

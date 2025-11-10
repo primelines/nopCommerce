@@ -568,7 +568,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(entity => entity.NotApprovedTotalReviews, options => options.Ignore())
             .ForMember(entity => entity.ParentGroupedProductId, options => options.Ignore())
             .ForMember(entity => entity.ProductType, options => options.Ignore())
-            .ForMember(entity => entity.RentalPricePeriod, options => options.Ignore())
             .ForMember(entity => entity.UpdatedOnUtc, options => options.Ignore());
 
         CreateMap<Product, DiscountProductModel>()

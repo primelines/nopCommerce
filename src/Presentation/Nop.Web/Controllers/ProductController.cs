@@ -261,11 +261,6 @@ public partial class ProductController : BasePublicController
         //product and gift card attributes
         wrappedProduct.AttributesXml = await _productAttributeParser.ParseProductAttributesAsync(product, form, addToCartWarnings);
 
-        //rental attributes
-        _productAttributeParser.ParseRentalDates(product, form, out var rentalStartDate, out var rentalEndDate);
-        wrappedProduct.RentalStartDateUtc = rentalStartDate;
-        wrappedProduct.RentalEndDateUtc = rentalEndDate;
-
         var result = await _shoppingCartModelFactory.PrepareEstimateShippingResultModelAsync(new[] { wrappedProduct }, model, false);
 
         return Json(result);

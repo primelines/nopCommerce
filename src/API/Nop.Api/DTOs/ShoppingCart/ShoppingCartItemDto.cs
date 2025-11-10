@@ -74,11 +74,6 @@ public partial record ShoppingCartItemDto : BaseNopEntityDto
     [JsonProperty("attribute_info")]
     public string AttributeInfo { get; set; }
 
-
-    [JsonProperty("rental_info")]
-    public string RentalInfo { get; set; }
-
-
     [JsonProperty("allow_item_editing")]
     public bool AllowItemEditing { get; set; }
 

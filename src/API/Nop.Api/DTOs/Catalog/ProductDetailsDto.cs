@@ -127,17 +127,6 @@ public partial record ProductDetailsDto : BaseNopEntityDto
     [JsonProperty("delivery_date")]
     public string DeliveryDate { get; set; }
 
-
-    [JsonProperty("is_rental")]
-    public bool IsRental { get; set; }
-
-    [JsonProperty("rental_start_date")]
-    public DateTime? RentalStartDate { get; set; }
-
-    [JsonProperty("rental_end_date")]
-    public DateTime? RentalEndDate { get; set; }
-
-
     [JsonProperty("available_end_date")]
     public DateTime? AvailableEndDate { get; set; }
 

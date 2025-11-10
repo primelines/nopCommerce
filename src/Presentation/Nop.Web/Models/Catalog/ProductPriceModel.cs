@@ -21,7 +21,6 @@ public partial record ProductPriceModel : BaseNopModel
     public bool AvailableForPreOrder { get; set; }
     public DateTime? PreOrderAvailabilityStartDateTimeUtc { get; set; }
 
-    public bool IsRental { get; set; }
 
     public bool ForceRedirectionAfterAddingToCart { get; set; }
 
@@ -45,8 +44,5 @@ public partial record ProductPriceModel : BaseNopModel
     public int ProductId { get; set; }
 
     public bool HidePrices { get; set; }
-    
-    public string RentalPrice { get; set; }
-    public decimal? RentalPriceValue { get; set; }
-
+ 
 }

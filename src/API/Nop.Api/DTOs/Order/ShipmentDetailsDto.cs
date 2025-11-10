@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Nop.Api.Framework.Dtos;
 
 namespace Nop.Api.DTOs.Order;
@@ -46,48 +46,45 @@ public partial record ShipmentDetailsDto : BaseNopEntityDto
     public partial record ShipmentItemDto : BaseNopEntityDto
     {
 
-    [JsonProperty("sku")]
+        [JsonProperty("sku")]
         public string Sku { get; set; }
 
-    [JsonProperty("product_id")]
+        [JsonProperty("product_id")]
         public int ProductId { get; set; }
 
-    [JsonProperty("product_name")]
+        [JsonProperty("product_name")]
         public string ProductName { get; set; }
 
-    [JsonProperty("product_se_name")]
+        [JsonProperty("product_se_name")]
         public string ProductSeName { get; set; }
 
-    [JsonProperty("attribute_info")]
+        [JsonProperty("attribute_info")]
         public string AttributeInfo { get; set; }
 
-    [JsonProperty("rental_info")]
-        public string RentalInfo { get; set; }
 
-
-    [JsonProperty("quantity_ordered")]
+        [JsonProperty("quantity_ordered")]
         public int QuantityOrdered { get; set; }
 
-    [JsonProperty("quantity_shipped")]
+        [JsonProperty("quantity_shipped")]
         public int QuantityShipped { get; set; }
     }
 
     public partial record ShipmentStatusEventModel : BaseNopDto
     {
 
-    [JsonProperty("status")]
+        [JsonProperty("status")]
         public string Status { get; set; }
 
-    [JsonProperty("event_name")]
+        [JsonProperty("event_name")]
         public string EventName { get; set; }
 
-    [JsonProperty("location")]
+        [JsonProperty("location")]
         public string Location { get; set; }
 
-    [JsonProperty("country")]
+        [JsonProperty("country")]
         public string Country { get; set; }
 
-    [JsonProperty("date")]
+        [JsonProperty("date")]
         public DateTime? Date { get; set; }
     }
 

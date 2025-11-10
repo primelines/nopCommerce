@@ -333,16 +333,6 @@ public partial class SampleOrder
         public decimal? ItemWeight { get; set; }
 
         /// <summary>
-        /// Gets or sets the rental product start date (null if it's not a rental product)
-        /// </summary>
-        public DateTime? RentalStartDateUtc { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rental product end date (null if it's not a rental product)
-        /// </summary>
-        public DateTime? RentalEndDateUtc { get; set; }
-
-        /// <summary>
         /// Gets or sets the product name
         /// </summary>
         public string ProductName { get; set; }

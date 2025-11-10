@@ -8801,20 +8801,6 @@ label, label + * {
     width: 52%;
   }
 
-  .rental-attributes {
-    overflow: hidden;
-  }
-
-  .rental-attributes .attribute-item {
-    float: right;
-    margin: 0 0 0 20px;
-  }
-
-  .rental-attributes .datepicker {
-    width: 160px;
-    text-align: right;
-  }
-
   .attribute-squares li {
     margin: 0 0 10px 10px;
   }

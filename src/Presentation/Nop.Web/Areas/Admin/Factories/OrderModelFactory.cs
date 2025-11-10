@@ -342,16 +342,6 @@ public partial class OrderModelFactory : IOrderModelFactory
                 .FormatOrderPriceAsync(orderItem.PriceExclTax, order.CurrencyRate, order.CustomerCurrencyCode,
                     _orderSettings.DisplayCustomerCurrencyOnOrders, primaryStoreCurrency, languageId, false, true);
 
-            //rental info
-            if (product.IsRental)
-            {
-                var rentalStartDate = orderItem.RentalStartDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalStartDateUtc.Value) : string.Empty;
-                var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalEndDateUtc.Value) : string.Empty;
-                orderItemModel.RentalInfo = string.Format(await _localizationService.GetResourceAsync("Order.Rental.FormattedDate"),
-                    rentalStartDate, rentalEndDate);
-            }
 
             //prepare return request models
             await PrepareReturnRequestBriefModelsAsync(orderItemModel.ReturnRequests, orderItem);
@@ -776,14 +766,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         model.ItemDimensions =
             $"{product.Length:F2} x {product.Width:F2} x {product.Height:F2} [{baseDimension}]";
 
-        if (!product.IsRental)
-            return;
-
-        var rentalStartDate = orderItem.RentalStartDateUtc.HasValue
-            ? _productService.FormatRentalDate(product, orderItem.RentalStartDateUtc.Value) : string.Empty;
-        var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
-            ? _productService.FormatRentalDate(product, orderItem.RentalEndDateUtc.Value) : string.Empty;
-        model.RentalInfo = string.Format(await _localizationService.GetResourceAsync("Order.Rental.FormattedDate"), rentalStartDate, rentalEndDate);
     }
 
     /// <summary>
@@ -1334,7 +1316,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         model.ProductId = product.Id;
         model.OrderId = order.Id;
         model.Name = product.Name;
-        model.IsRental = product.IsRental;
         model.ProductType = product.ProductType;
         model.AutoUpdateOrderTotals = _orderSettings.AutoUpdateOrderTotalsOnEditingOrder;
 

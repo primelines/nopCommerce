@@ -418,20 +418,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
             });
         }
 
-        //rental info
-        if (product.IsRental)
-        {
-            var rentalStartDate = sci.RentalStartDateUtc.HasValue
-                ? _productService.FormatRentalDate(product, sci.RentalStartDateUtc.Value)
-                : string.Empty;
-            var rentalEndDate = sci.RentalEndDateUtc.HasValue
-                ? _productService.FormatRentalDate(product, sci.RentalEndDateUtc.Value)
-                : string.Empty;
-            cartItemModel.RentalInfo =
-                string.Format(await _localizationService.GetResourceAsync("ShoppingCart.Rental.FormattedDate"),
-                    rentalStartDate, rentalEndDate);
-        }
-
         //unit prices
         var currentCurrency = await _workContext.GetWorkingCurrencyAsync();
         if (product.CallForPrice &&
@@ -494,8 +480,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
             sci.StoreId,
             sci.AttributesXml,
             sci.CustomerEnteredPrice,
-            sci.RentalStartDateUtc,
-            sci.RentalEndDateUtc,
             sci.Quantity,
             false,
             sci.Id);
@@ -551,20 +535,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
                 Value = qty.ToString(),
                 Selected = sci.Quantity == qty
             });
-        }
-
-        //rental info
-        if (product.IsRental)
-        {
-            var rentalStartDate = sci.RentalStartDateUtc.HasValue
-                ? _productService.FormatRentalDate(product, sci.RentalStartDateUtc.Value)
-                : string.Empty;
-            var rentalEndDate = sci.RentalEndDateUtc.HasValue
-                ? _productService.FormatRentalDate(product, sci.RentalEndDateUtc.Value)
-                : string.Empty;
-            cartItemModel.RentalInfo =
-                string.Format(await _localizationService.GetResourceAsync("ShoppingCart.Rental.FormattedDate"),
-                    rentalStartDate, rentalEndDate);
         }
 
         //unit prices
@@ -629,8 +599,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
             sci.StoreId,
             sci.AttributesXml,
             sci.CustomerEnteredPrice,
-            sci.RentalStartDateUtc,
-            sci.RentalEndDateUtc,
             sci.Quantity,
             false,
             sci.Id);

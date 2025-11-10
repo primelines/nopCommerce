@@ -125,14 +125,6 @@ public partial interface IProductAttributeParser
     /// <returns>Customer entered price of the product</returns>
     int ParseEnteredQuantity(Product product, IFormCollection form);
 
-    /// <summary>
-    /// Parse product rental dates on the product details page
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="form">Form</param>
-    /// <param name="startDate">Start date</param>
-    /// <param name="endDate">End date</param>
-    void ParseRentalDates(Product product, IFormCollection form, out DateTime? startDate, out DateTime? endDate);
 
     /// <summary>
     /// Get product attributes from the passed form

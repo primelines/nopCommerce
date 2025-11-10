@@ -1462,70 +1462,6 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Get number of rental periods (price ratio)
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="startDate">Start date</param>
-    /// <param name="endDate">End date</param>
-    /// <returns>Number of rental periods</returns>
-    public virtual int GetRentalPeriods(Product product, DateTime startDate, DateTime endDate)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (!product.IsRental)
-            return 1;
-
-        if (startDate.CompareTo(endDate) >= 0)
-            return 1;
-
-        int totalPeriods;
-        switch (product.RentalPricePeriod)
-        {
-            case RentalPricePeriod.Days:
-            {
-                var totalDaysToRent = Math.Max((endDate - startDate).TotalDays, 1);
-                var configuredPeriodDays = product.RentalPriceLength;
-                totalPeriods = Convert.ToInt32(Math.Ceiling(totalDaysToRent / configuredPeriodDays));
-            }
-
-                break;
-            case RentalPricePeriod.Weeks:
-            {
-                var totalDaysToRent = Math.Max((endDate - startDate).TotalDays, 1);
-                var configuredPeriodDays = 7 * product.RentalPriceLength;
-                totalPeriods = Convert.ToInt32(Math.Ceiling(totalDaysToRent / configuredPeriodDays));
-            }
-
-                break;
-            case RentalPricePeriod.Months:
-            {
-                //Source: http://stackoverflow.com/questions/4638993/difference-in-months-between-two-dates
-                var totalMonthsToRent = (endDate.Year - startDate.Year) * 12 + endDate.Month - startDate.Month;
-                if (startDate.AddMonths(totalMonthsToRent) < endDate)
-                    //several days added (not full month)
-                    totalMonthsToRent++;
-
-                var configuredPeriodMonths = product.RentalPriceLength;
-                totalPeriods = Convert.ToInt32(Math.Ceiling((double)totalMonthsToRent / configuredPeriodMonths));
-            }
-
-                break;
-            case RentalPricePeriod.Years:
-            {
-                var totalDaysToRent = Math.Max((endDate - startDate).TotalDays, 1);
-                var configuredPeriodDays = 365 * product.RentalPriceLength;
-                totalPeriods = Convert.ToInt32(Math.Ceiling(totalDaysToRent / configuredPeriodDays));
-            }
-
-                break;
-            default:
-                throw new Exception("Not supported rental period");
-        }
-
-        return totalPeriods;
-    }
-
-    /// <summary>
     /// Formats the stock availability/quantity message
     /// </summary>
     /// <param name="product">Product</param>
@@ -1605,22 +1541,6 @@ public partial class ProductService : IProductService
         var (_, _, gtin) = await GetSkuMpnGtinAsync(product, attributesXml);
 
         return gtin;
-    }
-
-    /// <summary>
-    /// Formats start/end date for rental product
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="date">Date</param>
-    /// <returns>Formatted date</returns>
-    public virtual string FormatRentalDate(Product product, DateTime date)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (!product.IsRental)
-            return null;
-
-        return date.ToShortDateString();
     }
 
     /// <summary>

@@ -297,8 +297,7 @@ public partial class ShoppingCartController : BasePublicController
     }
 
     protected virtual async Task SaveItemAsync(ShoppingCartItem updatecartitem, List<string> addToCartWarnings, Product product,
-        ShoppingCartType cartType, string attributes, decimal customerEnteredPriceConverted, DateTime? rentalStartDate,
-        DateTime? rentalEndDate, int quantity)
+        ShoppingCartType cartType, string attributes, decimal customerEnteredPriceConverted,  int quantity)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
@@ -307,16 +306,14 @@ public partial class ShoppingCartController : BasePublicController
             //add to the cart
             addToCartWarnings.AddRange(await _shoppingCartService.AddToCartAsync(customer,
                 product, cartType, store.Id,
-                attributes, customerEnteredPriceConverted,
-                rentalStartDate, rentalEndDate, quantity, true));
+                attributes, customerEnteredPriceConverted, quantity, true));
         }
         else
         {
             var cart = await _shoppingCartService.GetShoppingCartAsync(customer, updatecartitem.ShoppingCartType, store.Id);
 
             var otherCartItemWithSameParameters = await _shoppingCartService.FindShoppingCartItemInTheCartAsync(
-                cart, updatecartitem.ShoppingCartType, product, attributes, customerEnteredPriceConverted,
-                rentalStartDate, rentalEndDate);
+                cart, updatecartitem.ShoppingCartType, product, attributes, customerEnteredPriceConverted);
             if (otherCartItemWithSameParameters != null &&
                 otherCartItemWithSameParameters.Id == updatecartitem.Id)
             {
@@ -325,8 +322,7 @@ public partial class ShoppingCartController : BasePublicController
             }
             //update existing item
             addToCartWarnings.AddRange(await _shoppingCartService.UpdateShoppingCartItemAsync(customer,
-                updatecartitem.Id, attributes, customerEnteredPriceConverted,
-                rentalStartDate, rentalEndDate, quantity + (otherCartItemWithSameParameters?.Quantity ?? 0), true));
+                updatecartitem.Id, attributes, customerEnteredPriceConverted,quantity + (otherCartItemWithSameParameters?.Quantity ?? 0), true));
             if (otherCartItemWithSameParameters != null && !addToCartWarnings.Any())
             {
                 //delete the same shopping cart item (the other one)
@@ -560,12 +556,6 @@ public partial class ShoppingCartController : BasePublicController
             return Ok(new { redirect = redirectUrl });
         }
 
-        if (product.IsRental)
-        {
-            //rental products require start/end dates to be entered
-            return Ok(new { redirect = redirectUrl });
-        }
-
         var allowedQuantities = _productService.ParseAllowedQuantities(product);
         if (allowedQuantities.Length > 0)
         {
@@ -608,7 +598,7 @@ public partial class ShoppingCartController : BasePublicController
         var addToCartWarnings = await _shoppingCartService
             .GetShoppingCartItemWarningsAsync(customer, cartType,
                 product, store.Id, string.Empty,
-                decimal.Zero, null, null, quantityToValidate, false, shoppingCartItem?.Id ?? 0, true, false, false, false);
+                decimal.Zero, quantityToValidate, false, shoppingCartItem?.Id ?? 0, true, false, false, false);
         if (addToCartWarnings.Any())
         {
             //cannot be added to the cart
@@ -779,14 +769,12 @@ public partial class ShoppingCartController : BasePublicController
         //product and gift card attributes
         var attributes = await _productAttributeParser.ParseProductAttributesAsync(product, form, addToCartWarnings);
 
-        //rental attributes
-        _productAttributeParser.ParseRentalDates(product, form, out var rentalStartDate, out var rentalEndDate);
 
         var cartType = updatecartitem == null ? (ShoppingCartType)shoppingCartTypeId :
             //if the item to update is found, then we ignore the specified "shoppingCartTypeId" parameter
             updatecartitem.ShoppingCartType;
 
-        await SaveItemAsync(updatecartitem, addToCartWarnings, product, cartType, attributes, customerEnteredPriceConverted, rentalStartDate, rentalEndDate, quantity);
+        await SaveItemAsync(updatecartitem, addToCartWarnings, product, cartType, attributes, customerEnteredPriceConverted, quantity);
 
         //return result
         return await GetProductToCartDetailsAsync(addToCartWarnings, cartType, product);
@@ -809,14 +797,6 @@ public partial class ShoppingCartController : BasePublicController
 
         var errors = new List<string>();
         var attributeXml = await _productAttributeParser.ParseProductAttributesAsync(product, form, errors);
-
-        //rental attributes
-        DateTime? rentalStartDate = null;
-        DateTime? rentalEndDate = null;
-        if (product.IsRental)
-        {
-            _productAttributeParser.ParseRentalDates(product, form, out rentalStartDate, out rentalEndDate);
-        }
 
         //sku, mpn, gtin
         var sku = await _productService.FormatSkuAsync(product, attributeXml);
@@ -858,8 +838,7 @@ public partial class ShoppingCartController : BasePublicController
                 currentCustomer,
                 currentStore,
                 ShoppingCartType.ShoppingCart,
-                1, attributeXml, 0,
-                rentalStartDate, rentalEndDate, true);
+                1, attributeXml, 0, true);
             var (finalPriceWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, finalPrice);
             var finalPriceWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithDiscountBase, await _workContext.GetWorkingCurrencyAsync());
             price = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
@@ -1251,7 +1230,7 @@ public partial class ShoppingCartController : BasePublicController
             ItemId = cartItem.Item.Id,
             Warnings = await _shoppingCartService.UpdateShoppingCartItemAsync(customer,
                 cartItem.Item.Id, cartItem.Item.AttributesXml, cartItem.Item.CustomerEnteredPrice,
-                cartItem.Item.RentalStartDateUtc, cartItem.Item.RentalEndDateUtc, cartItem.NewQuantity, true)
+                cartItem.NewQuantity, true)
         }).ToListAsync();
 
         //updated cart
@@ -1608,7 +1587,6 @@ public partial class ShoppingCartController : BasePublicController
                         {
                             var currSciWarnings = await _shoppingCartService.UpdateShoppingCartItemAsync(customer,
                                 sci.Id, sci.AttributesXml, sci.CustomerEnteredPrice,
-                                sci.RentalStartDateUtc, sci.RentalEndDateUtc,
                                 newQuantity, true);
                             innerWarnings.Add(sci.Id, currSciWarnings);
                         }
@@ -1678,8 +1656,7 @@ public partial class ShoppingCartController : BasePublicController
                 var warnings = await _shoppingCartService.AddToCartAsync(customer,
                     product, ShoppingCartType.ShoppingCart,
                     store.Id,
-                    sci.AttributesXml, sci.CustomerEnteredPrice,
-                    sci.RentalStartDateUtc, sci.RentalEndDateUtc, sci.Quantity, true);
+                    sci.AttributesXml, sci.CustomerEnteredPrice,sci.Quantity, true);
                 if (!warnings.Any())
                     countOfAddedItems++;
                 if (_shoppingCartSettings.MoveItemsFromWishlistToCart && //settings enabled

@@ -8730,19 +8730,6 @@ label, label + * {
     width: 52%;
   }
 
-  .rental-attributes {
-    overflow: hidden;
-  }
-
-  .rental-attributes .attribute-item {
-    float: left;
-    margin: 0 20px 0 0;
-  }
-
-  .rental-attributes .datepicker {
-    width: 160px;
-    text-align: left;
-  }
 
   .attribute-squares li {
     margin: 0 10px 10px 0;

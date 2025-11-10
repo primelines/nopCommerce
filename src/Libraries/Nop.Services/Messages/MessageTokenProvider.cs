@@ -597,18 +597,6 @@ public partial class MessageTokenProvider : IMessageTokenProvider
                 sb.AppendLine("<br />");
                 sb.AppendLine(orderItem.AttributeDescription);
             }
-            //rental info
-            if (product.IsRental)
-            {
-                var rentalStartDate = orderItem.RentalStartDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalStartDateUtc.Value) : string.Empty;
-                var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalEndDateUtc.Value) : string.Empty;
-                var rentalInfo = string.Format(await _localizationService.GetResourceAsync("Order.Rental.FormattedDate", languageId),
-                    rentalStartDate, rentalEndDate);
-                sb.AppendLine("<br />");
-                sb.AppendLine(rentalInfo);
-            }
             //SKU
             if (_catalogSettings.ShowSkuOnProductDetailsPage)
             {
@@ -916,19 +904,6 @@ public partial class MessageTokenProvider : IMessageTokenProvider
             {
                 sb.AppendLine("<br />");
                 sb.AppendLine(orderItem.AttributeDescription);
-            }
-
-            //rental info
-            if (product.IsRental)
-            {
-                var rentalStartDate = orderItem.RentalStartDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalStartDateUtc.Value) : string.Empty;
-                var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalEndDateUtc.Value) : string.Empty;
-                var rentalInfo = string.Format(await _localizationService.GetResourceAsync("Order.Rental.FormattedDate"),
-                    rentalStartDate, rentalEndDate);
-                sb.AppendLine("<br />");
-                sb.AppendLine(rentalInfo);
             }
 
             //SKU

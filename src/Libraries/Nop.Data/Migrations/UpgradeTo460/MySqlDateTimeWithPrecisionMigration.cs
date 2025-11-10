@@ -195,14 +195,6 @@ public class MySqlDateTimeWithPrecisionMigration : ForwardOnlyMigration
             .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(Order), nameof(Order.PaidDateUtc)))
             .AsCustom("datetime(6)")
             .Nullable();
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(OrderItem)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(OrderItem), nameof(OrderItem.RentalEndDateUtc)))
-            .AsCustom("datetime(6)")
-            .Nullable();
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(OrderItem)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(OrderItem), nameof(OrderItem.RentalStartDateUtc)))
-            .AsCustom("datetime(6)")
-            .Nullable();
         Alter.Table(NameCompatibilityManager.GetTableName(typeof(OrderNote)))
             .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(OrderNote), nameof(OrderNote.CreatedOnUtc)))
             .AsCustom("datetime(6)");
@@ -301,14 +293,6 @@ public class MySqlDateTimeWithPrecisionMigration : ForwardOnlyMigration
         Alter.Table(NameCompatibilityManager.GetTableName(typeof(ShoppingCartItem)))
             .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(ShoppingCartItem), nameof(ShoppingCartItem.CreatedOnUtc)))
             .AsCustom("datetime(6)");
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(ShoppingCartItem)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(ShoppingCartItem), nameof(ShoppingCartItem.RentalEndDateUtc)))
-            .AsCustom("datetime(6)")
-            .Nullable();
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(ShoppingCartItem)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(ShoppingCartItem), nameof(ShoppingCartItem.RentalStartDateUtc)))
-            .AsCustom("datetime(6)")
-            .Nullable();
         Alter.Table(NameCompatibilityManager.GetTableName(typeof(ShoppingCartItem)))
             .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(ShoppingCartItem), nameof(ShoppingCartItem.UpdatedOnUtc)))
             .AsCustom("datetime(6)");

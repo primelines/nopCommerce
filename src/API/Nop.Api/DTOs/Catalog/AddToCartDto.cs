@@ -46,11 +46,6 @@ public partial record AddToCartDto : BaseNopDto
     [JsonProperty("disable_wishlist_button")]
     public bool DisableWishlistButton { get; set; }
 
-    //rental
-
-    [JsonProperty("is_rental")]
-    public bool IsRental { get; set; }
-
     //pre-order
 
     [JsonProperty("available_for_pre_order")]

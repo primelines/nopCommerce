@@ -99,7 +99,6 @@
                         dataDictGiftCard.TemplateInfo.HtmlFieldPrefix = $"giftcard_{@Model.ProductId}";
                         @await Html.PartialAsync("_ProductAddGiftCardInfo", Model.GiftCard, dataDictGiftCard)
 
-                        @await Html.PartialAsync("_ProductAddRentalInfo", Model)
 
                         <div class="card card-default">
                             <div class="card-body">

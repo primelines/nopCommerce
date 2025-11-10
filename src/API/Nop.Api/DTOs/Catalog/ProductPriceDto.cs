@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Nop.Api.Framework.Dtos;
 
 namespace Nop.Api.DTOs.Catalog;
@@ -48,17 +48,6 @@ namespace Nop.Api.DTOs.Catalog;
 
     [JsonProperty("hide_prices")]
         public bool HidePrices { get; set; }
-
-        //rental
-
-    [JsonProperty("is_rental")]
-        public bool IsRental { get; set; }
-
-    [JsonProperty("rental_price")]
-        public string RentalPrice { get; set; }
-
-    [JsonProperty("rental_price_value")]
-        public decimal? RentalPriceValue { get; set; }
 
         /// <summary>
         /// A value indicating whether we should display tax/shipping info (used in Germany)

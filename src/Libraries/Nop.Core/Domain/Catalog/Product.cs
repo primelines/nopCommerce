@@ -210,21 +210,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public string UserAgreementText { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the product is rental
-    /// </summary>
-    public bool IsRental { get; set; }
-
-    /// <summary>
-    /// Gets or sets the rental length for some period (price for this period)
-    /// </summary>
-    public int RentalPriceLength { get; set; }
-
-    /// <summary>
-    /// Gets or sets the rental period (price for this period)
-    /// </summary>
-    public int RentalPricePeriodId { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the entity is ship enabled
     /// </summary>
     public bool IsShipEnabled { get; set; }
@@ -566,12 +551,4 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
         set => ManageInventoryMethodId = (int)value;
     }
 
-    /// <summary>
-    /// Gets or sets the period for rental products
-    /// </summary>
-    public RentalPricePeriod RentalPricePeriod
-    {
-        get => (RentalPricePeriod)RentalPricePeriodId;
-        set => RentalPricePeriodId = (int)value;
-    }
 }

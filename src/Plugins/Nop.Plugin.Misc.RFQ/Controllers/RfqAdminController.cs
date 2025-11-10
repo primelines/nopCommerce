@@ -156,9 +156,6 @@ public class RfqAdminController : BasePluginController
         //attributes
         var attributesXml = await _productAttributeParser.ParseProductAttributesAsync(product, form, warnings);
 
-        //rental product
-        _productAttributeParser.ParseRentalDates(product, form, out _, out _);
-
         var quote = await _rfqService.GetQuoteByIdAsync(quoteId)
                 ?? throw new ArgumentException("No quote found with the specified id");
 

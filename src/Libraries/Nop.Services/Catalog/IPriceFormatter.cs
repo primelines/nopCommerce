@@ -122,16 +122,6 @@ public partial interface IPriceFormatter
     Task<string> FormatPriceAsync(decimal price, bool showCurrency,
         Currency targetCurrency, int languageId, bool priceIncludesTax, bool showTax);
 
-    /// <summary>
-    /// Formats the price of rental product (with rental period)
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="price">Price</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the rental product price with period
-    /// </returns>
-    Task<string> FormatRentalProductPeriodAsync(Product product, string price);
 
     /// <summary>
     /// Formats the shipping price

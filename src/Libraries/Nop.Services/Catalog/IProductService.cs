@@ -318,14 +318,6 @@ public partial interface IProductService
     /// </returns>
     Task<int> GetTotalStockQuantityAsync(Product product, bool useReservedQuantity = true, int warehouseId = 0);
 
-    /// <summary>
-    /// Get number of rental periods (price ratio)
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="startDate">Start date</param>
-    /// <param name="endDate">End date</param>
-    /// <returns>Number of rental periods</returns>
-    int GetRentalPeriods(Product product, DateTime startDate, DateTime endDate);
 
     /// <summary>
     /// Formats the stock availability/quantity message
@@ -371,13 +363,6 @@ public partial interface IProductService
     /// </returns>
     Task<string> FormatGtinAsync(Product product, string attributesXml = null);
 
-    /// <summary>
-    /// Formats start/end date for rental product
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="date">Date</param>
-    /// <returns>Formatted date</returns>
-    string FormatRentalDate(Product product, DateTime date);
 
     /// <summary>
     /// Gets the value whether the sequence contains downloadable products

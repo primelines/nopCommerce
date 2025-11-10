@@ -58,7 +58,6 @@ public partial record OrderItemModel : BaseNopEntityModel
 
     public string AttributeInfo { get; set; }
 
-    public string RentalInfo { get; set; }
 
     public IList<ReturnRequestBriefModel> ReturnRequests { get; set; }
 

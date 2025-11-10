@@ -31,29 +31,7 @@ public partial interface IPriceCalculationService
         bool includeDiscounts = true,
         int quantity = 1);
 
-    /// <summary>
-    /// Gets the final price
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="customer">The customer</param>
-    /// <param name="store">Store</param>
-    /// <param name="additionalCharge">Additional charge</param>
-    /// <param name="includeDiscounts">A value indicating whether include discounts or not for final price computation</param>
-    /// <param name="quantity">Shopping cart item quantity</param>
-    /// <param name="rentalStartDate">Rental period start date (for rental products)</param>
-    /// <param name="rentalEndDate">Rental period end date (for rental products)</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the final price without discounts, Final price, Applied discount amount, Applied discounts
-    /// </returns>
-    Task<(decimal priceWithoutDiscounts, decimal finalPrice, decimal appliedDiscountAmount, List<Discount> appliedDiscounts)> GetFinalPriceAsync(Product product,
-        Customer customer,
-        Store store,
-        decimal additionalCharge,
-        bool includeDiscounts,
-        int quantity,
-        DateTime? rentalStartDate,
-        DateTime? rentalEndDate);
+
 
     /// <summary>
     /// Gets the final price
@@ -65,8 +43,6 @@ public partial interface IPriceCalculationService
     /// <param name="additionalCharge">Additional charge</param>
     /// <param name="includeDiscounts">A value indicating whether include discounts or not for final price computation</param>
     /// <param name="quantity">Shopping cart item quantity</param>
-    /// <param name="rentalStartDate">Rental period start date (for rental products)</param>
-    /// <param name="rentalEndDate">Rental period end date (for rental products)</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the final price without discounts, Final price, Applied discount amount, Applied discounts
@@ -77,9 +53,7 @@ public partial interface IPriceCalculationService
         decimal? overriddenProductPrice,
         decimal additionalCharge,
         bool includeDiscounts,
-        int quantity,
-        DateTime? rentalStartDate,
-        DateTime? rentalEndDate);
+        int quantity);
 
     /// <summary>
     /// Gets the product cost (one item)

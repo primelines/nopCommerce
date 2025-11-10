@@ -1260,8 +1260,6 @@ public partial class ImportManager : IImportManager
             manager.SetSelectList("LowStockActivity",
                 await LowStockActivity.Nothing.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("BackorderMode", await BackorderMode.NoBackorders.ToSelectListAsync(useLocalization: false));
-            manager.SetSelectList("RentalPricePeriod", await RentalPricePeriod.Days.ToSelectListAsync(useLocalization: false));
-
             manager.SetSelectList("Vendor",
                 (await _vendorService.GetAllVendorsAsync(showHidden: true)).Select(v => v as BaseEntity)
                 .ToSelectList(p => (p as Vendor)?.Name ?? string.Empty));
@@ -2274,15 +2272,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "UserAgreementText":
                         product.UserAgreementText = property.StringValue;
-                        break;
-                    case "IsRental":
-                        product.IsRental = property.BooleanValue;
-                        break;
-                    case "RentalPriceLength":
-                        product.RentalPriceLength = property.IntValue;
-                        break;
-                    case "RentalPricePeriod":
-                        product.RentalPricePeriodId = property.IntValue;
                         break;
                     case "IsShipEnabled":
                         product.IsShipEnabled = property.BooleanValue;

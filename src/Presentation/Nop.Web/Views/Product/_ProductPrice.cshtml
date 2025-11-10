@@ -17,13 +17,6 @@
         }
         else
         {
-            if (Model.IsRental)
-            {
-                <div class="rental-price">
-                    <span>@T("Products.Price.RentalPrice"):</span>
-                    <span>@Model.RentalPrice</span>
-                </div>
-            }
             if (!string.IsNullOrWhiteSpace(Model.OldPrice))
             {
                 @*old price*@

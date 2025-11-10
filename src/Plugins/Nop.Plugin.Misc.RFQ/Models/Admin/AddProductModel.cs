@@ -41,8 +41,6 @@ public record AddProductModel : BaseNopModel
     public IList<ProductAttributeModel> ProductAttributes { get; set; }
     //gift card info
     public GiftCardModel GiftCard { get; set; }
-    //rental
-    public bool IsRental { get; set; }
 
     public List<string> Warnings { get; set; }
 

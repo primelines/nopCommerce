@@ -75,10 +75,6 @@
                     else
                     {
                         addToCartText = T("ShoppingCart.AddToCart").Text;
-                        if (Model.IsRental)
-                        {
-                            addToCartText = T("ShoppingCart.Rent").Text;
-                        }
                         if (Model.AvailableForPreOrder)
                         {
                             addToCartText = T("ShoppingCart.PreOrder").Text;

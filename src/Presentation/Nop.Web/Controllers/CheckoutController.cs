@@ -370,8 +370,6 @@ public partial class CheckoutController : BasePublicController
                 sci.StoreId,
                 sci.AttributesXml,
                 sci.CustomerEnteredPrice,
-                sci.RentalStartDateUtc,
-                sci.RentalEndDateUtc,
                 sci.Quantity,
                 false,
                 sci.Id);

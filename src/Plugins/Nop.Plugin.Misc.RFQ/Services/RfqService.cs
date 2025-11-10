@@ -788,8 +788,6 @@ public class RfqService
                 AttributesXml = quoteItem.AttributesXml,
                 CustomerEnteredPrice = decimal.Zero,
                 Quantity = quoteItem.OfferedQty,
-                RentalStartDateUtc = null,
-                RentalEndDateUtc = null,
                 CreatedOnUtc = now,
                 UpdatedOnUtc = now,
                 CustomerId = customer.Id

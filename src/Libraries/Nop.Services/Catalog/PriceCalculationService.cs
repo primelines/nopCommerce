@@ -253,6 +253,8 @@ public partial class PriceCalculationService : IPriceCalculationService
 
     #region Methods
 
+ 
+
     /// <summary>
     /// Gets the final price
     /// </summary>
@@ -273,37 +275,7 @@ public partial class PriceCalculationService : IPriceCalculationService
         bool includeDiscounts = true,
         int quantity = 1)
     {
-        return await GetFinalPriceAsync(product, customer, store,
-            additionalCharge, includeDiscounts, quantity,
-            null, null);
-    }
-
-    /// <summary>
-    /// Gets the final price
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="customer">The customer</param>
-    /// <param name="store">Store</param>
-    /// <param name="additionalCharge">Additional charge</param>
-    /// <param name="includeDiscounts">A value indicating whether include discounts or not for final price computation</param>
-    /// <param name="quantity">Shopping cart item quantity</param>
-    /// <param name="rentalStartDate">Rental period start date (for rental products)</param>
-    /// <param name="rentalEndDate">Rental period end date (for rental products)</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the final price without discounts, Final price, Applied discount amount, Applied discounts
-    /// </returns>
-    public virtual async Task<(decimal priceWithoutDiscounts, decimal finalPrice, decimal appliedDiscountAmount, List<Discount> appliedDiscounts)> GetFinalPriceAsync(Product product,
-        Customer customer,
-        Store store,
-        decimal additionalCharge,
-        bool includeDiscounts,
-        int quantity,
-        DateTime? rentalStartDate,
-        DateTime? rentalEndDate)
-    {
-        return await GetFinalPriceAsync(product, customer, store, null, additionalCharge, includeDiscounts, quantity,
-            rentalStartDate, rentalEndDate);
+        return await GetFinalPriceAsync(product, customer, store, null, additionalCharge, includeDiscounts, quantity);
     }
 
     /// <summary>
@@ -316,8 +288,6 @@ public partial class PriceCalculationService : IPriceCalculationService
     /// <param name="additionalCharge">Additional charge</param>
     /// <param name="includeDiscounts">A value indicating whether include discounts or not for final price computation</param>
     /// <param name="quantity">Shopping cart item quantity</param>
-    /// <param name="rentalStartDate">Rental period start date (for rental products)</param>
-    /// <param name="rentalEndDate">Rental period end date (for rental products)</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the final price without discounts, Final price, Applied discount amount, Applied discounts
@@ -328,9 +298,7 @@ public partial class PriceCalculationService : IPriceCalculationService
         decimal? overriddenProductPrice,
         decimal additionalCharge,
         bool includeDiscounts,
-        int quantity,
-        DateTime? rentalStartDate,
-        DateTime? rentalEndDate)
+        int quantity)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -345,7 +313,7 @@ public partial class PriceCalculationService : IPriceCalculationService
 
         //we do not cache price if this not allowed by settings or if the product is rental product
         //otherwise, it can cause memory leaks (to store all possible date period combinations)
-        if (!_catalogSettings.CacheProductPrices || product.IsRental)
+        if (!_catalogSettings.CacheProductPrices)
             cacheKey.CacheTime = 0;
 
         decimal rezPrice;
@@ -370,10 +338,6 @@ public partial class PriceCalculationService : IPriceCalculationService
             //additional charge
             price += additionalCharge;
 
-            //rental products
-            if (product.IsRental)
-                if (rentalStartDate.HasValue && rentalEndDate.HasValue)
-                    price *= _productService.GetRentalPeriods(product, rentalStartDate.Value, rentalEndDate.Value);
 
             var priceWithoutDiscount = price;
 

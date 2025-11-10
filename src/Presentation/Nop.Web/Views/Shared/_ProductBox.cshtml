@@ -115,10 +115,6 @@
                 @if (!Model.ProductPrice.DisableBuyButton)
                 {
                     var addToCartText = T("ShoppingCart.AddToCart").Text;
-                    if (Model.ProductPrice.IsRental)
-                    {
-                        addToCartText = T("ShoppingCart.Rent").Text;
-                    }
                     if (Model.ProductPrice.AvailableForPreOrder)
                     {
                         addToCartText = T("ShoppingCart.PreOrder").Text;

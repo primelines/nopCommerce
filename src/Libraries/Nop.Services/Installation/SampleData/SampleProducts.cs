@@ -141,16 +141,6 @@ public partial class SampleProducts
         public bool HasUserAgreement { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the product is rental
-        /// </summary>
-        public bool IsRental { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rental length for some period (price for this period)
-        /// </summary>
-        public int RentalPriceLength { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the entity is ship enabled
         /// </summary>
         public bool IsShipEnabled { get; set; }
@@ -295,12 +285,6 @@ public partial class SampleProducts
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public ManageInventoryMethod ManageInventoryMethod { get; set; }
-
-        /// <summary>
-        /// Gets or sets the period for rental products
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public RentalPricePeriod RentalPricePeriod { get; set; }
 
         /// <summary>
         /// Gets or sets a value of used product template name

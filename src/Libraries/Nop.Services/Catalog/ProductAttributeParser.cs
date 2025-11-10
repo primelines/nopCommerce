@@ -939,41 +939,6 @@ public partial class ProductAttributeParser : IProductAttributeParser
     }
 
     /// <summary>
-    /// Parse product rental dates on the product details page
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="form">Form</param>
-    /// <param name="startDate">Start date</param>
-    /// <param name="endDate">End date</param>
-    public virtual void ParseRentalDates(Product product, IFormCollection form, out DateTime? startDate, out DateTime? endDate)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-        ArgumentNullException.ThrowIfNull(form);
-
-        startDate = null;
-        endDate = null;
-
-        if (product.IsRental)
-        {
-            var ctrlStartDate = form[$"rental_start_date_{product.Id}"];
-            var ctrlEndDate = form[$"rental_end_date_{product.Id}"];
-            try
-            {
-                startDate = DateTime.ParseExact(ctrlStartDate,
-                    CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
-                    CultureInfo.InvariantCulture);
-                endDate = DateTime.ParseExact(ctrlEndDate,
-                    CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
-                    CultureInfo.InvariantCulture);
-            }
-            catch
-            {
-                // ignored
-            }
-        }
-    }
-
-    /// <summary>
     /// Get product attributes from the passed form
     /// </summary>
     /// <param name="product">Product</param>

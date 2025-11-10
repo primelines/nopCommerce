@@ -112,7 +112,6 @@ public partial record OrderDetailsModel : BaseNopEntityModel
         public int Quantity { get; set; }
         public PictureModel Picture { get; set; }
         public string AttributeInfo { get; set; }
-        public string RentalInfo { get; set; }
 
         public string VendorName { get; set; }
 

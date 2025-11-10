@@ -1841,8 +1841,6 @@ public partial class InstallationService
                 IsDownloadActivated = oi.IsDownloadActivated,
                 LicenseDownloadId = oi.LicenseDownloadId,
                 ItemWeight = oi.ItemWeight,
-                RentalStartDateUtc = oi.RentalStartDateUtc,
-                RentalEndDateUtc = oi.RentalEndDateUtc
             }, oi)).ToListAsync()).ToListAsync()).SelectMany(p => p).ToList();
 
         await _dataProvider.BulkInsertEntitiesAsync(items.Select(i => i.Key));

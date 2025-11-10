@@ -120,12 +120,6 @@
                                             @Html.Raw(item.AttributeInfo)
                                         </div>
                                     }
-                                    @if (!string.IsNullOrEmpty(item.RentalInfo))
-                                    {
-                                        <div class="rental-info">
-                                            @Html.Raw(item.RentalInfo)
-                                        </div>
-                                    }
                                     @if (Model.IsEditable && item.AllowItemEditing)
                                     {
                                         var editCartItemUrl = await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = item.ProductSeName }, webHelper.GetCurrentRequestProtocol());

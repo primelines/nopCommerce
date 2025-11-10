@@ -116,18 +116,7 @@ public partial interface IShoppingCartService
     Task<IList<string>> GetShoppingCartItemGiftCardWarningsAsync(ShoppingCartType shoppingCartType,
         Product product, string attributesXml);
 
-    /// <summary>
-    /// Validates shopping cart item for rental products
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the warnings
-    /// </returns>
-    Task<IList<string>> GetRentalProductWarningsAsync(Product product,
-        DateTime? rentalStartDate = null, DateTime? rentalEndDate = null);
+
 
     /// <summary>
     /// Validates shopping cart item
@@ -138,8 +127,6 @@ public partial interface IShoppingCartService
     /// <param name="storeId">Store identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="customerEnteredPrice">Customer entered price</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
     /// <param name="quantity">Quantity</param>
     /// <param name="addRequiredProducts">Whether to add required products</param>
     /// <param name="shoppingCartItemId">Shopping cart identifier; pass 0 if it's a new item</param>
@@ -147,7 +134,6 @@ public partial interface IShoppingCartService
     /// <param name="getAttributesWarnings">A value indicating whether we should validate product attributes</param>
     /// <param name="getGiftCardWarnings">A value indicating whether we should validate gift card properties</param>
     /// <param name="getRequiredProductWarnings">A value indicating whether we should validate required products (products which require other products to be added to the cart)</param>
-    /// <param name="getRentalWarnings">A value indicating whether we should validate rental properties</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the warnings
@@ -155,11 +141,9 @@ public partial interface IShoppingCartService
     Task<IList<string>> GetShoppingCartItemWarningsAsync(Customer customer, ShoppingCartType shoppingCartType,
         Product product, int storeId,
         string attributesXml, decimal customerEnteredPrice,
-        DateTime? rentalStartDate = null, DateTime? rentalEndDate = null,
         int quantity = 1, bool addRequiredProducts = true, int shoppingCartItemId = 0,
         bool getStandardWarnings = true, bool getAttributesWarnings = true,
-        bool getGiftCardWarnings = true, bool getRequiredProductWarnings = true,
-        bool getRentalWarnings = true);
+        bool getGiftCardWarnings = true, bool getRequiredProductWarnings = true );
 
     /// <summary>
     /// Validates whether this shopping cart is valid
@@ -195,8 +179,6 @@ public partial interface IShoppingCartService
     /// <param name="quantity">Quantity</param>
     /// <param name="attributesXml">Product attributes (XML format)</param>
     /// <param name="customerEnteredPrice">Customer entered price (if specified)</param>
-    /// <param name="rentalStartDate">Rental start date (null for not rental products)</param>
-    /// <param name="rentalEndDate">Rental end date (null for not rental products)</param>
     /// <param name="includeDiscounts">A value indicating whether include discounts or not for price computation</param>
     /// <returns>
     /// A task that represents the asynchronous operation
@@ -209,7 +191,6 @@ public partial interface IShoppingCartService
         int quantity,
         string attributesXml,
         decimal customerEnteredPrice,
-        DateTime? rentalStartDate, DateTime? rentalEndDate,
         bool includeDiscounts);
 
     /// <summary>
@@ -232,8 +213,6 @@ public partial interface IShoppingCartService
     /// <param name="product">Product</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="customerEnteredPrice">Price entered by a customer</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the found shopping cart item
@@ -242,9 +221,7 @@ public partial interface IShoppingCartService
         ShoppingCartType shoppingCartType,
         Product product,
         string attributesXml = "",
-        decimal customerEnteredPrice = decimal.Zero,
-        DateTime? rentalStartDate = null,
-        DateTime? rentalEndDate = null);
+        decimal customerEnteredPrice = decimal.Zero);
 
     /// <summary>
     /// Add a product to shopping cart
@@ -255,8 +232,6 @@ public partial interface IShoppingCartService
     /// <param name="storeId">Store identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="customerEnteredPrice">The price enter by a customer</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
     /// <param name="quantity">Quantity</param>
     /// <param name="addRequiredProducts">Whether to add required products</param>
     /// <param name="wishlistId">Wishlist identifier; pass null if it's default wishlist</param>
@@ -267,7 +242,6 @@ public partial interface IShoppingCartService
     Task<IList<string>> AddToCartAsync(Customer customer, Product product,
         ShoppingCartType shoppingCartType, int storeId, string attributesXml = null,
         decimal customerEnteredPrice = decimal.Zero,
-        DateTime? rentalStartDate = null, DateTime? rentalEndDate = null,
         int quantity = 1, bool addRequiredProducts = true, int? wishlistId = null);
 
     /// <summary>
@@ -277,8 +251,6 @@ public partial interface IShoppingCartService
     /// <param name="shoppingCartItemId">Shopping cart item identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="customerEnteredPrice">New customer entered price</param>
-    /// <param name="rentalStartDate">Rental start date</param>
-    /// <param name="rentalEndDate">Rental end date</param>
     /// <param name="quantity">New shopping cart item quantity</param>
     /// <param name="resetCheckoutData">A value indicating whether to reset checkout data</param>
     /// <returns>
@@ -288,7 +260,6 @@ public partial interface IShoppingCartService
     Task<IList<string>> UpdateShoppingCartItemAsync(Customer customer,
         int shoppingCartItemId, string attributesXml,
         decimal customerEnteredPrice,
-        DateTime? rentalStartDate = null, DateTime? rentalEndDate = null,
         int quantity = 1, bool resetCheckoutData = true);
 
     /// <summary>

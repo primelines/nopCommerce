@@ -547,16 +547,7 @@ public partial class OrderModelFactory : IOrderModelFactory
                 Quantity = orderItem.Quantity,
                 AttributeInfo = orderItem.AttributeDescription,
             };
-            //rental info
-            if (product.IsRental)
-            {
-                var rentalStartDate = orderItem.RentalStartDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalStartDateUtc.Value) : "";
-                var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalEndDateUtc.Value) : "";
-                orderItemModel.RentalInfo = string.Format(await _localizationService.GetResourceAsync("Order.Rental.FormattedDate"),
-                    rentalStartDate, rentalEndDate);
-            }
+
             model.Items.Add(orderItemModel);
 
             //unit price, subtotal
@@ -673,16 +664,7 @@ public partial class OrderModelFactory : IOrderModelFactory
                 QuantityOrdered = orderItem.Quantity,
                 QuantityShipped = shipmentItem.Quantity,
             };
-            //rental info
-            if (product.IsRental)
-            {
-                var rentalStartDate = orderItem.RentalStartDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalStartDateUtc.Value) : "";
-                var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
-                    ? _productService.FormatRentalDate(product, orderItem.RentalEndDateUtc.Value) : "";
-                shipmentItemModel.RentalInfo = string.Format(await _localizationService.GetResourceAsync("Order.Rental.FormattedDate"),
-                    rentalStartDate, rentalEndDate);
-            }
+
             model.Items.Add(shipmentItemModel);
         }
 

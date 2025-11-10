@@ -315,35 +315,6 @@ public partial class PriceFormatter : IPriceFormatter
     }
 
     /// <summary>
-    /// Formats the price of rental product (with rental period)
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="price">Price</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the rental product price with period
-    /// </returns>
-    public virtual async Task<string> FormatRentalProductPeriodAsync(Product product, string price)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (!product.IsRental)
-            return price;
-
-        if (string.IsNullOrWhiteSpace(price))
-            return price;
-        var result = product.RentalPricePeriod switch
-        {
-            RentalPricePeriod.Days => string.Format(await _localizationService.GetResourceAsync("Products.Price.Rental.Days"), price, product.RentalPriceLength),
-            RentalPricePeriod.Weeks => string.Format(await _localizationService.GetResourceAsync("Products.Price.Rental.Weeks"), price, product.RentalPriceLength),
-            RentalPricePeriod.Months => string.Format(await _localizationService.GetResourceAsync("Products.Price.Rental.Months"), price, product.RentalPriceLength),
-            RentalPricePeriod.Years => string.Format(await _localizationService.GetResourceAsync("Products.Price.Rental.Years"), price, product.RentalPriceLength),
-            _ => throw new NopException("Not supported rental period"),
-        };
-        return result;
-    }
-
-    /// <summary>
     /// Formats the shipping price
     /// </summary>
     /// <param name="price">Price</param>
