@@ -627,35 +627,6 @@
             <span asp-validation-for="AvailableEndDateTimeUtc"></span>
         </div>
     </div>
-    <div class="form-group row @(Model.ProductEditorSettingsModel.MarkAsNew ? null : "advanced-setting")">
-        <div class="col-md-3">
-            <nop-label asp-for="MarkAsNew" />
-        </div>
-        <div class="col-md-9">
-            <nop-editor asp-for="MarkAsNew" />
-            <span asp-validation-for="MarkAsNew"></span>
-        </div>
-    </div>
-    <nop-nested-setting asp-for="MarkAsNew">
-        <div class="form-group row @(Model.ProductEditorSettingsModel.MarkAsNew  ? null : "advanced-setting")">
-            <div class="col-md-3">
-                <nop-label asp-for="MarkAsNewStartDateTimeUtc" />
-            </div>
-            <div class="col-md-9">
-                <nop-editor asp-for="MarkAsNewStartDateTimeUtc" />
-                <span asp-validation-for="MarkAsNewStartDateTimeUtc"></span>
-            </div>
-        </div>
-        <div class="form-group row @(Model.ProductEditorSettingsModel.MarkAsNew  ? null : "advanced-setting")">
-            <div class="col-md-3">
-                <nop-label asp-for="MarkAsNewEndDateTimeUtc" />
-            </div>
-            <div class="col-md-9">
-                <nop-editor asp-for="MarkAsNewEndDateTimeUtc" />
-                <span asp-validation-for="MarkAsNewEndDateTimeUtc"></span>
-            </div>
-        </div>
-    </nop-nested-setting>
     <div class="form-group row @(Model.ProductEditorSettingsModel.AdminComment ? null : "advanced-setting")">
         <div class="col-md-3">
             <nop-label asp-for="AdminComment" />

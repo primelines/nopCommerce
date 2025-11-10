@@ -181,11 +181,6 @@ public partial class SampleProducts
         public decimal OldPrice { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this product is marked as new
-        /// </summary>
-        public bool MarkAsNew { get; set; }
-
-        /// <summary>
         /// Gets or sets the weight
         /// </summary>
         public decimal Weight { get; set; }

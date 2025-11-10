@@ -1306,9 +1306,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
                 SeName = await _urlRecordService.GetSeNameAsync(product),
                 Sku = product.Sku,
                 ProductType = product.ProductType,
-                MarkAsNew = product.MarkAsNew &&
-                            (!product.MarkAsNewStartDateTimeUtc.HasValue || product.MarkAsNewStartDateTimeUtc.Value < DateTime.UtcNow) &&
-                            (!product.MarkAsNewEndDateTimeUtc.HasValue || product.MarkAsNewEndDateTimeUtc.Value > DateTime.UtcNow)
             };
 
             //price

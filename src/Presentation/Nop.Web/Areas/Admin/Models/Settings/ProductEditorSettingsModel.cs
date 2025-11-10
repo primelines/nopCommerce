@@ -144,9 +144,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.AvailableEndDate")]
     public bool AvailableEndDate { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.MarkAsNew")]
-    public bool MarkAsNew { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.Published")]
     public bool Published { get; set; }
 

@@ -297,17 +297,6 @@ public partial record ProductModel : BaseNopEntityModel,
     public int BasepriceBaseUnitId { get; set; }
     public IList<SelectListItem> AvailableBasepriceBaseUnits { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MarkAsNew")]
-    public bool MarkAsNew { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MarkAsNewStartDateTimeUtc")]
-    [UIHint("DateTimeNullable")]
-    public DateTime? MarkAsNewStartDateTimeUtc { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MarkAsNewEndDateTimeUtc")]
-    [UIHint("DateTimeNullable")]
-    public DateTime? MarkAsNewEndDateTimeUtc { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Weight")]
     public decimal Weight { get; set; }
 

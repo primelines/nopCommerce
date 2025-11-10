@@ -394,88 +394,6 @@ public partial class CatalogController : BasePublicController
 
     #endregion
 
-    #region New (recently added) products page
-
-    [HttpGet]
-    [Route("NewProducts", Name = "NewProducts")]
-    [ProducesResponseType(typeof(IList<ProductOverviewDto>), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public virtual async Task<IActionResult> NewProducts(CatalogProductsCommand command)
-    {
-        if (!_catalogSettings.NewProductsEnabled)
-            return InvokeHttp404();
-
-        var model = new NewProductsDto
-        {
-            CatalogProducts = await _catalogModelFactory.PrepareNewProductsDtoAsync(command)
-        };
-
-        return Ok(model);
-    }
-
-    //ignore SEO friendly URLs checks
-    [CheckLanguageSeoCode(ignore: true)]
-    [HttpGet]
-    [Route("GetNewProducts", Name = "GetNewProducts")]
-    [ProducesResponseType(typeof(CatalogProductsDto), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public virtual async Task<IActionResult> GetNewProducts(CatalogProductsCommand command)
-    {
-        if (!_catalogSettings.NewProductsEnabled)
-            return NotFound();
-
-        var model = await _catalogModelFactory.PrepareNewProductsDtoAsync(command);
-
-        return Ok(model);
-    }
-
-    [CheckLanguageSeoCode(ignore: true)]
-    [HttpGet]
-    [Route("NewProductsRss", Name = "NewProductsRss")]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    public virtual async Task<IActionResult> NewProductsRss()
-    {
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var feed = new RssFeed(
-            $"{await _localizationService.GetLocalizedAsync(store, x => x.Name)}: New products",
-            "Information about products",
-            new Uri(_webHelper.GetStoreLocation()),
-            DateTime.UtcNow);
-
-        if (!_catalogSettings.NewProductsEnabled)
-            return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
-
-        var items = new List<RssItem>();
-
-        var storeId = store.Id;
-        var products = await _productService.GetProductsMarkedAsNewAsync(storeId: storeId);
-
-        foreach (var product in products)
-        {
-            var seName = await _urlRecordService.GetSeNameAsync(product);
-            var productUrl = await _nopUrlHelper.RouteGenericUrlAsync<Product>(new { SeName = seName }, _webHelper.GetCurrentRequestProtocol());
-            var productName = await _localizationService.GetLocalizedAsync(product, x => x.Name);
-            var productDescription = await _localizationService.GetLocalizedAsync(product, x => x.ShortDescription);
-            var item = new RssItem(productName, productDescription, new Uri(productUrl), $"urn:store:{store.Id}:newProducts:product:{product.Id}", product.CreatedOnUtc);
-            items.Add(item);
-            //uncomment below if you want to add RSS enclosure for pictures
-            //var picture = _pictureService.GetPicturesByProductId(product.Id, 1).FirstOrDefault();
-            //if (picture != null)
-            //{
-            //    var imageUrl = _pictureService.GetPictureUrl(picture, _mediaSettings.ProductDetailsPictureSize);
-            //    item.ElementExtensions.Add(new XElement("enclosure", new XAttribute("type", "image/jpeg"), new XAttribute("url", imageUrl), new XAttribute("length", picture.PictureBinary.Length)));
-            //}
-
-        }
-        feed.Items = items;
-        return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
-    }
-
-    #endregion
-
     #region Searching
 
     [HttpPost]
@@ -626,7 +544,6 @@ public partial class CatalogController : BasePublicController
     }
 
     #endregion
-
 
     #region Components
     [HttpGet]

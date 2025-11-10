@@ -514,7 +514,6 @@
         "Height": 2,
         "TaxCategoryName": "Electronics & Software",
         "ShowOnHomepage": true,
-        "MarkAsNew": true,
         "CategoryName": "Desktops",
         "ProductPictures": [ "product_Desktops_1.jpeg", "product_Desktops_2.jpeg" ],
         "ProductAttributeMapping": [
@@ -1263,7 +1262,6 @@
         "Height": 2,
         "TaxCategoryName": "Electronics & Software",
         "ShowOnHomepage": true,
-        "MarkAsNew": true,
         "CategoryName": "Cell phones",
         "ProductPictures": [ "product_HTC_One_M8.jpeg" ],
         "ProductTags": [ "cell", "compact", "awesome" ]
@@ -1293,7 +1291,6 @@
         "Width": 7,
         "Height": 7,
         "TaxCategoryName": "Electronics & Software",
-        "MarkAsNew": true,
         "CategoryName": "Cell phones",
         "ProductPictures": [ "product_HTC_One_Mini_1.jpeg", "product_HTC_One_Mini_2.jpeg" ],
         "ProductTags": [ "awesome", "compact", "cell" ]
@@ -1352,7 +1349,6 @@
         "Width": 7,
         "Height": 7,
         "TaxCategoryName": "Electronics & Software",
-        "MarkAsNew": true,
         "CategoryName": "Cell phones",
         "ProductPictures": [ "product_iphone_16_128.png" ],
         "ProductTags": [ "cool", "cell" ]
@@ -1382,7 +1378,6 @@
         "Width": 7,
         "Height": 7,
         "TaxCategoryName": "Electronics & Software",
-        "MarkAsNew": true,
         "CategoryName": "Cell phones",
         "ProductPictures": [ "product_samsung_galaxy_s24.png" ],
         "ProductTags": [ "awesome", "cell" ]
@@ -1413,7 +1408,6 @@
         "Width": 2,
         "Height": 3,
         "TaxCategoryName": "Electronics & Software",
-        "MarkAsNew": true,
         "CategoryName": "Others",
         "ProductPictures": [ "product_PillBeats_1.jpeg", "product_PillBeats_2.jpeg" ],
         "TierPrices": [
@@ -2142,7 +2136,6 @@
         "Width": 2,
         "Height": 2,
         "TaxCategoryName": "Jewelry",
-        "MarkAsNew": true,
         "CategoryName": "Jewelry",
         "ProductPictures": [ "product_GemstoneNecklaces.jpg" ],
         "ProductTags": [ "jewelry", "awesome" ]
@@ -2261,7 +2254,6 @@
         "Width": 1,
         "Height": 1,
         "ManageInventoryMethod": "DontManageStock",
-        "MarkAsNew": true,
         "CategoryName": "Gift Cards",
         "ProductPictures": [ "product_50giftcart.jpeg" ]
       },

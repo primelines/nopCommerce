@@ -3228,24 +3228,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.Manufacturers.NoManufacturersAvailable">
     <Value>No manufacturers available.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MarkAsNew">
-    <Value>Mark as new</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MarkAsNew.Hint">
-    <Value>Check to mark the product as new. Use this option for promoting new products.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MarkAsNewEndDateTimeUtc">
-    <Value>Mark as new. End date</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MarkAsNewEndDateTimeUtc.Hint">
-    <Value>Set Product as New to Date in Coordinated Universal Time (UTC).</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MarkAsNewStartDateTimeUtc">
-    <Value>Mark as new. Start date</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MarkAsNewStartDateTimeUtc.Hint">
-    <Value>Set Product as New from Date in Coordinated Universal Time (UTC).</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.MetaDescription">
     <Value>Meta description</Value>
   </LocaleResource>
@@ -8766,9 +8748,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Manufacturers">
     <Value>Manufacturers</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.MarkAsNew">
-    <Value>Mark as new</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.MaximumCartQuantity">
     <Value>Maximum cart qty</Value>

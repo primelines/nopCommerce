@@ -371,12 +371,4 @@ public class CatalogModelFactoryBaseTests : WebTest
         model.TotalItems.Should().Be(model.Products.Count);
     }
 
-    [Test]
-    public async Task CanPrepareNewProductsModelAsync()
-    {
-        var model = await _catalogModelFactory.PrepareNewProductsModelAsync(new CatalogProductsCommand());
-        model.Products.Any().Should().BeTrue();
-        model.Products.Count.Should().Be(6);
-        model.UseAjaxLoading.Should().Be(_catalogSettings.UseAjaxCatalogProductsLoading);
-    }
 }

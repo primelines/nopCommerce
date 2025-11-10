@@ -256,20 +256,6 @@ public partial interface ICatalogDtoFactory
 
     #endregion
 
-    #region New products
-
-    /// <summary>
-    /// Prepare new products model
-    /// </summary>
-    /// <param name="command">Model to get the catalog products</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the new products model
-    /// </returns>
-    Task<CatalogProductsDto> PrepareNewProductsDtoAsync(CatalogProductsCommand command);
-
-    #endregion
-
     #region Searching
 
     /// <summary>

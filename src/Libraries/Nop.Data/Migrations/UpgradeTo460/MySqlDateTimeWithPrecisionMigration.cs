@@ -221,14 +221,6 @@ public class MySqlDateTimeWithPrecisionMigration : ForwardOnlyMigration
             .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(Product), nameof(Product.CreatedOnUtc)))
             .AsCustom("datetime(6)");
         Alter.Table(NameCompatibilityManager.GetTableName(typeof(Product)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(Product), nameof(Product.MarkAsNewEndDateTimeUtc)))
-            .AsCustom("datetime(6)")
-            .Nullable();
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(Product)))
-            .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(Product), nameof(Product.MarkAsNewStartDateTimeUtc)))
-            .AsCustom("datetime(6)")
-            .Nullable();
-        Alter.Table(NameCompatibilityManager.GetTableName(typeof(Product)))
             .AlterColumn(NameCompatibilityManager.GetColumnName(typeof(Product), nameof(Product.PreOrderAvailabilityStartDateTimeUtc)))
             .AsCustom("datetime(6)")
             .Nullable();

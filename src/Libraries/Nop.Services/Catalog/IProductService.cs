@@ -61,18 +61,6 @@ public partial interface IProductService
     Task<IList<Product>> GetManufacturerFeaturedProductsAsync(int manufacturerId, int storeId = 0);
 
     /// <summary>
-    /// Gets products which marked as new
-    /// </summary>
-    /// <param name="storeId">Store identifier; 0 if you want to get all records</param>
-    /// <param name="pageIndex">Page index</param>
-    /// <param name="pageSize">Page size</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the list of new products
-    /// </returns>
-    Task<IPagedList<Product>> GetProductsMarkedAsNewAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
-
-    /// <summary>
     /// Gets a product
     /// </summary>
     /// <param name="productId">Product identifier</param>

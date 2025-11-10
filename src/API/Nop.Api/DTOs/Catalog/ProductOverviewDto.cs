@@ -37,10 +37,6 @@ public partial record ProductOverviewDto : BaseNopEntityDto
     [JsonProperty("product_type")]
     public ProductType ProductType { get; set; }
 
-
-    [JsonProperty("mark_as_new")]
-    public bool MarkAsNew { get; set; }
-
     //price
 
     [JsonProperty("product_price")]

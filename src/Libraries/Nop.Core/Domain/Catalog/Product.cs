@@ -346,21 +346,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int BasepriceBaseUnitId { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this product is marked as new
-    /// </summary>
-    public bool MarkAsNew { get; set; }
-
-    /// <summary>
-    /// Gets or sets the start date and time of the new product (set product as "New" from date). Leave empty to ignore this property
-    /// </summary>
-    public DateTime? MarkAsNewStartDateTimeUtc { get; set; }
-
-    /// <summary>
-    /// Gets or sets the end date and time of the new product (set product as "New" to date). Leave empty to ignore this property
-    /// </summary>
-    public DateTime? MarkAsNewEndDateTimeUtc { get; set; }
-
-    /// <summary>
     /// Gets or sets the weight
     /// </summary>
     public decimal Weight { get; set; }

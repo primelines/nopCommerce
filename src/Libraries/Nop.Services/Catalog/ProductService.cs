@@ -702,36 +702,6 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Gets products which marked as new
-    /// </summary>
-    /// <param name="storeId">Store identifier; 0 if you want to get all records</param>
-    /// <param name="pageIndex">Page index</param>
-    /// <param name="pageSize">Page size</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the list of new products
-    /// </returns>
-    public virtual async Task<IPagedList<Product>> GetProductsMarkedAsNewAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
-    {
-        var query = from p in _productRepository.Table
-            where p.Published && p.VisibleIndividually && p.MarkAsNew && !p.Deleted &&
-                  DateTime.UtcNow >= (p.MarkAsNewStartDateTimeUtc ?? SqlDateTime.MinValue.Value) &&
-                  DateTime.UtcNow <= (p.MarkAsNewEndDateTimeUtc ?? SqlDateTime.MaxValue.Value)
-            select p;
-
-        //apply store mapping constraints
-        query = await _storeMappingService.ApplyStoreMapping(query, storeId);
-
-        //apply ACL constraints
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        query = await _aclService.ApplyAcl(query, customer);
-
-        query = query.OrderByDescending(p => p.CreatedOnUtc);
-
-        return await query.ToPagedListAsync(pageIndex, pageSize);
-    }
-
-    /// <summary>
     /// Get number of product (published and visible) in certain category
     /// </summary>
     /// <param name="categoryIds">Category identifiers</param>

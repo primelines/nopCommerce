@@ -228,11 +228,6 @@ public partial class ProductEditorSettings : ISettings
     public bool AvailableEndDate { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Mark as new' field is shown
-    /// </summary>
-    public bool MarkAsNew { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Published' field is shown
     /// </summary>
     public bool Published { get; set; }

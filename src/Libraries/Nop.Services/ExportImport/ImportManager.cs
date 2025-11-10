@@ -2352,15 +2352,6 @@ public partial class ImportManager : IImportManager
                     case "BasepriceBaseUnit":
                         product.BasepriceBaseUnitId = property.IntValue;
                         break;
-                    case "MarkAsNew":
-                        product.MarkAsNew = property.BooleanValue;
-                        break;
-                    case "MarkAsNewStartDateTimeUtc":
-                        product.MarkAsNewStartDateTimeUtc = property.DateTimeNullable;
-                        break;
-                    case "MarkAsNewEndDateTimeUtc":
-                        product.MarkAsNewEndDateTimeUtc = property.DateTimeNullable;
-                        break;
                     case "Weight":
                         product.Weight = property.DecimalValue;
                         break;

@@ -205,7 +205,6 @@ public partial class InstallationService
                 OrderMaximumQuantity = sample.OrderMaximumQuantity,
                 Published = sample.Published,
                 ShowOnHomepage = sample.ShowOnHomepage,
-                MarkAsNew = sample.MarkAsNew,
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow,
                 IsGiftCard = sample.IsGiftCard,

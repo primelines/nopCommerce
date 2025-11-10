@@ -25,8 +25,6 @@ public partial record ProductOverviewModel : BaseNopEntityModel
 
     public ProductType ProductType { get; set; }
 
-    public bool MarkAsNew { get; set; }
-
     //price
     public ProductPriceModel ProductPrice { get; set; }
     //pictures
