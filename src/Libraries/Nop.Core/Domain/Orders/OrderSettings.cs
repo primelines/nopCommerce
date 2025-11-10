@@ -164,11 +164,6 @@ public partial class OrderSettings : ISettings
     public bool ExportWithProducts { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether administrators (in impersonation mode) are allowed to buy products marked as "Call for price"
-    /// </summary>
-    public bool AllowAdminsToBuyCallForPriceProducts { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether to show product thumbnail in order details page"
     /// </summary>
     public bool ShowProductThumbnailInOrderDetailsPage { get; set; }

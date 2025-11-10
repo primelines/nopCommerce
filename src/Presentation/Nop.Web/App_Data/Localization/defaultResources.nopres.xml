@@ -3078,12 +3078,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.BasepriceUnit.Hint">
     <Value>Enter a unit of product.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.CallForPrice">
-    <Value>Call for price</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.CallForPrice.Hint">
-    <Value>Check to show "Call for Pricing" or "Call for quote" instead of price.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.Categories">
     <Value>Categories</Value>
   </LocaleResource>
@@ -8359,12 +8353,6 @@
   <LocaleResource Name="Admin.Configuration.Settings.Order.ActivateGiftCardsAfterCompletingOrder.Hint">
     <Value>Check to activate related gift cards when an order is completed.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Order.AllowAdminsToBuyCallForPriceProducts">
-    <Value>Allow admins to buy "Call for price" products</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Order.AllowAdminsToBuyCallForPriceProducts.Hint">
-    <Value>Check to allow administrators (in impersonation mode) are allowed to buy products marked as "Call for price".</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Order.AllowCustomersCancelOrders">
     <Value>Allow customers to cancel orders</Value>
   </LocaleResource>
@@ -8736,9 +8724,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Button">
     <Value>Settings</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.CallForPrice">
-    <Value>Call for price</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.CrossSellsProducts">
     <Value>Cross-sells products</Value>
@@ -19483,9 +19468,6 @@
   </LocaleResource>
   <LocaleResource Name="Products.Breadcrumb.Top">
     <Value>Home</Value>
-  </LocaleResource>
-  <LocaleResource Name="Products.CallForPrice">
-    <Value>Call for pricing</Value>
   </LocaleResource>
   <LocaleResource Name="Products.Compare">
     <Value>Compare products</Value>

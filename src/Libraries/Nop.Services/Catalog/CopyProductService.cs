@@ -689,7 +689,6 @@ public partial class CopyProductService : ICopyProductService
             DisableWishlistButton = product.DisableWishlistButton,
             AvailableForPreOrder = product.AvailableForPreOrder,
             PreOrderAvailabilityStartDateTimeUtc = product.PreOrderAvailabilityStartDateTimeUtc,
-            CallForPrice = product.CallForPrice,
             Price = product.Price,
             OldPrice = product.OldPrice,
             ProductCost = product.ProductCost,

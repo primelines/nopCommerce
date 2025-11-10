@@ -66,9 +66,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.AvailableForPreOrder")]
     public bool AvailableForPreOrder { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.CallForPrice")]
-    public bool CallForPrice { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.OldPrice")]
     public bool OldPrice { get; set; }
 

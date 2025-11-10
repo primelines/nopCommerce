@@ -267,8 +267,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.MinimumAgeToPurchase")]
     public int MinimumAgeToPurchase { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.CallForPrice")]
-    public bool CallForPrice { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Price")]
     public decimal Price { get; set; }

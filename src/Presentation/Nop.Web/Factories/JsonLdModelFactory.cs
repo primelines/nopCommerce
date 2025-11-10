@@ -168,7 +168,7 @@ public partial class JsonLdModelFactory : IJsonLdModelFactory
             Offer = new JsonLdOfferModel
             {
                 Url = productUrl.ToLowerInvariant(),
-                Price = model.ProductPrice.CallForPrice ? null : productPrice?.ToString("0.00", CultureInfo.InvariantCulture),
+                Price = productPrice?.ToString("0.00", CultureInfo.InvariantCulture),
                 PriceCurrency = model.ProductPrice.CurrencyCode,
                 PriceValidUntil = ConvertDateTimeToIso8601String(model.AvailableEndDate),
                 Availability = @"https://schema.org/" + (model.InStock ? "InStock" : "OutOfStock")

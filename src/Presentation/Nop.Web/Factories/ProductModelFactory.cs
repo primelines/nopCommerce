@@ -220,31 +220,20 @@ public partial class ProductModelFactory : IProductModelFactory
         if (minPriceProduct == null)
             return;
 
-        if (minPriceProduct.CallForPrice &&
-            //also check whether the current user is impersonated
-            (!_orderSettings.AllowAdminsToBuyCallForPriceProducts ||
-             _workContext.OriginalCustomerIfImpersonated == null))
-        {
-            priceModel.OldPrice = null;
-            priceModel.OldPriceValue = null;
-            priceModel.Price = await _localizationService.GetResourceAsync("Products.CallForPrice");
-            priceModel.PriceValue = null;
-        }
-        else
-        {
-            //calculate prices
-            var (finalPriceBase, _) = await _taxService.GetProductPriceAsync(minPriceProduct, minPossiblePrice.Value);
-            var finalPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceBase, await _workContext.GetWorkingCurrencyAsync());
 
-            priceModel.OldPrice = null;
-            priceModel.OldPriceValue = null;
-            priceModel.Price = string.Format(await _localizationService.GetResourceAsync("Products.PriceRangeFrom"), await _priceFormatter.FormatPriceAsync(finalPrice));
-            priceModel.PriceValue = finalPrice;
+        //calculate prices
+        var (finalPriceBase, _) = await _taxService.GetProductPriceAsync(minPriceProduct, minPossiblePrice.Value);
+        var finalPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceBase, await _workContext.GetWorkingCurrencyAsync());
 
-            //PAngV default baseprice (used in Germany)
-            priceModel.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceBase);
-            priceModel.BasePricePAngVValue = finalPriceBase;
-        }
+        priceModel.OldPrice = null;
+        priceModel.OldPriceValue = null;
+        priceModel.Price = string.Format(await _localizationService.GetResourceAsync("Products.PriceRangeFrom"), await _priceFormatter.FormatPriceAsync(finalPrice));
+        priceModel.PriceValue = finalPrice;
+
+        //PAngV default baseprice (used in Germany)
+        priceModel.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceBase);
+        priceModel.BasePricePAngVValue = finalPriceBase;
+        
     }
 
     /// <summary>
@@ -421,22 +410,6 @@ public partial class ProductModelFactory : IProductModelFactory
                 DateTime.UtcNow;
 
             model.PreOrderAvailabilityStartDateTimeUtc = product.PreOrderAvailabilityStartDateTimeUtc;
-        }
-
-        if (product.CallForPrice &&
-            //also check whether the current user is impersonated
-            (!_orderSettings.AllowAdminsToBuyCallForPriceProducts ||
-                _workContext.OriginalCustomerIfImpersonated == null))
-        {
-            model.CallForPrice = true;
-
-            //call for price
-            model.OldPrice = null;
-            model.OldPriceValue = null;
-            model.Price = await _localizationService.GetResourceAsync("Products.CallForPrice");
-            model.PriceValue = null;
-
-            return model;
         }
 
         var store = await _storeContext.GetCurrentStoreAsync();

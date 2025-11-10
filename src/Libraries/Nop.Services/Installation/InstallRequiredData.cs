@@ -1757,7 +1757,6 @@ public partial class InstallationService
             CompleteOrderWhenDelivered = true,
             CustomOrderNumberMask = "{ID}",
             ExportWithProducts = true,
-            AllowAdminsToBuyCallForPriceProducts = true,
             AllowCustomersCancelOrders = true,
             ShowProductThumbnailInOrderDetailsPage = true,
             DisplayCustomerCurrencyOnOrders = false,

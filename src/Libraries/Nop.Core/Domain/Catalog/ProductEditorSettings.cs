@@ -98,11 +98,6 @@ public partial class ProductEditorSettings : ISettings
     public bool AvailableForPreOrder { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Call for price' field is shown
-    /// </summary>
-    public bool CallForPrice { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Old price' field is shown
     /// </summary>
     public bool OldPrice { get; set; }

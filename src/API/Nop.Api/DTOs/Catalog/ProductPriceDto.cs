@@ -33,11 +33,6 @@ public partial record ProductPriceDto : BaseNopDto
     [JsonProperty("price_with_discount_value")]
     public decimal? PriceWithDiscountValue { get; set; }
 
-
-    [JsonProperty("call_for_price")]
-    public bool CallForPrice { get; set; }
-
-
     [JsonProperty("product_id")]
     public int ProductId { get; set; }
 

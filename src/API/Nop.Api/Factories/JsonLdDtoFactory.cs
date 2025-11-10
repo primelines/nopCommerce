@@ -140,7 +140,7 @@ public partial class JsonLdDtoFactory : IJsonLdDtoFactory
             Offer = new JsonLdOfferDto
             {
                 Url = productUrl.ToLowerInvariant(),
-                Price = model.ProductPrice.CallForPrice ? null : productPrice.ToString("0.00", CultureInfo.InvariantCulture),
+                Price = productPrice.ToString("0.00", CultureInfo.InvariantCulture),
                 PriceCurrency = model.ProductPrice.CurrencyCode,
                 PriceValidUntil = model.AvailableEndDate,
                 Availability = @"https://schema.org/" + (model.InStock ? "InStock" : "OutOfStock")

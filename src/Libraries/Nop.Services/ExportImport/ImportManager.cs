@@ -2328,9 +2328,6 @@ public partial class ImportManager : IImportManager
                     case "PreOrderAvailabilityStartDateTimeUtc":
                         product.PreOrderAvailabilityStartDateTimeUtc = property.DateTimeNullable;
                         break;
-                    case "CallForPrice":
-                        product.CallForPrice = property.BooleanValue;
-                        break;
                     case "Price":
                         product.Price = property.DecimalValue;
                         break;

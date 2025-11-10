@@ -354,14 +354,6 @@ public partial class ShoppingCartService : IShoppingCartService
             warnings.Add(await _localizationService.GetResourceAsync("ShoppingCart.WishlistDisabled"));
         }
 
-        //call for price
-        if (shoppingCartType == ShoppingCartType.ShoppingCart && product.CallForPrice &&
-            //also check whether the current user is impersonated
-            (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
-        {
-            warnings.Add(await _localizationService.GetResourceAsync("Products.CallForPrice"));
-        }
-
         //quantity validation
         var hasQtyWarnings = false;
         if (quantity < product.OrderMinimumQuantity)
