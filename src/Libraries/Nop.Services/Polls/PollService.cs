@@ -56,7 +56,6 @@ public partial class PollService : IPollService
     /// <param name="storeId">The store identifier; pass 0 to load all records</param>
     /// <param name="languageId">Language identifier; pass 0 to load all records</param>
     /// <param name="showHidden">Whether to show hidden records (not published, not started and expired)</param>
-    /// <param name="loadShownOnHomepageOnly">Retrieve only shown on home page polls</param>
     /// <param name="systemKeyword">The poll system keyword; pass null to load all records</param>
     /// <param name="pageIndex">Page index</param>
     /// <param name="pageSize">Page size</param>
@@ -65,7 +64,7 @@ public partial class PollService : IPollService
     /// The task result contains the polls
     /// </returns>
     public virtual async Task<IPagedList<Poll>> GetPollsAsync(int storeId, int languageId = 0, bool showHidden = false,
-        bool loadShownOnHomepageOnly = false, string systemKeyword = null,
+        string systemKeyword = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = _pollRepository.Table;
@@ -84,10 +83,6 @@ public partial class PollService : IPollService
             query = query.Where(poll => !poll.StartDateUtc.HasValue || poll.StartDateUtc <= utcNow);
             query = query.Where(poll => !poll.EndDateUtc.HasValue || poll.EndDateUtc >= utcNow);
         }
-
-        //load homepage polls only
-        if (loadShownOnHomepageOnly)
-            query = query.Where(poll => poll.ShowOnHomepage);
 
         //filter by language
         if (languageId > 0)

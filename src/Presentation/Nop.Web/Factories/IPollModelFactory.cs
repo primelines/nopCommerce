@@ -29,12 +29,4 @@ public partial interface IPollModelFactory
     /// </returns>
     Task<PollModel> PreparePollModelBySystemNameAsync(string systemKeyword);
 
-    /// <summary>
-    /// Prepare the home page poll models
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the list of the poll model
-    /// </returns>
-    Task<List<PollModel>> PrepareHomepagePollModelsAsync();
 }

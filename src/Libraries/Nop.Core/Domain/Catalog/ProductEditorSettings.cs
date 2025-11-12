@@ -34,11 +34,6 @@ public partial class ProductEditorSettings : ISettings
     public bool ACL { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Show on home page' field is shown
-    /// </summary>
-    public bool ShowOnHomepage { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Allow customer reviews' field is shown
     /// </summary>
     public bool AllowCustomerReviews { get; set; }

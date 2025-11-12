@@ -164,7 +164,6 @@ public partial class PollModelFactory : IPollModelFactory
         if (poll == null)
         {
             model.Published = true;
-            model.ShowOnHomepage = true;
         }
 
         //prepare available languages

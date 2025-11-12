@@ -201,7 +201,6 @@ public partial class InstallationService
                 OrderMinimumQuantity = sample.OrderMinimumQuantity,
                 OrderMaximumQuantity = sample.OrderMaximumQuantity,
                 Published = sample.Published,
-                ShowOnHomepage = sample.ShowOnHomepage,
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow,
                 IsGiftCard = sample.IsGiftCard,

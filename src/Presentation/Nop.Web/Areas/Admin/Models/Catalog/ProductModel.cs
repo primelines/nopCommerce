@@ -93,9 +93,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.AdminComment")]
     public string AdminComment { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ShowOnHomepage")]
-    public bool ShowOnHomepage { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.MetaKeywords")]
     public string MetaKeywords { get; set; }
 
@@ -296,9 +293,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.AvailableEndDateTime")]
     [UIHint("DateTimeNullable")]
     public DateTime? AvailableEndDateTimeUtc { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.DisplayOrder")]
-    public int DisplayOrder { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Published")]
     public bool Published { get; set; }

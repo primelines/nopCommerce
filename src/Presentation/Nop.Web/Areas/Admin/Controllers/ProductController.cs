@@ -1047,10 +1047,6 @@ public partial class ProductController : BaseAdminController
             if (currentVendor != null)
                 model.VendorId = currentVendor.Id;
 
-            //vendors cannot edit "Show on home page" property
-            if (currentVendor != null && model.ShowOnHomepage)
-                model.ShowOnHomepage = false;
-
             //product
             var product = model.ToEntity<Product>();
             product.CreatedOnUtc = DateTime.UtcNow;
@@ -1179,11 +1175,6 @@ public partial class ProductController : BaseAdminController
             //a vendor should have access only to his products
             if (currentVendor != null)
                 model.VendorId = currentVendor.Id;
-
-            //we do not validate maximum number of products per vendor when editing existing products (only during creation of new products)
-            //vendors cannot edit "Show on home page" property
-            if (currentVendor != null && model.ShowOnHomepage != product.ShowOnHomepage)
-                model.ShowOnHomepage = product.ShowOnHomepage;
 
             //some previously used values
             var prevTotalStockQuantity = await _productService.GetTotalStockQuantityAsync(product);

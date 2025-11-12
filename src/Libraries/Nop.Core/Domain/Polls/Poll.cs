@@ -28,11 +28,6 @@ public partial class Poll : BaseEntity, IStoreMappingSupported
     public bool Published { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the entity should be shown on home page
-    /// </summary>
-    public bool ShowOnHomepage { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the anonymous votes are allowed
     /// </summary>
     public bool AllowGuestsToVote { get; set; }

@@ -294,7 +294,6 @@
       "ImageFileName": "category_electronics.jpeg",
       "DisplayOrder": 2,
       "PriceRangeFiltering": false,
-      "ShowOnHomepage": true,
       "PageSize": 6,
       "AllowCustomersToSelectPageSize": true,
       "PageSizeOptions": "6, 3, 9",
@@ -347,7 +346,6 @@
       "ImageFileName": "category_apparel.jpeg",
       "DisplayOrder": 3,
       "PriceRangeFiltering": false,
-      "ShowOnHomepage": true,
       "PageSize": 6,
       "AllowCustomersToSelectPageSize": true,
       "PageSizeOptions": "6, 3, 9",
@@ -400,7 +398,6 @@
       "ImageFileName": "category_digital_downloads.jpeg",
       "DisplayOrder": 4,
       "PriceRangeFiltering": false,
-      "ShowOnHomepage": true,
       "PageSize": 6,
       "AllowCustomersToSelectPageSize": true,
       "PageSizeOptions": "6, 3, 9",
@@ -511,7 +508,6 @@
         "Width": 2,
         "Height": 2,
         "TaxCategoryName": "Electronics & Software",
-        "ShowOnHomepage": true,
         "CategoryName": "Desktops",
         "ProductPictures": [ "product_Desktops_1.jpeg", "product_Desktops_2.jpeg" ],
         "ProductAttributeMapping": [
@@ -690,7 +686,6 @@
         "Height": 2,
         "TaxCategoryName": "Electronics & Software",
         "OrderMinimumQuantity": 2,
-        "ShowOnHomepage": true,
         "CategoryName": "Notebooks",
         "ManufacturerName": "Apple",
         "ProductPictures": [ "product_macbook_1.jpeg", "product_macbook_2.jpeg" ],
@@ -1177,7 +1172,6 @@
         "Width": 2,
         "Height": 2,
         "TaxCategoryName": "Electronics & Software",
-        "ShowOnHomepage": true,
         "CategoryName": "Cell phones",
         "ProductPictures": [ "product_HTC_One_M8.jpeg" ],
         "ProductTags": [ "cell", "compact", "awesome" ]
@@ -2089,7 +2083,6 @@
         "IsGiftCard": true,
         "GiftCardType": "Virtual",
         "ManageInventoryMethod": "DontManageStock",
-        "ShowOnHomepage": true,
         "CategoryName": "Gift Cards",
         "ProductPictures": [ "product_25giftcart.jpeg" ],
         "ProductTags": [ "nice", "gift" ]
@@ -2652,8 +2645,7 @@
           "DisplayOrder": 4
         }
       ],
-      "Published": true,
-      "ShowOnHomepage": true
+      "Published": true
     }
   ],
   "Warehouses": [

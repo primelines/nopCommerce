@@ -68,11 +68,6 @@ public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IA
     public string PageSizeOptions { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to show the category on home page
-    /// </summary>
-    public bool ShowOnHomepage { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the entity is subject to ACL
     /// </summary>
     public bool SubjectToAcl { get; set; }

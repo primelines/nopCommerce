@@ -340,42 +340,6 @@ public partial class CategoryService : ICategoryService
     }
 
     /// <summary>
-    /// Gets all categories displayed on the home page
-    /// </summary>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the categories
-    /// </returns>
-    public virtual async Task<IList<Category>> GetAllCategoriesDisplayedOnHomepageAsync(bool showHidden = false)
-    {
-        var categories = await _categoryRepository.GetAllAsync(query =>
-        {
-            return from c in query
-                orderby c.DisplayOrder, c.Id
-                where c.Published &&
-                      !c.Deleted &&
-                      c.ShowOnHomepage
-                select c;
-        }, cache => cache.PrepareKeyForDefaultCache(NopCatalogDefaults.CategoriesHomepageCacheKey));
-
-        if (showHidden)
-            return categories;
-
-        var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.CategoriesHomepageWithoutHiddenCacheKey,
-            await _storeContext.GetCurrentStoreAsync(), await _customerService.GetCustomerRoleIdsAsync(await _workContext.GetCurrentCustomerAsync()));
-
-        var result = await _staticCacheManager.GetAsync(cacheKey, async () =>
-        {
-            return await categories
-                .WhereAwait(async c => await _aclService.AuthorizeAsync(c) && await _storeMappingService.AuthorizeAsync(c))
-                .ToListAsync();
-        });
-
-        return result;
-    }
-
-    /// <summary>
     /// Get category identifiers to which a discount is applied
     /// </summary>
     /// <param name="discount">Discount</param>

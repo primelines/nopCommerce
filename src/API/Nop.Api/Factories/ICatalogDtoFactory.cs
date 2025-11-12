@@ -42,23 +42,6 @@ public partial interface ICatalogDtoFactory
     Task<CategoryNavigationDto> PrepareCategoryNavigationDtoAsync(int currentCategoryId,
         int currentProductId);
 
-    ///// <summary>
-    ///// Prepare top menu model
-    ///// </summary>
-    ///// <returns>
-    ///// A task that represents the asynchronous operation
-    ///// The task result contains the op menu model
-    ///// </returns>
-    //Task<TopMenuDto> PrepareTopMenuDtoAsync();
-
-    /// <summary>
-    /// Prepare homepage category models
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the list of homepage category models
-    /// </returns>
-    Task<List<CategoryDto>> PrepareHomepageCategoryDtosAsync();
 
     /// <summary>
     /// Prepare root categories for menu

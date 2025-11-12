@@ -170,21 +170,6 @@ public partial class HomeController : BasePublicController
         return Ok(model);
     }
 
-
-
-    [HttpGet]
-    [Route("GetHomepageCategories", Name = "GetHomepageCategories")]
-    [ProducesResponseType(typeof(List<CategoryDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetHomepageCategories()
-    {
-        var model = await _catalogModelFactory.PrepareHomepageCategoryDtosAsync();
-        if (!model.Any())
-            return Content("");
-
-        return Ok(model);
-    }
-
-
     [HttpGet]
     [Route("GetHomepageNews", Name = "GetHomepageNews")]
     [ProducesResponseType(typeof(HomepageNewsItemsDto), (int)HttpStatusCode.OK)]
@@ -194,39 +179,6 @@ public partial class HomeController : BasePublicController
             return Content("");
 
         var model = await _newsDtoFactory.PrepareHomepageNewsItemsModelAsync();
-        return Ok(model);
-    }
-
-    [HttpGet]
-    [Route("GetHomepagePolls", Name = "GetHomepagePolls")]
-    [ProducesResponseType(typeof(List<PollDto>), (int)HttpStatusCode.OK)]
-
-    public async Task<IActionResult> GetHomepagePolls()
-    {
-        var model = await _pollDtoFactory.PrepareHomepagePollDtosAsync();
-        if (!model.Any())
-            return Content("");
-
-        return Ok(model);
-    }
-
-
-    [HttpGet]
-    [Route("GetHomepageProducts", Name = "GetHomepageProducts")]
-    [ProducesResponseType(typeof(IList<ProductOverviewDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetHomepageProducts(int? productThumbPictureSize)
-    {
-        var products = await (await _productService.GetAllProductsDisplayedOnHomepageAsync())
-            //ACL and store mapping
-            .WhereAwait(async p => await _aclService.AuthorizeAsync(p) && await _storeMappingService.AuthorizeAsync(p))
-            //availability dates
-            .Where(p => _productService.ProductIsAvailable(p)).ToListAsync();
-
-        if (!products.Any())
-            return Content("");
-
-        var model = (await _productModelFactory.PrepareProductOverviewDtosAsync(products, true, true, productThumbPictureSize)).ToList();
-
         return Ok(model);
     }
 

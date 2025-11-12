@@ -86,10 +86,6 @@ public class Indexes : ForwardOnlyMigration
             .OnColumn(nameof(Product.SubjectToAcl)).Ascending()
             .WithOptions().NonClustered();
 
-        Create.Index("IX_Product_ShowOnHomepage").OnTable(nameof(Product))
-            .OnColumn(nameof(Product.ShowOnHomepage)).Ascending()
-            .WithOptions().NonClustered();
-
         Create.Index("IX_Product_Published").OnTable(nameof(Product))
             .OnColumn(nameof(Product.Published)).Ascending()
             .WithOptions().NonClustered();

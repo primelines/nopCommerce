@@ -522,28 +522,6 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Gets all products displayed on the home page
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the products
-    /// </returns>
-    public virtual async Task<IList<Product>> GetAllProductsDisplayedOnHomepageAsync()
-    {
-        var products = await _productRepository.GetAllAsync(query =>
-        {
-            return from p in query
-                orderby p.DisplayOrder, p.Id
-                where p.Published &&
-                      !p.Deleted &&
-                      p.ShowOnHomepage
-                select p;
-        }, cache => cache.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductsHomepageCacheKey));
-
-        return products;
-    }
-
-    /// <summary>
     /// Gets a product
     /// </summary>
     /// <param name="productId">Product identifier</param>
@@ -1162,7 +1140,7 @@ public partial class ProductService : IProductService
         if (loadPublishedOnly.HasValue)
             query = query.Where(product => product.Published == loadPublishedOnly.Value);
 
-        query = query.OrderBy(product => product.MinStockQuantity).ThenBy(product => product.DisplayOrder).ThenBy(product => product.Id);
+        query = query.OrderBy(product => product.MinStockQuantity).ThenBy(product => product.Id);
 
         return await query.ToPagedListAsync(pageIndex, pageSize, getOnlyTotalCount);
     }
@@ -2061,7 +2039,7 @@ public partial class ProductService : IProductService
         if (!showHidden)
             products = products.Where(product => !product.Deleted);
 
-        products = products.OrderBy(product => product.DisplayOrder).ThenBy(product => product.Id);
+        products = products.OrderBy(product => product.Id);
 
         return await products.ToPagedListAsync(pageIndex, pageSize);
     }

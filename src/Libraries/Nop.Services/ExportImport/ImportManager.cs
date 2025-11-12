@@ -549,9 +549,6 @@ public partial class ImportManager : IImportManager
                 case "PageSizeOptions":
                     category.PageSizeOptions = property.StringValue;
                     break;
-                case "ShowOnHomepage":
-                    category.ShowOnHomepage = property.BooleanValue;
-                    break;
                 case "PriceRangeFiltering":
                     category.PriceRangeFiltering = property.BooleanValue;
                     break;
@@ -2181,16 +2178,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "ProductTemplate":
                         product.ProductTemplateId = property.IntValue;
-                        break;
-                    case "ShowOnHomepage":
-                        //vendor can't change this field
-                        if (currentVendor == null)
-                            product.ShowOnHomepage = property.BooleanValue;
-                        break;
-                    case "DisplayOrder":
-                        //vendor can't change this field
-                        if (currentVendor == null)
-                            product.DisplayOrder = property.IntValue;
                         break;
                     case "MetaKeywords":
                         product.MetaKeywords = property.StringValue;

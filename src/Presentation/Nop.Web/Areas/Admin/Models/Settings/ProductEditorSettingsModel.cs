@@ -27,9 +27,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.ACL")]
     public bool ACL { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.ShowOnHomepage")]
-    public bool ShowOnHomepage { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.AllowCustomerReviews")]
     public bool AllowCustomerReviews { get; set; }
 

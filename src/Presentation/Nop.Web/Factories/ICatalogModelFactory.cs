@@ -42,15 +42,6 @@ public partial interface ICatalogModelFactory
         int currentProductId);
 
     /// <summary>
-    /// Prepare homepage category models
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the list of homepage category models
-    /// </returns>
-    Task<List<CategoryModel>> PrepareHomepageCategoryModelsAsync();
-
-    /// <summary>
     /// Prepares the category products model
     /// </summary>
     /// <param name="category">Category</param>

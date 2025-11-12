@@ -130,20 +130,6 @@ public class CatalogModelFactoryBaseTests : WebTest
     }
 
     [Test]
-    public async Task CanPrepareHomepageCategoryModels()
-    {
-        var model = await _catalogModelFactory.PrepareHomepageCategoryModelsAsync();
-
-        model.Any().Should().BeTrue();
-        model.Count.Should().Be(3);
-
-        var categories = new[] { "Electronics", "Apparel", "Digital downloads" };
-
-        foreach (var categoryModel in model)
-            categoryModel.Name.Should().BeOneOf(categories);
-    }
-
-    [Test]
     public async Task CanPrepareManufacturerModel()
     {
         var model = await _catalogModelFactory.PrepareManufacturerModelAsync(_manufacturer, new CatalogProductsCommand());

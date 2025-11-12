@@ -574,69 +574,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
     //}
 
     /// <summary>
-    /// Prepare homepage category models
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the list of homepage category models
-    /// </returns>
-    public virtual async Task<List<CategoryDto>> PrepareHomepageCategoryDtosAsync()
-    {
-        var language = await _workContext.GetWorkingLanguageAsync();
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var customerRoleIds = await _customerService.GetCustomerRoleIdsAsync(customer);
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var pictureSize = _mediaSettings.CategoryThumbPictureSize;
-        var categoriesCacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopDtoCacheDefaults.CategoryHomepageKey,
-            store, customerRoleIds, pictureSize, language, _webHelper.IsCurrentConnectionSecured());
-
-        var model = await _staticCacheManager.GetAsync(categoriesCacheKey, async () =>
-        {
-            var homepageCategories = await _categoryService.GetAllCategoriesDisplayedOnHomepageAsync();
-            return await homepageCategories.SelectAwait(async category =>
-            {
-                var catModel = new CategoryDto
-                {
-                    Id = category.Id,
-                    Name = await _localizationService.GetLocalizedAsync(category, x => x.Name),
-                    Description = await _localizationService.GetLocalizedAsync(category, x => x.Description),
-                    MetaKeywords = await _localizationService.GetLocalizedAsync(category, x => x.MetaKeywords),
-                    MetaDescription = await _localizationService.GetLocalizedAsync(category, x => x.MetaDescription),
-                    MetaTitle = await _localizationService.GetLocalizedAsync(category, x => x.MetaTitle),
-                    SeName = await _urlRecordService.GetSeNameAsync(category),
-                };
-
-                //prepare picture model
-                var secured = _webHelper.IsCurrentConnectionSecured();
-                var categoryPictureCacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopDtoCacheDefaults.CategoryPictureDtoKey,
-                    category, pictureSize, true, language, secured, store);
-                catModel.Picture = await _staticCacheManager.GetAsync(categoryPictureCacheKey, async () =>
-                {
-                    var picture = await _pictureService.GetPictureByIdAsync(category.PictureId);
-                    string fullSizeImageUrl, imageUrl;
-
-                    (fullSizeImageUrl, picture) = await _pictureService.GetPictureUrlAsync(picture);
-                    (imageUrl, _) = await _pictureService.GetPictureUrlAsync(picture, pictureSize);
-
-                    var titleLocale = await _localizationService.GetResourceAsync("Media.Category.ImageLinkTitleFormat");
-                    var altLocale = await _localizationService.GetResourceAsync("Media.Category.ImageAlternateTextFormat");
-                    return new PictureDto
-                    {
-                        FullSizeImageUrl = fullSizeImageUrl,
-                        ImageUrl = imageUrl,
-                        Title = string.Format(titleLocale, catModel.Name),
-                        AlternateText = string.Format(altLocale, catModel.Name)
-                    };
-                });
-
-                return catModel;
-            }).ToListAsync();
-        });
-
-        return model;
-    }
-
-    /// <summary>
     /// Prepare root categories for menu
     /// </summary>
     /// <returns>

@@ -30,15 +30,6 @@ public partial interface IProductService
     Task DeleteProductsAsync(IList<Product> products);
 
     /// <summary>
-    /// Gets all products displayed on the home page
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the products
-    /// </returns>
-    Task<IList<Product>> GetAllProductsDisplayedOnHomepageAsync();
-
-    /// <summary>
     /// Gets featured products by a category identifier
     /// </summary>
     /// <param name="categoryId">Category identifier</param>

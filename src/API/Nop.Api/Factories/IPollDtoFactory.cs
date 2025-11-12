@@ -1,4 +1,4 @@
-using Nop.Core.Domain.Polls;
+﻿using Nop.Core.Domain.Polls;
 using Nop.Api.DTOs.Polls;
 
 namespace Nop.Api.Factories;
@@ -28,13 +28,4 @@ public partial interface IPollDtoFactory
     /// The task result contains the poll model
     /// </returns>
     Task<PollDto> PreparePollDtoBySystemNameAsync(string systemKeyword);
-
-    /// <summary>
-    /// Prepare the home page poll models
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the list of the poll model
-    /// </returns>
-    Task<List<PollDto>> PrepareHomepagePollDtosAsync();
 }

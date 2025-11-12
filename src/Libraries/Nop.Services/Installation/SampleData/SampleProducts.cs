@@ -88,10 +88,6 @@ public partial class SampleProducts
         /// </summary>
         public string FullDescription { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to show the product on home page
-        /// </summary>
-        public bool ShowOnHomepage { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the product allows customer reviews

@@ -1,4 +1,4 @@
-using Nop.Core;
+﻿using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Polls;
 using Nop.Services.Polls;
@@ -116,40 +116,6 @@ public partial class PollDtoFactory : IPollDtoFactory
         var model = cachedModel with { };
         var customer = await _workContext.GetCurrentCustomerAsync();
         model.AlreadyVoted = await _pollService.AlreadyVotedAsync(model.Id, customer.Id);
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare the home page poll models
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the list of the poll model
-    /// </returns>
-    public virtual async Task<List<PollDto>> PrepareHomepagePollDtosAsync()
-    {
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var language = await _workContext.GetWorkingLanguageAsync();
-        var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopDtoCacheDefaults.HomepagePollsModelKey, language, store);
-
-        var cachedPolls = await _staticCacheManager.GetAsync(cacheKey, async () =>
-        {
-            var polls = await _pollService.GetPollsAsync(store.Id, language.Id, loadShownOnHomepageOnly: true);
-            var pollsModels = await polls.SelectAwait(async poll => await PreparePollDtoAsync(poll, false)).ToListAsync();
-            return pollsModels;
-        });
-
-        //"AlreadyVoted" property of "PollDto" object depends on the current customer. Let's update it.
-        //But first we need to clone the cached model (the updated one should not be cached)
-        var model = new List<PollDto>();
-        foreach (var poll in cachedPolls)
-        {
-            var pollModel = poll with { };
-            pollModel.AlreadyVoted = await _pollService.AlreadyVotedAsync(pollModel.Id, customer.Id);
-            model.Add(pollModel);
-        }
 
         return model;
     }

@@ -1365,7 +1365,6 @@ public partial class InstallationService
                 DisplayOrder = sample.DisplayOrder,
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow,
-                ShowOnHomepage = sample.ShowOnHomepage
             };
 
             if (!sample.PriceRangeFiltering)
@@ -1599,7 +1598,6 @@ public partial class InstallationService
             Name = sp.Name,
             SystemKeyword = sp.SystemKeyword,
             Published = sp.Published,
-            ShowOnHomepage = sp.ShowOnHomepage,
             DisplayOrder = sp.DisplayOrder
         }, sp => sp.Answers);
 

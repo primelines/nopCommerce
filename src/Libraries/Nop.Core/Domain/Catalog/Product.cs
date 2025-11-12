@@ -43,11 +43,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int VendorId { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to show the product on home page
-    /// </summary>
-    public bool ShowOnHomepage { get; set; }
-
-    /// <summary>
     /// Gets or sets the meta keywords
     /// </summary>
     public string MetaKeywords { get; set; }
@@ -357,13 +352,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets the available end date and time
     /// </summary>
     public DateTime? AvailableEndDateTimeUtc { get; set; }
-
-    /// <summary>
-    /// Gets or sets a display order.
-    /// This value is used when sorting associated products (used with "grouped" products)
-    /// This value is used when sorting home page products
-    /// </summary>
-    public int DisplayOrder { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is published
