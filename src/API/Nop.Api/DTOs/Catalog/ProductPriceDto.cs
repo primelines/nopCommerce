@@ -46,15 +46,6 @@ public partial record ProductPriceDto : BaseNopDto
 
     [JsonProperty("display_tax_shipping_info")]
     public bool DisplayTaxShippingInfo { get; set; }
-    /// <summary>
-    /// PAngV baseprice (used in Germany)
-    /// </summary>
-
-    [JsonProperty("base_price_p_ang_v")]
-    public string BasePricePAngV { get; set; }
-
-    [JsonProperty("base_price_p_ang_v_value")]
-    public decimal? BasePricePAngVValue { get; set; }
 
 }
 

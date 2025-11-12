@@ -27,9 +27,6 @@ public partial record ProductModel : BaseNopEntityModel,
         ProductWarehouseInventoryModels = new List<ProductWarehouseInventoryModel>();
         ProductEditorSettingsModel = new ProductEditorSettingsModel();
         StockQuantityHistory = new StockQuantityHistoryModel();
-
-        AvailableBasepriceUnits = new List<SelectListItem>();
-        AvailableBasepriceBaseUnits = new List<SelectListItem>();
         AvailableProductTemplates = new List<SelectListItem>();
         AvailableTaxCategories = new List<SelectListItem>();
         AvailableDeliveryDates = new List<SelectListItem>();
@@ -247,23 +244,6 @@ public partial record ProductModel : BaseNopEntityModel,
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductCost")]
     public decimal ProductCost { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.BasepriceEnabled")]
-    public bool BasepriceEnabled { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.BasepriceAmount")]
-    public decimal BasepriceAmount { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.BasepriceUnit")]
-    public int BasepriceUnitId { get; set; }
-    public IList<SelectListItem> AvailableBasepriceUnits { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.BasepriceBaseAmount")]
-    public decimal BasepriceBaseAmount { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.BasepriceBaseUnit")]
-    public int BasepriceBaseUnitId { get; set; }
-    public IList<SelectListItem> AvailableBasepriceBaseUnits { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Weight")]
     public decimal Weight { get; set; }

@@ -338,10 +338,6 @@ public class ProductModelFactoryTests : WebTest
                     //we display tax/shipping info only with "shipping enabled" for this product
                     //we also ensure this it's not free shipping
                     priceModel.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductBoxes && product.IsShipEnabled && !product.IsFreeShipping;
-
-                    //PAngV default baseprice (used in Germany)
-                    priceModel.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscount);
-                    priceModel.BasePricePAngVValue = finalPriceWithDiscount;
                     
                 }
                 else
@@ -425,12 +421,7 @@ public class ProductModelFactoryTests : WebTest
                 //we also ensure this it's not free shipping
                 model.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductDetailsPage
                                                 && product.IsShipEnabled &&
-                                                !product.IsFreeShipping;
-
-                //PAngV baseprice (used in Germany)
-                model.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase);
-                model.BasePricePAngVValue = finalPriceWithDiscountBase;
-                
+                                                !product.IsFreeShipping;                
             }
             else
             {

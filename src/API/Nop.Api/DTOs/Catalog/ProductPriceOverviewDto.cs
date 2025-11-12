@@ -19,16 +19,6 @@ public partial record ProductPriceOverviewDto : BaseNopDto
 
         [JsonProperty("price_value")]
         public decimal? PriceValue { get; set; }
-        /// <summary>
-        /// PAngV baseprice (used in Germany)
-        /// </summary>
-
-        [JsonProperty("base_price_p_ang_v")]
-        public string BasePricePAngV { get; set; }
-
-        [JsonProperty("base_price_p_ang_v_value")]
-        public decimal? BasePricePAngVValue { get; set; }
-
 
         [JsonProperty("disable_buy_button")]
         public bool DisableBuyButton { get; set; }

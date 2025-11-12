@@ -284,31 +284,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public decimal ProductCost { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether base price (PAngV) is enabled. Used by German users.
-    /// </summary>
-    public bool BasepriceEnabled { get; set; }
-
-    /// <summary>
-    /// Gets or sets an amount in product for PAngV
-    /// </summary>
-    public decimal BasepriceAmount { get; set; }
-
-    /// <summary>
-    /// Gets or sets a unit of product for PAngV (MeasureWeight entity)
-    /// </summary>
-    public int BasepriceUnitId { get; set; }
-
-    /// <summary>
-    /// Gets or sets a reference amount for PAngV
-    /// </summary>
-    public decimal BasepriceBaseAmount { get; set; }
-
-    /// <summary>
-    /// Gets or sets a reference unit for PAngV (MeasureWeight entity)
-    /// </summary>
-    public int BasepriceBaseUnitId { get; set; }
-
-    /// <summary>
     /// Gets or sets the weight
     /// </summary>
     public decimal Weight { get; set; }

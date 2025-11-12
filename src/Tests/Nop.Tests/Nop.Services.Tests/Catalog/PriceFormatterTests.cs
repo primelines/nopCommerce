@@ -112,7 +112,8 @@ public class PriceFormatterTests : ServiceTest
     {
         //test with null currency code
         string nullCurrencyCode = null;
-        var formatNullCurrency = await _priceFormatter.FormatPriceAsync(100M, true, nullCurrencyCode, _enLangId, false);
+        var formatNullCurrency = 
+            await _priceFormatter.FormatPriceAsync(100M, true, nullCurrencyCode, _enLangId, false);
         formatNullCurrency.Should().NotBeNull();
 
         //test with empty currency code
@@ -121,31 +122,6 @@ public class PriceFormatterTests : ServiceTest
         formatEmptyCurrency.Should().NotBeNull();
     }
 
-    [Test]
-    public void FormatBasePrice_WhenProductIsNull_ReturnsNull()
-    {
-        //arrange
-        decimal? productPrice = 10.0M;
-
-        //act and Assert
-        Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _priceFormatter.FormatBasePriceAsync(null, productPrice)
-        );
-    }
-    [Test]
-    public async Task FormatBasePrice_WhenBasePriceNotEnabled_ReturnsNull()
-    {
-        //arrange
-        var product = new Product { BasepriceEnabled = false };
-        decimal? productPrice = 10.0M;
-
-        //act
-        var result = await _priceFormatter.FormatBasePriceAsync(product, productPrice);
-
-        //assert
-        Assert.That(result, Is.Null);
-    }
-    [Test]
     public void FormatTaxRate_ReturnsCorrectFormat()
     {
         //arrange

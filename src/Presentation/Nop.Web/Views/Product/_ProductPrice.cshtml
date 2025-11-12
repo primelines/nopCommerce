@@ -43,12 +43,6 @@
             </span>
         </div>
     }
-    @if (!string.IsNullOrEmpty(Model.BasePricePAngV))
-    {
-        <div class="base-price-pangv" id="base-price-pangv-@Model.ProductId">
-            @Model.BasePricePAngV
-        </div>
-    }
     @if (Model.DisplayTaxShippingInfo)
     {
         var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;

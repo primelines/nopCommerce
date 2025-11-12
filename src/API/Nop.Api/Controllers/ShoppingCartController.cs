@@ -781,31 +781,8 @@ public partial class ShoppingCartController : BasePublicController
         var mpn = await _productService.FormatMpnAsync(product, attributeXml);
         var gtin = await _productService.FormatGtinAsync(product, attributeXml);
 
-        // calculating weight adjustment
-        var attributeValues = await _productAttributeParser.ParseProductAttributeValuesAsync(attributeXml);
-        var totalWeight = product.BasepriceAmount;
-
-        foreach (var attributeValue in attributeValues)
-        {
-            switch (attributeValue.AttributeValueType)
-            {
-                case AttributeValueType.Simple:
-                    //simple attribute
-                    totalWeight += attributeValue.WeightAdjustment;
-                    break;
-                case AttributeValueType.AssociatedToProduct:
-                    //bundled product
-                    var associatedProduct = await _productService.GetProductByIdAsync(attributeValue.AssociatedProductId);
-                    if (associatedProduct != null)
-                        totalWeight += associatedProduct.BasepriceAmount * attributeValue.Quantity;
-                    break;
-            }
-        }
-
         //price
         var price = string.Empty;
-        //base price
-        var basepricepangv = string.Empty;
         if (await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
         {
             var currentStore = await _storeContext.GetCurrentStoreAsync();
@@ -820,7 +797,6 @@ public partial class ShoppingCartController : BasePublicController
             var (finalPriceWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, finalPrice);
             var finalPriceWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithDiscountBase, await _workContext.GetWorkingCurrencyAsync());
             price = await _priceFormatter.FormatPriceAsync(finalPriceWithDiscount);
-            basepricepangv = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase, totalWeight);
         }
 
         //stock
@@ -910,7 +886,6 @@ public partial class ShoppingCartController : BasePublicController
             mpn,
             sku,
             price,
-            basepricepangv,
             stockAvailability,
             enabledattributemappingids = enabledAttributeMappingIds.ToArray(),
             disabledattributemappingids = disabledAttributeMappingIds.ToArray(),

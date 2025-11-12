@@ -476,12 +476,7 @@ public partial class ProductDtoFactory : IProductDtoFactory
             //property for German market
             //we display tax/shipping info only with "shipping enabled" for this product
             //we also ensure this it's not free shipping
-            priceModel.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductBoxes && product.IsShipEnabled && !product.IsFreeShipping;
-
-            //PAngV default baseprice (used in Germany)
-            priceModel.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscount);
-            priceModel.BasePricePAngVValue = finalPriceWithDiscount;
-            
+            priceModel.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductBoxes && product.IsShipEnabled && !product.IsFreeShipping;            
         }
         else
         {
@@ -687,10 +682,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
             model.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductDetailsPage
                                             && product.IsShipEnabled &&
                                             !product.IsFreeShipping;
-
-            //PAngV baseprice (used in Germany)
-            model.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase);
-            model.BasePricePAngVValue = finalPriceWithDiscountBase;
             //currency code
             model.CurrencyCode = currentCurrency.CurrencyCode;
 

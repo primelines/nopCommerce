@@ -504,8 +504,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
         //products
         CreateMap<Product, ProductModel>()
             .ForMember(model => model.AddPictureModel, options => options.Ignore())
-            .ForMember(model => model.AvailableBasepriceBaseUnits, options => options.Ignore())
-            .ForMember(model => model.AvailableBasepriceUnits, options => options.Ignore())
             .ForMember(model => model.AvailableCategories, options => options.Ignore())
             .ForMember(model => model.AvailableDeliveryDates, options => options.Ignore())
             .ForMember(model => model.AvailableManufacturers, options => options.Ignore())

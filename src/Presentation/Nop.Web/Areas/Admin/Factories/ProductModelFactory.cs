@@ -920,12 +920,6 @@ public partial class ProductModelFactory : IProductModelFactory
             defaultItemText: await _localizationService.GetResourceAsync("Admin.Catalog.Products.Fields.Warehouse.None"));
         await PrepareProductWarehouseInventoryModelsAsync(model.ProductWarehouseInventoryModels, product);
 
-        //prepare available base price units
-        var availableMeasureWeights = (await _measureService.GetAllMeasureWeightsAsync())
-            .Select(weight => new SelectListItem { Text = weight.Name, Value = weight.Id.ToString() }).ToList();
-        model.AvailableBasepriceUnits = availableMeasureWeights;
-        model.AvailableBasepriceBaseUnits = availableMeasureWeights;
-
         //prepare model categories
         await _baseAdminModelFactory.PrepareCategoriesAsync(model.AvailableCategories, false);
         foreach (var categoryItem in model.AvailableCategories)

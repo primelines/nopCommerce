@@ -1269,12 +1269,6 @@ public partial class ImportManager : IImportManager
             manager.SetSelectList("TaxCategory",
                 (await _taxCategoryService.GetAllTaxCategoriesAsync()).Select(tc => tc as BaseEntity)
                 .ToSelectList(p => (p as TaxCategory)?.Name ?? string.Empty));
-            manager.SetSelectList("BasepriceUnit",
-                (await _measureService.GetAllMeasureWeightsAsync()).Select(mw => mw as BaseEntity)
-                .ToSelectList(p => (p as MeasureWeight)?.Name ?? string.Empty));
-            manager.SetSelectList("BasepriceBaseUnit",
-                (await _measureService.GetAllMeasureWeightsAsync()).Select(mw => mw as BaseEntity)
-                .ToSelectList(p => (p as MeasureWeight)?.Name ?? string.Empty));
         }
 
         var allAttributeIds = new List<int>();
@@ -2304,21 +2298,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "ProductCost":
                         product.ProductCost = property.DecimalValue;
-                        break;
-                    case "BasepriceEnabled":
-                        product.BasepriceEnabled = property.BooleanValue;
-                        break;
-                    case "BasepriceAmount":
-                        product.BasepriceAmount = property.DecimalValue;
-                        break;
-                    case "BasepriceUnit":
-                        product.BasepriceUnitId = property.IntValue;
-                        break;
-                    case "BasepriceBaseAmount":
-                        product.BasepriceBaseAmount = property.DecimalValue;
-                        break;
-                    case "BasepriceBaseUnit":
-                        product.BasepriceBaseUnitId = property.IntValue;
                         break;
                     case "Weight":
                         product.Weight = property.DecimalValue;

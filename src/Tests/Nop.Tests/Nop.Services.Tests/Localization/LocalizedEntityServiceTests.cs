@@ -24,21 +24,11 @@ public class LocalizedEntityServiceTests : BaseNopTest
         var product = await GetService<IProductService>().GetProductByIdAsync(1);
 
         await _localizedEntityService.SaveLocalizedValueAsync(product, p => p.Name, "test lang 1", 1);
-        await _localizedEntityService.SaveLocalizedValueAsync(product, p => p.BasepriceAmount, 1.0M, 1);
 
         var name = await _localizedEntityService.GetLocalizedValueAsync(1, 1, nameof(Product),
             nameof(Product.Name));
 
         name.Should().Be("test lang 1");
 
-        var basePriceAmount = await _localizedEntityService.GetLocalizedValueAsync(1, 1, nameof(Product),
-            nameof(Product.BasepriceAmount));
-
-        decimal.Parse(basePriceAmount, CultureInfo.InvariantCulture).Should().Be(1M);
-
-        basePriceAmount = await _localizedEntityService.GetLocalizedValueAsync(2, 1, nameof(Product),
-            nameof(Product.BasepriceAmount));
-
-        basePriceAmount.Should().BeNullOrEmpty();
     }
 }

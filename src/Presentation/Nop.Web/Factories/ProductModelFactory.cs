@@ -216,10 +216,6 @@ public partial class ProductModelFactory : IProductModelFactory
             {
                 var prices = new List<(decimal PriceWithoutDiscount, decimal PriceWithDiscount)>();
 
-                //we shouldn't use the base product price if there is at least one required attribute
-                var ignoreBasePrice = (await _productAttributeService.GetProductAttributeMappingsByProductIdAsync(product.Id))
-                    .Any(am => !am.IsNonCombinable() && am.IsRequired);
-
                 //check all possible attribute combinations for min price
                 var allAttributesXml = await _productAttributeParser.GenerateAllCombinationsAsync(product, true);
                 foreach (var attributesXml in allAttributesXml)
@@ -261,7 +257,7 @@ public partial class ProductModelFactory : IProductModelFactory
 
                 //find the min price
                 var (minPriceWithoutDiscount, minPriceWithDiscount) = prices.OrderBy(p => p.PriceWithDiscount).First();
-                return new { PriceWithoutDiscount = minPriceWithoutDiscount, PriceWithDiscount = minPriceWithDiscount, IgnoreBasePrice = ignoreBasePrice };
+                return new { PriceWithoutDiscount = minPriceWithoutDiscount, PriceWithDiscount = minPriceWithDiscount };
             });
 
             if (cachedPrice is not null)
@@ -269,7 +265,7 @@ public partial class ProductModelFactory : IProductModelFactory
                 hasMultiplePrices = true;
 
                 //change min product price
-                if (cachedPrice.IgnoreBasePrice || cachedPrice.PriceWithDiscount < minPossiblePriceWithDiscount)
+                if (cachedPrice.PriceWithDiscount < minPossiblePriceWithDiscount)
                 {
                     minPossiblePriceWithoutDiscount = cachedPrice.PriceWithoutDiscount;
                     minPossiblePriceWithDiscount = cachedPrice.PriceWithDiscount;
@@ -417,10 +413,6 @@ public partial class ProductModelFactory : IProductModelFactory
         model.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoProductBoxes
             && product.IsShipEnabled
             && !product.IsFreeShipping;
-
-        //PAngV default base price (used in Germany)
-        model.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceWithDiscountBase);
-        model.BasePricePAngVValue = finalPriceWithDiscountBase;
 
         return model;
     }
