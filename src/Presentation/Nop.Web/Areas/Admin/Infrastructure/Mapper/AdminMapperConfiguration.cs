@@ -567,8 +567,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.ProductName, options => options.Ignore())
             .ForMember(model => model.VendorId, options => options.Ignore());
 
-        CreateMap<Product, AssociatedProductModel>()
-            .ForMember(model => model.ProductName, options => options.Ignore());
 
         CreateMap<ProductAttributeCombination, ProductAttributeCombinationModel>()
             .ForMember(model => model.AttributesXml, options => options.Ignore())

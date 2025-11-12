@@ -188,107 +188,6 @@ public partial class ShoppingCartService : IShoppingCartService
     }
 
     /// <summary>
-    /// Validates required products (products which require some other products to be added to the cart)
-    /// </summary>
-    /// <param name="customer">Customer</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
-    /// <param name="product">Product</param>
-    /// <param name="storeId">Store identifier</param>
-    /// <param name="quantity">Quantity</param>
-    /// <param name="addRequiredProducts">Whether to add required products</param>
-    /// <param name="shoppingCartItemId">Shopping cart identifier; pass 0 if it's a new item</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the warnings
-    /// </returns>
-    protected virtual async Task<IList<string>> GetRequiredProductWarningsAsync(Customer customer, ShoppingCartType shoppingCartType, Product product,
-        int storeId, int quantity, bool addRequiredProducts, int shoppingCartItemId)
-    {
-        ArgumentNullException.ThrowIfNull(customer);
-
-        ArgumentNullException.ThrowIfNull(product);
-
-        var warnings = new List<string>();
-
-        //at now we ignore quantities of required products and use 1
-        var requiredProductQuantity = 1;
-
-        //get customer shopping cart
-        var cart = await GetShoppingCartAsync(customer, shoppingCartType, storeId);
-
-        var productsRequiringProduct = await GetProductsRequiringProductAsync(cart, product);
-
-        //whether other cart items require the passed product
-        var passedProductRequiredQuantity = cart.Where(ci => productsRequiringProduct.Any(p => p.Id == ci.ProductId))
-            .Sum(item => item.Quantity * requiredProductQuantity);
-
-        if (passedProductRequiredQuantity > quantity)
-            warnings.Add(string.Format(await _localizationService.GetResourceAsync("ShoppingCart.RequiredProductUpdateWarning"), passedProductRequiredQuantity));
-
-        //whether the passed product requires other products
-        if (!product.RequireOtherProducts)
-            return warnings;
-
-        //get these required products
-        var requiredProducts = await _productService.GetProductsByIdsAsync(_productService.ParseRequiredProductIds(product));
-        if (!requiredProducts.Any())
-            return warnings;
-
-        var finalRequiredProducts = requiredProducts.GroupBy(p => p.Id)
-            .Select(g => new { Product = g.First(), Count = g.Count() });
-
-        //get warnings
-        var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
-        var warningLocale = await _localizationService.GetResourceAsync("ShoppingCart.RequiredProductWarning");
-        foreach (var requiredProduct in finalRequiredProducts)
-        {
-            var productsRequiringRequiredProduct = await GetProductsRequiringProductAsync(cart, requiredProduct.Product);
-
-            //get the required quantity of the required product
-            var requiredProductRequiredQuantity = quantity * requiredProductQuantity +
-                                                  cart.Where(ci => productsRequiringRequiredProduct.Any(p => p.Id == ci.ProductId))
-                                                      .Where(item => item.Id != shoppingCartItemId)
-                                                      .Sum(item => item.Quantity * requiredProductQuantity);
-
-            //whether required product is already in the cart in the required quantity
-            var quantityToAdd = requiredProductRequiredQuantity * requiredProduct.Count - (cart.FirstOrDefault(item => item.ProductId == requiredProduct.Product.Id)?.Quantity ?? 0);
-            if (quantityToAdd <= 0)
-                continue;
-
-            //prepare warning message
-            var url = urlHelper.RouteUrl(nameof(Product), new { SeName = await _urlRecordService.GetSeNameAsync(requiredProduct.Product) });
-            var requiredProductName = WebUtility.HtmlEncode(await _localizationService.GetLocalizedAsync(requiredProduct.Product, x => x.Name));
-            var requiredProductWarning = _catalogSettings.UseLinksInRequiredProductWarnings
-                ? string.Format(warningLocale, $"<a href=\"{url}\">{requiredProductName}</a>", requiredProductRequiredQuantity * requiredProduct.Count)
-                : string.Format(warningLocale, requiredProductName, requiredProductRequiredQuantity);
-
-            //add to cart (if possible)
-            if (addRequiredProducts && product.AutomaticallyAddRequiredProducts)
-            {
-                //do not add required products to prevent circular references
-                var addToCartWarnings = await GetShoppingCartItemWarningsAsync(
-                    customer: customer,
-                    product: requiredProduct.Product,
-                    attributesXml: null,
-                    shoppingCartType: shoppingCartType,
-                    storeId: storeId,
-                    quantity: quantityToAdd,
-                    addRequiredProducts: true);
-
-                //don't display all specific errors only the generic one
-                if (addToCartWarnings.Any())
-                    warnings.Add(requiredProductWarning);
-            }
-            else
-            {
-                warnings.Add(requiredProductWarning);
-            }
-        }
-
-        return warnings;
-    }
-
-    /// <summary>
     /// Validates a product for standard properties
     /// </summary>
     /// <param name="customer">Customer</param>
@@ -589,26 +488,6 @@ public partial class ShoppingCartService : IShoppingCartService
         if (!_catalogSettings.RemoveRequiredProducts)
             return;
 
-        var product = await _productService.GetProductByIdAsync(shoppingCartItem.ProductId);
-        if (!product?.RequireOtherProducts ?? true)
-            return;
-
-        var requiredProductIds = _productService.ParseRequiredProductIds(product);
-        var requiredShoppingCartItems =
-            (await GetShoppingCartAsync(customer, shoppingCartType: shoppingCartItem.ShoppingCartType))
-            .Where(item => requiredProductIds.Any(id => id == item.ProductId))
-            .ToList();
-
-        //update quantity of required products in the cart if the main one is removed
-        foreach (var cartItem in requiredShoppingCartItems)
-        {
-            //at now we ignore quantities of required products and use 1
-            var requiredProductQuantity = 1;
-
-            await UpdateShoppingCartItemAsync(customer, cartItem.Id, cartItem.AttributesXml,
-                quantity: cartItem.Quantity - shoppingCartItem.Quantity * requiredProductQuantity,
-                resetCheckoutData: false);
-        }
     }
 
     /// <summary>
@@ -671,33 +550,6 @@ public partial class ShoppingCartService : IShoppingCartService
             await DeleteShoppingCartItemAsync(cartItem);
 
         return cartItems.Count;
-    }
-
-    /// <summary>
-    /// Get products from shopping cart whether requiring specific product
-    /// </summary>
-    /// <param name="cart">Shopping cart </param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    public virtual async Task<IList<Product>> GetProductsRequiringProductAsync(IList<ShoppingCartItem> cart, Product product)
-    {
-        ArgumentNullException.ThrowIfNull(cart);
-
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (!cart.Any())
-            return new List<Product>();
-
-        var productIds = cart.Select(ci => ci.ProductId).ToArray();
-
-        var cartProducts = await _productService.GetProductsByIdsAsync(productIds);
-
-        return cartProducts.Where(cartProduct =>
-            cartProduct.RequireOtherProducts &&
-            _productService.ParseRequiredProductIds(cartProduct).Contains(product.Id)).ToList();
     }
 
     /// <summary>
@@ -1059,9 +911,6 @@ public partial class ShoppingCartService : IShoppingCartService
         if (getGiftCardWarnings)
             warnings.AddRange(await GetShoppingCartItemGiftCardWarningsAsync(shoppingCartType, product, attributesXml));
 
-        //required products
-        if (getRequiredProductWarnings)
-            warnings.AddRange(await GetRequiredProductWarningsAsync(customer, shoppingCartType, product, storeId, quantity, addRequiredProducts, shoppingCartItemId));
 
         return warnings;
     }
@@ -1453,8 +1302,6 @@ public partial class ShoppingCartService : IShoppingCartService
             //update existing shopping cart item
             var newQuantity = shoppingCartItem.Quantity + quantity;
 
-            await addRequiredProductsToCartAsync(newQuantity, wishlistId);
-
             if (warnings.Any())
                 return warnings;
 
@@ -1480,8 +1327,6 @@ public partial class ShoppingCartService : IShoppingCartService
 
             if (warnings.Any())
                 return warnings;
-
-            await addRequiredProductsToCartAsync(wishlistId: wishlistId);
 
             if (warnings.Any())
                 return warnings;
@@ -1536,48 +1381,6 @@ public partial class ShoppingCartService : IShoppingCartService
 
         return warnings;
 
-        async Task addRequiredProductsToCartAsync(int qty = 0, int? wishlistId = null)
-        {
-            if (!product.RequireOtherProducts)
-                return;
-
-            //get these required products
-            var requiredProducts = await _productService.GetProductsByIdsAsync(_productService.ParseRequiredProductIds(product));
-            if (!requiredProducts.Any())
-                return;
-
-            var finalRequiredProducts = requiredProducts.GroupBy(p => p.Id)
-                .Select(g => new { Product = g.First(), Count = g.Count() });
-
-            foreach (var requiredProduct in finalRequiredProducts)
-            {
-                var productsRequiringRequiredProduct = await GetProductsRequiringProductAsync(cart, requiredProduct.Product);
-
-                //get the required quantity of the required product
-                var requiredProductRequiredQuantity = (qty > 0 ? qty : quantity) +
-                                                      cart.Where(ci => productsRequiringRequiredProduct.Any(p => p.Id == ci.ProductId))
-                                                          .Where(item => item.Id != (shoppingCartItem?.Id ?? 0))
-                                                          .Sum(item => item.Quantity);
-
-                //whether required product is already in the cart in the required quantity
-                var quantityToAdd = requiredProductRequiredQuantity * requiredProduct.Count - (cart.FirstOrDefault(item => item.ProductId == requiredProduct.Product.Id)?.Quantity ?? 0);
-                if (quantityToAdd <= 0)
-                    continue;
-
-                if (addRequiredProducts && product.AutomaticallyAddRequiredProducts)
-                {
-                    //do not add required products to prevent circular references
-                    var addToCartWarnings = await AddToCartAsync(customer, requiredProduct.Product, shoppingCartType, storeId,
-                        quantity: quantityToAdd, addRequiredProducts: requiredProduct.Product.AutomaticallyAddRequiredProducts, wishlistId: wishlistId);
-
-                    if (addToCartWarnings.Any())
-                    {
-                        warnings.AddRange(addToCartWarnings);
-                        return;
-                    }
-                }
-            }
-        }
     }
 
     /// <summary>
@@ -1631,12 +1434,6 @@ public partial class ShoppingCartService : IShoppingCartService
         }
         else
         {
-            //check warnings for required products
-            warnings.AddRange(await GetRequiredProductWarningsAsync(customer, shoppingCartItem.ShoppingCartType,
-                product, shoppingCartItem.StoreId, quantity, false, shoppingCartItemId));
-            if (warnings.Any())
-                return warnings;
-
             //delete a shopping cart item
             await DeleteShoppingCartItemAsync(shoppingCartItem, resetCheckoutData, true);
         }

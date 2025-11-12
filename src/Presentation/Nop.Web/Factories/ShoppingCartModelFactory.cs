@@ -401,10 +401,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
                                          (!string.IsNullOrEmpty(cartItemModel.AttributeInfo) ||
                                           product.IsGiftCard);
 
-        //disable removal?
-        //1. do other items require this one?
-        cartItemModel.DisableRemoval = (await _shoppingCartService.GetProductsRequiringProductAsync(cart, product)).Any();
-
         //allowed quantities
         var allowedQuantities = _productService.ParseAllowedQuantities(product);
         foreach (var qty in allowedQuantities)

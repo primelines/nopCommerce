@@ -240,13 +240,6 @@ public partial interface IProductService
     Task<int> GetNumberOfProductsByVendorIdAsync(int vendorId);
 
     /// <summary>
-    /// Parse "required product Ids" property
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <returns>A list of required product IDs</returns>
-    int[] ParseRequiredProductIds(Product product);
-
-    /// <summary>
     /// Get a value indicating whether a product is available now (availability dates)
     /// </summary>
     /// <param name="product">Product</param>

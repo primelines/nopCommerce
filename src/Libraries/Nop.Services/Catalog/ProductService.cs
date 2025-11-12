@@ -1243,29 +1243,6 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Parse "required product Ids" property
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <returns>A list of required product IDs</returns>
-    public virtual int[] ParseRequiredProductIds(Product product)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (string.IsNullOrEmpty(product.RequiredProductIds))
-            return Array.Empty<int>();
-
-        var ids = new List<int>();
-
-        foreach (var idStr in product.RequiredProductIds
-                     .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                     .Select(x => x.Trim()))
-            if (int.TryParse(idStr, out var id))
-                ids.Add(id);
-
-        return ids.ToArray();
-    }
-
-    /// <summary>
     /// Get a value indicating whether a product is available now (availability dates)
     /// </summary>
     /// <param name="product">Product</param>

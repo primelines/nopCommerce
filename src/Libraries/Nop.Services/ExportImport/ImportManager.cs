@@ -2212,15 +2212,6 @@ public partial class ImportManager : IImportManager
                     case "OverriddenGiftCardAmount":
                         product.OverriddenGiftCardAmount = property.DecimalValue;
                         break;
-                    case "RequireOtherProducts":
-                        product.RequireOtherProducts = property.BooleanValue;
-                        break;
-                    case "RequiredProductIds":
-                        product.RequiredProductIds = property.StringValue;
-                        break;
-                    case "AutomaticallyAddRequiredProducts":
-                        product.AutomaticallyAddRequiredProducts = property.BooleanValue;
-                        break;
                     case "IsShipEnabled":
                         product.IsShipEnabled = property.BooleanValue;
                         break;

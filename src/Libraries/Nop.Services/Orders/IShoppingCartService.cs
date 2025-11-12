@@ -49,16 +49,6 @@ public partial interface IShoppingCartService
     /// </returns>
     Task<int> DeleteExpiredShoppingCartItemsAsync(DateTime olderThanUtc);
 
-    /// <summary>
-    /// Get products from shopping cart whether requiring specific product
-    /// </summary>
-    /// <param name="cart">Shopping cart </param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    Task<IList<Product>> GetProductsRequiringProductAsync(IList<ShoppingCartItem> cart, Product product);
 
     /// <summary>
     /// Gets shopping cart

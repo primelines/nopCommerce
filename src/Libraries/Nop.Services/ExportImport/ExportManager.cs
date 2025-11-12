@@ -1269,9 +1269,6 @@ public partial class ExportManager : IExportManager
             await xmlWriter.WriteStringAsync("IsGiftCard", product.IsGiftCard, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard));
             await xmlWriter.WriteStringAsync("GiftCardType", product.GiftCardType, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard));
             await xmlWriter.WriteStringAsync("OverriddenGiftCardAmount", product.OverriddenGiftCardAmount, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard));
-            await xmlWriter.WriteStringAsync("RequireOtherProducts", product.RequireOtherProducts, await IgnoreExportProductPropertyAsync(p => p.RequireOtherProductsAddedToCart));
-            await xmlWriter.WriteStringAsync("RequiredProductIds", product.RequiredProductIds, await IgnoreExportProductPropertyAsync(p => p.RequireOtherProductsAddedToCart));
-            await xmlWriter.WriteStringAsync("AutomaticallyAddRequiredProducts", product.AutomaticallyAddRequiredProducts, await IgnoreExportProductPropertyAsync(p => p.RequireOtherProductsAddedToCart));
             await xmlWriter.WriteStringAsync("IsShipEnabled", product.IsShipEnabled);
             await xmlWriter.WriteStringAsync("IsFreeShipping", product.IsFreeShipping, await IgnoreExportProductPropertyAsync(p => p.FreeShipping));
             await xmlWriter.WriteStringAsync("ShipSeparately", product.ShipSeparately, await IgnoreExportProductPropertyAsync(p => p.ShipSeparately));
@@ -1593,9 +1590,6 @@ public partial class ExportManager : IExportManager
                 DropDownElements = await GiftCardType.Virtual.ToSelectListAsync(useLocalization: false)
             },
             new PropertyByName<Product>("OverriddenGiftCardAmount", (p, _) => p.OverriddenGiftCardAmount, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard)),
-            new PropertyByName<Product>("RequireOtherProducts", (p, _) => p.RequireOtherProducts, await IgnoreExportProductPropertyAsync(p => p.RequireOtherProductsAddedToCart)),
-            new PropertyByName<Product>("RequiredProductIds", (p, _) => p.RequiredProductIds, await IgnoreExportProductPropertyAsync(p => p.RequireOtherProductsAddedToCart)),
-            new PropertyByName<Product>("AutomaticallyAddRequiredProducts", (p, _) => p.AutomaticallyAddRequiredProducts, await IgnoreExportProductPropertyAsync(p => p.RequireOtherProductsAddedToCart)),
             new PropertyByName<Product>("IsShipEnabled", (p, _) => p.IsShipEnabled),
             new PropertyByName<Product>("IsFreeShipping", (p, _) => p.IsFreeShipping, await IgnoreExportProductPropertyAsync(p => p.FreeShipping)),
             new PropertyByName<Product>("ShipSeparately", (p, _) => p.ShipSeparately, await IgnoreExportProductPropertyAsync(p => p.ShipSeparately)),

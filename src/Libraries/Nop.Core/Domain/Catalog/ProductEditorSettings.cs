@@ -94,11 +94,6 @@ public partial class ProductEditorSettings : ISettings
     public bool PAngV { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Require other products added to the cart' field is shown
-    /// </summary>
-    public bool RequireOtherProductsAddedToCart { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Is gift card' field is shown
     /// </summary>
     public bool IsGiftCard { get; set; }

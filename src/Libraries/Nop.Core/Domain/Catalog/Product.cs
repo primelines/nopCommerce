@@ -123,21 +123,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public decimal? OverriddenGiftCardAmount { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the product requires that other products are added to the cart (Product X requires Product Y)
-    /// </summary>
-    public bool RequireOtherProducts { get; set; }
-
-    /// <summary>
-    /// Gets or sets a required product identifiers (comma separated)
-    /// </summary>
-    public string RequiredProductIds { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether required products are automatically added to the cart
-    /// </summary>
-    public bool AutomaticallyAddRequiredProducts { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the entity is ship enabled
     /// </summary>
     public bool IsShipEnabled { get; set; }

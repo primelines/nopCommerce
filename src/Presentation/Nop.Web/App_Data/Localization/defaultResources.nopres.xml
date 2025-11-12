@@ -3360,12 +3360,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.RequiredProductIds.Hint">
     <Value>Specify comma separated list of required product IDs. NOTE: Ensure that there are no circular references (for example, A requires B, and B requires A).</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.RequireOtherProducts">
-    <Value>Require other products</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.RequireOtherProducts.Hint">
-    <Value>Check if the product requires adding other products to the cart.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.SampleDownload">
     <Value>Sample download file</Value>
   </LocaleResource>
@@ -8766,9 +8760,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.RelatedProducts">
     <Value>Related products</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.RequireOtherProductsAddedToCart">
-    <Value>Require other products</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Seo">
     <Value>SEO</Value>

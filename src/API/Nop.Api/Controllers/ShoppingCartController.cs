@@ -1196,10 +1196,8 @@ public partial class ShoppingCartController : BasePublicController
         //first should be items with a reduced quantity and that require other products; or items with an increased quantity and are required for other products
         var orderedCart = await itemsWithNewQuantity
             .OrderByDescendingAwait(async cartItem =>
-                (cartItem.NewQuantity < cartItem.Item.Quantity &&
-                 (cartItem.Product?.RequireOtherProducts ?? false)) ||
-                (cartItem.NewQuantity > cartItem.Item.Quantity && cartItem.Product != null && (await _shoppingCartService
-                    .GetProductsRequiringProductAsync(cart, cartItem.Product)).Any()))
+                (cartItem.NewQuantity < cartItem.Item.Quantity) ||
+                (cartItem.NewQuantity > cartItem.Item.Quantity && cartItem.Product != null ))
             .ToListAsync();
 
         //try to update cart items with new quantities and get warnings

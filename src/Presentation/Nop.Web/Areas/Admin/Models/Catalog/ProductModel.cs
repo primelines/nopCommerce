@@ -132,15 +132,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [UIHint("DecimalNullable")]
     public decimal? OverriddenGiftCardAmount { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RequireOtherProducts")]
-    public bool RequireOtherProducts { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RequiredProductIds")]
-    public string RequiredProductIds { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.AutomaticallyAddRequiredProducts")]
-    public bool AutomaticallyAddRequiredProducts { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsShipEnabled")]
     public bool IsShipEnabled { get; set; }
 
