@@ -20,10 +20,7 @@ public partial record ProductOverviewModel : BaseNopEntityModel
     public string ShortDescription { get; set; }
     public string FullDescription { get; set; }
     public string SeName { get; set; }
-
     public string Sku { get; set; }
-
-    public ProductType ProductType { get; set; }
 
     //price
     public ProductPriceModel ProductPrice { get; set; }

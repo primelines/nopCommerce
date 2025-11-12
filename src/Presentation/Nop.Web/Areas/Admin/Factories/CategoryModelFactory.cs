@@ -309,9 +309,6 @@ public partial class CategoryModelFactory : ICategoryModelFactory
         //prepare available vendors
         await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
 
-        //prepare available product types
-        await _baseAdminModelFactory.PrepareProductTypesAsync(searchModel.AvailableProductTypes);
-
         //prepare page parameters
         searchModel.SetPopupGridPageSize();
 
@@ -336,7 +333,6 @@ public partial class CategoryModelFactory : ICategoryModelFactory
             manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 

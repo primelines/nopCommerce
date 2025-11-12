@@ -775,14 +775,13 @@ public partial class OrderReportService : IOrderReportService
     /// <param name="storeId">Store identifier</param>
     /// <param name="productId">Product identifier</param>
     /// <param name="recordsToReturn">Records to return</param>
-    /// <param name="visibleIndividuallyOnly">A values indicating whether to load only products marked as "visible individually"; "false" to load all records; "true" to load "visible individually" only</param>
     /// <param name="showHidden">A value indicating whether to show hidden records</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
     public virtual async Task<int[]> GetAlsoPurchasedProductsIdsAsync(int storeId, int productId,
-        int recordsToReturn = 5, bool visibleIndividuallyOnly = true, bool showHidden = false)
+        int recordsToReturn = 5,  bool showHidden = false)
     {
         if (productId == 0)
             throw new ArgumentException("Product ID is not specified");
@@ -800,8 +799,7 @@ public partial class OrderReportService : IOrderReportService
                   (showHidden || p.Published) &&
                   !o.Deleted &&
                   (storeId == 0 || o.StoreId == storeId) &&
-                  !p.Deleted &&
-                  (!visibleIndividuallyOnly || p.VisibleIndividually)
+                  !p.Deleted 
             select new { orderItem, p };
 
         var query3 = from orderItem_p in query2
@@ -846,7 +844,6 @@ public partial class OrderReportService : IOrderReportService
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
     {
-        var simpleProductTypeId = (int)ProductType.SimpleProduct;
 
         var availableProductsQuery =
             from oi in _orderItemRepository.Table
@@ -862,7 +859,6 @@ public partial class OrderReportService : IOrderReportService
                 into p_oi
             from oi in p_oi.DefaultIfEmpty()
             where oi == null &&
-                  p.ProductTypeId == simpleProductTypeId &&
                   !p.Deleted &&
                   (vendorId == 0 || p.VendorId == vendorId) &&
                   (showHidden || p.Published)

@@ -74,19 +74,6 @@ public class Indexes : ForwardOnlyMigration
             .Include(nameof(ProductSpecificationAttribute.ProductId))
             .Include(nameof(ProductSpecificationAttribute.SpecificationAttributeOptionId));
 
-        Create.Index("IX_Product_VisibleIndividually_Published_Deleted_Extended").OnTable(nameof(Product))
-            .OnColumn(nameof(Product.VisibleIndividually)).Ascending()
-            .OnColumn(nameof(Product.Published)).Ascending()
-            .OnColumn(nameof(Product.Deleted)).Ascending()
-            .WithOptions().NonClustered()
-            .Include(nameof(Product.Id))
-            .Include(nameof(Product.AvailableStartDateTimeUtc))
-            .Include(nameof(Product.AvailableEndDateTimeUtc));
-
-        Create.Index("IX_Product_VisibleIndividually").OnTable(nameof(Product))
-            .OnColumn(nameof(Product.VisibleIndividually)).Ascending()
-            .WithOptions().NonClustered();
-
         Create.Index("IX_ProductTag_Name").OnTable(nameof(ProductTag))
             .OnColumn(nameof(ProductTag.Name)).Ascending()
             .WithOptions().NonClustered();
@@ -118,10 +105,6 @@ public class Indexes : ForwardOnlyMigration
             .OnColumn(nameof(Product.AvailableEndDateTimeUtc)).Ascending()
             .OnColumn(nameof(Product.Published)).Ascending()
             .OnColumn(nameof(Product.Deleted)).Ascending()
-            .WithOptions().NonClustered();
-
-        Create.Index("IX_Product_ParentGroupedProductId").OnTable(nameof(Product))
-            .OnColumn(nameof(Product.ParentGroupedProductId)).Ascending()
             .WithOptions().NonClustered();
 
         Create.Index("IX_Product_Manufacturer_Mapping_IsFeaturedProduct")
@@ -211,7 +194,6 @@ public class Indexes : ForwardOnlyMigration
         Create.Index("IX_GetLowStockProducts").OnTable(nameof(Product))
             .OnColumn(nameof(Product.Deleted)).Ascending()
             .OnColumn(nameof(Product.VendorId)).Ascending()
-            .OnColumn(nameof(Product.ProductTypeId)).Ascending()
             .OnColumn(nameof(Product.ManageInventoryMethodId)).Ascending()
             .OnColumn(nameof(Product.MinStockQuantity)).Ascending()
             .OnColumn(nameof(Product.UseMultipleWarehouses)).Ascending()

@@ -153,9 +153,7 @@ public partial class JsonLdModelFactory : IJsonLdModelFactory
     {
         productUrl ??= await _nopUrlHelper.RouteGenericUrlAsync<Product>(new { SeName = model.SeName }, _webHelper.GetCurrentRequestProtocol());
 
-        var productPrice = model.AssociatedProducts.Any()
-            ? model.AssociatedProducts.Min(associatedProduct => associatedProduct.ProductPrice.PriceValue)
-            : model.ProductPrice.PriceValue;
+        var productPrice = model.ProductPrice.PriceValue;
 
         var product = new JsonLdProductModel
         {
@@ -199,12 +197,6 @@ public partial class JsonLdModelFactory : IJsonLdModelFactory
                 Author = new JsonLdPersonModel { Name = JavaScriptEncoder.Default.Encode(review.CustomerName) },
                 DatePublished = ConvertDateTimeToIso8601String(review.WrittenOn)
             }).ToList();
-        }
-
-        foreach (var associatedProduct in model.AssociatedProducts)
-        {
-            var parentUrl = !associatedProduct.VisibleIndividually ? productUrl : null;
-            product.HasVariant.Add(await PrepareJsonLdProductAsync(associatedProduct, parentUrl));
         }
 
         await _eventPublisher.PublishAsync(new JsonLdCreatedEvent<JsonLdProductModel>(product));

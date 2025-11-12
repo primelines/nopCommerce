@@ -355,7 +355,6 @@ public partial class CatalogController : BasePublicController
             storeId: store.Id,
             keywords: term,
             languageId: (await _workContext.GetWorkingLanguageAsync()).Id,
-            visibleIndividuallyOnly: true,
             pageSize: productNumber);
 
         var showLinkToResultSearch = _catalogSettings.ShowLinkToAllResultInSearchAutoComplete && (products.TotalCount > productNumber);

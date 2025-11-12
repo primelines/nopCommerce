@@ -1,4 +1,4 @@
-using Nop.Core.Domain.Catalog;
+﻿using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Orders;
 using Nop.Api.DTOs.Catalog;
 
@@ -52,12 +52,11 @@ public partial interface IProductDtoFactory
     /// </summary>
     /// <param name="product">Product</param>
     /// <param name="updatecartitem">Updated shopping cart item</param>
-    /// <param name="isAssociatedProduct">Whether the product is associated</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the product details model
     /// </returns>
-    Task<ProductDetailsDto> PrepareProductDetailsDtoAsync(Product product, ShoppingCartItem updatecartitem = null, bool isAssociatedProduct = false);
+    Task<ProductDetailsDto> PrepareProductDetailsDtoAsync(Product product, ShoppingCartItem updatecartitem = null);
 
     /// <summary>
     /// Prepare the product reviews model

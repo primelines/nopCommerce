@@ -52,12 +52,11 @@ public partial interface IProductModelFactory
     /// </summary>
     /// <param name="product">Product</param>
     /// <param name="updatecartitem">Updated shopping cart item</param>
-    /// <param name="isAssociatedProduct">Whether the product is associated</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the product details model
     /// </returns>
-    Task<ProductDetailsModel> PrepareProductDetailsModelAsync(Product product, ShoppingCartItem updatecartitem = null, bool isAssociatedProduct = false);
+    Task<ProductDetailsModel> PrepareProductDetailsModelAsync(Product product, ShoppingCartItem updatecartitem = null);
 
     /// <summary>
     /// Prepare the product reviews model

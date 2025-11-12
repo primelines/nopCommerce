@@ -2898,9 +2898,6 @@
   <LocaleResource Name="Admin.Catalog.Products.AssociatedProducts.SaveBeforeEdit">
     <Value>You need to save the product before you can add associated products for this product page.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.AssociatedProducts.TryToAddSelfGroupedProduct">
-    <Value>You cannot add current group product to related ones. This group product was ignored while adding.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.BackToList">
     <Value>back to product list</Value>
   </LocaleResource>
@@ -3351,12 +3348,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.ProductTemplate.Hint">
     <Value>Choose a product template. This template defines how this product will be displayed in public store.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.ProductType">
-    <Value>Product type</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.ProductType.Hint">
-    <Value>Product type can be simple or grouped. In most cases your product will have the Simple product type. You need to use Grouped product type when a new product consists of one or more existing products that will be displayed on one single product details page.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.Published">
     <Value>Published</Value>
   </LocaleResource>
@@ -3449,12 +3440,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.Vendor.None">
     <Value>No vendor</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.VisibleIndividually">
-    <Value>Visible individually</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.VisibleIndividually.Hint">
-    <Value>Check it if you want the product to be on catalog or search results. You can uncheck this box to hide associated products from catalog and make them accessible only from grouped product details page.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.Warehouse">
     <Value>Warehouse</Value>
@@ -3575,12 +3560,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.List.SearchProductName.Hint">
     <Value>A product name.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.List.SearchProductType">
-    <Value>Product type</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.List.SearchProductType.Hint">
-    <Value>Search by a product type.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.List.SearchPublished">
     <Value>Published</Value>
@@ -8791,9 +8770,6 @@
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.ProductTemplate">
     <Value>Product template</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.ProductType">
-    <Value>Product type</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Published">
     <Value>Published</Value>
   </LocaleResource>
@@ -8832,9 +8808,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Vendor">
     <Value>Vendor</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.VisibleIndividually">
-    <Value>Visible individually</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Warehouse">
     <Value>Warehouses</Value>
@@ -16499,12 +16472,6 @@
   <LocaleResource Name="Admin.System.Templates.Product.DisplayOrder.Hint">
     <Value>The display order of this template. 1 represents the top of the list.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.System.Templates.Product.IgnoredProductTypes">
-    <Value>Ignored product type IDs (advanced)</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.System.Templates.Product.IgnoredProductTypes.Hint">
-    <Value>Specify ignored product types for this template.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.System.Templates.Product.Name">
     <Value>Name</Value>
   </LocaleResource>
@@ -17662,12 +17629,6 @@
   </LocaleResource>
   <LocaleResource Name="Enums.Nop.Core.Domain.Catalog.ProductSortingEnum.PriceDesc">
     <Value>Price: High to Low</Value>
-  </LocaleResource>
-  <LocaleResource Name="Enums.Nop.Core.Domain.Catalog.ProductType.GroupedProduct">
-    <Value>Grouped (product with variants)</Value>
-  </LocaleResource>
-  <LocaleResource Name="Enums.Nop.Core.Domain.Catalog.ProductType.SimpleProduct">
-    <Value>Simple</Value>
   </LocaleResource>
   <LocaleResource Name="Enums.Nop.Core.Domain.Catalog.ProductUrlStructureType.CategoryProduct">
     <Value>/Category/Product</Value>

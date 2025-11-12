@@ -722,7 +722,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
                     var products = await _productService.SearchProductsAsync(0, 1,
                         categoryIds: categoryIds,
                         storeId: currentStore.Id,
-                        visibleIndividuallyOnly: true,
                         excludeFeaturedProducts: !_catalogSettings.IgnoreFeaturedProducts && !_catalogSettings.IncludeFeaturedProductsInNormalLists,
                         orderBy: orderBy);
 
@@ -772,7 +771,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
             command.PageSize,
             categoryIds: categoryIds,
             storeId: currentStore.Id,
-            visibleIndividuallyOnly: true,
             excludeFeaturedProducts: !_catalogSettings.IgnoreFeaturedProducts && !_catalogSettings.IncludeFeaturedProductsInNormalLists,
             priceMin: selectedPriceRange?.From,
             priceMax: selectedPriceRange?.To,
@@ -988,7 +986,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
                     var products = await _productService.SearchProductsAsync(0, 1,
                         manufacturerIds: manufacturerIds,
                         storeId: currentStore.Id,
-                        visibleIndividuallyOnly: true,
                         excludeFeaturedProducts: !_catalogSettings.IgnoreFeaturedProducts && !_catalogSettings.IncludeFeaturedProductsInNormalLists,
                         orderBy: orderBy);
 
@@ -1030,7 +1027,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
             command.PageSize,
             manufacturerIds: manufacturerIds,
             storeId: currentStore.Id,
-            visibleIndividuallyOnly: true,
             excludeFeaturedProducts: !_catalogSettings.IgnoreFeaturedProducts && !_catalogSettings.IncludeFeaturedProductsInNormalLists,
             priceMin: selectedPriceRange?.From,
             priceMax: selectedPriceRange?.To,
@@ -1230,7 +1226,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
             priceMin: selectedPriceRange?.From,
             priceMax: selectedPriceRange?.To,
             storeId: store.Id,
-            visibleIndividuallyOnly: true,
             orderBy: (ProductSortingEnum)command.OrderBy);
 
         var isFiltering = selectedPriceRange?.From is not null;
@@ -1434,7 +1429,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
                     var products = await _productService.SearchProductsAsync(0, 1,
                         storeId: store.Id,
                         productTagId: productTag.Id,
-                        visibleIndividuallyOnly: true,
                         orderBy: orderBy);
 
                     return products?.FirstOrDefault()?.Price ?? 0;
@@ -1466,7 +1460,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
             priceMax: selectedPriceRange?.To,
             storeId: store.Id,
             productTagId: productTag.Id,
-            visibleIndividuallyOnly: true,
             orderBy: (ProductSortingEnum)command.OrderBy);
 
         var isFiltering = selectedPriceRange?.From is not null;
@@ -1668,7 +1661,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
                             categoryIds: categoryIds,
                             manufacturerIds: new List<int> { manufacturerId },
                             storeId: currentStore.Id,
-                            visibleIndividuallyOnly: true,
                             keywords: searchTerms,
                             searchDescriptions: searchInDescriptions,
                             searchProductTags: searchInProductTags,
@@ -1706,7 +1698,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
                     categoryIds: categoryIds,
                     manufacturerIds: new List<int> { manufacturerId },
                     storeId: currentStore.Id,
-                    visibleIndividuallyOnly: true,
                     keywords: searchTerms,
                     priceMin: selectedPriceRange?.From,
                     priceMax: selectedPriceRange?.To,

@@ -1253,9 +1253,6 @@ public partial class ExportManager : IExportManager
             await xmlWriter.WriteStartElementAsync("Product");
 
             await xmlWriter.WriteStringAsync("ProductId", product.Id);
-            await xmlWriter.WriteStringAsync("ProductTypeId", product.ProductTypeId, await IgnoreExportProductPropertyAsync(p => p.ProductType));
-            await xmlWriter.WriteStringAsync("ParentGroupedProductId", product.ParentGroupedProductId, await IgnoreExportProductPropertyAsync(p => p.ProductType));
-            await xmlWriter.WriteStringAsync("VisibleIndividually", product.VisibleIndividually, await IgnoreExportProductPropertyAsync(p => p.VisibleIndividually));
             await WriteLocalizedPropertyXmlAsync(product, p => p.Name, xmlWriter, languages);
             await WriteLocalizedPropertyXmlAsync(product, p => p.ShortDescription, xmlWriter, languages);
             await WriteLocalizedPropertyXmlAsync(product, p => p.FullDescription, xmlWriter, languages);
@@ -1574,12 +1571,6 @@ public partial class ExportManager : IExportManager
         var properties = new[]
         {
             new PropertyByName<Product>("ProductId", (p, _) => p.Id),
-            new PropertyByName<Product>("ProductType", (p, _) => p.ProductTypeId, await IgnoreExportProductPropertyAsync(p => p.ProductType))
-            {
-                DropDownElements = await ProductType.SimpleProduct.ToSelectListAsync(useLocalization: false)
-            },
-            new PropertyByName<Product>("ParentGroupedProductId", (p, _) => p.ParentGroupedProductId, await IgnoreExportProductPropertyAsync(p => p.ProductType)),
-            new PropertyByName<Product>("VisibleIndividually", (p, _) => p.VisibleIndividually, await IgnoreExportProductPropertyAsync(p => p.VisibleIndividually)),
             new PropertyByName<Product>("Name", (p, _) => p.Name),
             new PropertyByName<Product>("ShortDescription", (p, _) => p.ShortDescription),
             new PropertyByName<Product>("FullDescription", (p, _) => p.FullDescription),

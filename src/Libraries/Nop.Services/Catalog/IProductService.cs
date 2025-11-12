@@ -129,8 +129,6 @@ public partial interface IProductService
     /// <param name="storeId">Store identifier; 0 to load all records</param>
     /// <param name="vendorId">Vendor identifier; 0 to load all records</param>
     /// <param name="warehouseId">Warehouse identifier; 0 to load all records</param>
-    /// <param name="productType">Product type; 0 to load all records</param>
-    /// <param name="visibleIndividuallyOnly">A values indicating whether to load only products marked as "visible individually"; "false" to load all records; "true" to load "visible individually" only</param>
     /// <param name="excludeFeaturedProducts">A value indicating whether loaded products are marked as featured (relates only to categories and manufacturers); "false" (by default) to load all records; "true" to exclude featured products from results</param>
     /// <param name="priceMin">Minimum price; null to load all records</param>
     /// <param name="priceMax">Maximum price; null to load all records</param>
@@ -161,8 +159,6 @@ public partial interface IProductService
         int storeId = 0,
         int vendorId = 0,
         int warehouseId = 0,
-        ProductType? productType = null,
-        bool visibleIndividuallyOnly = false,
         bool excludeFeaturedProducts = false,
         decimal? priceMin = null,
         decimal? priceMax = null,
@@ -190,20 +186,6 @@ public partial interface IProductService
     /// </returns>
     Task<IPagedList<Product>> GetProductsByProductAttributeIdAsync(int productAttributeId,
         int pageIndex = 0, int pageSize = int.MaxValue);
-
-    /// <summary>
-    /// Gets associated products
-    /// </summary>
-    /// <param name="parentGroupedProductId">Parent product identifier (used with grouped products)</param>
-    /// <param name="storeId">Store identifier; 0 to load all records</param>
-    /// <param name="vendorId">Vendor identifier; 0 to load all records</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the products
-    /// </returns>
-    Task<IList<Product>> GetAssociatedProductsAsync(int parentGroupedProductId,
-        int storeId = 0, int vendorId = 0, bool showHidden = false);
 
     /// <summary>
     /// Get low stock products

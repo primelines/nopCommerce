@@ -370,7 +370,6 @@ public class AdminModelFactory
         model.ProductId = product.Id;
         model.QuoteId = quote.Id;
         model.Name = product.Name;
-        model.ProductType = product.ProductType;
 
         var presetQty = 1;
         var (_, presetPrice, _, _) = await _priceCalculationService.GetFinalPriceAsync(product, customer, store, decimal.Zero, true, presetQty);
@@ -413,9 +412,6 @@ public class AdminModelFactory
         //prepare available manufacturers
         await _baseAdminModelFactory.PrepareManufacturersAsync(searchModel.AvailableManufacturers);
 
-        //prepare available product types
-        await _baseAdminModelFactory.PrepareProductTypesAsync(searchModel.AvailableProductTypes);
-
         //prepare page parameters
         searchModel.SetGridPageSize();
 
@@ -438,7 +434,6 @@ public class AdminModelFactory
         var products = await _productService.SearchProductsAsync(showHidden: true,
             categoryIds: new List<int> { searchModel.SearchCategoryId },
             manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 

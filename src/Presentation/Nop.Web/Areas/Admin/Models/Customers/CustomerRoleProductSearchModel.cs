@@ -17,7 +17,6 @@ public partial record CustomerRoleProductSearchModel : BaseSearchModel
         AvailableManufacturers = new List<SelectListItem>();
         AvailableStores = new List<SelectListItem>();
         AvailableVendors = new List<SelectListItem>();
-        AvailableProductTypes = new List<SelectListItem>();
         AddProductToCustomerRoleModel = new AddProductToCustomerRoleModel();
     }
 
@@ -43,10 +42,6 @@ public partial record CustomerRoleProductSearchModel : BaseSearchModel
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchVendor")]
     public int SearchVendorId { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductType")]
-    public int SearchProductTypeId { get; set; }
-
     public IList<SelectListItem> AvailableCategories { get; set; }
 
     public IList<SelectListItem> AvailableManufacturers { get; set; }
@@ -54,8 +49,6 @@ public partial record CustomerRoleProductSearchModel : BaseSearchModel
     public IList<SelectListItem> AvailableStores { get; set; }
 
     public IList<SelectListItem> AvailableVendors { get; set; }
-
-    public IList<SelectListItem> AvailableProductTypes { get; set; }
 
     #endregion
 }

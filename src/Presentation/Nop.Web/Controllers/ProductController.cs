@@ -147,18 +147,6 @@ public partial class ProductController : BasePublicController
         if (notAvailable && !hasAdminAccess)
             return InvokeHttp404();
 
-        //visible individually?
-        if (!product.VisibleIndividually)
-        {
-            //is this one an associated products?
-            var parentGroupedProduct = await _productService.GetProductByIdAsync(product.ParentGroupedProductId);
-            if (parentGroupedProduct == null)
-                return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-            var productUrl = await _nopUrlHelper.RouteGenericUrlAsync(parentGroupedProduct);
-            return LocalRedirectPermanent(productUrl);
-        }
-
         //update existing shopping cart or wishlist  item?
         ShoppingCartItem updatecartitem = null;
         if (_shoppingCartSettings.AllowCartItemEditing && updatecartitemid > 0)
@@ -197,7 +185,7 @@ public partial class ProductController : BasePublicController
             string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.ViewProduct"), product.Name), product);
 
         //model
-        var model = await _productModelFactory.PrepareProductDetailsModelAsync(product, updatecartitem, false);
+        var model = await _productModelFactory.PrepareProductDetailsModelAsync(product, updatecartitem);
         //template
         var productTemplateViewPath = await _productModelFactory.PrepareProductTemplateViewPathAsync(product);
 

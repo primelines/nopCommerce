@@ -91,31 +91,6 @@ public partial class CopyProductService : ICopyProductService
     }
 
     /// <summary>
-    /// Copy associated products
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="isPublished">A value indicating whether they should be published</param>
-    /// <param name="copyMultimedia">A value indicating whether to copy images and videos</param>
-    /// <param name="copyAssociatedProducts">A value indicating whether to copy associated products</param>
-    /// <param name="productCopy">New product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task CopyAssociatedProductsAsync(Product product, bool isPublished, bool copyMultimedia, bool copyAssociatedProducts, Product productCopy)
-    {
-        if (!copyAssociatedProducts)
-            return;
-
-        var associatedProducts = await _productService.GetAssociatedProductsAsync(product.Id, showHidden: true);
-        foreach (var associatedProduct in associatedProducts)
-        {
-            var associatedProductCopy = await CopyProductAsync(associatedProduct,
-                string.Format(NopCatalogDefaults.ProductCopyNameTemplate, associatedProduct.Name),
-                isPublished, copyMultimedia, false);
-            associatedProductCopy.ParentGroupedProductId = productCopy.Id;
-            await _productService.UpdateProductAsync(associatedProductCopy);
-        }
-    }
-
-    /// <summary>
     /// Copy tier prices
     /// </summary>
     /// <param name="product">Product</param>
@@ -636,9 +611,6 @@ public partial class CopyProductService : ICopyProductService
         // product
         var productCopy = new Product
         {
-            ProductTypeId = product.ProductTypeId,
-            ParentGroupedProductId = product.ParentGroupedProductId,
-            VisibleIndividually = product.VisibleIndividually,
             Name = newName,
             ShortDescription = product.ShortDescription,
             FullDescription = product.FullDescription,
@@ -794,9 +766,6 @@ public partial class CopyProductService : ICopyProductService
 
         //tier prices
         await CopyTierPricesAsync(product, productCopy);
-
-        //associated products
-        await CopyAssociatedProductsAsync(product, isPublished, copyMultimedia, copyAssociatedProducts, productCopy);
 
         return productCopy;
     }

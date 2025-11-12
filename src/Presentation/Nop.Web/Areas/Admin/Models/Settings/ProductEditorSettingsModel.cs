@@ -12,12 +12,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
 
     public int ActiveStoreScopeConfiguration { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.ProductType")]
-    public bool ProductType { get; set; }
-
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.VisibleIndividually")]
-    public bool VisibleIndividually { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.ProductTemplate")]
     public bool ProductTemplate { get; set; }
 

@@ -324,12 +324,6 @@ public partial class ShoppingCartService : IShoppingCartService
             warnings.Add(await _localizationService.GetResourceAsync("ShoppingCart.ProductUnpublished"));
         }
 
-        //we can add only simple products
-        if (product.ProductType != ProductType.SimpleProduct)
-        {
-            warnings.Add("This is not simple product");
-        }
-
         //ACL
         if (!await _aclService.AuthorizeAsync(product, customer))
         {

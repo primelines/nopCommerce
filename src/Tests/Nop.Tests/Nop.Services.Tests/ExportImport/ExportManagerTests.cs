@@ -421,7 +421,6 @@ public class ExportManagerTests : ServiceTest
         var replacePairs = new Dictionary<string, string>
         {
             { "ProductId", "Id" },
-            { "ProductType", "ProductTypeId" },
             { "GiftCardType", "GiftCardTypeId" },
             { "Vendor", "VendorId" },
             { "ProductTemplate", "ProductTemplateId" },
@@ -437,7 +436,7 @@ public class ExportManagerTests : ServiceTest
         };
 
         var ignore = new List<string> { "Categories", "Manufacturers", "AdminComment",
-            "ProductType", "BackorderMode", "DownloadActivationType", "GiftCardType", "LowStockActivity",
+             "BackorderMode", "DownloadActivationType", "GiftCardType", "LowStockActivity",
             "ManageInventoryMethod", "ProductCategories",
             "ProductManufacturers", "ProductPictures", "ProductReviews", "ProductSpecificationAttributes",
             "ProductTags", "ProductAttributeMappings", "ProductAttributeCombinations", "TierPrices",
@@ -459,7 +458,6 @@ public class ExportManagerTests : ServiceTest
         var worksheet = workbook.Worksheets.FirstOrDefault()
                         ?? throw new NopException("No worksheet found");
 
-        manager.SetSelectList("ProductType", await ProductType.SimpleProduct.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("GiftCardType", await GiftCardType.Virtual.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("ManageInventoryMethod", await ManageInventoryMethod.DontManageStock.ToSelectListAsync(useLocalization: false));
         manager.SetSelectList("LowStockActivity", await LowStockActivity.Nothing.ToSelectListAsync(useLocalization: false));

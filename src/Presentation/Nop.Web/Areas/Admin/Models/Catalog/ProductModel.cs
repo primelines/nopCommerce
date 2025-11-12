@@ -35,7 +35,6 @@ public partial record ProductModel : BaseNopEntityModel,
         AvailableDeliveryDates = new List<SelectListItem>();
         AvailableProductAvailabilityRanges = new List<SelectListItem>();
         AvailableWarehouses = new List<SelectListItem>();
-        ProductsTypesSupportedByProductTemplates = new Dictionary<int, IList<SelectListItem>>();
 
         AvailableVendors = new List<SelectListItem>();
 
@@ -60,7 +59,6 @@ public partial record ProductModel : BaseNopEntityModel,
         RelatedProductSearchModel = new RelatedProductSearchModel();
         CrossSellProductSearchModel = new CrossSellProductSearchModel();
         FilterLevelValueSearchModel = new FilterLevelValueSearchModel();
-        AssociatedProductSearchModel = new AssociatedProductSearchModel();
         ProductPictureSearchModel = new ProductPictureSearchModel();
         ProductVideoSearchModel = new ProductVideoSearchModel();
         ProductSpecificationAttributeSearchModel = new ProductSpecificationAttributeSearchModel();
@@ -79,27 +77,9 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.PictureThumbnailUrl")]
     public string PictureThumbnailUrl { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductType")]
-    public int ProductTypeId { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductType")]
-    public string ProductTypeName { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.AssociatedToProductName")]
-    public int AssociatedToProductId { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.AssociatedToProductName")]
-    public string AssociatedToProductName { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.VisibleIndividually")]
-    public bool VisibleIndividually { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductTemplate")]
     public int ProductTemplateId { get; set; }
     public IList<SelectListItem> AvailableProductTemplates { get; set; }
-
-    //<product type ID, list of supported product template IDs>
-    public Dictionary<int, IList<SelectListItem>> ProductsTypesSupportedByProductTemplates { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Name")]
     public string Name { get; set; }
@@ -397,8 +377,6 @@ public partial record ProductModel : BaseNopEntityModel,
     public CrossSellProductSearchModel CrossSellProductSearchModel { get; set; }
 
     public FilterLevelValueSearchModel FilterLevelValueSearchModel { get; set; }
-
-    public AssociatedProductSearchModel AssociatedProductSearchModel { get; set; }
 
     public ProductPictureSearchModel ProductPictureSearchModel { get; set; }
 

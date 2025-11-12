@@ -457,25 +457,6 @@ public partial class ProductModelFactory : IProductModelFactory
     }
 
     /// <summary>
-    /// Prepare associated product search model
-    /// </summary>
-    /// <param name="searchModel">Associated product search model</param>
-    /// <param name="product">Product</param>
-    /// <returns>Associated product search model</returns>
-    protected virtual AssociatedProductSearchModel PrepareAssociatedProductSearchModel(AssociatedProductSearchModel searchModel, Product product)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-        ArgumentNullException.ThrowIfNull(product);
-
-        searchModel.ProductId = product.Id;
-
-        //prepare page parameters
-        searchModel.SetGridPageSize();
-
-        return searchModel;
-    }
-
-    /// <summary>
     /// Prepare product picture search model
     /// </summary>
     /// <param name="searchModel">Product picture search model</param>
@@ -721,9 +702,6 @@ public partial class ProductModelFactory : IProductModelFactory
         //prepare available vendors
         await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
 
-        //prepare available product types
-        await _baseAdminModelFactory.PrepareProductTypesAsync(searchModel.AvailableProductTypes);
-
         //prepare available warehouses
         await _baseAdminModelFactory.PrepareWarehousesAsync(searchModel.AvailableWarehouses);
 
@@ -783,7 +761,6 @@ public partial class ProductModelFactory : IProductModelFactory
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             warehouseId: searchModel.SearchWarehouseId,
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize,
             overridePublished: overridePublished);
@@ -802,7 +779,7 @@ public partial class ProductModelFactory : IProductModelFactory
                 productModel.FullDescription = string.Empty;
 
                 //fill formatted price
-                productModel.FormattedPrice = product.ProductType == ProductType.GroupedProduct ? null : await _priceFormatter.FormatPriceAsync(product.Price);
+                productModel.FormattedPrice = await _priceFormatter.FormatPriceAsync(product.Price);
 
                 productModel.PrimaryStoreCurrencyCode = primaryStoreCurrency.CurrencyCode;
 
@@ -810,8 +787,7 @@ public partial class ProductModelFactory : IProductModelFactory
                 productModel.SeName = await _urlRecordService.GetSeNameAsync(product, 0, true, false);
                 var defaultProductPicture = (await _pictureService.GetPicturesByProductIdAsync(product.Id, 1)).FirstOrDefault();
                 (productModel.PictureThumbnailUrl, _) = await _pictureService.GetPictureUrlAsync(defaultProductPicture, 75);
-                productModel.ProductTypeName = await _localizationService.GetLocalizedEnumAsync(product.ProductType);
-                if (product.ProductType == ProductType.SimpleProduct && product.ManageInventoryMethod == ManageInventoryMethod.ManageStock)
+                if ( product.ManageInventoryMethod == ManageInventoryMethod.ManageStock)
                     productModel.StockQuantityStr = (await _productService.GetTotalStockQuantityAsync(product)).ToString();
 
                 return productModel;
@@ -844,13 +820,6 @@ public partial class ProductModelFactory : IProductModelFactory
                 model.SeName = await _urlRecordService.GetSeNameAsync(product, 0, true, false);
             }
 
-            var parentGroupedProduct = await _productService.GetProductByIdAsync(product.ParentGroupedProductId);
-            if (parentGroupedProduct != null)
-            {
-                model.AssociatedToProductId = product.ParentGroupedProductId;
-                model.AssociatedToProductName = parentGroupedProduct.Name;
-            }
-
             model.LastStockQuantity = product.StockQuantity;
 
             model.SelectedProductTags = (await _productTagService.GetAllProductTagsByProductIdAsync(product.Id)).Select(tag => tag.Name).ToList();
@@ -877,7 +846,6 @@ public partial class ProductModelFactory : IProductModelFactory
             PrepareRelatedProductSearchModel(model.RelatedProductSearchModel, product);
             PrepareCrossSellProductSearchModel(model.CrossSellProductSearchModel, product);
             PrepareFilterLevelValuesSearchModel(model.FilterLevelValueSearchModel, product);
-            PrepareAssociatedProductSearchModel(model.AssociatedProductSearchModel, product);
             PrepareProductPictureSearchModel(model.ProductPictureSearchModel, product);
             PrepareProductVideoSearchModel(model.ProductVideoSearchModel, product);
             PrepareProductSpecificationAttributeSearchModel(model.ProductSpecificationAttributeSearchModel, product);
@@ -911,7 +879,6 @@ public partial class ProductModelFactory : IProductModelFactory
             model.IsShipEnabled = true;
             model.AllowCustomerReviews = true;
             model.Published = true;
-            model.VisibleIndividually = true;
         }
 
         model.PrimaryStoreCurrencyCode = (await _currencyService.GetCurrencyByIdAsync(_currencySettings.PrimaryStoreCurrencyId)).CurrencyCode;
@@ -932,25 +899,6 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //prepare available product templates
         await _baseAdminModelFactory.PrepareProductTemplatesAsync(model.AvailableProductTemplates, false);
-
-        //prepare available product types
-        var productTemplates = await _productTemplateService.GetAllProductTemplatesAsync();
-        foreach (var productType in Enum.GetValues(typeof(ProductType)).OfType<ProductType>())
-        {
-            model.ProductsTypesSupportedByProductTemplates.Add((int)productType, new List<SelectListItem>());
-            foreach (var template in productTemplates)
-            {
-                var list = (IList<int>)TypeDescriptor.GetConverter(typeof(List<int>)).ConvertFrom(template.IgnoredProductTypes) ?? new List<int>();
-                if (string.IsNullOrEmpty(template.IgnoredProductTypes) || !list.Contains((int)productType))
-                {
-                    model.ProductsTypesSupportedByProductTemplates[(int)productType].Add(new SelectListItem
-                    {
-                        Text = template.Name,
-                        Value = template.Id.ToString()
-                    });
-                }
-            }
-        }
 
         //prepare available delivery dates
         await _baseAdminModelFactory.PrepareDeliveryDatesAsync(model.AvailableDeliveryDates,
@@ -1036,9 +984,6 @@ public partial class ProductModelFactory : IProductModelFactory
         //prepare available vendors
         await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
 
-        //prepare available product types
-        await _baseAdminModelFactory.PrepareProductTypesAsync(searchModel.AvailableProductTypes);
-
         //prepare page parameters
         searchModel.SetPopupGridPageSize();
 
@@ -1068,7 +1013,6 @@ public partial class ProductModelFactory : IProductModelFactory
             manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
@@ -1149,8 +1093,6 @@ public partial class ProductModelFactory : IProductModelFactory
         //prepare available vendors
         await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
 
-        //prepare available product types
-        await _baseAdminModelFactory.PrepareProductTypesAsync(searchModel.AvailableProductTypes);
 
         //prepare page parameters
         searchModel.SetPopupGridPageSize();
@@ -1181,7 +1123,6 @@ public partial class ProductModelFactory : IProductModelFactory
             manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
@@ -1311,9 +1252,6 @@ public partial class ProductModelFactory : IProductModelFactory
         //prepare available vendors
         await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
 
-        //prepare available product types
-        await _baseAdminModelFactory.PrepareProductTypesAsync(searchModel.AvailableProductTypes);
-
         //prepare page parameters
         searchModel.SetPopupGridPageSize();
 
@@ -1343,7 +1281,6 @@ public partial class ProductModelFactory : IProductModelFactory
             manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
@@ -1355,128 +1292,6 @@ public partial class ProductModelFactory : IProductModelFactory
                 var productModel = product.ToModel<ProductModel>();
 
                 productModel.SeName = await _urlRecordService.GetSeNameAsync(product, 0, true, false);
-
-                return productModel;
-            });
-        });
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare paged associated product list model
-    /// </summary>
-    /// <param name="searchModel">Associated product search model</param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the associated product list model
-    /// </returns>
-    public virtual async Task<AssociatedProductListModel> PrepareAssociatedProductListModelAsync(AssociatedProductSearchModel searchModel, Product product)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-        ArgumentNullException.ThrowIfNull(product);
-
-        var vendor = await _workContext.GetCurrentVendorAsync();
-        //get associated products
-        var associatedProducts = (await _productService.GetAssociatedProductsAsync(showHidden: true,
-            parentGroupedProductId: product.Id,
-            vendorId: vendor?.Id ?? 0)).ToPagedList(searchModel);
-
-        //prepare grid model
-        var model = new AssociatedProductListModel().PrepareToGrid(searchModel, associatedProducts, () =>
-        {
-            return associatedProducts.Select(associatedProduct =>
-            {
-                var associatedProductModel = associatedProduct.ToModel<AssociatedProductModel>();
-                associatedProductModel.ProductName = associatedProduct.Name;
-
-                return associatedProductModel;
-            });
-        });
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare associated product search model to add to the product
-    /// </summary>
-    /// <param name="searchModel">Associated product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the associated product search model to add to the product
-    /// </returns>
-    public virtual async Task<AddAssociatedProductSearchModel> PrepareAddAssociatedProductSearchModelAsync(AddAssociatedProductSearchModel searchModel)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-
-        searchModel.IsLoggedInAsVendor = await _workContext.GetCurrentVendorAsync() != null;
-
-        //prepare available categories
-        await _baseAdminModelFactory.PrepareCategoriesAsync(searchModel.AvailableCategories);
-
-        //prepare available manufacturers
-        await _baseAdminModelFactory.PrepareManufacturersAsync(searchModel.AvailableManufacturers);
-
-        //prepare available stores
-        await _baseAdminModelFactory.PrepareStoresAsync(searchModel.AvailableStores);
-
-        //prepare available vendors
-        await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
-
-        //prepare available product types
-        await _baseAdminModelFactory.PrepareProductTypesAsync(searchModel.AvailableProductTypes);
-
-        //prepare page parameters
-        searchModel.SetPopupGridPageSize();
-
-        return searchModel;
-    }
-
-    /// <summary>
-    /// Prepare paged associated product list model to add to the product
-    /// </summary>
-    /// <param name="searchModel">Associated product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the associated product list model to add to the product
-    /// </returns>
-    public virtual async Task<AddAssociatedProductListModel> PrepareAddAssociatedProductListModelAsync(AddAssociatedProductSearchModel searchModel)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-
-        //a vendor should have access only to his products
-        var currentVendor = await _workContext.GetCurrentVendorAsync();
-        if (currentVendor != null)
-            searchModel.SearchVendorId = currentVendor.Id;
-
-        //get products
-        var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
-            storeId: searchModel.SearchStoreId,
-            vendorId: searchModel.SearchVendorId,
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
-            keywords: searchModel.SearchProductName,
-            pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
-
-        //prepare grid model
-        var model = await new AddAssociatedProductListModel().PrepareToGridAsync(searchModel, products, () =>
-        {
-            return products.SelectAwait(async product =>
-            {
-                //fill in model values from the entity
-                var productModel = product.ToModel<ProductModel>();
-
-                //fill in additional values (not existing in the entity)
-                productModel.SeName = await _urlRecordService.GetSeNameAsync(product, 0, true, false);
-                var parentGroupedProduct = await _productService.GetProductByIdAsync(product.ParentGroupedProductId);
-
-                if (parentGroupedProduct == null)
-                    return productModel;
-
-                productModel.AssociatedToProductId = product.ParentGroupedProductId;
-                productModel.AssociatedToProductName = parentGroupedProduct.Name;
 
                 return productModel;
             });
@@ -2325,9 +2140,6 @@ public partial class ProductModelFactory : IProductModelFactory
         //prepare available vendors
         await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
 
-        //prepare available product types
-        await _baseAdminModelFactory.PrepareProductTypesAsync(searchModel.AvailableProductTypes);
-
         //prepare page parameters
         searchModel.SetPopupGridPageSize();
 
@@ -2358,7 +2170,6 @@ public partial class ProductModelFactory : IProductModelFactory
             manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 

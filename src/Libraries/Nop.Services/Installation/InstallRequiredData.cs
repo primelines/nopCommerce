@@ -3337,13 +3337,11 @@ public partial class InstallationService
                 Name = "Simple product",
                 ViewPath = "ProductTemplate.Simple",
                 DisplayOrder = 10,
-                IgnoredProductTypes = ((int)ProductType.GroupedProduct).ToString()
             },
             new() {
                 Name = "Grouped product (with variants)",
                 ViewPath = "ProductTemplate.Grouped",
                 DisplayOrder = 100,
-                IgnoredProductTypes = ((int)ProductType.SimpleProduct).ToString()
             }
         };
 

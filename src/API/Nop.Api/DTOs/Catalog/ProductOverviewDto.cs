@@ -33,10 +33,6 @@ public partial record ProductOverviewDto : BaseNopEntityDto
     [JsonProperty("sku")]
     public string Sku { get; set; }
 
-
-    [JsonProperty("product_type")]
-    public ProductType ProductType { get; set; }
-
     //price
 
     [JsonProperty("product_price")]

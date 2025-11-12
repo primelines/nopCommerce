@@ -538,10 +538,6 @@ public partial class ShoppingCartController : BasePublicController
 
         var redirectUrl = await _nopUrlHelper.RouteGenericUrlAsync<Product>(new { SeName = await _urlRecordService.GetSeNameAsync(product) });
 
-        //we can add only simple products
-        if (product.ProductType != ProductType.SimpleProduct)
-            return Ok(new { redirect = redirectUrl });
-
         //products with "minimum order quantity" more than a specified qty
         if (product.OrderMinimumQuantity > quantity)
         {
@@ -702,16 +698,6 @@ public partial class ShoppingCartController : BasePublicController
             return Ok(new
             {
                 redirect = Url.RouteUrl("Homepage")
-            });
-        }
-
-        //we can add only simple products
-        if (product.ProductType != ProductType.SimpleProduct)
-        {
-            return Ok(new
-            {
-                success = false,
-                message = "Only simple products could be added to the cart"
             });
         }
 

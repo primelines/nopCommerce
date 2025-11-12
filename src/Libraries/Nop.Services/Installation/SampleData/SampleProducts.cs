@@ -74,13 +74,6 @@ public partial class SampleProducts
     public partial class SampleProduct
     {
         /// <summary>
-        /// Gets or sets the values indicating whether this product is visible in catalog or search results.
-        /// It's used when this product is associated to some "grouped" one
-        /// This way associated products could be accessed/added/etc only from a grouped product details page
-        /// </summary>
-        public bool VisibleIndividually { get; set; }
-
-        /// <summary>
         /// Gets or sets the name
         /// </summary>
         public string Name { get; set; }
@@ -206,12 +199,6 @@ public partial class SampleProducts
         public bool Published { get; set; }
 
         /// <summary>
-        /// Gets or sets the product type
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ProductType ProductType { get; set; }
-
-        /// <summary>
         /// Gets or sets the backorder mode
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
@@ -269,11 +256,6 @@ public partial class SampleProducts
         /// Gets or sets a list of product specification attributes
         /// </summary>
         public List<SampleProductSpecificationAttribute> ProductSpecificationAttribute { get; set; } = new();
-
-        /// <summary>
-        /// Gets or sets the list of grouped products
-        /// </summary>
-        public List<SampleProduct> GroupedProducts { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the e tier prices

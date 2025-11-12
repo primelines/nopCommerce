@@ -144,7 +144,6 @@ public class ItemClassificationController : BaseAdminController
     public async Task<IActionResult> ProductToClassification()
     {
         var model = new AddProductToClassificationSearchModel();
-        await _baseAdminModelFactory.PrepareProductTypesAsync(model.AvailableProductTypes);
         await _baseAdminModelFactory.PrepareCategoriesAsync(model.AvailableCategories);
         await _baseAdminModelFactory.PrepareManufacturersAsync(model.AvailableManufacturers);
         await _baseAdminModelFactory.PrepareStoresAsync(model.AvailableStores);
@@ -161,7 +160,6 @@ public class ItemClassificationController : BaseAdminController
     {
         var products = await _productService.SearchProductsAsync(showHidden: true,
             keywords: searchModel.SearchProductName,
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             categoryIds: new List<int> { searchModel.SearchCategoryId },
             manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,

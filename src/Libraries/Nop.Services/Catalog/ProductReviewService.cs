@@ -185,9 +185,7 @@ public partial class ProductReviewService : IProductReviewService
         if (!_catalogSettings.ProductReviewPossibleOnlyAfterPurchasing)
             return error;
 
-        var hasCompletedOrders = product.ProductType == ProductType.SimpleProduct
-            ? await HasCompletedOrdersAsync(product)
-            : await (await _productService.GetAssociatedProductsAsync(product.Id)).AnyAwaitAsync(HasCompletedOrdersAsync);
+        var hasCompletedOrders =  await HasCompletedOrdersAsync(product);
 
         if (!hasCompletedOrders)
             error.Add(await _localizationService.GetResourceAsync("Reviews.ProductReviewPossibleOnlyAfterPurchasing"));

@@ -267,7 +267,7 @@ public partial class SitemapModelFactory : ISitemapModelFactory
     {
         var store = await _storeContext.GetCurrentStoreAsync();
         var products = await _productService
-            .SearchProductsAsync(0, storeId: store.Id, visibleIndividuallyOnly: true, orderBy: ProductSortingEnum.CreatedOn);
+            .SearchProductsAsync(0, storeId: store.Id, orderBy: ProductSortingEnum.CreatedOn);
 
         return await products
             .SelectAwait(async product => await PrepareLocalizedSitemapUrlAsync(product, product.UpdatedOnUtc))
@@ -788,7 +788,7 @@ public partial class SitemapModelFactory : ISitemapModelFactory
             if (_sitemapSettings.SitemapIncludeProducts)
             {
                 var productsGroupTitle = await _localizationService.GetResourceAsync("Sitemap.Products");
-                var products = await _productService.SearchProductsAsync(0, storeId: store.Id, visibleIndividuallyOnly: true);
+                var products = await _productService.SearchProductsAsync(0, storeId: store.Id);
                 model.Items.AddRange(await products.SelectAwait(async product => new SitemapModel.SitemapItemModel
                 {
                     GroupTitle = productsGroupTitle,

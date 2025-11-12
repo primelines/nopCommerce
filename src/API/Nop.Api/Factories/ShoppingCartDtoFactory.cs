@@ -397,10 +397,8 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
         //3. has attribute or gift card?
         //4. visible individually?
         cartItemModel.AllowItemEditing = _shoppingCartSettings.AllowCartItemEditing &&
-                                         product.ProductType == ProductType.SimpleProduct &&
                                          (!string.IsNullOrEmpty(cartItemModel.AttributeInfo) ||
-                                          product.IsGiftCard) &&
-                                         product.VisibleIndividually;
+                                          product.IsGiftCard);
 
         //disable removal?
         //1. do other items require this one?
@@ -501,10 +499,8 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
         //3. has attribute or gift card?
         //4. visible individually?
         cartItemModel.AllowItemEditing = _shoppingCartSettings.AllowCartItemEditing &&
-                                         product.ProductType == ProductType.SimpleProduct &&
                                          (!string.IsNullOrEmpty(cartItemModel.AttributeInfo) ||
-                                          product.IsGiftCard) &&
-                                         product.VisibleIndividually;
+                                          product.IsGiftCard);
 
         //allowed quantities
         var allowedQuantities = _productService.ParseAllowedQuantities(product);

@@ -35,9 +35,7 @@ public partial class RelatedProductsViewComponent : NopViewComponent
             //ACL and store mapping
             .WhereAwait(async p => await _aclService.AuthorizeAsync(p) && await _storeMappingService.AuthorizeAsync(p))
             //availability dates
-            .Where(p => _productService.ProductIsAvailable(p))
-            //visible individually
-            .Where(p => p.VisibleIndividually).ToListAsync();
+            .Where(p => _productService.ProductIsAvailable(p)).ToListAsync();
 
         if (!products.Any())
             return Content(string.Empty);

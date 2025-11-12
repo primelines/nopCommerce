@@ -1208,9 +1208,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         //prepare available manufacturers
         await _baseAdminModelFactory.PrepareManufacturersAsync(searchModel.AvailableManufacturers);
 
-        //prepare available product types
-        await _baseAdminModelFactory.PrepareProductTypesAsync(searchModel.AvailableProductTypes);
-
         //prepare page parameters
         searchModel.SetGridPageSize();
 
@@ -1234,7 +1231,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         var products = await _productService.SearchProductsAsync(showHidden: true,
             categoryIds: new List<int> { searchModel.SearchCategoryId },
             manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
-            productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
@@ -1279,7 +1275,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         model.ProductId = product.Id;
         model.OrderId = order.Id;
         model.Name = product.Name;
-        model.ProductType = product.ProductType;
         model.AutoUpdateOrderTotals = _orderSettings.AutoUpdateOrderTotalsOnEditingOrder;
 
         var presetQty = 1;

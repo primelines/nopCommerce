@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using System.Xml;
 using Microsoft.AspNetCore.Mvc;
@@ -282,7 +282,7 @@ public partial class SitemapDtoFactory : ISitemapDtoFactory
         var store = await _storeContext.GetCurrentStoreAsync();
 
         return await (await _productService.SearchProductsAsync(0, storeId: store.Id,
-                visibleIndividuallyOnly: true, orderBy: ProductSortingEnum.CreatedOn))
+                 orderBy: ProductSortingEnum.CreatedOn))
             .SelectAwait(async product => await PrepareLocalizedSitemapUrlAsync("Product", GetSeoRouteParamsAwait(product), product.UpdatedOnUtc)).ToListAsync();
     }
 
@@ -775,7 +775,7 @@ public partial class SitemapDtoFactory : ISitemapDtoFactory
             if (_sitemapSettings.SitemapIncludeProducts)
             {
                 var productsGroupTitle = await _localizationService.GetResourceAsync("Sitemap.Products");
-                var products = await _productService.SearchProductsAsync(0, storeId: store.Id, visibleIndividuallyOnly: true);
+                var products = await _productService.SearchProductsAsync(0, storeId: store.Id);
                 model.Items.AddRange(await products.SelectAwait(async product => new SitemapDto.SitemapItemModel
                 {
                     GroupTitle = productsGroupTitle,

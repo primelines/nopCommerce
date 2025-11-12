@@ -1070,12 +1070,8 @@ public partial class PictureService : IPictureService
         if (productPicture != null)
             return productPicture;
 
-        //finally, let's check whether this product has some parent "grouped" product
-        if (product.VisibleIndividually || product.ParentGroupedProductId <= 0)
             return null;
 
-        var parentGroupedProductPicture = (await GetPicturesByProductIdAsync(product.ParentGroupedProductId, 1)).FirstOrDefault();
-        return parentGroupedProductPicture;
     }
 
     /// <summary>

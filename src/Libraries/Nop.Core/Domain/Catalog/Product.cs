@@ -13,23 +13,6 @@ namespace Nop.Core.Domain.Catalog;
 public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountProductMapping>, ISoftDeletedEntity, IMetaTagsSupported
 {
     /// <summary>
-    /// Gets or sets the product type identifier
-    /// </summary>
-    public int ProductTypeId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the parent product identifier. It's used to identify associated products (only with "grouped" products)
-    /// </summary>
-    public int ParentGroupedProductId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the values indicating whether this product is visible in catalog or search results.
-    /// It's used when this product is associated to some "grouped" one
-    /// This way associated products could be accessed/added/etc only from a grouped product details page
-    /// </summary>
-    public bool VisibleIndividually { get; set; }
-
-    /// <summary>
     /// Gets or sets the name
     /// </summary>
     public string Name { get; set; }
@@ -411,15 +394,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets the minimum age to purchase
     /// </summary>
     public int MinimumAgeToPurchase { get; set; }
-
-    /// <summary>
-    /// Gets or sets the product type
-    /// </summary>
-    public ProductType ProductType
-    {
-        get => (ProductType)ProductTypeId;
-        set => ProductTypeId = (int)value;
-    }
 
     /// <summary>
     /// Gets or sets the backorder mode

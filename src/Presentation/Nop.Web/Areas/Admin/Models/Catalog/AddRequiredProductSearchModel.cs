@@ -17,7 +17,6 @@ public partial record AddRequiredProductSearchModel : BaseSearchModel
         AvailableManufacturers = new List<SelectListItem>();
         AvailableStores = new List<SelectListItem>();
         AvailableVendors = new List<SelectListItem>();
-        AvailableProductTypes = new List<SelectListItem>();
     }
 
     #endregion
@@ -39,9 +38,6 @@ public partial record AddRequiredProductSearchModel : BaseSearchModel
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchVendor")]
     public int SearchVendorId { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductType")]
-    public int SearchProductTypeId { get; set; }
-
     public IList<SelectListItem> AvailableCategories { get; set; }
 
     public IList<SelectListItem> AvailableManufacturers { get; set; }
@@ -49,8 +45,6 @@ public partial record AddRequiredProductSearchModel : BaseSearchModel
     public IList<SelectListItem> AvailableStores { get; set; }
 
     public IList<SelectListItem> AvailableVendors { get; set; }
-
-    public IList<SelectListItem> AvailableProductTypes { get; set; }
 
     //vendor
     public bool IsLoggedInAsVendor { get; set; }

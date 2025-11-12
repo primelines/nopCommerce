@@ -1251,7 +1251,6 @@ public partial class ImportManager : IImportManager
                 .Select(sa => sa as BaseEntity)
                 .ToSelectList(p => (p as SpecificationAttribute)?.Name ?? string.Empty));
 
-            manager.SetSelectList("ProductType", await ProductType.SimpleProduct.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("GiftCardType", await GiftCardType.Virtual.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("ManageInventoryMethod",
                 await ManageInventoryMethod.DontManageStock.ToSelectListAsync(useLocalization: false));
@@ -2166,15 +2165,6 @@ public partial class ImportManager : IImportManager
             {
                 switch (property.PropertyName)
                 {
-                    case "ProductType":
-                        product.ProductTypeId = property.IntValue;
-                        break;
-                    case "ParentGroupedProductId":
-                        product.ParentGroupedProductId = property.IntValue;
-                        break;
-                    case "VisibleIndividually":
-                        product.VisibleIndividually = property.BooleanValue;
-                        break;
                     case "Name":
                         product.Name = property.StringValue;
                         break;
@@ -2380,10 +2370,6 @@ public partial class ImportManager : IImportManager
             }
 
             //set some default values if not specified
-            if (isNew && metadata.Properties.All(p => p.PropertyName != "ProductType"))
-                product.ProductType = ProductType.SimpleProduct;
-            if (isNew && metadata.Properties.All(p => p.PropertyName != "VisibleIndividually"))
-                product.VisibleIndividually = true;
             if (isNew && metadata.Properties.All(p => p.PropertyName != "Published"))
                 product.Published = true;
 

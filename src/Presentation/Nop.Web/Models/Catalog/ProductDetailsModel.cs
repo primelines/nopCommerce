@@ -21,7 +21,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
         ProductPrice = new ProductPriceModel();
         AddToCart = new AddToCartModel();
         ProductAttributes = new List<ProductAttributeModel>();
-        AssociatedProducts = new List<ProductDetailsModel>();
         VendorModel = new VendorBriefInfoModel();
         Breadcrumb = new ProductBreadcrumbModel();
         ProductTags = new List<ProductTagModel>();
@@ -49,9 +48,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
     public string MetaDescription { get; set; }
     public string MetaTitle { get; set; }
     public string SeName { get; set; }
-    public bool VisibleIndividually { get; set; }
-
-    public ProductType ProductType { get; set; }
 
     public bool ShowSku { get; set; }
     public string Sku { get; set; }
@@ -108,9 +104,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
     public ProductEstimateShippingModel ProductEstimateShipping { get; set; }
 
     public IList<TierPriceModel> TierPrices { get; set; }
-
-    //a list of associated products. For example, "Grouped" products could have several child "simple" products
-    public IList<ProductDetailsModel> AssociatedProducts { get; set; }
 
     public bool DisplayDiscontinuedMessage { get; set; }
 

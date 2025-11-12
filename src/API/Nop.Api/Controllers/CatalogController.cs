@@ -443,7 +443,6 @@ public partial class CatalogController : BasePublicController
             storeId: store.Id,
             keywords: term,
             languageId: (await _workContext.GetWorkingLanguageAsync()).Id,
-            visibleIndividuallyOnly: true,
             pageSize: productNumber);
 
         var showLinkToResultSearch = _catalogSettings.ShowLinkToAllResultInSearchAutoComplete && (products.TotalCount > productNumber);
@@ -569,9 +568,7 @@ public partial class CatalogController : BasePublicController
         //ACL and store mapping
             .WhereAwait(async p => await _aclService.AuthorizeAsync(p) && await _storeMappingService.AuthorizeAsync(p))
             //availability dates
-            .Where(p => _productService.ProductIsAvailable(p))
-            //visible individually
-            .Where(p => p.VisibleIndividually).ToListAsync();
+            .Where(p => _productService.ProductIsAvailable(p)).ToListAsync();
 
         if (!products.Any())
             return Content("");
@@ -637,9 +634,7 @@ public partial class CatalogController : BasePublicController
             //ACL and store mapping
             .WhereAwait(async p => await _aclService.AuthorizeAsync(p) && await _storeMappingService.AuthorizeAsync(p))
             //availability dates
-            .Where(p => _productService.ProductIsAvailable(p))
-            //visible individually
-            .Where(p => p.VisibleIndividually).ToListAsync();
+            .Where(p => _productService.ProductIsAvailable(p)).ToListAsync();
 
         if (!products.Any())
             return Content(string.Empty);

@@ -23,31 +23,9 @@
 
 <script>
     $(function() {
-        $("#@Html.IdFor(model => model.AttributeValueTypeId)").change(toggleProductType);
         $("#@Html.IdFor(model => model.CustomerEntersQty)").change(toggleCustomerEntersQty);
-        toggleProductType();
     });
 
-    function toggleProductType() {
-        var selectedProductTypeId = $("#@Html.IdFor(model => model.AttributeValueTypeId)").val();
-        if (selectedProductTypeId == @(((int) AttributeValueType.Simple).ToString())) {
-            $('#group-associated-product').hideElement();
-        $('#group-customer-enters-qty').hideElement();
-        $('#group-quantity').hideElement();
-        $('#group-price-adjustment').showElement();
-        $('#group-price-adjustment-percentage').showElement();
-        $('#group-weight-adjustment').showElement();
-        $('#group-cost').showElement();
-    } else if (selectedProductTypeId == @(((int) AttributeValueType.AssociatedToProduct).ToString())) {
-        $('#group-associated-product').showElement();
-        $('#group-customer-enters-qty').showElement();
-        $('#group-price-adjustment').hideElement();
-        $('#group-price-adjustment-percentage').hideElement();
-        $('#group-weight-adjustment').hideElement();
-        $('#group-cost').hideElement();
-        toggleCustomerEntersQty();
-    }
-    };
 
     function toggleCustomerEntersQty() {
         if ($("#@Html.IdFor(model => model.CustomerEntersQty)").is(':checked')) {

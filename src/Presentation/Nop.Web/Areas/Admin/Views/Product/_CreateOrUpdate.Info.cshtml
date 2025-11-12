@@ -24,8 +24,6 @@
             toggleShowOnHomepage();
             </text>
         }
-        $("#@Html.IdFor(model => model.ProductTypeId)").change(toggleProductType);
-        toggleProductType();
     });
 
     function toggleShowOnHomepage() {
@@ -36,50 +34,18 @@
         }
     }
 
-    function toggleProductType() {
-        var simpleProductId = "@((int)ProductType.SimpleProduct)";
-        var groupedProductId = "@((int)ProductType.GroupedProduct)";
 
 
-        var selectedProductTypeId = $("#@Html.IdFor(model => model.ProductTypeId)").val();
-        if (!selectedProductTypeId || selectedProductTypeId == simpleProductId) {
-            $('#group-required-other-products').showElement();
-            $('#group-visible-individually').showElement();
-            $('#group-associated-products').hideElement();
+    $('#group-required-other-products').showElement();
+    $('#group-visible-individually').showElement();
+    $('#group-associated-products').hideElement();
 
-            $('[data-card-name=product-price]').showElement();
-            $('[data-card-name=product-shipping]').showElement();
-            $('[data-card-name=product-inventory]').showElement();
-            $('[data-card-name=product-giftcard]').showElement();
-        } else if (selectedProductTypeId == groupedProductId) {
-            $('#group-required-other-products').hideElement();
-            $('#group-visible-individually').hideElement();
-            $('#group-associated-products').showElement();
+    $('[data-card-name=product-price]').showElement();
+    $('[data-card-name=product-shipping]').showElement();
+    $('[data-card-name=product-inventory]').showElement();
+    $('[data-card-name=product-giftcard]').showElement();
+       
 
-            @if (Model.Id > 0)
-            {
-                <text>updateTableWidth('#associatedproducts-grid');</text>
-            }
-
-            $('#@Html.IdFor(model => model.VisibleIndividually)').prop('checked', true);
-            
-
-            $('[data-card-name=product-price]').hideElement();
-            $('[data-card-name=product-shipping]').hideElement();
-            $('[data-card-name=product-inventory]').hideElement();
-            $('[data-card-name=product-giftcard]').hideElement();
-        }
-
-        //templates
-        var productTypeSupportedValues = {};
-        @foreach (var kvp in Model.ProductsTypesSupportedByProductTemplates)
-        {
-            <text>productTypeSupportedValues['@(kvp.Key)'] = {};</text>
-            foreach (var item in kvp.Value)
-            {
-                <text>productTypeSupportedValues['@(kvp.Key)']['@(item.Value)'] = '@Html.Raw(JavaScriptEncoder.Default.Encode((item.Text)))';</text>
-            }
-        }
         var productTemplateDropddown = $("#@Html.IdFor(model => model.ProductTemplateId)");
         var productTemplateSelectedValue = productTemplateDropddown.val();
         productTemplateDropddown.empty();
@@ -349,114 +315,6 @@
             </div>
         </div>
     </nop-nested-setting>
-
-    <div class="form-group row @(Model.ProductEditorSettingsModel.ProductType ? null : "advanced-setting")">
-        <div class="col-md-3">
-            <nop-label asp-for="ProductTypeId" />
-        </div>
-        <div class="col-md-9">
-            <nop-select asp-for="ProductTypeId" asp-items="@(await ((ProductType)Model.ProductTypeId).ToSelectListAsync())" />
-            <span asp-validation-for="ProductTypeId"></span>
-        </div>
-    </div>
-    @if (Model.Id > 0 && Model.AssociatedToProductId > 0)
-    {
-        <div class="form-group row @(Model.ProductEditorSettingsModel.ProductType ? null : "advanced-setting")">
-            <div class="col-md-3">
-                <nop-label asp-for="AssociatedToProductId" />
-            </div>
-            <div class="col-md-9">
-                <a asp-controller="Product" asp-action="Edit" asp-route-id="@Model.AssociatedToProductId">@Model.AssociatedToProductName</a>
-            </div>
-        </div>
-    }
-    <div class="card card-default margin-bottom" id="group-associated-products">
-        <div class="card-header">
-            @T("Admin.Catalog.Products.AssociatedProducts")
-        </div>
-        @if (Model.Id > 0)
-        {
-            <div class="card-body">                
-            <ul class="common-list">
-                <li>
-                    @T("Admin.Catalog.Products.AssociatedProducts.Note1")
-                </li>
-                <li>
-                    @T("Admin.Catalog.Products.AssociatedProducts.Note2")
-                </li>
-            </ul>
-
-            @await Html.PartialAsync("Table", new DataTablesModel
-            {
-                Name = "associatedproducts-grid",
-                UrlRead = new DataUrl("AssociatedProductList", "Product", new RouteValueDictionary { [nameof(Model.AssociatedProductSearchModel.ProductId)] = Model.AssociatedProductSearchModel.ProductId }),
-                UrlDelete = new DataUrl("AssociatedProductDelete", "Product", null),
-                UrlUpdate = new DataUrl("AssociatedProductUpdate", "Product", null),
-                Length = Model.AssociatedProductSearchModel.PageSize,
-                LengthMenu = Model.AssociatedProductSearchModel.AvailablePageSizes,
-                ColumnCollection = new List<ColumnProperty>
-                    {
-					new ColumnProperty(nameof(AssociatedProductModel.ProductName))
-                        {
-                            Title = T("Admin.Catalog.Products.AssociatedProducts.Fields.Product").Text
-                        },
-                        new ColumnProperty(nameof(AssociatedProductModel.DisplayOrder))
-                        {
-                            Title = T("Admin.Catalog.Products.AssociatedProducts.Fields.DisplayOrder").Text,
-                            Width = "150",
-                            ClassName = NopColumnClassDefaults.CenterAll,
-                            Editable = true,
-                            EditType = EditType.Number
-                        },
-                        new ColumnProperty(nameof(AssociatedProductModel.Id))
-                        {
-                            Title = T("Admin.Common.View").Text,
-                            Width = "150",
-                            ClassName = NopColumnClassDefaults.Button,
-                            Render = new RenderButtonView(new DataUrl("~/Admin/Product/Edit/", nameof(AssociatedProductModel.Id)))
-                        },
-                        new ColumnProperty(nameof(AssociatedProductModel.Id))
-                        {
-                            Title = T("Admin.Common.Edit").Text,
-                            Width = "200",
-                            ClassName =  NopColumnClassDefaults.Button,
-                            Render = new RenderButtonsInlineEdit()
-                        },
-                        new ColumnProperty(nameof(AssociatedProductModel.Id))
-                        {
-                            Title = T("Admin.Common.Delete").Text,
-                            Width = "100",
-                            Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
-                            ClassName = NopColumnClassDefaults.Button
-                        }                               
-                    }
-                })
-            </div>
-            <div class="card-footer">
-                <button type="submit" id="btnAddNewAssociatedProduct" onclick="javascript:OpenWindow('@(Url.Action("AssociatedProductAddPopup", "Product", new {productId = Model.Id, btnId = "btnRefreshAssociatedProducts", formId = "product-form"}))', 800, 800, true); return false;" class="btn btn-primary">
-                    @T("Admin.Catalog.Products.AssociatedProducts.AddNew")
-                </button>
-                <button type="submit" id="btnRefreshAssociatedProducts" style="display: none"></button>
-                <script>
-                    $(function() {
-                        $('#btnRefreshAssociatedProducts').click(function () {
-                            //refresh grid
-                            updateTable('#associatedproducts-grid');
-
-                            //return false to don't reload a page
-                            return false;
-                        });
-                    });
-                </script>
-            </div>
-        }
-        else
-        {
-            <div class="card-body">
-                @T("Admin.Catalog.Products.AssociatedProducts.SaveBeforeEdit")
-            </div>
-        }
-    </div>
     <div class="form-group row @(Model.ProductEditorSettingsModel.ProductTemplate ? null : "advanced-setting")" @(Model.AvailableProductTemplates.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null) id="nnpnlProductTemplateId">
         <div class="col-md-3">
             <nop-label asp-for="ProductTemplateId" />
@@ -464,15 +322,6 @@
         <div class="col-md-9">
             <nop-select asp-for="ProductTemplateId" asp-items="Model.AvailableProductTemplates" />
             <span asp-validation-for="ProductTemplateId"></span>
-        </div>
-    </div>
-    <div class="form-group row @(Model.ProductEditorSettingsModel.VisibleIndividually ? null : "advanced-setting")" id="group-visible-individually">
-        <div class="col-md-3">
-            <nop-label asp-for="VisibleIndividually" />
-        </div>
-        <div class="col-md-9">
-            <nop-editor asp-for="VisibleIndividually" />
-            <span asp-validation-for="VisibleIndividually"></span>
         </div>
     </div>
     <div class="form-group row @(Model.ProductEditorSettingsModel.AgeVerification ? null : "advanced-setting")">

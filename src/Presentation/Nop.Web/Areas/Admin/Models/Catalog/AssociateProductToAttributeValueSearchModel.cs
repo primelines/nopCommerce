@@ -17,7 +17,6 @@ public partial record AssociateProductToAttributeValueSearchModel : BaseSearchMo
         AvailableManufacturers = new List<SelectListItem>();
         AvailableStores = new List<SelectListItem>();
         AvailableVendors = new List<SelectListItem>();
-        AvailableProductTypes = new List<SelectListItem>();
         AssociateProductToAttributeValueModel = new AssociateProductToAttributeValueModel();
     }
 
@@ -40,9 +39,6 @@ public partial record AssociateProductToAttributeValueSearchModel : BaseSearchMo
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchVendor")]
     public int SearchVendorId { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductType")]
-    public int SearchProductTypeId { get; set; }
-
     public IList<SelectListItem> AvailableCategories { get; set; }
 
     public IList<SelectListItem> AvailableManufacturers { get; set; }
@@ -50,8 +46,6 @@ public partial record AssociateProductToAttributeValueSearchModel : BaseSearchMo
     public IList<SelectListItem> AvailableStores { get; set; }
 
     public IList<SelectListItem> AvailableVendors { get; set; }
-
-    public IList<SelectListItem> AvailableProductTypes { get; set; }
 
     public bool IsLoggedInAsVendor { get; set; }
 

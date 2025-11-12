@@ -46,14 +46,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-md-4">
-                                            <nop-label asp-for="SearchProductTypeId" />
-                                        </div>
-                                        <div class="col-md-8">
-                                            <nop-select asp-for="SearchProductTypeId" asp-items="Model.AvailableProductTypes" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
                                         <div class="col-md-8 offset-md-4">
                                             <button type="button" id="search-products" class="btn btn-primary btn-search">
                                                 <i class="fas fa-search"></i>
@@ -81,7 +73,6 @@
                                 new(nameof(Model.SearchProductName)),
                                 new(nameof(Model.SearchCategoryId)),
                                 new(nameof(Model.SearchManufacturerId)),
-                                new(nameof(Model.SearchProductTypeId))
                             },
                             ColumnCollection = new List<ColumnProperty>
                             {

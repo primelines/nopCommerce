@@ -18,7 +18,6 @@ public partial record ProductDetailsDto : BaseNopEntityDto
         ProductPrice = new ProductPriceDto();
         AddToCart = new AddToCartDto();
         ProductAttributes = new List<ProductAttributeOverviewDto>();
-        AssociatedProducts = new List<ProductDetailsDto>();
         Vendor = new VendorBriefInfoDto();
         Breadcrumb = new ProductBreadcrumbDto();
         ProductTags = new List<ProductTagDto>();
@@ -70,14 +69,6 @@ public partial record ProductDetailsDto : BaseNopEntityDto
 
     [JsonProperty("se_name")]
     public string SeName { get; set; }
-
-    [JsonProperty("visible_individually")]
-    public bool VisibleIndividually { get; set; }
-
-
-    [JsonProperty("product_type")]
-    public ProductType ProductType { get; set; }
-
 
     [JsonProperty("show_sku")]
     public bool ShowSku { get; set; }
@@ -199,8 +190,6 @@ public partial record ProductDetailsDto : BaseNopEntityDto
 
     //a list of associated products. For example, "Grouped" products could have several child "simple" products
 
-    [JsonProperty("associated_products")]
-    public IList<ProductDetailsDto> AssociatedProducts { get; set; }
 
 
     [JsonProperty("display_discontinued_message")]

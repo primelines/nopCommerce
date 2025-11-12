@@ -7,15 +7,6 @@ namespace Nop.Core.Domain.Catalog;
 /// </summary>
 public partial class ProductEditorSettings : ISettings
 {
-    /// <summary>
-    /// Gets or sets a value indicating whether 'Product type' field is shown
-    /// </summary>
-    public bool ProductType { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether 'Visible individually' field is shown
-    /// </summary>
-    public bool VisibleIndividually { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether 'Product template' field is shown

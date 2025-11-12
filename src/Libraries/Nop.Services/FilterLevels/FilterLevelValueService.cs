@@ -222,7 +222,7 @@ public partial class FilterLevelValueService : IFilterLevelValueService
 
         var query = from pc in _filterLevelValueProductMappingRepository.Table
                     join p in _productRepository.Table on pc.ProductId equals p.Id
-                    where pc.FilterLevelValueId == filterLevelValueId && !p.Deleted && p.Published && p.VisibleIndividually
+                    where pc.FilterLevelValueId == filterLevelValueId && !p.Deleted && p.Published
                     orderby pc.Id
                     select p;
 

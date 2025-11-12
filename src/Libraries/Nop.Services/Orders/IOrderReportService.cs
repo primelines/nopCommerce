@@ -177,14 +177,13 @@ public partial interface IOrderReportService
     /// <param name="storeId">Store identifier</param>
     /// <param name="productId">Product identifier</param>
     /// <param name="recordsToReturn">Records to return</param>
-    /// <param name="visibleIndividuallyOnly">A values indicating whether to load only products marked as "visible individually"; "false" to load all records; "true" to load "visible individually" only</param>
     /// <param name="showHidden">A value indicating whether to show hidden records</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
     Task<int[]> GetAlsoPurchasedProductsIdsAsync(int storeId, int productId,
-        int recordsToReturn = 5, bool visibleIndividuallyOnly = true, bool showHidden = false);
+        int recordsToReturn = 5, bool showHidden = false);
 
     /// <summary>
     /// Gets a list of products that were never sold

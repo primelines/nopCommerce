@@ -148,9 +148,7 @@ public partial class ProductController : BasePublicController
         if (!_catalogSettings.ProductReviewPossibleOnlyAfterPurchasing)
             return;
 
-        var hasCompletedOrders = product.ProductType == ProductType.SimpleProduct
-            ? await HasCompletedOrdersAsync(product)
-            : await (await _productService.GetAssociatedProductsAsync(product.Id)).AnyAwaitAsync(HasCompletedOrdersAsync);
+        var hasCompletedOrders =  await HasCompletedOrdersAsync(product);
 
         if (!hasCompletedOrders)
             ModelState.AddModelError(string.Empty, await _localizationService.GetResourceAsync("Reviews.ProductReviewPossibleOnlyAfterPurchasing"));
@@ -196,18 +194,6 @@ public partial class ProductController : BasePublicController
         if (notAvailable && !hasAdminAccess)
             return InvokeHttp404();
 
-        //visible individually?
-        if (!product.VisibleIndividually)
-        {
-            //is this one an associated products?
-            var parentGroupedProduct = await _productService.GetProductByIdAsync(product.ParentGroupedProductId);
-            if (parentGroupedProduct == null)
-                return Error();
-
-            var seName = await _urlRecordService.GetSeNameAsync(parentGroupedProduct);
-            var productUrl = await _nopUrlHelper.RouteGenericUrlAsync<Product>(new { SeName = seName });
-            return LocalRedirectPermanent(productUrl);
-        }
 
         //update existing shopping cart or wishlist  item?
         ShoppingCartItem updatecartitem = null;
@@ -248,7 +234,7 @@ public partial class ProductController : BasePublicController
             string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.ViewProduct"), product.Name), product);
 
         //model
-        var model = await _productModelFactory.PrepareProductDetailsDtoAsync(product, updatecartitem, false);
+        var model = await _productModelFactory.PrepareProductDetailsDtoAsync(product, updatecartitem);
 
         //template
         var productTemplateViewPath = await _productModelFactory.PrepareProductTemplateViewPathAsync(product);

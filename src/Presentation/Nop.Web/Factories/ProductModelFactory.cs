@@ -182,59 +182,6 @@ public partial class ProductModelFactory : IProductModelFactory
 
     #region Utilities
 
-    /// <summary>
-    /// Prepare the grouped product overview price model
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="priceModel">Price model</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task PrepareGroupedProductPriceModelAsync(Product product, ProductPriceModel priceModel)
-    {
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var associatedProducts = await _productService.GetAssociatedProductsAsync(product.Id,
-            store.Id);
-
-        if (!associatedProducts.Any())
-            return;
-
-        //we have at least one associated product
-        //find a minimum possible price
-        decimal? minPossiblePrice = null;
-        Product minPriceProduct = null;
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        foreach (var associatedProduct in associatedProducts)
-        {
-            var (_, tmpMinPossiblePrice, _, _) = await _priceCalculationService.GetFinalPriceAsync(associatedProduct, customer, store);
-
-            //calculate price for the maximum quantity if we have tier prices, and choose minimal
-            tmpMinPossiblePrice = Math.Min(tmpMinPossiblePrice,
-                (await _priceCalculationService.GetFinalPriceAsync(associatedProduct, customer, store, quantity: int.MaxValue)).finalPrice);
-
-            if (minPossiblePrice.HasValue && tmpMinPossiblePrice >= minPossiblePrice.Value)
-                continue;
-
-            minPriceProduct = associatedProduct;
-            minPossiblePrice = tmpMinPossiblePrice;
-        }
-
-        if (minPriceProduct == null)
-            return;
-
-
-        //calculate prices
-        var (finalPriceBase, _) = await _taxService.GetProductPriceAsync(minPriceProduct, minPossiblePrice.Value);
-        var finalPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceBase, await _workContext.GetWorkingCurrencyAsync());
-
-        priceModel.OldPrice = null;
-        priceModel.OldPriceValue = null;
-        priceModel.Price = string.Format(await _localizationService.GetResourceAsync("Products.PriceRangeFrom"), await _priceFormatter.FormatPriceAsync(finalPrice));
-        priceModel.PriceValue = finalPrice;
-
-        //PAngV default baseprice (used in Germany)
-        priceModel.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceBase);
-        priceModel.BasePricePAngVValue = finalPriceBase;
-        
-    }
 
     /// <summary>
     /// Gets the minimum possible product price
@@ -370,11 +317,11 @@ public partial class ProductModelFactory : IProductModelFactory
         {
             ProductId = product.Id,
             //add to cart button (ignore "DisableBuyButton" property for grouped products)
-            DisableBuyButton = (product.ProductType != ProductType.GroupedProduct && product.DisableBuyButton) ||
+            DisableBuyButton = 
                 !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART) ||
                 !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES),
             //add to wishlist button (ignore "DisableWishlistButton" property for grouped products)
-            DisableWishlistButton = (product.ProductType != ProductType.GroupedProduct && product.DisableWishlistButton) ||
+            DisableWishlistButton = 
                 !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST) ||
                 !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES),
             //compare products
@@ -391,13 +338,6 @@ public partial class ProductModelFactory : IProductModelFactory
             model.Price = null;
             model.PriceValue = null;
             model.HidePrices = true;
-
-            return model;
-        }
-
-        if (addPriceRangeFrom && product.ProductType == ProductType.GroupedProduct)
-        {
-            await PrepareGroupedProductPriceModelAsync(product, model);
 
             return model;
         }
@@ -1119,23 +1059,20 @@ public partial class ProductModelFactory : IProductModelFactory
     /// Prepare the product details picture model
     /// </summary>
     /// <param name="product">Product</param>
-    /// <param name="isAssociatedProduct">Whether the product is associated</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the picture model for the default picture; All picture models
     /// </returns>
-    protected virtual async Task<(PictureModel pictureModel, IList<PictureModel> allPictureModels, IList<VideoModel> allVideoModels)> PrepareProductDetailsPictureModelAsync(Product product, bool isAssociatedProduct)
+    protected virtual async Task<(PictureModel pictureModel, IList<PictureModel> allPictureModels, IList<VideoModel> allVideoModels)> PrepareProductDetailsPictureModelAsync(Product product)
     {
         ArgumentNullException.ThrowIfNull(product);
 
         //default picture size
-        var defaultPictureSize = isAssociatedProduct ?
-            _mediaSettings.AssociatedProductPictureSize :
-            _mediaSettings.ProductDetailsPictureSize;
+        var defaultPictureSize = _mediaSettings.ProductDetailsPictureSize;
 
         //prepare picture models
         var productPicturesCacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopModelCacheDefaults.ProductDetailsPicturesModelKey
-            , product, defaultPictureSize, isAssociatedProduct,
+            , product, defaultPictureSize,
             await _workContext.GetWorkingLanguageAsync(), _webHelper.IsCurrentConnectionSecured(), await _storeContext.GetCurrentStoreAsync());
         var cachedPictures = await _staticCacheManager.GetAsync(productPicturesCacheKey, async () =>
         {
@@ -1144,8 +1081,8 @@ public partial class ProductModelFactory : IProductModelFactory
             var pictures = await _pictureService.GetPicturesByProductIdAsync(product.Id);
             var defaultPicture = pictures.FirstOrDefault();
 
-            (var fullSizeImageUrl, defaultPicture) = await _pictureService.GetPictureUrlAsync(defaultPicture, 0, !isAssociatedProduct);
-            (var imageUrl, defaultPicture) = await _pictureService.GetPictureUrlAsync(defaultPicture, defaultPictureSize, !isAssociatedProduct);
+            (var fullSizeImageUrl, defaultPicture) = await _pictureService.GetPictureUrlAsync(defaultPicture, 0);
+            (var imageUrl, defaultPicture) = await _pictureService.GetPictureUrlAsync(defaultPicture, defaultPictureSize);
 
             var defaultPictureModel = new PictureModel
             {
@@ -1168,7 +1105,7 @@ public partial class ProductModelFactory : IProductModelFactory
                 var picture = pictures[i];
 
                 (fullSizeImageUrl, picture) = await _pictureService.GetPictureUrlAsync(picture);
-                (imageUrl, picture) = await _pictureService.GetPictureUrlAsync(picture, defaultPictureSize, !isAssociatedProduct);
+                (imageUrl, picture) = await _pictureService.GetPictureUrlAsync(picture, defaultPictureSize);
                 (var thumbImageUrl, picture) = await _pictureService.GetPictureUrlAsync(picture, _mediaSettings.ProductThumbPictureSizeOnProductDetailsPage);
 
                 var pictureModel = new PictureModel
@@ -1268,7 +1205,6 @@ public partial class ProductModelFactory : IProductModelFactory
                 FullDescription = await _localizationService.GetLocalizedAsync(product, x => x.FullDescription),
                 SeName = await _urlRecordService.GetSeNameAsync(product),
                 Sku = product.Sku,
-                ProductType = product.ProductType,
             };
 
             //price
@@ -1361,13 +1297,12 @@ public partial class ProductModelFactory : IProductModelFactory
     /// </summary>
     /// <param name="product">Product</param>
     /// <param name="updatecartitem">Updated shopping cart item</param>
-    /// <param name="isAssociatedProduct">Whether the product is associated</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the product details model
     /// </returns>
     public virtual async Task<ProductDetailsModel> PrepareProductDetailsModelAsync(Product product,
-        ShoppingCartItem updatecartitem = null, bool isAssociatedProduct = false)
+        ShoppingCartItem updatecartitem = null)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -1382,7 +1317,6 @@ public partial class ProductModelFactory : IProductModelFactory
             MetaDescription = await _localizationService.GetLocalizedAsync(product, x => x.MetaDescription),
             MetaTitle = await _localizationService.GetLocalizedAsync(product, x => x.MetaTitle),
             SeName = await _urlRecordService.GetSeNameAsync(product),
-            ProductType = product.ProductType,
             ShowSku = _catalogSettings.ShowSkuOnProductDetailsPage,
             Sku = product.Sku,
             ShowManufacturerPartNumber = _catalogSettings.ShowManufacturerPartNumber,
@@ -1394,7 +1328,6 @@ public partial class ProductModelFactory : IProductModelFactory
             StockAvailability = await _productService.FormatStockMessageAsync(product, string.Empty),
             DisplayDiscontinuedMessage = !product.Published && _catalogSettings.DisplayDiscontinuedMessageForUnpublishedProducts,
             AvailableEndDate = product.AvailableEndDateTimeUtc,
-            VisibleIndividually = product.VisibleIndividually,
             AllowAddingOnlyExistingAttributeCombinations = product.AllowAddingOnlyExistingAttributeCombinations,
             DisplayAttributeCombinationImagesOnly = product.DisplayAttributeCombinationImagesOnly
         };
@@ -1479,23 +1412,20 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //breadcrumb
         //do not prepare this model for the associated products. anyway it's not used
-        if (_catalogSettings.CategoryBreadcrumbEnabled && !isAssociatedProduct)
+        if (_catalogSettings.CategoryBreadcrumbEnabled )
         {
             model.Breadcrumb = await PrepareProductBreadcrumbModelAsync(product);
         }
 
-        //product tags
-        //do not prepare this model for the associated products. anyway it's not used
-        if (!isAssociatedProduct)
-        {
-            model.ProductTags = await PrepareProductTagModelsAsync(product);
-        }
+
+        model.ProductTags = await PrepareProductTagModelsAsync(product);
+        
 
         //pictures and videos
         model.DefaultPictureZoomEnabled = _mediaSettings.DefaultPictureZoomEnabled;
         IList<PictureModel> allPictureModels;
         IList<VideoModel> allVideoModels;
-        (model.DefaultPictureModel, allPictureModels, allVideoModels) = await PrepareProductDetailsPictureModelAsync(product, isAssociatedProduct);
+        (model.DefaultPictureModel, allPictureModels, allVideoModels) = await PrepareProductDetailsPictureModelAsync(product);
         model.PictureModels = allPictureModels;
         model.VideoModels = allVideoModels;
 
@@ -1533,12 +1463,9 @@ public partial class ProductModelFactory : IProductModelFactory
         //product attributes
         model.ProductAttributes = await PrepareProductAttributeModelsAsync(product, updatecartitem);
 
-        //product specifications
-        //do not prepare this model for the associated products. anyway it's not used
-        if (!isAssociatedProduct)
-        {
-            model.ProductSpecificationModel = await PrepareProductSpecificationModelAsync(product);
-        }
+
+        model.ProductSpecificationModel = await PrepareProductSpecificationModelAsync(product);
+        
 
         //product review overview
         model.ProductReviewOverview = await PrepareProductReviewOverviewModelAsync(product);
@@ -1577,18 +1504,6 @@ public partial class ProductModelFactory : IProductModelFactory
             model.ProductEstimateShipping.AvailableStates = estimateShippingModel.AvailableStates;
         }
 
-        //associated products
-        if (product.ProductType == ProductType.GroupedProduct)
-        {
-            //ensure no circular references
-            if (!isAssociatedProduct)
-            {
-                var associatedProducts = await _productService.GetAssociatedProductsAsync(product.Id, store.Id);
-                foreach (var associatedProduct in associatedProducts)
-                    model.AssociatedProducts.Add(await PrepareProductDetailsModelAsync(associatedProduct, null, true));
-            }
-            model.InStock = model.AssociatedProducts.Any(associatedProduct => associatedProduct.InStock);
-        }
         if (_seoSettings.MicrodataEnabled)
         {
             var jsonLdModel = await _jsonLdModelFactory.PrepareJsonLdProductAsync(model);

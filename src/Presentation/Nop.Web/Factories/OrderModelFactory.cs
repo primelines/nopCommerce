@@ -541,7 +541,7 @@ public partial class OrderModelFactory : IOrderModelFactory
                 OrderItemGuid = orderItem.OrderItemGuid,
                 Sku = await _productService.FormatSkuAsync(product, orderItem.AttributesXml),
                 VendorName = (await _vendorService.GetVendorByIdAsync(product.VendorId))?.Name ?? string.Empty,
-                ProductId = (product.ParentGroupedProductId > 0 && !product.VisibleIndividually) ? product.ParentGroupedProductId : product.Id,
+                ProductId = product.Id,
                 ProductName = await _localizationService.GetLocalizedAsync(product, x => x.Name),
                 ProductSeName = await _urlRecordService.GetSeNameAsync(product),
                 Quantity = orderItem.Quantity,

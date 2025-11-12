@@ -750,7 +750,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                     var products = await _productService.SearchProductsAsync(0, 1,
                         categoryIds: categoryIds,
                         storeId: currentStore.Id,
-                        visibleIndividuallyOnly: true,
                         excludeFeaturedProducts: !_catalogSettings.IgnoreFeaturedProducts && !_catalogSettings.IncludeFeaturedProductsInNormalLists,
                         orderBy: orderBy);
 
@@ -800,7 +799,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             command.PageSize,
             categoryIds: categoryIds,
             storeId: currentStore.Id,
-            visibleIndividuallyOnly: true,
             excludeFeaturedProducts: !_catalogSettings.IgnoreFeaturedProducts && !_catalogSettings.IncludeFeaturedProductsInNormalLists,
             priceMin: selectedPriceRange?.From,
             priceMax: selectedPriceRange?.To,
@@ -904,7 +902,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                     var products = await _productService.SearchProductsAsync(0, 1,
                         manufacturerIds: manufacturerIds,
                         storeId: currentStore.Id,
-                        visibleIndividuallyOnly: true,
                         excludeFeaturedProducts: !_catalogSettings.IgnoreFeaturedProducts && !_catalogSettings.IncludeFeaturedProductsInNormalLists,
                         orderBy: orderBy);
 
@@ -946,7 +943,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             command.PageSize,
             manufacturerIds: manufacturerIds,
             storeId: currentStore.Id,
-            visibleIndividuallyOnly: true,
             excludeFeaturedProducts: !_catalogSettings.IgnoreFeaturedProducts && !_catalogSettings.IncludeFeaturedProductsInNormalLists,
             priceMin: selectedPriceRange?.From,
             priceMax: selectedPriceRange?.To,
@@ -1137,7 +1133,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                     var products = await _productService.SearchProductsAsync(0, 1,
                         vendorId: vendor.Id,
                         storeId: store.Id,
-                        visibleIndividuallyOnly: true,
                         orderBy: orderBy);
 
                     return products?.FirstOrDefault()?.Price ?? 0;
@@ -1169,7 +1164,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             priceMin: selectedPriceRange?.From,
             priceMax: selectedPriceRange?.To,
             storeId: store.Id,
-            visibleIndividuallyOnly: true,
             orderBy: (ProductSortingEnum)command.OrderBy);
 
         var isFiltering = selectedPriceRange?.From is not null;
@@ -1444,7 +1438,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                     var products = await _productService.SearchProductsAsync(0, 1,
                         storeId: store.Id,
                         productTagId: productTag.Id,
-                        visibleIndividuallyOnly: true,
                         orderBy: orderBy);
 
                     return products?.FirstOrDefault()?.Price ?? 0;
@@ -1476,7 +1469,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             priceMax: selectedPriceRange?.To,
             storeId: store.Id,
             productTagId: productTag.Id,
-            visibleIndividuallyOnly: true,
             orderBy: (ProductSortingEnum)command.OrderBy);
 
         var isFiltering = selectedPriceRange?.From is not null;
@@ -1687,7 +1679,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                             categoryIds: categoryIds,
                             manufacturerIds: new List<int> { manufacturerId },
                             storeId: currentStore.Id,
-                            visibleIndividuallyOnly: true,
                             keywords: searchTerms,
                             searchDescriptions: searchInDescriptions,
                             searchProductTags: searchInProductTags,
@@ -1725,7 +1716,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                     categoryIds: categoryIds,
                     manufacturerIds: new List<int> { manufacturerId },
                     storeId: currentStore.Id,
-                    visibleIndividuallyOnly: true,
                     keywords: searchTerms,
                     priceMin: selectedPriceRange?.From,
                     priceMax: selectedPriceRange?.To,

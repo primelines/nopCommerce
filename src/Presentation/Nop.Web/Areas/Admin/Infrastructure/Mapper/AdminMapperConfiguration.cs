@@ -504,9 +504,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
         //products
         CreateMap<Product, ProductModel>()
             .ForMember(model => model.AddPictureModel, options => options.Ignore())
-            .ForMember(model => model.AssociatedProductSearchModel, options => options.Ignore())
-            .ForMember(model => model.AssociatedToProductId, options => options.Ignore())
-            .ForMember(model => model.AssociatedToProductName, options => options.Ignore())
             .ForMember(model => model.AvailableBasepriceBaseUnits, options => options.Ignore())
             .ForMember(model => model.AvailableBasepriceUnits, options => options.Ignore())
             .ForMember(model => model.AvailableCategories, options => options.Ignore())
@@ -539,9 +536,7 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.ProductVideoSearchModel, options => options.Ignore())
             .ForMember(model => model.AddVideoModel, options => options.Ignore())
             .ForMember(model => model.ProductSpecificationAttributeSearchModel, options => options.Ignore())
-            .ForMember(model => model.ProductsTypesSupportedByProductTemplates, options => options.Ignore())
             .ForMember(model => model.AvailableProductTags, options => options.Ignore())
-            .ForMember(model => model.ProductTypeName, options => options.Ignore())
             .ForMember(model => model.ProductWarehouseInventoryModels, options => options.Ignore())
             .ForMember(model => model.RelatedProductSearchModel, options => options.Ignore())
             .ForMember(model => model.SelectedCategoryIds, options => options.Ignore())
@@ -565,8 +560,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(entity => entity.ManageInventoryMethod, options => options.Ignore())
             .ForMember(entity => entity.NotApprovedRatingSum, options => options.Ignore())
             .ForMember(entity => entity.NotApprovedTotalReviews, options => options.Ignore())
-            .ForMember(entity => entity.ParentGroupedProductId, options => options.Ignore())
-            .ForMember(entity => entity.ProductType, options => options.Ignore())
             .ForMember(entity => entity.UpdatedOnUtc, options => options.Ignore());
 
         CreateMap<Product, DiscountProductModel>()

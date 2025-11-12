@@ -1189,28 +1189,12 @@ public partial class ProductController : BaseAdminController
             var prevTotalStockQuantity = await _productService.GetTotalStockQuantityAsync(product);
             var previousStockQuantity = product.StockQuantity;
             var previousWarehouseId = product.WarehouseId;
-            var previousProductType = product.ProductType;
 
             //product
             product = model.ToEntity(product);
 
             product.UpdatedOnUtc = DateTime.UtcNow;
             await _productService.UpdateProductAsync(product);
-
-            //remove associated products
-            if (previousProductType == ProductType.GroupedProduct && product.ProductType == ProductType.SimpleProduct)
-            {
-                var store = await _storeContext.GetCurrentStoreAsync();
-                var storeId = store?.Id ?? 0;
-                var vendorId = currentVendor?.Id ?? 0;
-
-                var associatedProducts = await _productService.GetAssociatedProductsAsync(product.Id, storeId, vendorId);
-                foreach (var associatedProduct in associatedProducts)
-                {
-                    associatedProduct.ParentGroupedProductId = 0;
-                    await _productService.UpdateProductAsync(associatedProduct);
-                }
-            }
 
             //search engine name
             model.SeName = await _urlRecordService.ValidateSeNameAsync(product, model.SeName, product.Name, true);
@@ -1832,134 +1816,6 @@ public partial class ProductController : BaseAdminController
         ViewBag.RefreshPage = true;
 
         return View(new FilterLevelValueSearchModel());
-    }
-
-    #endregion
-
-    #region Associated products
-
-    [HttpPost]
-    [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> AssociatedProductList(AssociatedProductSearchModel searchModel)
-    {
-        //try to get a product with the specified id
-        var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-            ?? throw new ArgumentException("No product found with the specified id");
-
-        //a vendor should have access only to his products
-        var currentVendor = await _workContext.GetCurrentVendorAsync();
-        if (currentVendor != null && product.VendorId != currentVendor.Id)
-            return Content("This is not your product");
-
-        //prepare model
-        var model = await _productModelFactory.PrepareAssociatedProductListModelAsync(searchModel, product);
-
-        return Json(model);
-    }
-
-    [HttpPost]
-    [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AssociatedProductUpdate(AssociatedProductModel model)
-    {
-        //try to get an associated product with the specified id
-        var associatedProduct = await _productService.GetProductByIdAsync(model.Id)
-            ?? throw new ArgumentException("No associated product found with the specified id");
-
-        //a vendor should have access only to his products
-        var currentVendor = await _workContext.GetCurrentVendorAsync();
-        if (currentVendor != null && associatedProduct.VendorId != currentVendor.Id)
-            return Content("This is not your product");
-
-        associatedProduct.DisplayOrder = model.DisplayOrder;
-        await _productService.UpdateProductAsync(associatedProduct);
-
-        return new NullJsonResult();
-    }
-
-    [HttpPost]
-    [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AssociatedProductDelete(int id)
-    {
-        //try to get an associated product with the specified id
-        var product = await _productService.GetProductByIdAsync(id)
-            ?? throw new ArgumentException("No associated product found with the specified id");
-
-        //a vendor should have access only to his products
-        var currentVendor = await _workContext.GetCurrentVendorAsync();
-        if (currentVendor != null && product.VendorId != currentVendor.Id)
-            return Content("This is not your product");
-
-        product.ParentGroupedProductId = 0;
-        await _productService.UpdateProductAsync(product);
-
-        return new NullJsonResult();
-    }
-
-    [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AssociatedProductAddPopup(int productId)
-    {
-        //prepare model
-        var model = await _productModelFactory.PrepareAddAssociatedProductSearchModelAsync(new AddAssociatedProductSearchModel());
-
-        return View(model);
-    }
-
-    [HttpPost]
-    [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AssociatedProductAddPopupList(AddAssociatedProductSearchModel searchModel)
-    {
-        //prepare model
-        var model = await _productModelFactory.PrepareAddAssociatedProductListModelAsync(searchModel);
-
-        return Json(model);
-    }
-
-    [HttpPost]
-    [FormValueRequired("save")]
-    [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AssociatedProductAddPopup(AddAssociatedProductModel model)
-    {
-        var selectedProducts = await _productService.GetProductsByIdsAsync(model.SelectedProductIds.ToArray());
-
-        var tryToAddSelfGroupedProduct = selectedProducts
-            .Select(p => p.Id)
-            .Contains(model.ProductId);
-
-        if (selectedProducts.Any())
-        {
-            foreach (var product in selectedProducts)
-            {
-                if (product.Id == model.ProductId)
-                    continue;
-
-                //a vendor should have access only to his products
-                var currentVendor = await _workContext.GetCurrentVendorAsync();
-                if (currentVendor != null && product.VendorId != currentVendor.Id)
-                    continue;
-
-                product.ParentGroupedProductId = model.ProductId;
-                await _productService.UpdateProductAsync(product);
-            }
-        }
-
-        if (tryToAddSelfGroupedProduct)
-        {
-            _notificationService.WarningNotification(await _localizationService.GetResourceAsync("Admin.Catalog.Products.AssociatedProducts.TryToAddSelfGroupedProduct"));
-
-            var addAssociatedProductSearchModel = await _productModelFactory.PrepareAddAssociatedProductSearchModelAsync(new AddAssociatedProductSearchModel());
-            //set current product id
-            addAssociatedProductSearchModel.ProductId = model.ProductId;
-
-            ViewBag.RefreshPage = true;
-
-            return View(addAssociatedProductSearchModel);
-        }
-
-        ViewBag.RefreshPage = true;
-
-        ViewBag.ClosePage = true;
-
-        return View(new AddAssociatedProductSearchModel());
     }
 
     #endregion
@@ -2673,7 +2529,6 @@ public partial class ProductController : BaseAdminController
             storeId: model.SearchStoreId,
             vendorId: model.SearchVendorId,
             warehouseId: model.SearchWarehouseId,
-            productType: model.SearchProductTypeId > 0 ? (ProductType?)model.SearchProductTypeId : null,
             keywords: model.SearchProductName,
             showHidden: true,
             overridePublished: overridePublished);
@@ -2728,7 +2583,6 @@ public partial class ProductController : BaseAdminController
             storeId: model.SearchStoreId,
             vendorId: model.SearchVendorId,
             warehouseId: model.SearchWarehouseId,
-            productType: model.SearchProductTypeId > 0 ? (ProductType?)model.SearchProductTypeId : null,
             keywords: model.SearchProductName,
             showHidden: true,
             overridePublished: overridePublished);
@@ -2810,7 +2664,6 @@ public partial class ProductController : BaseAdminController
             storeId: model.SearchStoreId,
             vendorId: model.SearchVendorId,
             warehouseId: model.SearchWarehouseId,
-            productType: model.SearchProductTypeId > 0 ? (ProductType?)model.SearchProductTypeId : null,
             keywords: model.SearchProductName,
             showHidden: true,
             overridePublished: overridePublished);
@@ -4075,8 +3928,6 @@ public partial class ProductController : BaseAdminController
                 TaxCategoryId = _defaultTaxCategoryId,
                 IsShipEnabled = true,
                 AllowCustomerReviews = true,
-                VisibleIndividually = true,
-                ProductType = ProductType.SimpleProduct,
                 VendorId = _vendorId
             };
 

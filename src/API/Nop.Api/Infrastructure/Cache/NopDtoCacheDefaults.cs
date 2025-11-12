@@ -97,12 +97,11 @@ public static partial class NopDtoCacheDefaults
     /// <remarks>
     /// {0} : product id
     /// {1} : picture size
-    /// {2} : isAssociatedProduct?
     /// {3} : language ID ("alt" and "title" can depend on localized product name)
     /// {4} : is connection SSL secured?
     /// {5} : current store ID
     /// </remarks>
-    public static CacheKey ProductDetailsPicturesModelKey => new("Nop.pres.product.detailspictures-{0}-{1}-{2}-{3}-{4}-{5}");
+    public static CacheKey ProductDetailsPicturesModelKey => new("Nop.pres.product.detailspictures-{0}-{1}-{2}-{3}-{4}");
     public static string ProductDetailsPicturesPrefixCacheKey => "Nop.pres.product.detailspictures";
     public static string ProductDetailsPicturesPrefixCacheKeyById => "Nop.pres.product.detailspictures-{0}-";
 

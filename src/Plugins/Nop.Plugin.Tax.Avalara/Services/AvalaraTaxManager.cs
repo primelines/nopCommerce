@@ -791,7 +791,7 @@ public class AvalaraTaxManager : IDisposable
         itemModel.CompanyId = _avalaraTaxSettings.CompanyId ?? 0;
         itemModel.ItemCode = product.Sku;
         itemModel.Description = $"{product.Name}. {product.ShortDescription}";
-        itemModel.ParentCode = product.ParentGroupedProductId > 0 ? product.ParentGroupedProductId.ToString() : "";
+        itemModel.ParentCode = "";
         itemModel.Summary = product.FullDescription;
 
         //If the product belongs to several categories, then we will ignore it and take only the first one from the list,

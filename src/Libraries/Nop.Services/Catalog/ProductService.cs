@@ -633,7 +633,7 @@ public partial class ProductService : IProductService
         {
             var query = from p in _productRepository.Table
                 join pc in _productCategoryRepository.Table on p.Id equals pc.ProductId
-                where p.Published && !p.Deleted && p.VisibleIndividually &&
+                where p.Published && !p.Deleted && 
                       (!p.AvailableStartDateTimeUtc.HasValue || p.AvailableStartDateTimeUtc.Value < DateTime.UtcNow) &&
                       (!p.AvailableEndDateTimeUtc.HasValue || p.AvailableEndDateTimeUtc.Value > DateTime.UtcNow) &&
                       pc.IsFeaturedProduct && categoryId == pc.CategoryId
@@ -680,7 +680,7 @@ public partial class ProductService : IProductService
         {
             var query = from p in _productRepository.Table
                 join pm in _productManufacturerRepository.Table on p.Id equals pm.ProductId
-                where p.Published && !p.Deleted && p.VisibleIndividually &&
+                where p.Published && !p.Deleted && 
                       (!p.AvailableStartDateTimeUtc.HasValue || p.AvailableStartDateTimeUtc.Value < DateTime.UtcNow) &&
                       (!p.AvailableEndDateTimeUtc.HasValue || p.AvailableEndDateTimeUtc.Value > DateTime.UtcNow) &&
                       pm.IsFeaturedProduct && manufacturerId == pm.ManufacturerId
@@ -716,7 +716,7 @@ public partial class ProductService : IProductService
         if (categoryIds != null && categoryIds.Contains(0))
             categoryIds.Remove(0);
 
-        var query = _productRepository.Table.Where(p => p.Published && !p.Deleted && p.VisibleIndividually);
+        var query = _productRepository.Table.Where(p => p.Published && !p.Deleted);
 
         //apply store mapping constraints
         query = await _storeMappingService.ApplyStoreMapping(query, storeId);
@@ -752,8 +752,6 @@ public partial class ProductService : IProductService
     /// <param name="storeId">Store identifier; 0 to load all records</param>
     /// <param name="vendorId">Vendor identifier; 0 to load all records</param>
     /// <param name="warehouseId">Warehouse identifier; 0 to load all records</param>
-    /// <param name="productType">Product type; 0 to load all records</param>
-    /// <param name="visibleIndividuallyOnly">A values indicating whether to load only products marked as "visible individually"; "false" to load all records; "true" to load "visible individually" only</param>
     /// <param name="excludeFeaturedProducts">A value indicating whether loaded products are marked as featured (relates only to categories and manufacturers); "false" (by default) to load all records; "true" to exclude featured products from results</param>
     /// <param name="priceMin">Minimum price; null to load all records</param>
     /// <param name="priceMax">Maximum price; null to load all records</param>
@@ -784,8 +782,6 @@ public partial class ProductService : IProductService
         int storeId = 0,
         int vendorId = 0,
         int warehouseId = 0,
-        ProductType? productType = null,
-        bool visibleIndividuallyOnly = false,
         bool excludeFeaturedProducts = false,
         decimal? priceMin = null,
         decimal? priceMax = null,
@@ -829,7 +825,6 @@ public partial class ProductService : IProductService
         productsQuery =
             from p in productsQuery
             where !p.Deleted &&
-                  (!visibleIndividuallyOnly || p.VisibleIndividually) &&
                   (vendorId == 0 || p.VendorId == vendorId) &&
                   (
                       warehouseId == 0 ||
@@ -838,7 +833,6 @@ public partial class ProductService : IProductService
                               _productWarehouseInventoryRepository.Table.Any(pwi => pwi.WarehouseId == warehouseId && pwi.ProductId == p.Id)
                       )
                   ) &&
-                  (productType == null || p.ProductTypeId == (int)productType) &&
                   (showHidden ||
                    DateTime.UtcNow >= (p.AvailableStartDateTimeUtc ?? SqlDateTime.MinValue.Value) &&
                    DateTime.UtcNow <= (p.AvailableEndDateTimeUtc ?? SqlDateTime.MaxValue.Value)
@@ -1133,54 +1127,6 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Gets associated products
-    /// </summary>
-    /// <param name="parentGroupedProductId">Parent product identifier (used with grouped products)</param>
-    /// <param name="storeId">Store identifier; 0 to load all records</param>
-    /// <param name="vendorId">Vendor identifier; 0 to load all records</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the products
-    /// </returns>
-    public virtual async Task<IList<Product>> GetAssociatedProductsAsync(int parentGroupedProductId,
-        int storeId = 0, int vendorId = 0, bool showHidden = false)
-    {
-        var query = _productRepository.Table;
-        query = query.Where(x => x.ParentGroupedProductId == parentGroupedProductId);
-        if (!showHidden)
-        {
-            query = query.Where(x => x.Published);
-
-            //available dates
-            query = query.Where(p =>
-                (!p.AvailableStartDateTimeUtc.HasValue || p.AvailableStartDateTimeUtc.Value < DateTime.UtcNow) &&
-                (!p.AvailableEndDateTimeUtc.HasValue || p.AvailableEndDateTimeUtc.Value > DateTime.UtcNow));
-        }
-        //vendor filtering
-        if (vendorId > 0)
-        {
-            query = query.Where(p => p.VendorId == vendorId);
-        }
-
-        //apply store mapping constraints
-        if (!showHidden && storeId > 0)
-            query = await _storeMappingService.ApplyStoreMapping(query, storeId);
-
-        if (!showHidden)
-        {
-            //apply ACL constraints
-            var customer = await _workContext.GetCurrentCustomerAsync();
-            query = await _aclService.ApplyAcl(query, customer);
-        }
-
-        query = query.Where(x => !x.Deleted);
-        query = query.OrderBy(x => x.DisplayOrder).ThenBy(x => x.Id);
-
-        return await query.ToListAsync();
-    }
-
-    /// <summary>
     /// Get low stock products
     /// </summary>
     /// <param name="vendorId">Vendor identifier; pass null to load all records</param>
@@ -1207,9 +1153,6 @@ public partial class ProductService : IProductService
 
         //ignore deleted products
         query = query.Where(product => !product.Deleted);
-
-        //ignore grouped products
-        query = query.Where(product => product.ProductTypeId != (int)ProductType.GroupedProduct);
 
         //filter by vendor
         if (vendorId.HasValue && vendorId.Value > 0)
@@ -1248,8 +1191,6 @@ public partial class ProductService : IProductService
                 p.ManageInventoryMethodId == (int)ManageInventoryMethod.ManageStockByAttributes &&
                 //ignore deleted products
                 !p.Deleted &&
-                //ignore grouped products
-                p.ProductTypeId != (int)ProductType.GroupedProduct &&
                 //filter by vendor
                 ((vendorId ?? 0) == 0 || p.VendorId == vendorId) &&
                 //whether to load published products only

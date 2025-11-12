@@ -81,7 +81,6 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
         var productsQuery =
             from p in _productRepository.Table
             where !p.Deleted && p.Published &&
-                  (p.ParentGroupedProductId == 0 || p.VisibleIndividually) &&
                   (!p.AvailableStartDateTimeUtc.HasValue || p.AvailableStartDateTimeUtc <= DateTime.UtcNow) &&
                   (!p.AvailableEndDateTimeUtc.HasValue || p.AvailableEndDateTimeUtc >= DateTime.UtcNow)
             select p;

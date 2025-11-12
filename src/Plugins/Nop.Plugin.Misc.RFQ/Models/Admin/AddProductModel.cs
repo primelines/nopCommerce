@@ -27,8 +27,6 @@ public record AddProductModel : BaseNopModel
 
     public int? QuoteId { get; set; }
 
-    public ProductType ProductType { get; set; }
-
     public string Name { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.Products.AddNew.UnitPriceInclTax")]

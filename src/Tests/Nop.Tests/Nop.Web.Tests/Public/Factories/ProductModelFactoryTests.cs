@@ -354,72 +354,6 @@ public class ProductModelFactoryTests : WebTest
                 }
             }
 
-            async Task prepareGroupedProductOverviewPriceModel(ProductPriceModel priceModel)
-            {
-                var store = await _storeContext.GetCurrentStoreAsync();
-                var associatedProducts = await _productService.GetAssociatedProductsAsync(product.Id,
-                    store.Id);
-
-                //add to cart button (ignore "DisableBuyButton" property for grouped products)
-                priceModel.DisableBuyButton =
-                    !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART) ||
-                    !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES);
-
-                //add to wishlist button (ignore "DisableWishlistButton" property for grouped products)
-                priceModel.DisableWishlistButton =
-                    !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST) ||
-                    !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES);
-
-                //compare products
-                priceModel.DisableAddToCompareListButton = !_catalogSettings.CompareProductsEnabled;
-                if (!associatedProducts.Any())
-                    return;
-
-                //we have at least one associated product
-                if (await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
-                {
-                    //find a minimum possible price
-                    decimal? minPossiblePrice = null;
-                    Product minPriceProduct = null;
-                    var customer = await _workContext.GetCurrentCustomerAsync();
-                    foreach (var associatedProduct in associatedProducts)
-                    {
-                        var (_, tmpMinPossiblePrice, _, _) = await _priceCalculationService.GetFinalPriceAsync(associatedProduct, customer, store);
-
-                        //calculate price for the maximum quantity if we have tier prices, and choose minimal
-                        tmpMinPossiblePrice = Math.Min(tmpMinPossiblePrice,
-                            (await _priceCalculationService.GetFinalPriceAsync(associatedProduct, customer, store, quantity: int.MaxValue)).finalPrice);
-
-                        if (minPossiblePrice.HasValue && tmpMinPossiblePrice >= minPossiblePrice.Value)
-                            continue;
-                        minPriceProduct = associatedProduct;
-                        minPossiblePrice = tmpMinPossiblePrice;
-                    }
-
-                    //calculate prices
-                    var (finalPriceBase, _) = await _taxService.GetProductPriceAsync(minPriceProduct, minPossiblePrice.Value);
-                    var finalPrice = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceBase, await _workContext.GetWorkingCurrencyAsync());
-
-                    priceModel.OldPrice = null;
-                    priceModel.OldPriceValue = null;
-                    priceModel.Price = string.Format(await _localizationService.GetResourceAsync("Products.PriceRangeFrom"), await _priceFormatter.FormatPriceAsync(finalPrice));
-                    priceModel.PriceValue = finalPrice;
-
-                    //PAngV default baseprice (used in Germany)
-                    priceModel.BasePricePAngV = await _priceFormatter.FormatBasePriceAsync(product, finalPriceBase);
-                    priceModel.BasePricePAngVValue = finalPriceBase;
-                    
-                }
-                else
-                {
-                    //hide prices
-                    priceModel.OldPrice = null;
-                    priceModel.OldPriceValue = null;
-                    priceModel.Price = null;
-                    priceModel.PriceValue = null;
-                }
-            }
-
             var currentCurrency = await _workContext.GetWorkingCurrencyAsync();
 
             var priceModel = new ProductPriceModel
@@ -429,20 +363,7 @@ public class ProductModelFactoryTests : WebTest
                 ProductId = product.Id
             };
 
-            switch (product.ProductType)
-            {
-                case ProductType.GroupedProduct:
-                    //grouped product
-                    await prepareGroupedProductOverviewPriceModel(priceModel);
-
-                    break;
-                case ProductType.SimpleProduct:
-                default:
-                    //simple product
-                    await prepareSimpleProductOverviewPriceModel(priceModel);
-
-                    break;
-            }
+            await prepareSimpleProductOverviewPriceModel(priceModel);
 
             return priceModel;
         }

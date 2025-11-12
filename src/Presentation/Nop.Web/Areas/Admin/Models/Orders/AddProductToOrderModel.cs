@@ -27,8 +27,6 @@ public partial record AddProductToOrderModel : BaseNopModel
 
     public int OrderId { get; set; }
 
-    public ProductType ProductType { get; set; }
-
     public string Name { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.Products.AddNew.UnitPriceInclTax")]

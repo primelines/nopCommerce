@@ -172,13 +172,10 @@ public partial class InstallationService
 
         var sampleDownloadsPath = _fileProvider.GetAbsolutePath(NopInstallationDefaults.SampleImagesPath);
 
-        async Task insertProduct(SampleProducts.SampleProduct sample, int parentGroupedProductId = 0)
+        async Task insertProduct(SampleProducts.SampleProduct sample)
         {
             var product = new Product
             {
-                ProductType = sample.ProductType,
-                VisibleIndividually = sample.VisibleIndividually,
-                ParentGroupedProductId = parentGroupedProductId,
                 Name = sample.Name,
                 Sku = sample.Sku,
                 ShortDescription = sample.ShortDescription,
@@ -328,8 +325,6 @@ public partial class InstallationService
                 await _dataProvider.BulkInsertEntitiesAsync(productSpecificationAttributes);
             }
 
-            foreach (var sampleGroupedProduct in sample.GroupedProducts)
-                await insertProduct(sampleGroupedProduct, product.Id);
 
             if (sample.TierPrices.Any())
                 await _dataProvider.BulkInsertEntitiesAsync(sample.TierPrices.Select(tp => new TierPrice
@@ -359,9 +354,6 @@ public partial class InstallationService
         using (var random = new SecureRandomNumberGenerator())
             foreach (var product in allProducts)
             {
-                if (product.ProductType != ProductType.SimpleProduct)
-                    continue;
-
                 //only 3 of 4 products will have reviews
                 if (random.Next(4) == 3)
                     continue;

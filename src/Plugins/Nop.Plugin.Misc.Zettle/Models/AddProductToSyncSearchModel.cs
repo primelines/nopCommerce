@@ -17,7 +17,6 @@ public record AddProductToSyncSearchModel : BaseSearchModel
         AvailableManufacturers = new List<SelectListItem>();
         AvailableStores = new List<SelectListItem>();
         AvailableVendors = new List<SelectListItem>();
-        AvailableProductTypes = new List<SelectListItem>();
     }
 
     #endregion
@@ -38,10 +37,6 @@ public record AddProductToSyncSearchModel : BaseSearchModel
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchVendor")]
     public int SearchVendorId { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductType")]
-    public int SearchProductTypeId { get; set; }
-
     public IList<SelectListItem> AvailableCategories { get; set; }
 
     public IList<SelectListItem> AvailableManufacturers { get; set; }
@@ -50,7 +45,6 @@ public record AddProductToSyncSearchModel : BaseSearchModel
 
     public IList<SelectListItem> AvailableVendors { get; set; }
 
-    public IList<SelectListItem> AvailableProductTypes { get; set; }
 
     #endregion
 }

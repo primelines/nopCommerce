@@ -19,7 +19,6 @@ public partial record ProductSearchModel : BaseSearchModel
         AvailableStores = new List<SelectListItem>();
         AvailableWarehouses = new List<SelectListItem>();
         AvailableVendors = new List<SelectListItem>();
-        AvailableProductTypes = new List<SelectListItem>();
         AvailablePublishedOptions = new List<SelectListItem>();
         LicenseCheckModel = new();
     }
@@ -49,9 +48,6 @@ public partial record ProductSearchModel : BaseSearchModel
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchWarehouse")]
     public int SearchWarehouseId { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductType")]
-    public int SearchProductTypeId { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchPublished")]
     public int SearchPublishedId { get; set; }
 
@@ -75,8 +71,6 @@ public partial record ProductSearchModel : BaseSearchModel
     public IList<SelectListItem> AvailableWarehouses { get; set; }
 
     public IList<SelectListItem> AvailableVendors { get; set; }
-
-    public IList<SelectListItem> AvailableProductTypes { get; set; }
 
     public IList<SelectListItem> AvailablePublishedOptions { get; set; }
 
