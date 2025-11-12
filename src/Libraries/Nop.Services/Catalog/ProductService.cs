@@ -50,7 +50,6 @@ public partial class ProductService : IProductService
     protected readonly IRepository<ProductSpecificationAttribute> _productSpecificationAttributeRepository;
     protected readonly IRepository<ProductTag> _productTagRepository;
     protected readonly IRepository<ProductVideo> _productVideoRepository;
-    protected readonly IRepository<ProductWarehouseInventory> _productWarehouseInventoryRepository;
     protected readonly IRepository<RelatedProduct> _relatedProductRepository;
     protected readonly IRepository<Shipment> _shipmentRepository;
     protected readonly IRepository<StockQuantityHistory> _stockQuantityHistoryRepository;
@@ -90,7 +89,6 @@ public partial class ProductService : IProductService
         IRepository<ProductSpecificationAttribute> productSpecificationAttributeRepository,
         IRepository<ProductTag> productTagRepository,
         IRepository<ProductVideo> productVideoRepository,
-        IRepository<ProductWarehouseInventory> productWarehouseInventoryRepository,
         IRepository<RelatedProduct> relatedProductRepository,
         IRepository<Shipment> shipmentRepository,
         IRepository<StockQuantityHistory> stockQuantityHistoryRepository,
@@ -125,7 +123,6 @@ public partial class ProductService : IProductService
         _productSpecificationAttributeRepository = productSpecificationAttributeRepository;
         _productTagRepository = productTagRepository;
         _productVideoRepository = productVideoRepository;
-        _productWarehouseInventoryRepository = productWarehouseInventoryRepository;
         _relatedProductRepository = relatedProductRepository;
         _shipmentRepository = shipmentRepository;
         _stockQuantityHistoryRepository = stockQuantityHistoryRepository;
@@ -189,20 +186,6 @@ public partial class ProductService : IProductService
         string sku = null;
         string manufacturerPartNumber = null;
         string gtin = null;
-
-        if (!string.IsNullOrEmpty(attributesXml) &&
-            product.ManageInventoryMethod == ManageInventoryMethod.ManageStockByAttributes)
-        {
-            //manage stock by attribute combinations
-            //let's find appropriate record
-            var combination = await _productAttributeParser.FindProductAttributeCombinationAsync(product, attributesXml);
-            if (combination != null)
-            {
-                sku = combination.Sku;
-                manufacturerPartNumber = combination.ManufacturerPartNumber;
-                gtin = combination.Gtin;
-            }
-        }
 
         if (string.IsNullOrEmpty(sku))
             sku = product.Sku;
@@ -332,7 +315,7 @@ public partial class ProductService : IProductService
             return string.Empty;
 
         var stockMessage = string.Empty;
-        var stockQuantity = await GetTotalStockQuantityAsync(product);
+        var stockQuantity = product.StockQuantity;
 
         if (stockQuantity > 0)
         {
@@ -382,91 +365,6 @@ public partial class ProductService : IProductService
         }
 
         return stockMessage;
-    }
-
-    /// <summary>
-    /// Reserve the given quantity in the warehouses.
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="quantity">Quantity, must be negative</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task ReserveInventoryAsync(Product product, int quantity)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (quantity >= 0)
-            throw new ArgumentException("Value must be negative.", nameof(quantity));
-
-        var qty = -quantity;
-
-        var productInventory = await _productWarehouseInventoryRepository.Table.Where(pwi => pwi.ProductId == product.Id)
-            .OrderByDescending(pwi => pwi.StockQuantity - pwi.ReservedQuantity)
-            .ToListAsync();
-
-        if (productInventory.Count <= 0)
-            return;
-
-        // 1st pass: Applying reserved
-        foreach (var item in productInventory)
-        {
-            var selectQty = Math.Min(Math.Max(0, item.StockQuantity - item.ReservedQuantity), qty);
-            item.ReservedQuantity += selectQty;
-            qty -= selectQty;
-
-            if (qty <= 0)
-                break;
-        }
-
-        if (qty > 0)
-        {
-            // 2rd pass: Booking negative stock!
-            var pwi = productInventory[0];
-            pwi.ReservedQuantity += qty;
-        }
-
-        await UpdateProductWarehouseInventoryAsync(productInventory);
-    }
-
-    /// <summary>
-    /// Unblocks the given quantity reserved items in the warehouses
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="quantity">Quantity, must be positive</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task UnblockReservedInventoryAsync(Product product, int quantity)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (quantity < 0)
-            throw new ArgumentException("Value must be positive.", nameof(quantity));
-
-        var productInventory = await _productWarehouseInventoryRepository.Table.Where(pwi => pwi.ProductId == product.Id)
-            .OrderByDescending(pwi => pwi.ReservedQuantity)
-            .ThenByDescending(pwi => pwi.StockQuantity)
-            .ToListAsync();
-
-        if (!productInventory.Any())
-            return;
-
-        var qty = quantity;
-
-        foreach (var item in productInventory)
-        {
-            var selectQty = Math.Min(item.ReservedQuantity, qty);
-            item.ReservedQuantity -= selectQty;
-            qty -= selectQty;
-
-            if (qty <= 0)
-                break;
-        }
-
-        if (qty > 0)
-        {
-            var pwi = productInventory[0];
-            pwi.StockQuantity += qty;
-        }
-
-        await UpdateProductWarehouseInventoryAsync(productInventory);
     }
 
     /// <summary>
@@ -729,7 +627,6 @@ public partial class ProductService : IProductService
     /// <param name="manufacturerIds">Manufacturer identifiers</param>
     /// <param name="storeId">Store identifier; 0 to load all records</param>
     /// <param name="vendorId">Vendor identifier; 0 to load all records</param>
-    /// <param name="warehouseId">Warehouse identifier; 0 to load all records</param>
     /// <param name="excludeFeaturedProducts">A value indicating whether loaded products are marked as featured (relates only to categories and manufacturers); "false" (by default) to load all records; "true" to exclude featured products from results</param>
     /// <param name="priceMin">Minimum price; null to load all records</param>
     /// <param name="priceMax">Maximum price; null to load all records</param>
@@ -759,7 +656,6 @@ public partial class ProductService : IProductService
         IList<int> manufacturerIds = null,
         int storeId = 0,
         int vendorId = 0,
-        int warehouseId = 0,
         bool excludeFeaturedProducts = false,
         decimal? priceMin = null,
         decimal? priceMax = null,
@@ -804,13 +700,6 @@ public partial class ProductService : IProductService
             from p in productsQuery
             where !p.Deleted &&
                   (vendorId == 0 || p.VendorId == vendorId) &&
-                  (
-                      warehouseId == 0 ||
-                      (
-                          !p.UseMultipleWarehouses ? p.WarehouseId == warehouseId :
-                              _productWarehouseInventoryRepository.Table.Any(pwi => pwi.WarehouseId == warehouseId && pwi.ProductId == p.Id)
-                      )
-                  ) &&
                   (showHidden ||
                    DateTime.UtcNow >= (p.AvailableStartDateTimeUtc ?? SqlDateTime.MinValue.Value) &&
                    DateTime.UtcNow <= (p.AvailableEndDateTimeUtc ?? SqlDateTime.MaxValue.Value)
@@ -1121,13 +1010,9 @@ public partial class ProductService : IProductService
     {
         var query = _productRepository.Table;
 
-        //filter by products with tracking inventory
-        query = query.Where(product => product.ManageInventoryMethodId == (int)ManageInventoryMethod.ManageStock);
 
         //filter by products with stock quantity less than the minimum
-        query = query.Where(product =>
-            (product.UseMultipleWarehouses ? _productWarehouseInventoryRepository.Table.Where(pwi => pwi.ProductId == product.Id).Sum(pwi => pwi.StockQuantity - pwi.ReservedQuantity)
-                : product.StockQuantity) <= product.MinStockQuantity);
+        query = query.Where(product => product.StockQuantity <= product.MinStockQuantity);
 
         //ignore deleted products
         query = query.Where(product => !product.Deleted);
@@ -1165,8 +1050,6 @@ public partial class ProductService : IProductService
             where
                 //filter by combinations with stock quantity less than the minimum
                 pac.StockQuantity <= pac.MinStockQuantity &&
-                //filter by products with tracking inventory by attributes
-                p.ManageInventoryMethodId == (int)ManageInventoryMethod.ManageStockByAttributes &&
                 //ignore deleted products
                 !p.Deleted &&
                 //filter by vendor
@@ -1289,70 +1172,19 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Get total quantity
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="useReservedQuantity">
-    /// A value indicating whether we should consider "Reserved Quantity" property 
-    /// when "multiple warehouses" are used
-    /// </param>
-    /// <param name="warehouseId">
-    /// Warehouse identifier. Used to limit result to certain warehouse.
-    /// Used only with "multiple warehouses" enabled.
-    /// </param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    public virtual async Task<int> GetTotalStockQuantityAsync(Product product, bool useReservedQuantity = true, int warehouseId = 0)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (product.ManageInventoryMethod != ManageInventoryMethod.ManageStock)
-            //We can calculate total stock quantity when 'Manage inventory' property is set to 'Track inventory'
-            return 0;
-
-        if (!product.UseMultipleWarehouses)
-            return product.StockQuantity;
-
-        var pwi = _productWarehouseInventoryRepository.Table.Where(wi => wi.ProductId == product.Id);
-
-        if (warehouseId > 0)
-            pwi = pwi.Where(x => x.WarehouseId == warehouseId);
-
-        var result = await pwi.SumAsync(x => x.StockQuantity);
-        if (useReservedQuantity)
-            result -= await pwi.SumAsync(x => x.ReservedQuantity);
-
-        return result;
-    }
-
-    /// <summary>
     /// Formats the stock availability/quantity message
     /// </summary>
     /// <param name="product">Product</param>
-    /// <param name="attributesXml">Selected product attributes in XML format (if specified)</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the stock message
     /// </returns>
-    public virtual async Task<string> FormatStockMessageAsync(Product product, string attributesXml)
+    public virtual async Task<string> FormatStockMessageAsync(Product product)
     {
         ArgumentNullException.ThrowIfNull(product);
 
-        var stockMessage = string.Empty;
-
-        switch (product.ManageInventoryMethod)
-        {
-            case ManageInventoryMethod.ManageStock:
-                stockMessage = await GetStockMessageAsync(product);
-                break;
-            case ManageInventoryMethod.ManageStockByAttributes:
-                stockMessage = await GetStockMessageForAttributesAsync(product, attributesXml);
-                break;
-        }
-
-        return stockMessage;
+        return await GetStockMessageAsync(product);
+        ;
     }
 
     /// <summary>
@@ -1464,29 +1296,16 @@ public partial class ProductService : IProductService
         if (quantityToChange == 0)
             return;
 
-        if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock)
-        {
-            //update stock quantity
-            if (product.UseMultipleWarehouses)
-            {
-                //use multiple warehouses
-                if (quantityToChange < 0)
-                    await ReserveInventoryAsync(product, quantityToChange);
-                else
-                    await UnblockReservedInventoryAsync(product, quantityToChange);
-            }
-            else
-            {
-                //do not use multiple warehouses
-                //simple inventory management
-                product.StockQuantity += quantityToChange;
-                await UpdateProductAsync(product);
+            //do not use multiple warehouses
+            //simple inventory management
+            product.StockQuantity += quantityToChange;
+            await UpdateProductAsync(product);
 
-                //quantity change history
-                await AddStockQuantityHistoryEntryAsync(product, quantityToChange, product.StockQuantity, product.WarehouseId, message);
-            }
+            //quantity change history
+            await AddStockQuantityHistoryEntryAsync(product, quantityToChange, product.StockQuantity, message);
+            
 
-            var totalStock = await GetTotalStockQuantityAsync(product);
+            var totalStock = product.StockQuantity;
 
             await ApplyLowStockActivityAsync(product, totalStock);
 
@@ -1503,43 +1322,7 @@ public partial class ProductService : IProductService
                     await workflowMessageService.SendQuantityBelowVendorNotificationAsync(product, vendor, _localizationSettings.DefaultAdminLanguageId);
                 }
             }
-        }
-
-        if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStockByAttributes)
-        {
-            var combination = await _productAttributeParser.FindProductAttributeCombinationAsync(product, attributesXml);
-            if (combination != null)
-            {
-                combination.StockQuantity += quantityToChange;
-                await _productAttributeService.UpdateProductAttributeCombinationAsync(combination);
-
-                //quantity change history
-                await AddStockQuantityHistoryEntryAsync(product, quantityToChange, combination.StockQuantity, message: message, combinationId: combination.Id);
-
-                if (product.AllowAddingOnlyExistingAttributeCombinations)
-                {
-                    var totalStockByAllCombinations = await (await _productAttributeService.GetAllProductAttributeCombinationsAsync(product.Id))
-                        .ToAsyncEnumerable()
-                        .SumAsync(c => c.StockQuantity);
-
-                    await ApplyLowStockActivityAsync(product, totalStockByAllCombinations);
-                }
-
-                //send email notification
-                if (quantityToChange < 0 && combination.StockQuantity < combination.NotifyAdminForQuantityBelow)
-                {
-                    //do not inject IWorkflowMessageService via constructor because it'll cause circular references
-                    var workflowMessageService = EngineContext.Current.Resolve<IWorkflowMessageService>();
-                    await workflowMessageService.SendQuantityBelowStoreOwnerNotificationAsync(combination, _localizationSettings.DefaultAdminLanguageId);
-
-                    if (product.VendorId != 0)
-                    {
-                        var vendor = await _vendorService.GetVendorByIdAsync(product.VendorId);
-                        await workflowMessageService.SendQuantityBelowVendorNotificationAsync(combination, vendor, _localizationSettings.DefaultAdminLanguageId);
-                    }
-                }
-            }
-        }
+       
 
         //bundled products
         var attributeValues = await _productAttributeParser.ParseProductAttributeValuesAsync(attributesXml);
@@ -1555,83 +1338,6 @@ public partial class ProductService : IProductService
                 await AdjustInventoryAsync(associatedProduct, quantityToChange * attributeValue.Quantity, message);
             }
         }
-    }
-
-    /// <summary>
-    /// Book the reserved quantity
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
-    /// <param name="quantity">Quantity, must be negative</param>
-    /// <param name="message">Message for the stock quantity history</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task BookReservedInventoryAsync(Product product, int warehouseId, int quantity, string message = "")
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (quantity >= 0)
-            throw new ArgumentException("Value must be negative.", nameof(quantity));
-
-        //only products with "use multiple warehouses" are handled this way
-        if (product.ManageInventoryMethod != ManageInventoryMethod.ManageStock || !product.UseMultipleWarehouses)
-            return;
-
-        var pwi = await _productWarehouseInventoryRepository.Table
-
-            .FirstOrDefaultAsync(wi => wi.ProductId == product.Id && wi.WarehouseId == warehouseId);
-        if (pwi == null)
-            return;
-
-        pwi.ReservedQuantity = Math.Max(pwi.ReservedQuantity + quantity, 0);
-        pwi.StockQuantity += quantity;
-
-        await UpdateProductWarehouseInventoryAsync(pwi);
-
-        //quantity change history
-        await AddStockQuantityHistoryEntryAsync(product, quantity, pwi.StockQuantity, warehouseId, message);
-    }
-
-    /// <summary>
-    /// Reverse booked inventory (if acceptable)
-    /// </summary>
-    /// <param name="product">product</param>
-    /// <param name="shipmentItem">Shipment item</param>
-    /// <param name="message">Message for the stock quantity history</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the quantity reversed
-    /// </returns>
-    public virtual async Task<int> ReverseBookedInventoryAsync(Product product, ShipmentItem shipmentItem, string message = "")
-    {
-        ArgumentNullException.ThrowIfNull(product);
-        ArgumentNullException.ThrowIfNull(shipmentItem);
-
-        //only products with "use multiple warehouses" are handled this way
-        if (product.ManageInventoryMethod != ManageInventoryMethod.ManageStock || !product.UseMultipleWarehouses)
-            return 0;
-
-        var pwi = await _productWarehouseInventoryRepository.Table
-            .FirstOrDefaultAsync(wi => wi.ProductId == product.Id && wi.WarehouseId == shipmentItem.WarehouseId);
-        if (pwi == null)
-            return 0;
-
-        var shipment = await _shipmentRepository.GetByIdAsync(shipmentItem.ShipmentId, cache => default);
-
-        //not shipped yet? hence "BookReservedInventory" method was not invoked
-        if (!shipment.ShippedDateUtc.HasValue)
-            return 0;
-
-        var qty = shipmentItem.Quantity;
-
-        pwi.StockQuantity += qty;
-        pwi.ReservedQuantity += qty;
-
-        await UpdateProductWarehouseInventoryAsync(pwi);
-
-        //quantity change history
-        await AddStockQuantityHistoryEntryAsync(product, qty, pwi.StockQuantity, shipmentItem.WarehouseId, message);
-
-        return qty;
     }
 
     #endregion
@@ -2090,60 +1796,6 @@ public partial class ProductService : IProductService
 
     #endregion
 
-    #region Product warehouses
-
-    /// <summary>
-    /// Get a product warehouse-inventory records by product identifier
-    /// </summary>
-    /// <param name="productId">Product identifier</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<IList<ProductWarehouseInventory>> GetAllProductWarehouseInventoryRecordsAsync(int productId)
-    {
-        return await _productWarehouseInventoryRepository.GetAllAsync(query => query.Where(pwi => pwi.ProductId == productId));
-    }
-
-    /// <summary>
-    /// Deletes a record to manage product inventory per warehouse
-    /// </summary>
-    /// <param name="pwi">Record to manage product inventory per warehouse</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeleteProductWarehouseInventoryAsync(ProductWarehouseInventory pwi)
-    {
-        await _productWarehouseInventoryRepository.DeleteAsync(pwi);
-    }
-
-    /// <summary>
-    /// Inserts a record to manage product inventory per warehouse
-    /// </summary>
-    /// <param name="pwi">Record to manage product inventory per warehouse</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertProductWarehouseInventoryAsync(ProductWarehouseInventory pwi)
-    {
-        await _productWarehouseInventoryRepository.InsertAsync(pwi);
-    }
-
-    /// <summary>
-    /// Updates a record to manage product inventory per warehouse
-    /// </summary>
-    /// <param name="pwi">Record to manage product inventory per warehouse</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateProductWarehouseInventoryAsync(ProductWarehouseInventory pwi)
-    {
-        await _productWarehouseInventoryRepository.UpdateAsync(pwi);
-    }
-
-    /// <summary>
-    /// Updates a records to manage product inventory per warehouse
-    /// </summary>
-    /// <param name="pwis">Records to manage product inventory per warehouse</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateProductWarehouseInventoryAsync(IList<ProductWarehouseInventory> pwis)
-    {
-        await _productWarehouseInventoryRepository.UpdateAsync(pwis);
-    }
-
-    #endregion
-
     #region Stock quantity history
 
     /// <summary>
@@ -2152,12 +1804,10 @@ public partial class ProductService : IProductService
     /// <param name="product">Product</param>
     /// <param name="quantityAdjustment">Quantity adjustment</param>
     /// <param name="stockQuantity">Current stock quantity</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
     /// <param name="message">Message</param>
     /// <param name="combinationId">Product attribute combination identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddStockQuantityHistoryEntryAsync(Product product, int quantityAdjustment, int stockQuantity,
-        int warehouseId = 0, string message = "", int? combinationId = null)
+    public virtual async Task AddStockQuantityHistoryEntryAsync(Product product, int quantityAdjustment, int stockQuantity, string message = "", int? combinationId = null)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -2168,7 +1818,6 @@ public partial class ProductService : IProductService
         {
             ProductId = product.Id,
             CombinationId = combinationId,
-            WarehouseId = warehouseId > 0 ? (int?)warehouseId : null,
             QuantityAdjustment = quantityAdjustment,
             StockQuantity = stockQuantity,
             Message = message,
@@ -2182,7 +1831,6 @@ public partial class ProductService : IProductService
     /// Get the history of the product stock quantity changes
     /// </summary>
     /// <param name="product">Product</param>
-    /// <param name="warehouseId">Warehouse identifier; pass 0 to load all entries</param>
     /// <param name="combinationId">Product attribute combination identifier; pass 0 to load all entries</param>
     /// <param name="pageIndex">Page index</param>
     /// <param name="pageSize">Page size</param>
@@ -2190,15 +1838,12 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of stock quantity change entries
     /// </returns>
-    public virtual async Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, int warehouseId = 0, int combinationId = 0,
+    public virtual async Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, int combinationId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         ArgumentNullException.ThrowIfNull(product);
 
         var query = _stockQuantityHistoryRepository.Table.Where(historyEntry => historyEntry.ProductId == product.Id);
-
-        if (warehouseId > 0)
-            query = query.Where(historyEntry => historyEntry.WarehouseId == warehouseId);
 
         if (combinationId > 0)
             query = query.Where(historyEntry => historyEntry.CombinationId == combinationId);

@@ -230,7 +230,6 @@ public partial class InstallationService : IInstallationService
         await InstallBlogPostsAsync(sampleData.BlogPosts);
         await InstallNewsAsync(sampleData.NewsItems);
         await InstallPollsAsync(sampleData.Polls);
-        await InstallWarehousesAsync(sampleData.Warehouses);
         await InstallVendorsAsync(sampleData.Vendors);
         await InstallAffiliatesAsync(sampleData.Affiliates);
         await InstallOrdersAsync(sampleData.Orders);

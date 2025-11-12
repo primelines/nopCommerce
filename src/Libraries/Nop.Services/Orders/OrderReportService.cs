@@ -32,7 +32,6 @@ public partial class OrderReportService : IOrderReportService
     protected readonly IRepository<Product> _productRepository;
     protected readonly IRepository<ProductCategory> _productCategoryRepository;
     protected readonly IRepository<ProductManufacturer> _productManufacturerRepository;
-    protected readonly IRepository<ProductWarehouseInventory> _productWarehouseInventoryRepository;
     protected readonly IStoreMappingService _storeMappingService;
     protected readonly IWorkContext _workContext;
 
@@ -52,7 +51,6 @@ public partial class OrderReportService : IOrderReportService
         IRepository<Product> productRepository,
         IRepository<ProductCategory> productCategoryRepository,
         IRepository<ProductManufacturer> productManufacturerRepository,
-        IRepository<ProductWarehouseInventory> productWarehouseInventoryRepository,
         IStoreMappingService storeMappingService,
         IWorkContext workContext)
     {
@@ -67,7 +65,6 @@ public partial class OrderReportService : IOrderReportService
         _productRepository = productRepository;
         _productCategoryRepository = productCategoryRepository;
         _productManufacturerRepository = productManufacturerRepository;
-        _productWarehouseInventoryRepository = productWarehouseInventoryRepository;
         _storeMappingService = storeMappingService;
         _workContext = workContext;
     }
@@ -232,7 +229,6 @@ public partial class OrderReportService : IOrderReportService
     /// <param name="storeId">Store identifier; pass 0 to ignore this parameter</param>
     /// <param name="vendorId">Vendor identifier; pass 0 to ignore this parameter</param>
     /// <param name="productId">Product identifier which was purchased in an order; 0 to load all orders</param>
-    /// <param name="warehouseId">Warehouse identifier; pass 0 to ignore this parameter</param>
     /// <param name="billingCountryId">Billing country identifier; 0 to load all orders</param>
     /// <param name="orderId">Order identifier; pass 0 to ignore this parameter</param>
     /// <param name="paymentMethodSystemName">Payment method system name; null to load all records</param>
@@ -250,7 +246,7 @@ public partial class OrderReportService : IOrderReportService
     /// The task result contains the result
     /// </returns>
     public virtual async Task<OrderAverageReportLine> GetOrderAverageReportLineAsync(int storeId = 0,
-        int vendorId = 0, int productId = 0, int warehouseId = 0, int billingCountryId = 0,
+        int vendorId = 0, int productId = 0,  int billingCountryId = 0,
         int orderId = 0, string paymentMethodSystemName = null,
         List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
         DateTime? startTimeUtc = null, DateTime? endTimeUtc = null,
@@ -280,26 +276,6 @@ public partial class OrderReportService : IOrderReportService
             query = from o in query
                 join oi in _orderItemRepository.Table on o.Id equals oi.OrderId
                 where oi.ProductId == productId
-                select o;
-
-            query = query.Distinct();
-        }
-
-        if (warehouseId > 0)
-        {
-            var manageStockInventoryMethodId = (int)ManageInventoryMethod.ManageStock;
-
-            query = from o in query
-                join oi in _orderItemRepository.Table on o.Id equals oi.OrderId
-                join p in _productRepository.Table on oi.ProductId equals p.Id
-                join pwi in _productWarehouseInventoryRepository.Table on p.Id equals pwi.ProductId
-                where
-                    //"Use multiple warehouses" enabled
-                    //we search in each warehouse
-                    (p.ManageInventoryMethodId == manageStockInventoryMethodId && p.UseMultipleWarehouses && pwi.WarehouseId == warehouseId) ||
-                    //"Use multiple warehouses" disabled
-                    //we use standard "warehouse" property
-                    ((p.ManageInventoryMethodId != manageStockInventoryMethodId || !p.UseMultipleWarehouses) && p.WarehouseId == warehouseId)
                 select o;
 
             query = query.Distinct();
@@ -899,7 +875,6 @@ public partial class OrderReportService : IOrderReportService
     /// <param name="storeId">Store identifier; pass 0 to ignore this parameter</param>
     /// <param name="vendorId">Vendor identifier; pass 0 to ignore this parameter</param>
     /// <param name="productId">Product identifier which was purchased in an order; 0 to load all orders</param>
-    /// <param name="warehouseId">Warehouse identifier; pass 0 to ignore this parameter</param>
     /// <param name="orderId">Order identifier; pass 0 to ignore this parameter</param>
     /// <param name="billingCountryId">Billing country identifier; 0 to load all orders</param>
     /// <param name="paymentMethodSystemName">Payment method system name; null to load all records</param>
@@ -917,7 +892,7 @@ public partial class OrderReportService : IOrderReportService
     /// The task result contains the result
     /// </returns>
     public virtual async Task<decimal> ProfitReportAsync(int storeId = 0, int vendorId = 0, int productId = 0,
-        int warehouseId = 0, int billingCountryId = 0, int orderId = 0, string paymentMethodSystemName = null,
+        int billingCountryId = 0, int orderId = 0, string paymentMethodSystemName = null,
         List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
         DateTime? startTimeUtc = null, DateTime? endTimeUtc = null,
         string billingPhone = null, string billingEmail = null, string billingLastName = "", string orderNotes = null)
@@ -936,7 +911,6 @@ public partial class OrderReportService : IOrderReportService
         if (ssIds != null && ssIds.Any())
             orders = orders.Where(o => ssIds.Contains(o.ShippingStatusId));
 
-        var manageStockInventoryMethodId = (int)ManageInventoryMethod.ManageStock;
 
         var query = from orderItem in _orderItemRepository.Table
             join o in orders on orderItem.OrderId equals o.Id
@@ -951,21 +925,6 @@ public partial class OrderReportService : IOrderReportService
                   !o.Deleted &&
                   (vendorId == 0 || p.VendorId == vendorId) &&
                   (productId == 0 || orderItem.ProductId == productId) &&
-                  (warehouseId == 0 ||
-                   //"Use multiple warehouses" enabled
-                   //we search in each warehouse
-                   p.ManageInventoryMethodId == manageStockInventoryMethodId &&
-                   p.UseMultipleWarehouses &&
-                   _productWarehouseInventoryRepository.Table.Any(pwi =>
-                       pwi.ProductId == orderItem.ProductId && pwi.WarehouseId == warehouseId)
-                   ||
-                   //"Use multiple warehouses" disabled
-                   //we use standard "warehouse" property
-                   (p.ManageInventoryMethodId != manageStockInventoryMethodId ||
-                    !p.UseMultipleWarehouses) &&
-                   p.WarehouseId == warehouseId) &&
-                  //we do not ignore deleted products when calculating order reports
-                  //(!p.Deleted)
                   (dontSearchPhone || (!string.IsNullOrEmpty(oba.PhoneNumber) &&
                                        oba.PhoneNumber.Contains(billingPhone))) &&
                   (dontSearchEmail || (!string.IsNullOrEmpty(oba.Email) && oba.Email.Contains(billingEmail))) &&
@@ -981,7 +940,6 @@ public partial class OrderReportService : IOrderReportService
             storeId,
             vendorId,
             productId,
-            warehouseId,
             billingCountryId,
             orderId,
             paymentMethodSystemName,

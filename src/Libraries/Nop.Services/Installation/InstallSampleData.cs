@@ -1642,24 +1642,6 @@ public partial class InstallationService
     }
 
     /// <summary>
-    /// Installs a sample warehouses
-    /// </summary>
-    /// <param name="sampleWarehouses">Sample warehouses to install</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task InstallWarehousesAsync(IList<SampleWarehouse> sampleWarehouses)
-    {
-        var warehouses = await sampleWarehouses.ToDictionaryAwaitAsync(
-            async sw => await CreateAddressAsync(sw), sw => new ValueTask<SampleWarehouse>(Task.FromResult(sw)));
-
-        await _dataProvider.BulkInsertEntitiesAsync(warehouses.Keys);
-        await _dataProvider.BulkInsertEntitiesAsync(warehouses.Select(w => new Warehouse
-        {
-            AddressId = w.Key.Id,
-            Name = w.Value.Name
-        }));
-    }
-
-    /// <summary>
     /// Installs a sample vendors
     /// </summary>
     /// <param name="sampleVendors">Sample vendors to install</param>
@@ -1859,7 +1841,6 @@ public partial class InstallationService
             {
                 OrderItemId = items.First(i => i.Value.ProductName.Equals(si.ProductName)).Key.Id,
                 Quantity = si.Quantity,
-                WarehouseId = 0,
                 ShipmentId = s.Key.Id
             })));
 

@@ -84,7 +84,6 @@ public partial class ImportManager : IImportManager
     protected readonly ITaxCategoryService _taxCategoryService;
     protected readonly IUrlRecordService _urlRecordService;
     protected readonly IVendorService _vendorService;
-    protected readonly IWarehouseService _warehouseService;
     protected readonly IWorkContext _workContext;
     protected readonly MediaSettings _mediaSettings;
     protected readonly SecuritySettings _securitySettings;
@@ -133,7 +132,6 @@ public partial class ImportManager : IImportManager
         ITaxCategoryService taxCategoryService,
         IUrlRecordService urlRecordService,
         IVendorService vendorService,
-        IWarehouseService warehouseService,
         IWorkContext workContext,
         MediaSettings mediaSettings,
         SecuritySettings securitySettings,
@@ -177,7 +175,6 @@ public partial class ImportManager : IImportManager
         _taxCategoryService = taxCategoryService;
         _urlRecordService = urlRecordService;
         _vendorService = vendorService;
-        _warehouseService = warehouseService;
         _workContext = workContext;
         _mediaSettings = mediaSettings;
         _securitySettings = securitySettings;
@@ -1249,8 +1246,6 @@ public partial class ImportManager : IImportManager
                 .ToSelectList(p => (p as SpecificationAttribute)?.Name ?? string.Empty));
 
             manager.SetSelectList("GiftCardType", await GiftCardType.Virtual.ToSelectListAsync(useLocalization: false));
-            manager.SetSelectList("ManageInventoryMethod",
-                await ManageInventoryMethod.DontManageStock.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("LowStockActivity",
                 await LowStockActivity.Nothing.ToSelectListAsync(useLocalization: false));
             manager.SetSelectList("BackorderMode", await BackorderMode.NoBackorders.ToSelectListAsync(useLocalization: false));
@@ -2146,8 +2141,7 @@ public partial class ImportManager : IImportManager
 
             //some of previous values
             var previousStockQuantity = product.StockQuantity;
-            var previousWarehouseId = product.WarehouseId;
-            var prevTotalStockQuantity = await _productService.GetTotalStockQuantityAsync(product);
+            var prevTotalStockQuantity = product.StockQuantity;
 
             if (isNew)
                 product.CreatedOnUtc = DateTime.UtcNow;
@@ -2226,18 +2220,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "TaxCategory":
                         product.TaxCategoryId = property.IntValue;
-                        break;
-                    case "ManageInventoryMethod":
-                        product.ManageInventoryMethodId = property.IntValue;
-                        break;
-                    case "ProductAvailabilityRange":
-                        product.ProductAvailabilityRangeId = property.IntValue;
-                        break;
-                    case "UseMultipleWarehouses":
-                        product.UseMultipleWarehouses = property.BooleanValue;
-                        break;
-                    case "WarehouseId":
-                        product.WarehouseId = property.IntValue;
                         break;
                     case "StockQuantity":
                         product.StockQuantity = property.IntValue;
@@ -2342,43 +2324,27 @@ public partial class ImportManager : IImportManager
                 await _productService.UpdateProductAsync(product);
 
             //quantity change history
-            if (isNew || previousWarehouseId == product.WarehouseId)
+            if (isNew)
             {
                 await _productService.AddStockQuantityHistoryEntryAsync(product, product.StockQuantity - previousStockQuantity, product.StockQuantity,
-                    product.WarehouseId, await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.ImportProduct.Edit"));
+                    await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.ImportProduct.Edit"));
             }
             //warehouse is changed 
             else
             {
-                //compose a message
-                var oldWarehouseMessage = string.Empty;
-                if (previousWarehouseId > 0)
-                {
-                    var oldWarehouse = await _warehouseService.GetWarehouseByIdAsync(previousWarehouseId);
-                    if (oldWarehouse != null)
-                        oldWarehouseMessage = string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.EditWarehouse.Old"), oldWarehouse.Name);
-                }
 
-                var newWarehouseMessage = string.Empty;
-                if (product.WarehouseId > 0)
-                {
-                    var newWarehouse = await _warehouseService.GetWarehouseByIdAsync(product.WarehouseId);
-                    if (newWarehouse != null)
-                        newWarehouseMessage = string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.EditWarehouse.New"), newWarehouse.Name);
-                }
 
-                var message = string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.ImportProduct.EditWarehouse"), oldWarehouseMessage, newWarehouseMessage);
+                var message = string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.ImportProduct.EditWarehouse"));
 
                 //record history
-                await _productService.AddStockQuantityHistoryEntryAsync(product, -previousStockQuantity, 0, previousWarehouseId, message);
-                await _productService.AddStockQuantityHistoryEntryAsync(product, product.StockQuantity, product.StockQuantity, product.WarehouseId, message);
+                await _productService.AddStockQuantityHistoryEntryAsync(product, -previousStockQuantity, 0, message);
+                await _productService.AddStockQuantityHistoryEntryAsync(product, product.StockQuantity, product.StockQuantity, message);
             }
 
             if (!isNew &&
-                product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
                 product.BackorderMode == BackorderMode.NoBackorders &&
                 product.AllowBackInStockSubscriptions &&
-                await _productService.GetTotalStockQuantityAsync(product) > 0 &&
+                product.StockQuantity > 0 &&
                 prevTotalStockQuantity <= 0 &&
                 product.Published &&
                 !product.Deleted)

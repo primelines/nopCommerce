@@ -59,9 +59,6 @@ public partial record OrderSearchModel : BaseSearchModel
     [NopResourceDisplayName("Admin.Orders.List.Vendor")]
     public int VendorId { get; set; }
 
-    [NopResourceDisplayName("Admin.Orders.List.Warehouse")]
-    public int WarehouseId { get; set; }
-
     [NopResourceDisplayName("Admin.Orders.List.Product")]
     public int ProductId { get; set; }
 

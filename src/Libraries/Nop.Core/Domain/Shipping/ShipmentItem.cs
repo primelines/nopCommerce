@@ -20,8 +20,4 @@ public partial class ShipmentItem : BaseEntity
     /// </summary>
     public int Quantity { get; set; }
 
-    /// <summary>
-    /// Gets or sets the warehouse identifier
-    /// </summary>
-    public int WarehouseId { get; set; }
 }

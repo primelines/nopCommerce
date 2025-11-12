@@ -28,7 +28,6 @@ public partial class OrderService : IOrderService
     protected readonly IRepository<OrderItem> _orderItemRepository;
     protected readonly IRepository<OrderNote> _orderNoteRepository;
     protected readonly IRepository<Product> _productRepository;
-    protected readonly IRepository<ProductWarehouseInventory> _productWarehouseInventoryRepository;
     protected readonly IShipmentService _shipmentService;
     private static readonly char[] _separator = [';'];
 
@@ -44,7 +43,6 @@ public partial class OrderService : IOrderService
         IRepository<OrderItem> orderItemRepository,
         IRepository<OrderNote> orderNoteRepository,
         IRepository<Product> productRepository,
-        IRepository<ProductWarehouseInventory> productWarehouseInventoryRepository,
         IShipmentService shipmentService)
     {
         _htmlFormatter = htmlFormatter;
@@ -55,7 +53,6 @@ public partial class OrderService : IOrderService
         _orderItemRepository = orderItemRepository;
         _orderNoteRepository = orderNoteRepository;
         _productRepository = productRepository;
-        _productWarehouseInventoryRepository = productWarehouseInventoryRepository;
         _shipmentService = shipmentService;
     }
 
@@ -226,7 +223,6 @@ public partial class OrderService : IOrderService
     /// <param name="productId">Product identifier which was purchased in an order; 0 to load all orders</param>
     /// <param name="affiliateId">Affiliate identifier; 0 to load all orders</param>
     /// <param name="billingCountryId">Billing country identifier; 0 to load all orders</param>
-    /// <param name="warehouseId">Warehouse identifier, only orders with products from a specified warehouse will be loaded; 0 to load all orders</param>
     /// <param name="paymentMethodSystemName">Payment method system name; null to load all records</param>
     /// <param name="createdFromUtc">Created date from (UTC); null to load all records</param>
     /// <param name="createdToUtc">Created date to (UTC); null to load all records</param>
@@ -246,7 +242,7 @@ public partial class OrderService : IOrderService
     /// </returns>
     public virtual async Task<IPagedList<Order>> SearchOrdersAsync(int storeId = 0,
         int vendorId = 0, int customerId = 0,
-        int productId = 0, int affiliateId = 0, int warehouseId = 0,
+        int productId = 0, int affiliateId = 0,
         int billingCountryId = 0, string paymentMethodSystemName = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
@@ -277,27 +273,6 @@ public partial class OrderService : IOrderService
             query = from o in query
                 join oi in _orderItemRepository.Table on o.Id equals oi.OrderId
                 where oi.ProductId == productId
-                select o;
-
-            query = query.Distinct();
-        }
-
-        if (warehouseId > 0)
-        {
-            var manageStockInventoryMethodId = (int)ManageInventoryMethod.ManageStock;
-
-            query = from o in query
-                join oi in _orderItemRepository.Table on o.Id equals oi.OrderId
-                join p in _productRepository.Table on oi.ProductId equals p.Id
-                join pwi in _productWarehouseInventoryRepository.Table on p.Id equals pwi.ProductId into ps
-                from pwi in ps.DefaultIfEmpty()
-                where
-                    //"Use multiple warehouses" enabled
-                    //we search in each warehouse
-                    (p.ManageInventoryMethodId == manageStockInventoryMethodId && p.UseMultipleWarehouses && pwi.WarehouseId == warehouseId) ||
-                    //"Use multiple warehouses" disabled
-                    //we use standard "warehouse" property
-                    ((p.ManageInventoryMethodId != manageStockInventoryMethodId || !p.UseMultipleWarehouses) && p.WarehouseId == warehouseId)
                 select o;
 
             query = query.Distinct();

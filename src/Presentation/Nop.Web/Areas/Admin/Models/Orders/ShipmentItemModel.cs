@@ -8,15 +8,6 @@ namespace Nop.Web.Areas.Admin.Models.Orders;
 /// </summary>
 public partial record ShipmentItemModel : BaseNopEntityModel
 {
-    #region Ctor
-
-    public ShipmentItemModel()
-    {
-        AvailableWarehouses = new List<WarehouseInfo>();
-    }
-
-    #endregion
-
     #region Properties
 
     public int OrderItemId { get; set; }
@@ -53,21 +44,6 @@ public partial record ShipmentItemModel : BaseNopEntityModel
 
     public bool AllowToChooseWarehouse { get; set; }
 
-    //used before a shipment is created
-    public List<WarehouseInfo> AvailableWarehouses { get; set; }
-
     #endregion
 
-    #region Nested Classes
-
-    public partial record WarehouseInfo : BaseNopModel
-    {
-        public int WarehouseId { get; set; }
-        public string WarehouseName { get; set; }
-        public int StockQuantity { get; set; }
-        public int ReservedQuantity { get; set; }
-        public int PlannedQuantity { get; set; }
-    }
-
-    #endregion
 }

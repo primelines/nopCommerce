@@ -112,14 +112,12 @@ public class SchemaMigration : ForwardOnlyMigration
         Create.TableFor<SpecificationAttributeOption>();
         Create.TableFor<ProductSpecificationAttribute>();
         Create.TableFor<TierPrice>();
-        Create.TableFor<Warehouse>();
         Create.TableFor<DeliveryDate>();
         Create.TableFor<ProductAvailabilityRange>();
         Create.TableFor<Shipment>();
         Create.TableFor<ShipmentItem>();
         Create.TableFor<ShippingMethod>();
         Create.TableFor<ShippingMethodCountryMapping>();
-        Create.TableFor<ProductWarehouseInventory>();
         Create.TableFor<StockQuantityHistory>();
         Create.TableFor<Download>();
         Create.TableFor<Picture>();

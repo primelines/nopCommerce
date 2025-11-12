@@ -66,7 +66,6 @@ public partial class ShipmentService : IShipmentService
     /// Search shipments
     /// </summary>
     /// <param name="vendorId">Vendor identifier; 0 to load all records</param>
-    /// <param name="warehouseId">Warehouse identifier, only shipments with products from a specified warehouse will be loaded; 0 to load all orders</param>
     /// <param name="shippingCountryId">Shipping country identifier; 0 to load all records</param>
     /// <param name="shippingStateId">Shipping state identifier; 0 to load all records</param>
     /// <param name="shippingCounty">Shipping county; null to load all records</param>
@@ -84,7 +83,7 @@ public partial class ShipmentService : IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipments
     /// </returns>
-    public virtual async Task<IPagedList<Shipment>> GetAllShipmentsAsync(int vendorId = 0, int warehouseId = 0,
+    public virtual async Task<IPagedList<Shipment>> GetAllShipmentsAsync(int vendorId = 0, 
         int shippingCountryId = 0,
         int shippingStateId = 0,
         string shippingCounty = null,
@@ -175,16 +174,6 @@ public partial class ShipmentService : IShipmentService
                 query = from s in query
                     join si in _siRepository.Table on s.Id equals si.ShipmentId
                     where queryVendorOrderItems.Contains(si.OrderItemId)
-                    select s;
-
-                query = query.Distinct();
-            }
-
-            if (warehouseId > 0)
-            {
-                query = from s in query
-                    join si in _siRepository.Table on s.Id equals si.ShipmentId
-                    where si.WarehouseId == warehouseId
                     select s;
 
                 query = query.Distinct();
@@ -334,23 +323,17 @@ public partial class ShipmentService : IShipmentService
     /// Get quantity in shipments. For example, get planned quantity to be shipped
     /// </summary>
     /// <param name="product">Product</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
     /// <param name="ignoreShipped">Ignore already shipped shipments</param>
     /// <param name="ignoreDelivered">Ignore already delivered shipments</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the quantity
     /// </returns>
-    public virtual async Task<int> GetQuantityInShipmentsAsync(Product product, int warehouseId,
+    public virtual async Task<int> GetQuantityInShipmentsAsync(Product product, 
         bool ignoreShipped, bool ignoreDelivered)
     {
         ArgumentNullException.ThrowIfNull(product);
 
-        //only products with "use multiple warehouses" are handled this way
-        if (product.ManageInventoryMethod != ManageInventoryMethod.ManageStock)
-            return 0;
-        if (!product.UseMultipleWarehouses)
-            return 0;
 
         const int cancelledOrderStatusId = (int)OrderStatus.Cancelled;
 
@@ -364,8 +347,6 @@ public partial class ShipmentService : IShipmentService
 
         query = query.Distinct();
 
-        if (warehouseId > 0)
-            query = query.Where(si => si.WarehouseId == warehouseId);
         if (ignoreShipped)
         {
             query = from si in query

@@ -270,104 +270,71 @@ public partial class ShoppingCartService : IShoppingCartService
         var validateOutOfStock = shoppingCartType == ShoppingCartType.ShoppingCart || !_shoppingCartSettings.AllowOutOfStockItemsToBeAddedToWishlist;
         if (validateOutOfStock && !hasQtyWarnings)
         {
-            switch (product.ManageInventoryMethod)
+
+            if (product.BackorderMode == BackorderMode.NoBackorders)
             {
-                case ManageInventoryMethod.DontManageStock:
-                    //do nothing
-                    break;
-                case ManageInventoryMethod.ManageStock:
-                    if (product.BackorderMode == BackorderMode.NoBackorders)
+                var maximumQuantityCanBeAdded = product.StockQuantity;
+
+                warnings.AddRange(await GetQuantityProductWarningsAsync(product, quantity, maximumQuantityCanBeAdded));
+
+                if (warnings.Any())
+                    return warnings;
+
+                //validate product quantity with non combinable product attributes
+                var productAttributeMappings = await _productAttributeService.GetProductAttributeMappingsByProductIdAsync(product.Id);
+                if (productAttributeMappings?.Any() == true)
+                {
+                    var onlyCombinableAttributes = productAttributeMappings.All(mapping => !mapping.IsNonCombinable());
+                    if (!onlyCombinableAttributes)
                     {
-                        var maximumQuantityCanBeAdded = await _productService.GetTotalStockQuantityAsync(product);
+                        var cart = await GetShoppingCartAsync(customer, shoppingCartType, storeId);
+                        var totalAddedQuantity = cart
+                            .Where(item => item.ProductId == product.Id && item.Id != shoppingCartItemId)
+                            .Sum(product => product.Quantity);
 
-                        warnings.AddRange(await GetQuantityProductWarningsAsync(product, quantity, maximumQuantityCanBeAdded));
+                        totalAddedQuantity += quantity;
 
-                        if (warnings.Any())
-                            return warnings;
-
-                        //validate product quantity with non combinable product attributes
-                        var productAttributeMappings = await _productAttributeService.GetProductAttributeMappingsByProductIdAsync(product.Id);
-                        if (productAttributeMappings?.Any() == true)
+                        //counting a product into bundles
+                        foreach (var bundle in cart.Where(x => x.Id != shoppingCartItemId && !string.IsNullOrEmpty(x.AttributesXml)))
                         {
-                            var onlyCombinableAttributes = productAttributeMappings.All(mapping => !mapping.IsNonCombinable());
-                            if (!onlyCombinableAttributes)
+                            var attributeValues = await _productAttributeParser.ParseProductAttributeValuesAsync(bundle.AttributesXml);
+                            foreach (var attributeValue in attributeValues)
                             {
-                                var cart = await GetShoppingCartAsync(customer, shoppingCartType, storeId);
-                                var totalAddedQuantity = cart
-                                    .Where(item => item.ProductId == product.Id && item.Id != shoppingCartItemId)
-                                    .Sum(product => product.Quantity);
-
-                                totalAddedQuantity += quantity;
-
-                                //counting a product into bundles
-                                foreach (var bundle in cart.Where(x => x.Id != shoppingCartItemId && !string.IsNullOrEmpty(x.AttributesXml)))
-                                {
-                                    var attributeValues = await _productAttributeParser.ParseProductAttributeValuesAsync(bundle.AttributesXml);
-                                    foreach (var attributeValue in attributeValues)
-                                    {
-                                        if (attributeValue.AttributeValueType == AttributeValueType.AssociatedToProduct && attributeValue.AssociatedProductId == product.Id)
-                                            totalAddedQuantity += bundle.Quantity * attributeValue.Quantity;
-                                    }
-                                }
-
-                                warnings.AddRange(await GetQuantityProductWarningsAsync(product, totalAddedQuantity, maximumQuantityCanBeAdded));
+                                if (attributeValue.AttributeValueType == AttributeValueType.AssociatedToProduct && attributeValue.AssociatedProductId == product.Id)
+                                    totalAddedQuantity += bundle.Quantity * attributeValue.Quantity;
                             }
                         }
 
-                        if (warnings.Any())
-                            return warnings;
+                        warnings.AddRange(await GetQuantityProductWarningsAsync(product, totalAddedQuantity, maximumQuantityCanBeAdded));
+                    }
+                }
 
-                        //validate product quantity and product quantity into bundles
-                        if (string.IsNullOrEmpty(attributesXml))
+                if (warnings.Any())
+                    return warnings;
+
+                //validate product quantity and product quantity into bundles
+                if (string.IsNullOrEmpty(attributesXml))
+                {
+                    var cart = await GetShoppingCartAsync(customer, shoppingCartType, storeId);
+                    var totalQuantityInCart = cart.Where(item => item.ProductId == product.Id && item.Id != shoppingCartItemId && string.IsNullOrEmpty(item.AttributesXml))
+                        .Sum(product => product.Quantity);
+
+                    totalQuantityInCart += quantity;
+
+                    foreach (var bundle in cart.Where(x => x.Id != shoppingCartItemId && !string.IsNullOrEmpty(x.AttributesXml)))
+                    {
+                        var attributeValues = await _productAttributeParser.ParseProductAttributeValuesAsync(bundle.AttributesXml);
+                        foreach (var attributeValue in attributeValues)
                         {
-                            var cart = await GetShoppingCartAsync(customer, shoppingCartType, storeId);
-                            var totalQuantityInCart = cart.Where(item => item.ProductId == product.Id && item.Id != shoppingCartItemId && string.IsNullOrEmpty(item.AttributesXml))
-                                .Sum(product => product.Quantity);
-
-                            totalQuantityInCart += quantity;
-
-                            foreach (var bundle in cart.Where(x => x.Id != shoppingCartItemId && !string.IsNullOrEmpty(x.AttributesXml)))
-                            {
-                                var attributeValues = await _productAttributeParser.ParseProductAttributeValuesAsync(bundle.AttributesXml);
-                                foreach (var attributeValue in attributeValues)
-                                {
-                                    if (attributeValue.AttributeValueType == AttributeValueType.AssociatedToProduct && attributeValue.AssociatedProductId == product.Id)
-                                        totalQuantityInCart += bundle.Quantity * attributeValue.Quantity;
-                                }
-                            }
-
-                            warnings.AddRange(await GetQuantityProductWarningsAsync(product, totalQuantityInCart, maximumQuantityCanBeAdded));
+                            if (attributeValue.AttributeValueType == AttributeValueType.AssociatedToProduct && attributeValue.AssociatedProductId == product.Id)
+                                totalQuantityInCart += bundle.Quantity * attributeValue.Quantity;
                         }
                     }
 
-                    break;
-                case ManageInventoryMethod.ManageStockByAttributes:
-                    var combination = await _productAttributeParser.FindProductAttributeCombinationAsync(product, attributesXml);
-                    if (combination != null)
-                    {
-                        //combination exists
-                        //let's check stock level
-                        if (!combination.AllowOutOfStockOrders)
-                            warnings.AddRange(await GetQuantityProductWarningsAsync(product, quantity, combination.StockQuantity));
-                    }
-                    else
-                    {
-                        //combination doesn't exist
-                        if (product.AllowAddingOnlyExistingAttributeCombinations)
-                        {
-                            //maybe, is it better  to display something like "No such product/combination" message?
-                            var productAvailabilityRange = await _dateRangeService.GetProductAvailabilityRangeByIdAsync(product.ProductAvailabilityRangeId);
-                            var warning = productAvailabilityRange == null ? await _localizationService.GetResourceAsync("ShoppingCart.OutOfStock")
-                                : string.Format(await _localizationService.GetResourceAsync("ShoppingCart.AvailabilityRange"),
-                                    await _localizationService.GetLocalizedAsync(productAvailabilityRange, range => range.Name));
-                            warnings.Add(warning);
-                        }
-                    }
-
-                    break;
-                default:
-                    break;
+                    warnings.AddRange(await GetQuantityProductWarningsAsync(product, totalQuantityInCart, maximumQuantityCanBeAdded));
+                }
             }
+
         }
 
         //availability dates

@@ -41,7 +41,6 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// </summary>
     /// <param name="shippingMethodId">Shipping method identifier</param>
     /// <param name="storeId">Store identifier</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
     /// <param name="countryId">Country identifier</param>
     /// <param name="stateProvinceId">State identifier</param>
     /// <param name="zip">Zip postal code</param>
@@ -51,7 +50,6 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// </returns>
     private async Task<IList<ShippingByWeightByTotalRecord>> GetRecordsAsync(int shippingMethodId,
         int storeId,
-        int warehouseId,
         int countryId,
         int stateProvinceId,
         string zip)
@@ -72,10 +70,6 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
                 ? data
                 : data.Where(r => r.StoreId == storeId || r.StoreId == 0);
 
-            //filter by warehouse
-            data = warehouseId == 0
-                ? data
-                : data.Where(r => r.WarehouseId == warehouseId || r.WarehouseId == 0);
 
             //filter by country
             data = countryId == 0
@@ -103,7 +97,7 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
                 .ThenBy(sbw => sbw.OrderSubtotalFrom);
 
             return data;
-        }), FixedByWeightByTotalDefaults.ShippingByWeightByTotalCacheKey, shippingMethodId, storeId, warehouseId, countryId, stateProvinceId, zip);
+        }), FixedByWeightByTotalDefaults.ShippingByWeightByTotalCacheKey, shippingMethodId, storeId, countryId, stateProvinceId, zip);
 
         return rez;
     }
@@ -117,7 +111,6 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// </summary>
     /// <param name="shippingMethodId">Shipping method identifier</param>
     /// <param name="storeId">Store identifier</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
     /// <param name="countryId">Country identifier</param>
     /// <param name="stateProvinceId">State identifier</param>
     /// <param name="zip">Zip postal code</param>
@@ -129,12 +122,12 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of the shipping by weight record
     /// </returns>
-    public virtual async Task<IPagedList<ShippingByWeightByTotalRecord>> FindRecordsAsync(int shippingMethodId, int storeId, int warehouseId,
+    public virtual async Task<IPagedList<ShippingByWeightByTotalRecord>> FindRecordsAsync(int shippingMethodId, int storeId, 
         int countryId, int stateProvinceId, string zip, decimal? weight, decimal? orderSubtotal, int pageIndex, int pageSize)
     {
         //filter by weight
         var existingRates =
-            (await GetRecordsAsync(shippingMethodId, storeId, warehouseId, countryId, stateProvinceId, zip))
+            (await GetRecordsAsync(shippingMethodId, storeId, countryId, stateProvinceId, zip))
             .Where(sbw => !weight.HasValue || weight >= sbw.WeightFrom && weight <= sbw.WeightTo);
 
         //filter by order subtotal
@@ -144,7 +137,6 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
         //sort from particular to general, more particular cases will be the first
         existingRates = existingRates
             .OrderBy(r => r.StoreId == 0)
-            .ThenBy(r => r.WarehouseId == 0)
             .ThenBy(r => r.CountryId == 0)
             .ThenBy(r => r.StateProvinceId == 0)
             .ThenBy(r => string.IsNullOrEmpty(r.Zip));
@@ -159,7 +151,6 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// </summary>
     /// <param name="shippingMethodId">Shipping method identifier</param>
     /// <param name="storeId">Store identifier</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
     /// <param name="countryId">Country identifier</param>
     /// <param name="stateProvinceId">State identifier</param>
     /// <param name="zip">Zip postal code</param>
@@ -169,10 +160,10 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping by weight record
     /// </returns>
-    public virtual async Task<ShippingByWeightByTotalRecord> FindRecordsAsync(int shippingMethodId, int storeId, int warehouseId,
+    public virtual async Task<ShippingByWeightByTotalRecord> FindRecordsAsync(int shippingMethodId, int storeId, 
         int countryId, int stateProvinceId, string zip, decimal weight, decimal orderSubtotal)
     {
-        var foundRecords = await FindRecordsAsync(shippingMethodId, storeId, warehouseId, countryId, stateProvinceId, zip, weight, orderSubtotal, 0, int.MaxValue);
+        var foundRecords = await FindRecordsAsync(shippingMethodId, storeId, countryId, stateProvinceId, zip, weight, orderSubtotal, 0, int.MaxValue);
 
         return foundRecords.FirstOrDefault();
     }

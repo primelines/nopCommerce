@@ -190,9 +190,7 @@ public class Indexes : ForwardOnlyMigration
         Create.Index("IX_GetLowStockProducts").OnTable(nameof(Product))
             .OnColumn(nameof(Product.Deleted)).Ascending()
             .OnColumn(nameof(Product.VendorId)).Ascending()
-            .OnColumn(nameof(Product.ManageInventoryMethodId)).Ascending()
             .OnColumn(nameof(Product.MinStockQuantity)).Ascending()
-            .OnColumn(nameof(Product.UseMultipleWarehouses)).Ascending()
             .WithOptions().NonClustered();
 
         Create.Index("IX_GenericAttribute_EntityId_and_KeyGroup").OnTable(nameof(GenericAttribute))

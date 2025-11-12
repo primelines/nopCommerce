@@ -463,31 +463,6 @@ public partial class CopyProductService : ICopyProductService
     }
 
     /// <summary>
-    /// Copy warehouse mapping
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="productCopy">New product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task CopyWarehousesMappingAsync(Product product, Product productCopy)
-    {
-        foreach (var pwi in await _productService.GetAllProductWarehouseInventoryRecordsAsync(product.Id))
-        {
-            await _productService.InsertProductWarehouseInventoryAsync(
-                new ProductWarehouseInventory
-                {
-                    ProductId = productCopy.Id,
-                    WarehouseId = pwi.WarehouseId,
-                    StockQuantity = pwi.StockQuantity,
-                    ReservedQuantity = 0
-                });
-
-            //quantity change history
-            var message = $"{await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.MultipleWarehouses")} {string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.CopyProduct"), product.Id)}";
-            await _productService.AddStockQuantityHistoryEntryAsync(productCopy, pwi.StockQuantity, pwi.StockQuantity, pwi.WarehouseId, message);
-        }
-    }
-
-    /// <summary>
     /// Copy product pictures
     /// </summary>
     /// <param name="product">Product</param>
@@ -636,10 +611,7 @@ public partial class CopyProductService : ICopyProductService
             DeliveryDateId = product.DeliveryDateId,
             IsTaxExempt = product.IsTaxExempt,
             TaxCategoryId = product.TaxCategoryId,
-            ManageInventoryMethod = product.ManageInventoryMethod,
             ProductAvailabilityRangeId = product.ProductAvailabilityRangeId,
-            UseMultipleWarehouses = product.UseMultipleWarehouses,
-            WarehouseId = product.WarehouseId,
             StockQuantity = product.StockQuantity,
             DisplayStockAvailability = product.DisplayStockAvailability,
             DisplayStockQuantity = product.DisplayStockQuantity,
@@ -722,14 +694,12 @@ public partial class CopyProductService : ICopyProductService
         await CopyProductVideosAsync(product, copyMultimedia, productCopy);
 
         //quantity change history
-        await _productService.AddStockQuantityHistoryEntryAsync(productCopy, product.StockQuantity, product.StockQuantity, product.WarehouseId,
+        await _productService.AddStockQuantityHistoryEntryAsync(productCopy, product.StockQuantity, product.StockQuantity, 
             string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.CopyProduct"), product.Id));
 
         //product specifications
         await CopyProductSpecificationsAsync(product, productCopy);
 
-        //product <-> warehouses mappings
-        await CopyWarehousesMappingAsync(product, productCopy);
         //product <-> categories mappings
         await CopyCategoriesMappingAsync(product, productCopy);
         //product <-> manufacturers mappings

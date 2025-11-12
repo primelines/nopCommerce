@@ -15,9 +15,6 @@ public partial record LowStockProductModel : BaseNopEntityModel
 
     public string Attributes { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ManageInventoryMethod")]
-    public string ManageInventoryMethod { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.StockQuantity")]
     public int StockQuantity { get; set; }
 

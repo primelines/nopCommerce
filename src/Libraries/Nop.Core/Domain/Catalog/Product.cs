@@ -158,24 +158,9 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int TaxCategoryId { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating how to manage inventory
-    /// </summary>
-    public int ManageInventoryMethodId { get; set; }
-
-    /// <summary>
     /// Gets or sets a product availability range identifier
     /// </summary>
     public int ProductAvailabilityRangeId { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether multiple warehouses are used for this product
-    /// </summary>
-    public bool UseMultipleWarehouses { get; set; }
-
-    /// <summary>
-    /// Gets or sets a warehouse identifier
-    /// </summary>
-    public int WarehouseId { get; set; }
 
     /// <summary>
     /// Gets or sets the stock quantity
@@ -369,14 +354,4 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
         get => (LowStockActivity)LowStockActivityId;
         set => LowStockActivityId = (int)value;
     }
-
-    /// <summary>
-    /// Gets or sets the value indicating how to manage inventory
-    /// </summary>
-    public ManageInventoryMethod ManageInventoryMethod
-    {
-        get => (ManageInventoryMethod)ManageInventoryMethodId;
-        set => ManageInventoryMethodId = (int)value;
-    }
-
 }

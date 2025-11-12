@@ -87,7 +87,6 @@ public partial interface IOrderService
     /// <param name="productId">Product identifier which was purchased in an order; 0 to load all orders</param>
     /// <param name="affiliateId">Affiliate identifier; 0 to load all orders</param>
     /// <param name="billingCountryId">Billing country identifier; 0 to load all orders</param>
-    /// <param name="warehouseId">Warehouse identifier, only orders with products from a specified warehouse will be loaded; 0 to load all orders</param>
     /// <param name="paymentMethodSystemName">Payment method system name; null to load all records</param>
     /// <param name="createdFromUtc">Created date from (UTC); null to load all records</param>
     /// <param name="createdToUtc">Created date to (UTC); null to load all records</param>
@@ -107,7 +106,7 @@ public partial interface IOrderService
     /// </returns>
     Task<IPagedList<Order>> SearchOrdersAsync(int storeId = 0,
         int vendorId = 0, int customerId = 0,
-        int productId = 0, int affiliateId = 0, int warehouseId = 0,
+        int productId = 0, int affiliateId = 0,
         int billingCountryId = 0, string paymentMethodSystemName = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,

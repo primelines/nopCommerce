@@ -7,10 +7,6 @@
     ViewBag.PageTitle = string.Format(T("Admin.Orders.Shipments.AddNew.Title").Text, Model.CustomOrderNumber);
     //active menu item (system name)
     NopHtml.SetActiveMenuItemSystemName("Orders");
-
-    var itemsFromMultipleWarehouses = Model.Items
-        .Where(x => x.AllowToChooseWarehouse && x.AvailableWarehouses.Count > 0)
-        .ToList();
 }
 
 <form asp-controller="Order" asp-action="AddShipment" method="post">
@@ -105,56 +101,6 @@
                             }
                         </div>
                         <script>
-                            $(function() {
-                                $("#shipment-save").on("focus", function () {
-                                    if (validateWarehouseAvailability("save")) {
-                                        $("#shipment-save-action-confirmation").remove();
-                                        $(this).attr("name", "save").attr("type", "submit");
-                                    }
-                                });
-
-                                $("#shipment-save-continue").on("focus", function () {
-                                    if (validateWarehouseAvailability("continue")) {
-                                        $("#shipment-save-continue-action-confirmation").remove();
-                                        $(this).attr("name", "save-continue").attr("type", "submit");
-                                    }
-                                });
-                            });
-
-                            function validateWarehouseAvailability(action) {
-                                @{
-                                    var sb = new StringBuilder();
-                                    var count = itemsFromMultipleWarehouses.Count;
-                                    if (count == 0)
-                                    {
-                                        sb.Append("true");
-                                    }
-                                    else
-                                    {
-                                        for (var i = 0; i <= count - 1; i++)
-                                        {
-                                            var item = itemsFromMultipleWarehouses[i];
-                                            sb.AppendFormat("validateAvailableQuantity('{0}')", item.OrderItemId);
-                                            if (i != count - 1)
-                                            {
-                                                sb.Append(" && ");
-                                            }
-                                        }
-                                    }
-                                }
-                                var valid = @(Html.Raw(sb.ToString()));
-                                if (!valid) {
-                                    if (action === "save") {
-                                        $('#shipment-save-action-confirmation').modal('toggle');
-                                    }
-                                    if (action === "continue") {
-                                        $('#shipment-save-continue-action-confirmation').modal('toggle');
-                                    }
-                                    return false;
-                                }
-                                return true;
-                            }
-
                             function validateAvailableQuantity(orderItemId) {
                                 var enteredValue = parseInt($('#qtyToAdd' + orderItemId).val(), 10);
                                 if (enteredValue <= 0)
@@ -235,34 +181,6 @@
                                             </td>
                                             <td style="width: 10%;" class="text-center">
                                                 @item.Sku
-                                            </td>
-                                            <td style="width: 15%;" class="text-center">
-                                                @if (item.AllowToChooseWarehouse)
-                                                {
-                                                    if (item.AvailableWarehouses.Count > 0)
-                                                    {
-                                                        <select name="warehouse_@(item.OrderItemId)" id="warehouse_@(item.OrderItemId)" class="form-control">
-                                                            @foreach (var warehouse in item.AvailableWarehouses)
-                                                            {
-                                                                <option value="@warehouse.WarehouseId" data-stock-qty="@warehouse.StockQuantity" data-reserved-qty="@warehouse.ReservedQuantity" data-planned-qty="@warehouse.PlannedQuantity">
-                                                                    @T("Admin.Orders.Shipments.Products.Warehouse.ChooseQty", warehouse.WarehouseName, warehouse.StockQuantity, warehouse.ReservedQuantity, warehouse.PlannedQuantity)
-                                                                </option>
-                                                            }
-                                                        </select>
-                                                    }
-                                                    else
-                                                    {
-                                                        @T("Admin.Orders.Shipments.Products.Warehouse.NotAvailabe")
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    //display warehouses
-                                                    foreach (var warehouse in item.AvailableWarehouses)
-                                                    {
-                                                        <div>@warehouse.WarehouseName</div>
-                                                    }
-                                                }
                                             </td>
                                             <td style="width: 10%;" class="text-center">
                                                 @item.ItemWeight

@@ -13,7 +13,6 @@ public interface IShippingByWeightByTotalService
     /// </summary>
     /// <param name="shippingMethodId">Shipping method identifier</param>
     /// <param name="storeId">Store identifier</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
     /// <param name="countryId">Country identifier</param>
     /// <param name="stateProvinceId">State identifier</param>
     /// <param name="zip">Zip postal code</param>
@@ -23,7 +22,7 @@ public interface IShippingByWeightByTotalService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping by weight record
     /// </returns>
-    Task<ShippingByWeightByTotalRecord> FindRecordsAsync(int shippingMethodId, int storeId, int warehouseId,
+    Task<ShippingByWeightByTotalRecord> FindRecordsAsync(int shippingMethodId, int storeId, 
         int countryId, int stateProvinceId, string zip, decimal weight, decimal orderSubtotal);
 
     /// <summary>
@@ -31,7 +30,6 @@ public interface IShippingByWeightByTotalService
     /// </summary>
     /// <param name="shippingMethodId">Shipping method identifier</param>
     /// <param name="storeId">Store identifier</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
     /// <param name="countryId">Country identifier</param>
     /// <param name="stateProvinceId">State identifier</param>
     /// <param name="zip">Zip postal code</param>
@@ -43,7 +41,7 @@ public interface IShippingByWeightByTotalService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of the shipping by weight record
     /// </returns>
-    Task<IPagedList<ShippingByWeightByTotalRecord>> FindRecordsAsync(int shippingMethodId, int storeId, int warehouseId,
+    Task<IPagedList<ShippingByWeightByTotalRecord>> FindRecordsAsync(int shippingMethodId, int storeId, 
         int countryId, int stateProvinceId, string zip, decimal? weight, decimal? orderSubtotal, int pageIndex, int pageSize);
 
     /// <summary>

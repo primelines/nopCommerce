@@ -21,11 +21,6 @@ public record ShippingByWeightByTotalModel : BaseNopEntityModel
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Store")]
     public string StoreName { get; set; }
 
-    [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Warehouse")]
-    public int WarehouseId { get; set; }
-    [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Warehouse")]
-    public string WarehouseName { get; set; }
-
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Country")]
     public int CountryId { get; set; }
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Country")]

@@ -49,12 +49,6 @@ public partial class ShippingSettings : ISettings
     public string GoogleMapsApiKey { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the system should use warehouse location when requesting shipping rates
-    /// This is useful when you ship from multiple warehouses
-    /// </summary>
-    public bool UseWarehouseLocation { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether customers should be notified when shipping is made from multiple locations (warehouses)
     /// </summary>
     public bool NotifyCustomerAboutShippingFromMultipleLocations { get; set; }

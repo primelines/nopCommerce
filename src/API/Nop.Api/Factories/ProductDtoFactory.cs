@@ -1319,8 +1319,7 @@ public partial class ProductDtoFactory : IProductDtoFactory
             ManufacturerPartNumber = product.ManufacturerPartNumber,
             ShowGtin = _catalogSettings.ShowGtin,
             Gtin = product.Gtin,
-            ManageInventoryMethod = product.ManageInventoryMethod,
-            StockAvailability = await _productService.FormatStockMessageAsync(product, string.Empty),
+            StockAvailability = await _productService.FormatStockMessageAsync(product),
             DisplayDiscontinuedMessage = !product.Published && _catalogSettings.DisplayDiscontinuedMessageForUnpublishedProducts,
             AvailableEndDate = product.AvailableEndDateTimeUtc,
             AllowAddingOnlyExistingAttributeCombinations = product.AllowAddingOnlyExistingAttributeCombinations,
@@ -1385,25 +1384,11 @@ public partial class ProductDtoFactory : IProductDtoFactory
             model.PageShareCode = shareCode;
         }
 
-        switch (product.ManageInventoryMethod)
-        {
-            case ManageInventoryMethod.DontManageStock:
-                model.InStock = true;
-                break;
+  
+        model.InStock = product.BackorderMode != BackorderMode.NoBackorders
+                        || product.StockQuantity > 0;
+        model.DisplayBackInStockSubscription = !model.InStock && product.AllowBackInStockSubscriptions;
 
-            case ManageInventoryMethod.ManageStock:
-                model.InStock = product.BackorderMode != BackorderMode.NoBackorders
-                                || await _productService.GetTotalStockQuantityAsync(product) > 0;
-                model.DisplayBackInStockSubscription = !model.InStock && product.AllowBackInStockSubscriptions;
-                break;
-
-            case ManageInventoryMethod.ManageStockByAttributes:
-                model.InStock = (await _productAttributeService
-                                    .GetAllProductAttributeCombinationsAsync(product.Id))
-                                ?.Any(c => c.StockQuantity > 0 || c.AllowOutOfStockOrders)
-                                ?? false;
-                break;
-        }
 
         //breadcrumb
         //do not prepare this model for the associated products. anyway it's not used

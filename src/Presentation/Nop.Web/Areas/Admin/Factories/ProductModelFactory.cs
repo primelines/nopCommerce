@@ -77,7 +77,6 @@ public partial class ProductModelFactory : IProductModelFactory
     protected readonly IStoreService _storeService;
     protected readonly IUrlRecordService _urlRecordService;
     protected readonly IVideoService _videoService;
-    protected readonly IWarehouseService _warehouseService;
     protected readonly IWorkContext _workContext;
     protected readonly MeasureSettings _measureSettings;
     protected readonly NopHttpClient _nopHttpClient;
@@ -123,7 +122,6 @@ public partial class ProductModelFactory : IProductModelFactory
         IStoreService storeService,
         IUrlRecordService urlRecordService,
         IVideoService videoService,
-        IWarehouseService warehouseService,
         IWorkContext workContext,
         MeasureSettings measureSettings,
         NopHttpClient nopHttpClient,
@@ -165,7 +163,6 @@ public partial class ProductModelFactory : IProductModelFactory
         _storeService = storeService;
         _urlRecordService = urlRecordService;
         _videoService = videoService;
-        _warehouseService = warehouseService;
         _workContext = workContext;
         _measureSettings = measureSettings;
         _nopHttpClient = nopHttpClient;
@@ -211,40 +208,6 @@ public partial class ProductModelFactory : IProductModelFactory
         model.CopyMultimedia = true;
 
         return model;
-    }
-
-    /// <summary>
-    /// Prepare product warehouse inventory models
-    /// </summary>
-    /// <param name="models">List of product warehouse inventory models</param>
-    /// <param name="product">Product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task PrepareProductWarehouseInventoryModelsAsync(IList<ProductWarehouseInventoryModel> models, Product product)
-    {
-        ArgumentNullException.ThrowIfNull(models);
-
-        foreach (var warehouse in await _warehouseService.GetAllWarehousesAsync())
-        {
-            var model = new ProductWarehouseInventoryModel
-            {
-                WarehouseId = warehouse.Id,
-                WarehouseName = warehouse.Name
-            };
-
-            if (product != null)
-            {
-                var productWarehouseInventory = (await _productService.GetAllProductWarehouseInventoryRecordsAsync(product.Id))?.FirstOrDefault(inventory => inventory.WarehouseId == warehouse.Id);
-                if (productWarehouseInventory != null)
-                {
-                    model.WarehouseUsed = true;
-                    model.StockQuantity = productWarehouseInventory.StockQuantity;
-                    model.ReservedQuantity = productWarehouseInventory.ReservedQuantity;
-                    model.PlannedQuantity = await _shipmentService.GetQuantityInShipmentsAsync(product, productWarehouseInventory.WarehouseId, true, true);
-                }
-            }
-
-            models.Add(model);
-        }
     }
 
     /// <summary>
@@ -548,9 +511,6 @@ public partial class ProductModelFactory : IProductModelFactory
 
         searchModel.ProductId = product.Id;
 
-        //prepare available warehouses
-        await _baseAdminModelFactory.PrepareWarehousesAsync(searchModel.AvailableWarehouses);
-
         //prepare page parameters
         searchModel.SetGridPageSize();
 
@@ -702,9 +662,6 @@ public partial class ProductModelFactory : IProductModelFactory
         //prepare available vendors
         await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
 
-        //prepare available warehouses
-        await _baseAdminModelFactory.PrepareWarehousesAsync(searchModel.AvailableWarehouses);
-
         searchModel.HideStoresList = _catalogSettings.IgnoreStoreLimitations || searchModel.AvailableStores.SelectionIsNotPossible();
 
         //prepare "published" filter (0 - all; 1 - published only; 2 - unpublished only)
@@ -760,7 +717,6 @@ public partial class ProductModelFactory : IProductModelFactory
             manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
-            warehouseId: searchModel.SearchWarehouseId,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize,
             overridePublished: overridePublished);
@@ -787,8 +743,7 @@ public partial class ProductModelFactory : IProductModelFactory
                 productModel.SeName = await _urlRecordService.GetSeNameAsync(product, 0, true, false);
                 var defaultProductPicture = (await _pictureService.GetPicturesByProductIdAsync(product.Id, 1)).FirstOrDefault();
                 (productModel.PictureThumbnailUrl, _) = await _pictureService.GetPictureUrlAsync(defaultProductPicture, 75);
-                if ( product.ManageInventoryMethod == ManageInventoryMethod.ManageStock)
-                    productModel.StockQuantityStr = (await _productService.GetTotalStockQuantityAsync(product)).ToString();
+                productModel.StockQuantityStr = (product.StockQuantity).ToString();
 
                 return productModel;
             });
@@ -914,11 +869,6 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //prepare available tax categories
         await _baseAdminModelFactory.PrepareTaxCategoriesAsync(model.AvailableTaxCategories);
-
-        //prepare available warehouses
-        await _baseAdminModelFactory.PrepareWarehousesAsync(model.AvailableWarehouses,
-            defaultItemText: await _localizationService.GetResourceAsync("Admin.Catalog.Products.Fields.Warehouse.None"));
-        await PrepareProductWarehouseInventoryModelsAsync(model.ProductWarehouseInventoryModels, product);
 
         //prepare model categories
         await _baseAdminModelFactory.PrepareCategoriesAsync(model.AvailableCategories, false);
@@ -1799,7 +1749,6 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //get stock quantity history
         var stockQuantityHistory = await _productService.GetStockQuantityHistoryAsync(product: product,
-            warehouseId: searchModel.WarehouseId,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
         var currentCustomer = await _workContext.GetCurrentCustomerAsync();
@@ -1825,9 +1774,7 @@ public partial class ProductModelFactory : IProductModelFactory
                         .FormatAttributesAsync(product, combination.AttributesXml, currentCustomer, currentStore, renderGiftCardAttributes: false);
                 }
 
-                stockQuantityHistoryModel.WarehouseName = historyEntry.WarehouseId.HasValue
-                    ? (await _warehouseService.GetWarehouseByIdAsync(historyEntry.WarehouseId.Value))?.Name ?? "Deleted"
-                    : await _localizationService.GetResourceAsync("Admin.Catalog.Products.Fields.Warehouse.None");
+                stockQuantityHistoryModel.WarehouseName =  await _localizationService.GetResourceAsync("Admin.Catalog.Products.Fields.Warehouse.None");
 
                 return stockQuantityHistoryModel;
             });

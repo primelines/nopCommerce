@@ -17,14 +17,10 @@ public record ConfigurationModel : BaseSearchModel
         AvailableStates = new List<SelectListItem>();
         AvailableShippingMethods = new List<SelectListItem>();
         AvailableStores = new List<SelectListItem>();
-        AvailableWarehouses = new List<SelectListItem>();
     }
 
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Store")]
     public int SearchStoreId { get; set; }
-
-    [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Warehouse")]
-    public int SearchWarehouseId { get; set; }
 
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Country")]
     public int SearchCountryId { get; set; }
@@ -42,5 +38,4 @@ public record ConfigurationModel : BaseSearchModel
     public IList<SelectListItem> AvailableStates { get; set; }
     public IList<SelectListItem> AvailableShippingMethods { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
-    public IList<SelectListItem> AvailableWarehouses { get; set; }
 }

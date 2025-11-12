@@ -1354,7 +1354,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
         tokens.Add(new Token("Product.Name", await _localizationService.GetLocalizedAsync(product, x => x.Name, languageId)));
         tokens.Add(new Token("Product.ShortDescription", await _localizationService.GetLocalizedAsync(product, x => x.ShortDescription, languageId), true));
         tokens.Add(new Token("Product.SKU", product.Sku));
-        tokens.Add(new Token("Product.StockQuantity", await _productService.GetTotalStockQuantityAsync(product)));
+        tokens.Add(new Token("Product.StockQuantity", product.StockQuantity));
 
         var seName = await _urlRecordService.GetSeNameAsync(product);
         var productUrl = await RouteUrlAsync(routeName: "ProductDetails", routeValues: new { SeName = seName });

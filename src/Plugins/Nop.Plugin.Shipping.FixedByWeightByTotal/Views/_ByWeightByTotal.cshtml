@@ -66,14 +66,6 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-4">
-                                        <nop-label asp-for="SearchWarehouseId" />
-                                    </div>
-                                    <div class="col-md-8">
-                                        <nop-select asp-for="SearchWarehouseId" asp-items="Model.AvailableWarehouses" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
                                         <nop-label asp-for="SearchShippingMethodId" />
                                     </div>
                                     <div class="col-md-8">
@@ -136,7 +128,6 @@
                         Filters = new List<FilterParameter>
                         {
                             new FilterParameter(nameof(Model.SearchStoreId)),
-                            new FilterParameter(nameof(Model.SearchWarehouseId)),
                             new FilterParameter(nameof(Model.SearchCountryId)),
                             new FilterParameter(nameof(Model.SearchStateProvinceId)),
                             new FilterParameter(nameof(Model.SearchZip)),
@@ -149,11 +140,6 @@
                                 Title = T("Plugins.Shipping.FixedByWeightByTotal.Fields.Store").Text,
                                 Width = "200",
                                 Visible = stores.Count > 1
-                            },
-                            new ColumnProperty(nameof(ShippingByWeightByTotalModel.WarehouseName))
-                            {
-                                Title = T("Plugins.Shipping.FixedByWeightByTotal.Fields.Warehouse").Text,
-                                Width = "200"
                             },
                             new ColumnProperty(nameof(ShippingByWeightByTotalModel.CountryName))
                             {

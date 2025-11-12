@@ -137,38 +137,6 @@ public partial interface IShippingModelFactory
         ProductAvailabilityRange productAvailabilityRange, bool excludeProperties = false);
 
     /// <summary>
-    /// Prepare warehouse search model
-    /// </summary>
-    /// <param name="searchModel">Warehouse search model</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the warehouse search model
-    /// </returns>
-    Task<WarehouseSearchModel> PrepareWarehouseSearchModelAsync(WarehouseSearchModel searchModel);
-
-    /// <summary>
-    /// Prepare paged warehouse list model
-    /// </summary>
-    /// <param name="searchModel">Warehouse search model</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the warehouse list model
-    /// </returns>
-    Task<WarehouseListModel> PrepareWarehouseListModelAsync(WarehouseSearchModel searchModel);
-
-    /// <summary>
-    /// Prepare warehouse model
-    /// </summary>
-    /// <param name="model">Warehouse model</param>
-    /// <param name="warehouse">Warehouse</param>
-    /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the warehouse model
-    /// </returns>
-    Task<WarehouseModel> PrepareWarehouseModelAsync(WarehouseModel model, Warehouse warehouse, bool excludeProperties = false);
-
-    /// <summary>
     /// Prepare shipping method restriction model
     /// </summary>
     /// <param name="model">Shipping method restriction model</param>

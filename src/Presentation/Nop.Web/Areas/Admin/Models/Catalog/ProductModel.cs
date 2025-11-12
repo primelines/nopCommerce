@@ -24,14 +24,12 @@ public partial record ProductModel : BaseNopEntityModel,
         CopyProductModel = new CopyProductModel();
         AddPictureModel = new ProductPictureModel();
         AddVideoModel = new ProductVideoModel();
-        ProductWarehouseInventoryModels = new List<ProductWarehouseInventoryModel>();
         ProductEditorSettingsModel = new ProductEditorSettingsModel();
         StockQuantityHistory = new StockQuantityHistoryModel();
         AvailableProductTemplates = new List<SelectListItem>();
         AvailableTaxCategories = new List<SelectListItem>();
         AvailableDeliveryDates = new List<SelectListItem>();
         AvailableProductAvailabilityRanges = new List<SelectListItem>();
-        AvailableWarehouses = new List<SelectListItem>();
 
         AvailableVendors = new List<SelectListItem>();
 
@@ -152,19 +150,11 @@ public partial record ProductModel : BaseNopEntityModel,
     public int TaxCategoryId { get; set; }
     public IList<SelectListItem> AvailableTaxCategories { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ManageInventoryMethod")]
-    public int ManageInventoryMethodId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductAvailabilityRange")]
     public int ProductAvailabilityRangeId { get; set; }
     public IList<SelectListItem> AvailableProductAvailabilityRanges { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.UseMultipleWarehouses")]
-    public bool UseMultipleWarehouses { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.Warehouse")]
-    public int WarehouseId { get; set; }
-    public IList<SelectListItem> AvailableWarehouses { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.StockQuantity")]
     public int StockQuantity { get; set; }
@@ -318,10 +308,6 @@ public partial record ProductModel : BaseNopEntityModel,
     //product attributes
     public bool ProductAttributesExist { get; set; }
     public bool CanCreateCombinations { get; set; }
-
-    //multiple warehouses
-    [NopResourceDisplayName("Admin.Catalog.Products.ProductWarehouseInventory")]
-    public IList<ProductWarehouseInventoryModel> ProductWarehouseInventoryModels { get; set; }
 
     //specification attributes
     public bool HasAvailableSpecificationAttributes { get; set; }

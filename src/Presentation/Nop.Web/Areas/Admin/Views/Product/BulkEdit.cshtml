@@ -100,14 +100,6 @@
                                                     <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group row" @(Model.AvailableWarehouses.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
-                                                <div class="col-md-4">
-                                                    <nop-label asp-for="SearchWarehouseId"/>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <nop-select asp-for="SearchWarehouseId" asp-items="Model.AvailableWarehouses"/>
-                                                </div>
-                                            </div>
                                             <div class="form-group row">
                                                 <div class="col-md-4">
                                                     <nop-label asp-for="SearchPublishedId"/>
@@ -217,7 +209,6 @@
         var manufacturer = $("#@Html.IdFor(model => model.SearchManufacturerId)").val();
         var vendor = $("#@Html.IdFor(model => model.SearchVendorId)").val();
         var store = $("#@Html.IdFor(model => model.SearchStoreId)").val();
-        var warehouse = $("#@Html.IdFor(model => model.SearchWarehouseId)").val();
         var published = $("#@Html.IdFor(model => model.SearchPublishedId)").val();
                                         
         if (next == undefined)                                        
@@ -245,7 +236,6 @@
             SearchManufacturerId: manufacturer,
             SearchVendorId: vendor,
             SearchStoreId: store,
-            SearchWarehouseId: warehouse,
             SearchPublishedId: published,
             Start: start,
             PageSize: @Model.PageSize,

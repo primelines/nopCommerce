@@ -70,8 +70,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
 
     public DateTime? AvailableEndDate { get; set; }
 
-    public ManageInventoryMethod ManageInventoryMethod { get; set; }
-
     public string StockAvailability { get; set; }
 
     public bool DisplayBackInStockSubscription { get; set; }

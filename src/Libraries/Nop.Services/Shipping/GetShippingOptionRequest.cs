@@ -39,11 +39,6 @@ public partial class GetShippingOptionRequest
     public Address ShippingAddress { get; set; }
 
     /// <summary>
-    /// Shipped from warehouse
-    /// </summary>
-    public Warehouse WarehouseFrom { get; set; }
-
-    /// <summary>
     /// Shipped from country
     /// </summary>
     public Country CountryFrom { get; set; }

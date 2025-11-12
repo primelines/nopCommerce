@@ -117,11 +117,6 @@ public partial record ProductDetailsDto : BaseNopEntityDto
     [JsonProperty("available_end_date")]
     public DateTime? AvailableEndDate { get; set; }
 
-
-    [JsonProperty("manage_inventory_method")]
-    public ManageInventoryMethod ManageInventoryMethod { get; set; }
-
-
     [JsonProperty("stock_availability")]
     public string StockAvailability { get; set; }
 

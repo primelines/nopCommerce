@@ -39,7 +39,6 @@ public partial class ShippingController : BaseAdminController
     protected readonly IShippingModelFactory _shippingModelFactory;
     protected readonly IShippingPluginManager _shippingPluginManager;
     protected readonly IShippingMethodsService _shippingMethodsService;
-    protected readonly IWarehouseService _warehouseService;
     protected readonly ShippingSettings _shippingSettings;
     private static readonly char[] _separator = [','];
 
@@ -60,7 +59,6 @@ public partial class ShippingController : BaseAdminController
         IShippingModelFactory shippingModelFactory,
         IShippingPluginManager shippingPluginManager,
         IShippingMethodsService shippingMethodsService,
-        IWarehouseService warehouseService,
         ShippingSettings shippingSettings)
     {
         _addressService = addressService;
@@ -76,7 +74,6 @@ public partial class ShippingController : BaseAdminController
         _shippingModelFactory = shippingModelFactory;
         _shippingPluginManager = shippingPluginManager;
         _shippingMethodsService = shippingMethodsService;
-        _warehouseService = warehouseService;
         _shippingSettings = shippingSettings;
     }
 
@@ -566,149 +563,6 @@ public partial class ShippingController : BaseAdminController
         _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Configuration.Shipping.ProductAvailabilityRanges.Deleted"));
 
         return RedirectToAction("DatesAndRanges");
-    }
-
-    #endregion
-
-    #region Warehouses
-
-    [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> Warehouses()
-    {
-        //prepare model
-        var model = await _shippingModelFactory.PrepareWarehouseSearchModelAsync(new WarehouseSearchModel());
-
-        return View(model);
-    }
-
-    [HttpPost]
-    [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> Warehouses(WarehouseSearchModel searchModel)
-    {
-        //prepare model
-        var model = await _shippingModelFactory.PrepareWarehouseListModelAsync(searchModel);
-
-        return Json(model);
-    }
-
-    [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> CreateWarehouse()
-    {
-        //prepare model
-        var model = await _shippingModelFactory.PrepareWarehouseModelAsync(new WarehouseModel(), null);
-
-        return View(model);
-    }
-
-    [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-    [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> CreateWarehouse(WarehouseModel model, bool continueEditing)
-    {
-        if (ModelState.IsValid)
-        {
-            var address = model.Address.ToEntity<Address>();
-            address.CreatedOnUtc = DateTime.UtcNow;
-            await _addressService.InsertAddressAsync(address);
-
-            //fill entity from model
-            var warehouse = model.ToEntity<Warehouse>();
-            warehouse.AddressId = address.Id;
-
-            await _warehouseService.InsertWarehouseAsync(warehouse);
-
-            //activity log
-            await _customerActivityService.InsertActivityAsync("AddNewWarehouse",
-                string.Format(await _localizationService.GetResourceAsync("ActivityLog.AddNewWarehouse"), warehouse.Id), warehouse);
-
-            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Configuration.Shipping.Warehouses.Added"));
-
-            return continueEditing ? RedirectToAction("EditWarehouse", new { id = warehouse.Id }) : RedirectToAction("Warehouses");
-        }
-
-        //prepare model
-        model = await _shippingModelFactory.PrepareWarehouseModelAsync(model, null, true);
-
-        //if we got this far, something failed, redisplay form
-        return View(model);
-    }
-
-    [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> EditWarehouse(int id)
-    {
-        //try to get a warehouse with the specified id
-        var warehouse = await _warehouseService.GetWarehouseByIdAsync(id);
-        if (warehouse == null)
-            return RedirectToAction("Warehouses");
-
-        //prepare model
-        var model = await _shippingModelFactory.PrepareWarehouseModelAsync(null, warehouse);
-
-        return View(model);
-    }
-
-    [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-    [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> EditWarehouse(WarehouseModel model, bool continueEditing)
-    {
-        //try to get a warehouse with the specified id
-        var warehouse = await _warehouseService.GetWarehouseByIdAsync(model.Id);
-        if (warehouse == null)
-            return RedirectToAction("Warehouses");
-
-        if (ModelState.IsValid)
-        {
-            var address = await _addressService.GetAddressByIdAsync(warehouse.AddressId) ??
-                          new Address
-                          {
-                              CreatedOnUtc = DateTime.UtcNow
-                          };
-            address = model.Address.ToEntity(address);
-            if (address.Id > 0)
-                await _addressService.UpdateAddressAsync(address);
-            else
-                await _addressService.InsertAddressAsync(address);
-
-            //fill entity from model
-            warehouse = model.ToEntity(warehouse);
-
-            warehouse.AddressId = address.Id;
-
-            await _warehouseService.UpdateWarehouseAsync(warehouse);
-
-            //activity log
-            await _customerActivityService.InsertActivityAsync("EditWarehouse",
-                string.Format(await _localizationService.GetResourceAsync("ActivityLog.EditWarehouse"), warehouse.Id), warehouse);
-
-            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Configuration.Shipping.Warehouses.Updated"));
-
-            return continueEditing ? RedirectToAction("EditWarehouse", warehouse.Id) : RedirectToAction("Warehouses");
-        }
-
-        //prepare model
-        model = await _shippingModelFactory.PrepareWarehouseModelAsync(model, warehouse, true);
-
-        //if we got this far, something failed, redisplay form
-        return View(model);
-    }
-
-    [HttpPost]
-    [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> DeleteWarehouse(int id)
-    {
-        //try to get a warehouse with the specified id
-        var warehouse = await _warehouseService.GetWarehouseByIdAsync(id);
-        if (warehouse == null)
-            return RedirectToAction("Warehouses");
-
-        await _warehouseService.DeleteWarehouseAsync(warehouse);
-
-        //activity log
-        await _customerActivityService.InsertActivityAsync("DeleteWarehouse",
-            string.Format(await _localizationService.GetResourceAsync("ActivityLog.DeleteWarehouse"), warehouse.Id), warehouse);
-
-        _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Configuration.Shipping.warehouses.Deleted"));
-
-        return RedirectToAction("Warehouses");
     }
 
     #endregion

@@ -1784,7 +1784,6 @@ public partial class InstallationService
             AllowPickupInStore = true,
             DisplayPickupPointsOnMap = false,
             IgnoreAdditionalShippingChargeForPickupInStore = true,
-            UseWarehouseLocation = false,
             NotifyCustomerAboutShippingFromMultipleLocations = false,
             FreeShippingOverXEnabled = false,
             FreeShippingOverXValue = decimal.Zero,

@@ -13,11 +13,6 @@ public class ShippingByWeightByTotalRecord : BaseEntity
     public int StoreId { get; set; }
 
     /// <summary>
-    /// Gets or sets the warehouse identifier
-    /// </summary>
-    public int WarehouseId { get; set; }
-
-    /// <summary>
     /// Gets or sets the country identifier
     /// </summary>
     public int CountryId { get; set; }

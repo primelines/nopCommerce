@@ -30,7 +30,6 @@ public partial class ShippingModelFactory : IShippingModelFactory
     protected readonly IShippingPluginManager _shippingPluginManager;
     protected readonly IShippingMethodsService _shippingMethodsService;
     protected readonly IStateProvinceService _stateProvinceService;
-    protected readonly IWarehouseService _warehouseService;
 
     #endregion
 
@@ -45,8 +44,7 @@ public partial class ShippingModelFactory : IShippingModelFactory
         IPickupPluginManager pickupPluginManager,
         IShippingPluginManager shippingPluginManager,
         IShippingMethodsService shippingMethodsService,
-        IStateProvinceService stateProvinceService,
-        IWarehouseService warehouseService)
+        IStateProvinceService stateProvinceService)
     {
         _addressModelFactory = addressModelFactory;
         _addressService = addressService;
@@ -58,7 +56,6 @@ public partial class ShippingModelFactory : IShippingModelFactory
         _shippingPluginManager = shippingPluginManager;
         _shippingMethodsService = shippingMethodsService;
         _stateProvinceService = stateProvinceService;
-        _warehouseService = warehouseService;
     }
 
     #endregion
@@ -416,83 +413,6 @@ public partial class ShippingModelFactory : IShippingModelFactory
         //prepare localized models
         if (!excludeProperties)
             model.Locales = await _localizedModelFactory.PrepareLocalizedModelsAsync(localizedModelConfiguration);
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare warehouse search model
-    /// </summary>
-    /// <param name="searchModel">Warehouse search model</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the warehouse search model
-    /// </returns>
-    public virtual Task<WarehouseSearchModel> PrepareWarehouseSearchModelAsync(WarehouseSearchModel searchModel)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-
-        //prepare page parameters
-        searchModel.SetGridPageSize();
-
-        return Task.FromResult(searchModel);
-    }
-
-    /// <summary>
-    /// Prepare paged warehouse list model
-    /// </summary>
-    /// <param name="searchModel">Warehouse search model</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the warehouse list model
-    /// </returns>
-    public virtual async Task<WarehouseListModel> PrepareWarehouseListModelAsync(WarehouseSearchModel searchModel)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-
-        //get warehouses
-        var warehouses = (await _warehouseService.GetAllWarehousesAsync(
-                name: searchModel.SearchName))
-            .ToPagedList(searchModel);
-
-        //prepare list model
-        var model = new WarehouseListModel().PrepareToGrid(searchModel, warehouses, () =>
-        {
-            //fill in model values from the entity
-            return warehouses.Select(warehouse => warehouse.ToModel<WarehouseModel>());
-        });
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare warehouse model
-    /// </summary>
-    /// <param name="model">Warehouse model</param>
-    /// <param name="warehouse">Warehouse</param>
-    /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the warehouse model
-    /// </returns>
-    public virtual async Task<WarehouseModel> PrepareWarehouseModelAsync(WarehouseModel model, Warehouse warehouse, bool excludeProperties = false)
-    {
-        if (warehouse != null)
-        {
-            //fill in model values from the entity
-            if (model == null)
-            {
-                model = warehouse.ToModel<WarehouseModel>();
-            }
-        }
-
-        //prepare address model
-        var address = await _addressService.GetAddressByIdAsync(warehouse?.AddressId ?? 0);
-        if (!excludeProperties && address != null)
-            model.Address = address.ToModel(model.Address);
-        await _addressModelFactory.PrepareAddressModelAsync(model.Address, address);
-        model.Address.CountryRequired = true;
-        model.Address.ZipPostalCodeRequired = true;
 
         return model;
     }

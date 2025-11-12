@@ -191,7 +191,6 @@ public partial class InstallationService
                 Width = sample.Width,
                 Height = sample.Height,
                 TaxCategoryId = await getTaxCategoryId(sample.TaxCategoryName),
-                ManageInventoryMethod = sample.ManageInventoryMethod,
                 StockQuantity = sample.StockQuantity,
                 NotifyAdminForQuantityBelow = sample.NotifyAdminForQuantityBelow,
                 AllowBackInStockSubscriptions = sample.AllowBackInStockSubscriptions,
@@ -386,7 +385,6 @@ public partial class InstallationService
             await _dataProvider.InsertEntityAsync(new StockQuantityHistory
             {
                 ProductId = product.Id,
-                WarehouseId = product.WarehouseId > 0 ? product.WarehouseId : null,
                 QuantityAdjustment = product.StockQuantity,
                 StockQuantity = product.StockQuantity,
                 Message = "The stock quantity has been edited",

@@ -21,7 +21,6 @@ public partial interface IShipmentService
     /// Search shipments
     /// </summary>
     /// <param name="vendorId">Vendor identifier; 0 to load all records</param>
-    /// <param name="warehouseId">Warehouse identifier, only shipments with products from a specified warehouse will be loaded; 0 to load all orders</param>
     /// <param name="shippingCountryId">Shipping country identifier; 0 to load all records</param>
     /// <param name="shippingStateId">Shipping state identifier; 0 to load all records</param>
     /// <param name="shippingCounty">Shipping county; null to load all records</param>
@@ -39,7 +38,7 @@ public partial interface IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipments
     /// </returns>
-    Task<IPagedList<Shipment>> GetAllShipmentsAsync(int vendorId = 0, int warehouseId = 0,
+    Task<IPagedList<Shipment>> GetAllShipmentsAsync(int vendorId = 0,
         int shippingCountryId = 0,
         int shippingStateId = 0,
         string shippingCounty = null,
@@ -144,14 +143,13 @@ public partial interface IShipmentService
     /// Get quantity in shipments. For example, get planned quantity to be shipped
     /// </summary>
     /// <param name="product">Product</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
     /// <param name="ignoreShipped">Ignore already shipped shipments</param>
     /// <param name="ignoreDelivered">Ignore already delivered shipments</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the quantity
     /// </returns>
-    Task<int> GetQuantityInShipmentsAsync(Product product, int warehouseId,
+    Task<int> GetQuantityInShipmentsAsync(Product product, 
         bool ignoreShipped, bool ignoreDelivered);
 
     /// <summary>

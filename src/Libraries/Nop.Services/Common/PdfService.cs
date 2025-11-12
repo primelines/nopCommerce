@@ -908,9 +908,7 @@ public partial class PdfService : IPdfService
                 Weight = product.IsShipEnabled && product.Weight > decimal.Zero ?
                     $"{product.Weight:0.00} {(await _measureService.GetMeasureWeightByIdAsync(_measureSettings.BaseWeightId)).Name}" :
                     string.Empty,
-                Stock = product.ManageInventoryMethod == ManageInventoryMethod.ManageStock ?
-                    $"{await _productService.GetTotalStockQuantityAsync(product)}" :
-                    string.Empty
+                Stock = $"{product.StockQuantity}" 
             };
 
             var pictures = await _pictureService.GetPicturesByProductIdAsync(product.Id);

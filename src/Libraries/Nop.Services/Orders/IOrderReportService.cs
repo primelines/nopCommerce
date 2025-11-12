@@ -34,7 +34,6 @@ public partial interface IOrderReportService
     /// <param name="storeId">Store identifier; pass 0 to ignore this parameter</param>
     /// <param name="vendorId">Vendor identifier; pass 0 to ignore this parameter</param>
     /// <param name="productId">Product identifier which was purchased in an order; 0 to load all orders</param>
-    /// <param name="warehouseId">Warehouse identifier; pass 0 to ignore this parameter</param>
     /// <param name="billingCountryId">Billing country identifier; 0 to load all orders</param>
     /// <param name="orderId">Order identifier; pass 0 to ignore this parameter</param>
     /// <param name="paymentMethodSystemName">Payment method system name; null to load all records</param>
@@ -52,7 +51,7 @@ public partial interface IOrderReportService
     /// The task result contains the result
     /// </returns>
     Task<OrderAverageReportLine> GetOrderAverageReportLineAsync(int storeId = 0, int vendorId = 0, int productId = 0,
-        int warehouseId = 0, int billingCountryId = 0, int orderId = 0, string paymentMethodSystemName = null,
+        int billingCountryId = 0, int orderId = 0, string paymentMethodSystemName = null,
         List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
         DateTime? startTimeUtc = null, DateTime? endTimeUtc = null,
         string billingPhone = null, string billingEmail = null, string billingLastName = "", string orderNotes = null);
@@ -212,7 +211,6 @@ public partial interface IOrderReportService
     /// <param name="storeId">Store identifier; pass 0 to ignore this parameter</param>
     /// <param name="vendorId">Vendor identifier; pass 0 to ignore this parameter</param>
     /// <param name="productId">Product identifier which was purchased in an order; 0 to load all orders</param>
-    /// <param name="warehouseId">Warehouse identifier; pass 0 to ignore this parameter</param>
     /// <param name="orderId">Order identifier; pass 0 to ignore this parameter</param>
     /// <param name="billingCountryId">Billing country identifier; 0 to load all orders</param>
     /// <param name="paymentMethodSystemName">Payment method system name; null to load all records</param>
@@ -230,7 +228,7 @@ public partial interface IOrderReportService
     /// The task result contains the result
     /// </returns>
     Task<decimal> ProfitReportAsync(int storeId = 0, int vendorId = 0, int productId = 0,
-        int warehouseId = 0, int billingCountryId = 0, int orderId = 0, string paymentMethodSystemName = null,
+        int billingCountryId = 0, int orderId = 0, string paymentMethodSystemName = null,
         List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
         DateTime? startTimeUtc = null, DateTime? endTimeUtc = null,
         string billingPhone = null, string billingEmail = null, string billingLastName = "", string orderNotes = null);

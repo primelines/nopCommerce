@@ -84,7 +84,6 @@ public partial class OrderModelFactory : IOrderModelFactory
     protected readonly ITaxService _taxService;
     protected readonly IUrlHelperFactory _urlHelperFactory;
     protected readonly IVendorService _vendorService;
-    protected readonly IWarehouseService _warehouseService;
     protected readonly IWorkContext _workContext;
     protected readonly MeasureSettings _measureSettings;
     protected readonly NopHttpClient _nopHttpClient;
@@ -134,7 +133,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         ITaxService taxService,
         IUrlHelperFactory urlHelperFactory,
         IVendorService vendorService,
-        IWarehouseService warehouseService,
         IWorkContext workContext,
         MeasureSettings measureSettings,
         NopHttpClient nopHttpClient,
@@ -179,7 +177,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         _taxService = taxService;
         _urlHelperFactory = urlHelperFactory;
         _vendorService = vendorService;
-        _warehouseService = warehouseService;
         _workContext = workContext;
         _measureSettings = measureSettings;
         _nopHttpClient = nopHttpClient;
@@ -934,9 +931,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         //prepare available vendors
         await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
 
-        //prepare available warehouses
-        await _baseAdminModelFactory.PrepareWarehousesAsync(searchModel.AvailableWarehouses);
-
         //prepare available payment methods
         searchModel.AvailablePaymentMethods = (await _paymentPluginManager.LoadAllPluginsAsync()).Select(method =>
             new SelectListItem { Text = method.PluginDescriptor.FriendlyName, Value = method.PluginDescriptor.SystemName }).ToList();
@@ -986,7 +980,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         var orders = await _orderService.SearchOrdersAsync(storeId: searchModel.StoreId,
             vendorId: searchModel.VendorId,
             productId: filterByProductId,
-            warehouseId: searchModel.WarehouseId,
             paymentMethodSystemName: searchModel.PaymentMethodSystemName,
             createdFromUtc: startDateValue,
             createdToUtc: endDateValue,
@@ -1072,7 +1065,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         var reportSummary = await _orderReportService.GetOrderAverageReportLineAsync(storeId: searchModel.StoreId,
             vendorId: searchModel.VendorId,
             productId: filterByProductId,
-            warehouseId: searchModel.WarehouseId,
             paymentMethodSystemName: searchModel.PaymentMethodSystemName,
             osIds: orderStatusIds,
             psIds: paymentStatusIds,
@@ -1088,7 +1080,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         var profit = await _orderReportService.ProfitReportAsync(storeId: searchModel.StoreId,
             vendorId: searchModel.VendorId,
             productId: filterByProductId,
-            warehouseId: searchModel.WarehouseId,
             paymentMethodSystemName: searchModel.PaymentMethodSystemName,
             osIds: orderStatusIds,
             psIds: paymentStatusIds,
@@ -1346,8 +1337,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         //prepare available states and provinces
         await _baseAdminModelFactory.PrepareStatesAndProvincesAsync(searchModel.AvailableStates, searchModel.CountryId);
 
-        //prepare available warehouses
-        await _baseAdminModelFactory.PrepareWarehousesAsync(searchModel.AvailableWarehouses);
 
         //prepare nested search model
         PrepareShipmentItemSearchModel(searchModel.ShipmentItemSearchModel);
@@ -1380,7 +1369,6 @@ public partial class OrderModelFactory : IOrderModelFactory
 
         //get shipments
         var shipments = await _shipmentService.GetAllShipmentsAsync(vendorId,
-            searchModel.WarehouseId,
             searchModel.CountryId,
             searchModel.StateProvinceId,
             searchModel.County,
@@ -1438,7 +1426,7 @@ public partial class OrderModelFactory : IOrderModelFactory
                 {
                     Id = item.Id,
                     QuantityInThisShipment = item.Quantity,
-                    ShippedFromWarehouse = (await _warehouseService.GetWarehouseByIdAsync(item.WarehouseId))?.Name
+                    ShippedFromWarehouse = ""// (await _warehouseService.GetWarehouseByIdAsync(item.WarehouseId))?.Name
                 };
 
                 await PrepareShipmentItemModelAsync(shipmentItemModel, orderItem, product);
@@ -1480,42 +1468,6 @@ public partial class OrderModelFactory : IOrderModelFactory
             //ensure that this product can be added to a shipment
             if (shipmentItemModel.QuantityToAdd <= 0)
                 continue;
-
-            if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
-                product.UseMultipleWarehouses)
-            {
-                //multiple warehouses supported
-                shipmentItemModel.AllowToChooseWarehouse = true;
-                foreach (var pwi in (await _productService.GetAllProductWarehouseInventoryRecordsAsync(orderItem.ProductId)).OrderBy(w => w.WarehouseId).ToList())
-                {
-                    if (await _warehouseService.GetWarehouseByIdAsync(pwi.WarehouseId) is Warehouse warehouse)
-                    {
-                        shipmentItemModel.AvailableWarehouses.Add(new ShipmentItemModel.WarehouseInfo
-                        {
-                            WarehouseId = warehouse.Id,
-                            WarehouseName = warehouse.Name,
-                            StockQuantity = pwi.StockQuantity,
-                            ReservedQuantity = pwi.ReservedQuantity,
-                            PlannedQuantity =
-                                await _shipmentService.GetQuantityInShipmentsAsync(product, warehouse.Id, true, true)
-                        });
-                    }
-                }
-            }
-            else
-            {
-                //multiple warehouses are not supported
-                var warehouse = await _warehouseService.GetWarehouseByIdAsync(product.WarehouseId);
-                if (warehouse != null)
-                {
-                    shipmentItemModel.AvailableWarehouses.Add(new ShipmentItemModel.WarehouseInfo
-                    {
-                        WarehouseId = warehouse.Id,
-                        WarehouseName = warehouse.Name,
-                        StockQuantity = product.StockQuantity
-                    });
-                }
-            }
 
             model.Items.Add(shipmentItemModel);
         }
@@ -1601,7 +1553,8 @@ public partial class OrderModelFactory : IOrderModelFactory
                 shipmentItemModel.ProductId = orderItem.ProductId;
                 shipmentItemModel.ProductName = product.Name;
 
-                shipmentItemModel.ShippedFromWarehouse = (await _warehouseService.GetWarehouseByIdAsync(item.WarehouseId))?.Name;
+                // TODO: We need to implement warehouse names for.
+                shipmentItemModel.ShippedFromWarehouse  = ""; //(await _warehouseService.GetWarehouseByIdAsync(item.WarehouseId))?.Name;
 
                 var baseWeight = (await _measureService.GetMeasureWeightByIdAsync(_measureSettings.BaseWeightId))?.Name;
                 var baseDimension = (await _measureService.GetMeasureDimensionByIdAsync(_measureSettings.BaseDimensionId))?.Name;

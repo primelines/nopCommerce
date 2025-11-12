@@ -92,7 +92,6 @@ public partial class ProductController : BaseAdminController
     protected readonly ITranslationModelFactory _translationModelFactory;
     protected readonly IUrlRecordService _urlRecordService;
     protected readonly IVideoService _videoService;
-    protected readonly IWarehouseService _warehouseService;
     protected readonly IWebHelper _webHelper;
     protected readonly IWorkContext _workContext;
     protected readonly CurrencySettings _currencySettings;
@@ -146,7 +145,6 @@ public partial class ProductController : BaseAdminController
         ITranslationModelFactory translationModelFactory,
         IUrlRecordService urlRecordService,
         IVideoService videoService,
-        IWarehouseService warehouseService,
         IWebHelper webHelper,
         IWorkContext workContext,
         CurrencySettings currencySettings,
@@ -195,7 +193,6 @@ public partial class ProductController : BaseAdminController
         _translationModelFactory = translationModelFactory;
         _urlRecordService = urlRecordService;
         _videoService = videoService;
-        _warehouseService = warehouseService;
         _webHelper = webHelper;
         _workContext = workContext;
         _currencySettings = currencySettings;
@@ -535,105 +532,6 @@ public partial class ProductController : BaseAdminController
 
         return attributesXml;
     }
-
-    protected virtual async Task SaveProductWarehouseInventoryAsync(Product product, ProductModel model)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        if (model.ManageInventoryMethodId != (int)ManageInventoryMethod.ManageStock)
-            return;
-
-        if (!model.UseMultipleWarehouses)
-            return;
-
-        var warehouses = await _warehouseService.GetAllWarehousesAsync();
-
-        var form = await Request.ReadFormAsync();
-        var formData = form.ToDictionary(x => x.Key, x => x.Value.ToString());
-
-        foreach (var warehouse in warehouses)
-        {
-            //parse stock quantity
-            var stockQuantity = 0;
-            foreach (var formKey in formData.Keys)
-            {
-                if (!formKey.Equals($"warehouse_qty_{warehouse.Id}", StringComparison.InvariantCultureIgnoreCase))
-                    continue;
-
-                _ = int.TryParse(formData[formKey], out stockQuantity);
-                break;
-            }
-
-            //parse reserved quantity
-            var reservedQuantity = 0;
-            foreach (var formKey in formData.Keys)
-                if (formKey.Equals($"warehouse_reserved_{warehouse.Id}", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    _ = int.TryParse(formData[formKey], out reservedQuantity);
-                    break;
-                }
-
-            //parse "used" field
-            var used = false;
-            foreach (var formKey in formData.Keys)
-                if (formKey.Equals($"warehouse_used_{warehouse.Id}", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    _ = int.TryParse(formData[formKey], out var tmp);
-                    used = tmp == warehouse.Id;
-                    break;
-                }
-
-            //quantity change history message
-            var message = $"{await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.MultipleWarehouses")} {await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.Edit")}";
-
-            var existingPwI = (await _productService.GetAllProductWarehouseInventoryRecordsAsync(product.Id)).FirstOrDefault(x => x.WarehouseId == warehouse.Id);
-            if (existingPwI != null)
-            {
-                if (used)
-                {
-                    var previousStockQuantity = existingPwI.StockQuantity;
-
-                    //update existing record
-                    existingPwI.StockQuantity = stockQuantity;
-                    existingPwI.ReservedQuantity = reservedQuantity;
-                    await _productService.UpdateProductWarehouseInventoryAsync(existingPwI);
-
-                    //quantity change history
-                    await _productService.AddStockQuantityHistoryEntryAsync(product, existingPwI.StockQuantity - previousStockQuantity, existingPwI.StockQuantity,
-                        existingPwI.WarehouseId, message);
-                }
-                else
-                {
-                    //delete. no need to store record for qty 0
-                    await _productService.DeleteProductWarehouseInventoryAsync(existingPwI);
-
-                    //quantity change history
-                    await _productService.AddStockQuantityHistoryEntryAsync(product, -existingPwI.StockQuantity, 0, existingPwI.WarehouseId, message);
-                }
-            }
-            else
-            {
-                if (!used)
-                    continue;
-
-                //no need to insert a record for qty 0
-                existingPwI = new ProductWarehouseInventory
-                {
-                    WarehouseId = warehouse.Id,
-                    ProductId = product.Id,
-                    StockQuantity = stockQuantity,
-                    ReservedQuantity = reservedQuantity
-                };
-
-                await _productService.InsertProductWarehouseInventoryAsync(existingPwI);
-
-                //quantity change history
-                await _productService.AddStockQuantityHistoryEntryAsync(product, existingPwI.StockQuantity, existingPwI.StockQuantity,
-                    existingPwI.WarehouseId, message);
-            }
-        }
-    }
-
     protected virtual async Task SaveConditionAttributesAsync(ProductAttributeMapping productAttributeMapping,
         ProductAttributeConditionModel model, IFormCollection form)
     {
@@ -1075,11 +973,8 @@ public partial class ProductController : BaseAdminController
             //tags
             await _productTagService.UpdateProductTagsAsync(product, model.SelectedProductTags.ToArray());
 
-            //warehouses
-            await SaveProductWarehouseInventoryAsync(product, model);
-
             //quantity change history
-            await _productService.AddStockQuantityHistoryEntryAsync(product, product.StockQuantity, product.StockQuantity, product.WarehouseId,
+            await _productService.AddStockQuantityHistoryEntryAsync(product, product.StockQuantity, product.StockQuantity,
                 await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.Edit"));
 
             //activity log
@@ -1177,9 +1072,8 @@ public partial class ProductController : BaseAdminController
                 model.VendorId = currentVendor.Id;
 
             //some previously used values
-            var prevTotalStockQuantity = await _productService.GetTotalStockQuantityAsync(product);
+            var prevTotalStockQuantity = product.StockQuantity;
             var previousStockQuantity = product.StockQuantity;
-            var previousWarehouseId = product.WarehouseId;
 
             //product
             product = model.ToEntity(product);
@@ -1197,8 +1091,6 @@ public partial class ProductController : BaseAdminController
             //tags
             await _productTagService.UpdateProductTagsAsync(product, model.SelectedProductTags.ToArray());
 
-            //warehouses
-            await SaveProductWarehouseInventoryAsync(product, model);
 
             //categories
             await SaveCategoryMappingsAsync(product, model);
@@ -1216,10 +1108,10 @@ public partial class ProductController : BaseAdminController
             await UpdatePictureSeoNamesAsync(product);
 
             //back in stock notifications
-            if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
+            if (
                 product.BackorderMode == BackorderMode.NoBackorders &&
                 product.AllowBackInStockSubscriptions &&
-                await _productService.GetTotalStockQuantityAsync(product) > 0 &&
+                product.StockQuantity > 0 &&
                 prevTotalStockQuantity <= 0 &&
                 product.Published &&
                 !product.Deleted)
@@ -1227,38 +1119,9 @@ public partial class ProductController : BaseAdminController
                 await _backInStockSubscriptionService.SendNotificationsToSubscribersAsync(product);
             }
 
-            //quantity change history
-            if (previousWarehouseId != product.WarehouseId)
-            {
-                //warehouse is changed 
-                //compose a message
-                var oldWarehouseMessage = string.Empty;
-                if (previousWarehouseId > 0)
-                {
-                    var oldWarehouse = await _warehouseService.GetWarehouseByIdAsync(previousWarehouseId);
-                    if (oldWarehouse != null)
-                        oldWarehouseMessage = string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.EditWarehouse.Old"), oldWarehouse.Name);
-                }
 
-                var newWarehouseMessage = string.Empty;
-                if (product.WarehouseId > 0)
-                {
-                    var newWarehouse = await _warehouseService.GetWarehouseByIdAsync(product.WarehouseId);
-                    if (newWarehouse != null)
-                        newWarehouseMessage = string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.EditWarehouse.New"), newWarehouse.Name);
-                }
-
-                var message = string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.EditWarehouse"), oldWarehouseMessage, newWarehouseMessage);
-
-                //record history
-                await _productService.AddStockQuantityHistoryEntryAsync(product, -previousStockQuantity, 0, previousWarehouseId, message);
-                await _productService.AddStockQuantityHistoryEntryAsync(product, product.StockQuantity, product.StockQuantity, product.WarehouseId, message);
-            }
-            else
-            {
-                await _productService.AddStockQuantityHistoryEntryAsync(product, product.StockQuantity - previousStockQuantity, product.StockQuantity,
-                    product.WarehouseId, await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.Edit"));
-            }
+            await _productService.AddStockQuantityHistoryEntryAsync(product, product.StockQuantity - previousStockQuantity, product.StockQuantity, await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.Edit"));
+            
 
             //activity log
             await _customerActivityService.InsertActivityAsync("EditProduct",
@@ -2519,7 +2382,6 @@ public partial class ProductController : BaseAdminController
             manufacturerIds: new List<int> { model.SearchManufacturerId },
             storeId: model.SearchStoreId,
             vendorId: model.SearchVendorId,
-            warehouseId: model.SearchWarehouseId,
             keywords: model.SearchProductName,
             showHidden: true,
             overridePublished: overridePublished);
@@ -2573,7 +2435,6 @@ public partial class ProductController : BaseAdminController
             manufacturerIds: new List<int> { model.SearchManufacturerId },
             storeId: model.SearchStoreId,
             vendorId: model.SearchVendorId,
-            warehouseId: model.SearchWarehouseId,
             keywords: model.SearchProductName,
             showHidden: true,
             overridePublished: overridePublished);
@@ -2654,7 +2515,6 @@ public partial class ProductController : BaseAdminController
             manufacturerIds: new List<int> { model.SearchManufacturerId },
             storeId: model.SearchStoreId,
             vendorId: model.SearchVendorId,
-            warehouseId: model.SearchWarehouseId,
             keywords: model.SearchProductName,
             showHidden: true,
             overridePublished: overridePublished);

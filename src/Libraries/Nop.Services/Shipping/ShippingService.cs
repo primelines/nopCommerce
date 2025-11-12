@@ -36,7 +36,6 @@ public partial class ShippingService : IShippingService
     protected readonly IShippingPluginManager _shippingPluginManager;
     protected readonly IStateProvinceService _stateProvinceService;
     protected readonly IStoreContext _storeContext;
-    protected readonly IWarehouseService _warehouseService;
     protected readonly ShippingSettings _shippingSettings;
     protected readonly ShoppingCartSettings _shoppingCartSettings;
 
@@ -58,7 +57,6 @@ public partial class ShippingService : IShippingService
         IShippingPluginManager shippingPluginManager,
         IStateProvinceService stateProvinceService,
         IStoreContext storeContext,
-        IWarehouseService warehouseService,
         ShippingSettings shippingSettings,
         ShoppingCartSettings shoppingCartSettings)
     {
@@ -76,7 +74,6 @@ public partial class ShippingService : IShippingService
         _shippingPluginManager = shippingPluginManager;
         _stateProvinceService = stateProvinceService;
         _storeContext = storeContext;
-        _warehouseService = warehouseService;
         _shippingSettings = shippingSettings;
         _shoppingCartSettings = shoppingCartSettings;
     }
@@ -408,32 +405,7 @@ public partial class ShippingService : IShippingService
             if (product == null)
                 continue;
 
-            //warehouses
-            Warehouse warehouse = null;
-            if (_shippingSettings.UseWarehouseLocation)
-            {
-                if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
-                    product.UseMultipleWarehouses)
-                {
-                    var allWarehouses = new List<Warehouse>();
-                    //multiple warehouses supported
-                    foreach (var pwi in await _productService.GetAllProductWarehouseInventoryRecordsAsync(product.Id))
-                    {
-                        var tmpWarehouse = await _warehouseService.GetWarehouseByIdAsync(pwi.WarehouseId);
-                        if (tmpWarehouse != null)
-                            allWarehouses.Add(tmpWarehouse);
-                    }
-
-                    warehouse = await _warehouseService.GetNearestWarehouseAsync(shippingAddress, allWarehouses);
-                }
-                else
-                {
-                    //multiple warehouses are not supported
-                    warehouse = await _warehouseService.GetWarehouseByIdAsync(product.WarehouseId);
-                }
-            }
-
-            var warehouseId = warehouse?.Id ?? 0;
+            var warehouseId =  0;
 
             //add item to existing request
             if (requests.TryGetValue(warehouseId, out var value) && !product.ShipSeparately)
@@ -442,65 +414,59 @@ public partial class ShippingService : IShippingService
             }
             else
             {
-                //create a new request
-                var request = new GetShippingOptionRequest
-                {
-                    //store
-                    StoreId = storeId,
-                    //customer
-                    Customer = await _customerService.GetShoppingCartCustomerAsync(cart),
+            //create a new request
+            var request = new GetShippingOptionRequest
+            {
+                //store
+                StoreId = storeId,
+                //customer
+                Customer = await _customerService.GetShoppingCartCustomerAsync(cart),
 
-                    //ship to
-                    ShippingAddress = shippingAddress
-                };
-                //ship from
-                Address originAddress = null;
-                if (warehouse != null)
-                {
-                    //warehouse address
-                    originAddress = await _addressService.GetAddressByIdAsync(warehouse.AddressId);
-                    request.WarehouseFrom = warehouse;
-                }
+                //ship to
+                ShippingAddress = shippingAddress
+            };
+            //ship from
+            Address originAddress = null;
 
-                //no warehouse address. in this case use the default shipping origin
-                originAddress ??= await _addressService.GetAddressByIdAsync(_shippingSettings.ShippingOriginAddressId);
+            //no warehouse address. in this case use the default shipping origin
+            originAddress ??= await _addressService.GetAddressByIdAsync(_shippingSettings.ShippingOriginAddressId);
 
-                if (originAddress != null)
-                {
-                    request.CountryFrom = await _countryService.GetCountryByAddressAsync(originAddress);
-                    request.StateProvinceFrom = await _stateProvinceService.GetStateProvinceByAddressAsync(originAddress);
-                    request.ZipPostalCodeFrom = originAddress.ZipPostalCode;
-                    request.CountyFrom = originAddress.County;
-                    request.CityFrom = originAddress.City;
-                    request.AddressFrom = originAddress.Address1;
-                }
+            if (originAddress != null)
+            {
+                request.CountryFrom = await _countryService.GetCountryByAddressAsync(originAddress);
+                request.StateProvinceFrom = await _stateProvinceService.GetStateProvinceByAddressAsync(originAddress);
+                request.ZipPostalCodeFrom = originAddress.ZipPostalCode;
+                request.CountyFrom = originAddress.County;
+                request.CityFrom = originAddress.City;
+                request.AddressFrom = originAddress.Address1;
+            }
 
-                //whether this product should be shipped separately from other ones
-                if (product.ShipSeparately)
+            //whether this product should be shipped separately from other ones
+            if (product.ShipSeparately)
+            {
+                //whether product items should be shipped separately
+                if (_shippingSettings.ShipSeparatelyOneItemEach)
                 {
-                    //whether product items should be shipped separately
-                    if (_shippingSettings.ShipSeparatelyOneItemEach)
+                    //add item with overridden quantity 1
+                    request.Items.Add(new GetShippingOptionRequest.PackageItem(sci, product, 1));
+
+                    //create separate requests for all product quantity
+                    for (var i = 0; i < sci.Quantity; i++)
                     {
-                        //add item with overridden quantity 1
-                        request.Items.Add(new GetShippingOptionRequest.PackageItem(sci, product, 1));
-
-                        //create separate requests for all product quantity
-                        for (var i = 0; i < sci.Quantity; i++)
-                        {
-                            separateRequests.Add(request);
-                        }
-                    }
-                    else
-                    {
-                        //all of product items should be shipped in a single box, so create the single separate request 
-                        request.Items.Add(new GetShippingOptionRequest.PackageItem(sci, product));
                         separateRequests.Add(request);
                     }
                 }
                 else
                 {
-                    //usual request
+                    //all of product items should be shipped in a single box, so create the single separate request 
                     request.Items.Add(new GetShippingOptionRequest.PackageItem(sci, product));
+                    separateRequests.Add(request);
+                }
+            }
+            else
+            {
+                //usual request
+                request.Items.Add(new GetShippingOptionRequest.PackageItem(sci, product));
                     requests.Add(warehouseId, request);
                 }
             }

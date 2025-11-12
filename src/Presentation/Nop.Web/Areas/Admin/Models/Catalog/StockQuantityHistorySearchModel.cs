@@ -13,7 +13,6 @@ public partial record StockQuantityHistorySearchModel : BaseSearchModel
 
     public StockQuantityHistorySearchModel()
     {
-        AvailableWarehouses = new List<SelectListItem>();
     }
 
     #endregion
@@ -22,10 +21,6 @@ public partial record StockQuantityHistorySearchModel : BaseSearchModel
 
     public int ProductId { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.List.SearchWarehouse")]
-    public int WarehouseId { get; set; }
-
-    public IList<SelectListItem> AvailableWarehouses { get; set; }
 
     #endregion
 }

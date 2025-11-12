@@ -59,7 +59,6 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
     protected readonly ITaxCategoryService _taxCategoryService;
     protected readonly ITopicTemplateService _topicTemplateService;
     protected readonly IVendorService _vendorService;
-    protected readonly IWarehouseService _warehouseService;
     protected readonly TranslationSettings _translationSettings;
 
     #endregion
@@ -89,7 +88,6 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
         ITaxCategoryService taxCategoryService,
         ITopicTemplateService topicTemplateService,
         IVendorService vendorService,
-        IWarehouseService warehouseService,
         TranslationSettings translationSettings)
     {
         _categoryService = categoryService;
@@ -115,7 +113,6 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
         _taxCategoryService = taxCategoryService;
         _topicTemplateService = topicTemplateService;
         _vendorService = vendorService;
-        _warehouseService = warehouseService;
         _translationSettings = translationSettings;
     }
 
@@ -871,27 +868,6 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
         await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
     }
 
-    /// <summary>
-    /// Prepare available warehouses
-    /// </summary>
-    /// <param name="items">Warehouse items</param>
-    /// <param name="withSpecialDefaultItem">Whether to insert the first special item for the default value</param>
-    /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task PrepareWarehousesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
-    {
-        ArgumentNullException.ThrowIfNull(items);
-
-        //prepare available warehouses
-        var availableWarehouses = await _warehouseService.GetAllWarehousesAsync();
-        foreach (var warehouse in availableWarehouses)
-        {
-            items.Add(new SelectListItem { Value = warehouse.Id.ToString(), Text = warehouse.Name });
-        }
-
-        //insert special item for the default value
-        await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
-    }
 
     /// <summary>
     /// Prepare available delivery dates

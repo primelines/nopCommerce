@@ -22,36 +22,14 @@ public class ProductServiceTests : ServiceTest
         _productService = GetService<IProductService>();
 
         var product = await _productService.GetProductByIdAsync(1);
-        product.ManageInventoryMethod = ManageInventoryMethod.ManageStock;
-        product.UseMultipleWarehouses = true;
 
         await _productService.UpdateProductAsync(product);
-
-        await _productService.InsertProductWarehouseInventoryAsync(new ProductWarehouseInventory
-        {
-            ProductId = product.Id,
-            WarehouseId = 1,
-            StockQuantity = 8,
-            ReservedQuantity = 5
-        });
-
-        await _productService.InsertProductWarehouseInventoryAsync(new ProductWarehouseInventory
-        {
-            ProductId = product.Id,
-            WarehouseId = 2,
-            StockQuantity = 5
-        });
     }
 
     [OneTimeTearDown]
     public async Task TearDown()
     {
         var product = await _productService.GetProductByIdAsync(1);
-        foreach (var productWarehouseInventory in await _productService.GetAllProductWarehouseInventoryRecordsAsync(1))
-            await _productService.DeleteProductWarehouseInventoryAsync(productWarehouseInventory);
-
-        product.ManageInventoryMethod = ManageInventoryMethod.DontManageStock;
-        product.UseMultipleWarehouses = false;
 
         await _productService.UpdateProductAsync(product);
     }
@@ -164,34 +142,6 @@ public class ProductServiceTests : ServiceTest
         result[1].Should().Be(5);
         result[2].Should().Be(4);
         result[3].Should().Be(10);
-    }
-
-    [Test]
-    public async Task CanCalculateTotalQuantityWhenWeDoNotUseMultipleWarehouses()
-    {
-        var result = await _productService.GetTotalStockQuantityAsync(new Product { StockQuantity = 6, ManageInventoryMethod = ManageInventoryMethod.ManageStock });
-        result.Should().Be(6);
-    }
-
-    [Test]
-    public async Task PublicVoidCanCalculateTotalQuantityWhenWeDoUseMultipleWarehousesWithReserved()
-    {
-        var result = await _productService.GetTotalStockQuantityAsync(await _productService.GetProductByIdAsync(1));
-        result.Should().Be(8);
-    }
-
-    [Test]
-    public async Task CanCalculateTotalQuantityWhenWeDoUseMultipleWarehousesWithoutReserved()
-    {
-        var result = await _productService.GetTotalStockQuantityAsync(await _productService.GetProductByIdAsync(1), false);
-        result.Should().Be(13);
-    }
-
-    [Test]
-    public async Task CanCalculateTotalQuantityWhenWeDoUseMultipleWarehousesWithWarehouseSpecified()
-    {
-        var result = await _productService.GetTotalStockQuantityAsync(await _productService.GetProductByIdAsync(1), true, 1);
-        result.Should().Be(3);
     }
 
     #endregion

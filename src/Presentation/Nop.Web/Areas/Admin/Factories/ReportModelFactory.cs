@@ -316,9 +316,7 @@ public partial class ReportModelFactory : IReportModelFactory
         {
             Id = product.Id,
             Name = product.Name,
-
-            ManageInventoryMethod = await _localizationService.GetLocalizedEnumAsync(product.ManageInventoryMethod),
-            StockQuantity = await _productService.GetTotalStockQuantityAsync(product),
+            StockQuantity = product.StockQuantity,
             Published = product.Published
         }).ToListAsync());
 
@@ -333,11 +331,8 @@ public partial class ReportModelFactory : IReportModelFactory
             {
                 Id = combination.ProductId,
                 Name = product.Name,
-
                 Attributes = await _productAttributeFormatter
                     .FormatAttributesAsync(product, combination.AttributesXml, currentCustomer, currentStore, "<br />", true, true, true, false),
-                ManageInventoryMethod = await _localizationService.GetLocalizedEnumAsync(product.ManageInventoryMethod),
-
                 StockQuantity = combination.StockQuantity,
                 Published = product.Published
             };

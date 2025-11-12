@@ -109,16 +109,6 @@
         </nop-nested-setting>
         <div class="form-group row advanced-setting">
             <div class="col-md-3">
-                <nop-override-store-checkbox asp-for="UseWarehouseLocation_OverrideForStore" asp-input="UseWarehouseLocation" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
-                <nop-label asp-for="UseWarehouseLocation" />
-            </div>
-            <div class="col-md-9">
-                <nop-editor asp-for="UseWarehouseLocation" />
-                <span asp-validation-for="UseWarehouseLocation"></span>
-            </div>
-        </div>
-        <div class="form-group row advanced-setting">
-            <div class="col-md-3">
                 <nop-override-store-checkbox asp-for="ConsiderAssociatedProductsDimensions_OverrideForStore" asp-input="ConsiderAssociatedProductsDimensions" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                 <nop-label asp-for="ConsiderAssociatedProductsDimensions" />
             </div>

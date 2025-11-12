@@ -311,33 +311,13 @@ public class OmnisendService
 
             int stockQuantity;
 
-            switch (product.ManageInventoryMethod)
-            {
-                case ManageInventoryMethod.ManageStock:
-                    stockQuantity = await _productService.GetTotalStockQuantityAsync(product);
+            stockQuantity = product.StockQuantity;
 
-                    if (stockQuantity > 0 || product.BackorderMode == BackorderMode.AllowQtyBelow0)
-                        status = "inStock";
-                    else
-                        status = "outOfStock";
+            if (stockQuantity > 0 || product.BackorderMode == BackorderMode.AllowQtyBelow0)
+                status = "inStock";
+            else
+                status = "outOfStock";
 
-                    break;
-                case ManageInventoryMethod.ManageStockByAttributes:
-                    if (productAttributeCombination == null)
-                        return combinations.Any(c => c.StockQuantity > 0 || c.AllowOutOfStockOrders) ? "inStock" : "outOfStock";
-
-                    stockQuantity = productAttributeCombination.StockQuantity;
-
-                    if (stockQuantity > 0 || productAttributeCombination.AllowOutOfStockOrders)
-                        status = "inStock";
-                    else
-                        status = "outOfStock";
-
-                    break;
-                case ManageInventoryMethod.DontManageStock:
-                    status = "inStock";
-                    break;
-            }
 
             return status;
         }

@@ -265,15 +265,6 @@ public partial interface IBaseAdminModelFactory
     Task PrepareTopicTemplatesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
 
     /// <summary>
-    /// Prepare available warehouses
-    /// </summary>
-    /// <param name="items">Warehouse items</param>
-    /// <param name="withSpecialDefaultItem">Whether to insert the first special item for the default value</param>
-    /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task PrepareWarehousesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
-
-    /// <summary>
     /// Prepare available delivery dates
     /// </summary>
     /// <param name="items">Delivery date items</param>

@@ -289,7 +289,6 @@ public partial class OrderController : BaseAdminController
         var orders = await _orderService.SearchOrdersAsync(storeId: model.StoreId,
             vendorId: model.VendorId,
             productId: filterByProductId,
-            warehouseId: model.WarehouseId,
             paymentMethodSystemName: model.PaymentMethodSystemName,
             createdFromUtc: startDateValue,
             createdToUtc: endDateValue,
@@ -385,7 +384,6 @@ public partial class OrderController : BaseAdminController
         var orders = await _orderService.SearchOrdersAsync(storeId: model.StoreId,
             vendorId: model.VendorId,
             productId: filterByProductId,
-            warehouseId: model.WarehouseId,
             paymentMethodSystemName: model.PaymentMethodSystemName,
             createdFromUtc: startDateValue,
             createdToUtc: endDateValue,
@@ -933,7 +931,6 @@ public partial class OrderController : BaseAdminController
         var orders = await _orderService.SearchOrdersAsync(storeId: model.StoreId,
             vendorId: model.VendorId,
             productId: filterByProductId,
-            warehouseId: model.WarehouseId,
             paymentMethodSystemName: model.PaymentMethodSystemName,
             createdFromUtc: startDateValue,
             createdToUtc: endDateValue,
@@ -1749,25 +1746,6 @@ public partial class OrderController : BaseAdminController
                     break;
                 }
 
-            var warehouseId = 0;
-            if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
-                product.UseMultipleWarehouses)
-            {
-                //multiple warehouses supported
-                //warehouse is chosen by a store owner
-                foreach (var formKey in form.Keys)
-                    if (formKey.Equals($"warehouse_{orderItem.Id}", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        _ = int.TryParse(form[formKey], out warehouseId);
-                        break;
-                    }
-            }
-            else
-            {
-                //multiple warehouses are not supported
-                warehouseId = product.WarehouseId;
-            }
-
             //validate quantity
             if (qtyToAdd <= 0)
                 continue;
@@ -1789,7 +1767,6 @@ public partial class OrderController : BaseAdminController
             {
                 OrderItemId = orderItem.Id,
                 Quantity = qtyToAdd,
-                WarehouseId = warehouseId
             });
         }
 
@@ -1874,17 +1851,17 @@ public partial class OrderController : BaseAdminController
         if (await _workContext.GetCurrentVendorAsync() != null && !await HasAccessToShipmentAsync(shipment))
             return RedirectToAction("List");
 
-        foreach (var shipmentItem in await _shipmentService.GetShipmentItemsByShipmentIdAsync(shipment.Id))
-        {
-            var orderItem = await _orderService.GetOrderItemByIdAsync(shipmentItem.OrderItemId);
-            if (orderItem == null)
-                continue;
+        //foreach (var shipmentItem in await _shipmentService.GetShipmentItemsByShipmentIdAsync(shipment.Id))
+        //{
+        //    var orderItem = await _orderService.GetOrderItemByIdAsync(shipmentItem.OrderItemId);
+        //    if (orderItem == null)
+        //        continue;
 
-            var product = await _productService.GetProductByIdAsync(orderItem.ProductId);
+        //    var product = await _productService.GetProductByIdAsync(orderItem.ProductId);
 
-            await _productService.ReverseBookedInventoryAsync(product, shipmentItem,
-                string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.DeleteShipment"), shipment.OrderId));
-        }
+        //    await _productService.ReverseBookedInventoryAsync(product, shipmentItem,
+        //        string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.DeleteShipment"), shipment.OrderId));
+        //}
 
         var orderId = shipment.OrderId;
         await _shipmentService.DeleteShipmentAsync(shipment);
@@ -2171,7 +2148,6 @@ public partial class OrderController : BaseAdminController
 
         //load shipments
         var shipments = await _shipmentService.GetAllShipmentsAsync(vendorId: vendorId,
-            warehouseId: model.WarehouseId,
             shippingCountryId: model.CountryId,
             shippingStateId: model.StateProvinceId,
             shippingCounty: model.County,

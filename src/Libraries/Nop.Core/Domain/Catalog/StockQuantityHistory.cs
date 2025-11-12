@@ -34,9 +34,4 @@ public partial class StockQuantityHistory : BaseEntity
     /// Gets or sets the product attribute combination identifier
     /// </summary>
     public int? CombinationId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the warehouse identifier
-    /// </summary>
-    public int? WarehouseId { get; set; }
 }

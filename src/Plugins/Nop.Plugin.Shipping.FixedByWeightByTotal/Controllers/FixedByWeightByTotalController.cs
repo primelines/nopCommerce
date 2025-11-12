@@ -37,7 +37,6 @@ public class FixedByWeightByTotalController : BasePluginController
     protected readonly IShippingMethodsService _shippingMethodsService;
     protected readonly IStateProvinceService _stateProvinceService;
     protected readonly IStoreService _storeService;
-    protected readonly IWarehouseService _warehouseService;
     protected readonly MeasureSettings _measureSettings;
 
     #endregion
@@ -55,7 +54,6 @@ public class FixedByWeightByTotalController : BasePluginController
         IShippingMethodsService shippingMethodsService,
         IStateProvinceService stateProvinceService,
         IStoreService storeService,
-        IWarehouseService warehouseService,
         MeasureSettings measureSettings)
     {
         _currencySettings = currencySettings;
@@ -69,7 +67,6 @@ public class FixedByWeightByTotalController : BasePluginController
         _stateProvinceService = stateProvinceService;
         _shippingMethodsService = shippingMethodsService;
         _storeService = storeService;
-        _warehouseService = warehouseService;
         _measureSettings = measureSettings;
     }
 
@@ -90,10 +87,6 @@ public class FixedByWeightByTotalController : BasePluginController
         model.AvailableStores.Add(new SelectListItem { Text = "*", Value = "0" });
         foreach (var store in await _storeService.GetAllStoresAsync())
             model.AvailableStores.Add(new SelectListItem { Text = store.Name, Value = store.Id.ToString() });
-        //warehouses
-        model.AvailableWarehouses.Add(new SelectListItem { Text = "*", Value = "0" });
-        foreach (var warehouses in await _warehouseService.GetAllWarehousesAsync())
-            model.AvailableWarehouses.Add(new SelectListItem { Text = warehouses.Name, Value = warehouses.Id.ToString() });
         //shipping methods
         model.AvailableShippingMethods.Add(new SelectListItem { Text = "*", Value = "0" });
         foreach (var sm in await _shippingMethodsService.GetAllShippingMethodsAsync())
@@ -183,7 +176,6 @@ public class FixedByWeightByTotalController : BasePluginController
             pageIndex: searchModel.Page - 1,
             pageSize: searchModel.PageSize,
             storeId: filter.SearchStoreId,
-            warehouseId: filter.SearchWarehouseId,
             countryId: filter.SearchCountryId,
             stateProvinceId: filter.SearchStateProvinceId,
             zip: filter.SearchZip,
@@ -201,8 +193,6 @@ public class FixedByWeightByTotalController : BasePluginController
                     Id = record.Id,
                     StoreId = record.StoreId,
                     StoreName = (await _storeService.GetStoreByIdAsync(record.StoreId))?.Name ?? "*",
-                    WarehouseId = record.WarehouseId,
-                    WarehouseName = (await _warehouseService.GetWarehouseByIdAsync(record.WarehouseId))?.Name ?? "*",
                     ShippingMethodId = record.ShippingMethodId,
                     ShippingMethodName = (await _shippingMethodsService.GetShippingMethodByIdAsync(record.ShippingMethodId))?.Name ?? "Unavailable",
                     CountryId = record.CountryId,
@@ -282,10 +272,6 @@ public class FixedByWeightByTotalController : BasePluginController
         model.AvailableStores.Add(new SelectListItem { Text = "*", Value = "0" });
         foreach (var store in await _storeService.GetAllStoresAsync())
             model.AvailableStores.Add(new SelectListItem { Text = store.Name, Value = store.Id.ToString() });
-        //warehouses
-        model.AvailableWarehouses.Add(new SelectListItem { Text = "*", Value = "0" });
-        foreach (var warehouses in await _warehouseService.GetAllWarehousesAsync())
-            model.AvailableWarehouses.Add(new SelectListItem { Text = warehouses.Name, Value = warehouses.Id.ToString() });
         //shipping methods
         foreach (var sm in shippingMethods)
             model.AvailableShippingMethods.Add(new SelectListItem { Text = sm.Name, Value = sm.Id.ToString() });
@@ -307,7 +293,6 @@ public class FixedByWeightByTotalController : BasePluginController
         await _shippingByWeightService.InsertShippingByWeightRecordAsync(new ShippingByWeightByTotalRecord
         {
             StoreId = model.StoreId,
-            WarehouseId = model.WarehouseId,
             CountryId = model.CountryId,
             StateProvinceId = model.StateProvinceId,
             Zip = model.Zip == "*" ? null : model.Zip,
@@ -340,7 +325,6 @@ public class FixedByWeightByTotalController : BasePluginController
         {
             Id = sbw.Id,
             StoreId = sbw.StoreId,
-            WarehouseId = sbw.WarehouseId,
             CountryId = sbw.CountryId,
             StateProvinceId = sbw.StateProvinceId,
             Zip = sbw.Zip,
@@ -363,7 +347,6 @@ public class FixedByWeightByTotalController : BasePluginController
             return Content("No shipping methods can be loaded");
 
         var selectedStore = await _storeService.GetStoreByIdAsync(sbw.StoreId);
-        var selectedWarehouse = await _warehouseService.GetWarehouseByIdAsync(sbw.WarehouseId);
         var selectedShippingMethod = await _shippingMethodsService.GetShippingMethodByIdAsync(sbw.ShippingMethodId);
         var selectedCountry = await _countryService.GetCountryByIdAsync(sbw.CountryId);
         var selectedState = await _stateProvinceService.GetStateProvinceByIdAsync(sbw.StateProvinceId);
@@ -371,10 +354,6 @@ public class FixedByWeightByTotalController : BasePluginController
         model.AvailableStores.Add(new SelectListItem { Text = "*", Value = "0" });
         foreach (var store in await _storeService.GetAllStoresAsync())
             model.AvailableStores.Add(new SelectListItem { Text = store.Name, Value = store.Id.ToString(), Selected = (selectedStore != null && store.Id == selectedStore.Id) });
-        //warehouses
-        model.AvailableWarehouses.Add(new SelectListItem { Text = "*", Value = "0" });
-        foreach (var warehouse in await _warehouseService.GetAllWarehousesAsync())
-            model.AvailableWarehouses.Add(new SelectListItem { Text = warehouse.Name, Value = warehouse.Id.ToString(), Selected = (selectedWarehouse != null && warehouse.Id == selectedWarehouse.Id) });
         //shipping methods
         foreach (var sm in shippingMethods)
             model.AvailableShippingMethods.Add(new SelectListItem { Text = sm.Name, Value = sm.Id.ToString(), Selected = (selectedShippingMethod != null && sm.Id == selectedShippingMethod.Id) });
@@ -402,7 +381,6 @@ public class FixedByWeightByTotalController : BasePluginController
             return RedirectToAction("Configure");
 
         sbw.StoreId = model.StoreId;
-        sbw.WarehouseId = model.WarehouseId;
         sbw.CountryId = model.CountryId;
         sbw.StateProvinceId = model.StateProvinceId;
         sbw.Zip = model.Zip == "*" ? null : model.Zip;

@@ -66,11 +66,6 @@ public partial class SampleData
     public List<SamplePoll> Polls { get; set; } = new();
 
     /// <summary>
-    /// Gets or sets the list of warehouses
-    /// </summary>
-    public List<SampleWarehouse> Warehouses { get; set; } = new();
-
-    /// <summary>
     /// Gets or sets the list of vendors
     /// </summary>
     public List<SampleVendor> Vendors { get; set; } = new();

@@ -88,10 +88,9 @@ public partial class BackInStockSubscriptionController : BasePublicController
                     .GetAllSubscriptionsByCustomerIdAsync(customer.Id, store.Id, 0, 1))
                 .TotalCount
         };
-        if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
+        if (
             product.BackorderMode == BackorderMode.NoBackorders &&
-            product.AllowBackInStockSubscriptions &&
-            await _productService.GetTotalStockQuantityAsync(product) <= 0)
+            product.AllowBackInStockSubscriptions && product.StockQuantity <= 0)
         {
             //out of stock
             model.SubscriptionAllowed = true;
@@ -117,10 +116,9 @@ public partial class BackInStockSubscriptionController : BasePublicController
         if (!await _customerService.IsRegisteredAsync(customer))
             return Content(await _localizationService.GetResourceAsync("BackInStockSubscriptions.OnlyRegistered"));
 
-        if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
+        if (
             product.BackorderMode == BackorderMode.NoBackorders &&
-            product.AllowBackInStockSubscriptions &&
-            await _productService.GetTotalStockQuantityAsync(product) <= 0)
+            product.AllowBackInStockSubscriptions && product.StockQuantity <= 0)
         {
             //out of stock
             var store = await _storeContext.GetCurrentStoreAsync();

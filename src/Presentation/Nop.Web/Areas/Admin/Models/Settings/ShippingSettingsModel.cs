@@ -43,10 +43,6 @@ public partial record ShippingSettingsModel : BaseNopModel, ISettingsModel
     public string GoogleMapsApiKey { get; set; }
     public bool GoogleMapsApiKey_OverrideForStore { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.Shipping.UseWarehouseLocation")]
-    public bool UseWarehouseLocation { get; set; }
-    public bool UseWarehouseLocation_OverrideForStore { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.Shipping.NotifyCustomerAboutShippingFromMultipleLocations")]
     public bool NotifyCustomerAboutShippingFromMultipleLocations { get; set; }
     public bool NotifyCustomerAboutShippingFromMultipleLocations_OverrideForStore { get; set; }

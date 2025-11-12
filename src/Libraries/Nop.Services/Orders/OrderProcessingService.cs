@@ -197,45 +197,6 @@ public partial class OrderProcessingService : IOrderProcessingService
     #region Utilities
 
     /// <summary>
-    /// Books the inventory by specified shipment
-    /// </summary>
-    /// <param name="shipment">Shipment</param>
-    /// <param name="message">Message for the stock quantity history</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task BookReservedInventoryAsync(Shipment shipment, string message)
-    {
-        foreach (var item in await _shipmentService.GetShipmentItemsByShipmentIdAsync(shipment.Id))
-        {
-            var product = await _orderService.GetProductByOrderItemIdAsync(item.OrderItemId);
-            if (product is null)
-                continue;
-
-            await _productService.BookReservedInventoryAsync(product, item.WarehouseId, -item.Quantity, message);
-        }
-    }
-
-    /// <summary>
-    /// Reveres the booked inventory by specified order
-    /// </summary>
-    /// <param name="order"></param>
-    /// <param name="message">Message for the stock quantity history</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task ReverseBookedInventoryAsync(Order order, string message)
-    {
-        foreach (var shipment in await _shipmentService.GetShipmentsByOrderIdAsync(order.Id))
-        {
-            foreach (var shipmentItem in await _shipmentService.GetShipmentItemsByShipmentIdAsync(shipment.Id))
-            {
-                var product = await _orderService.GetProductByOrderItemIdAsync(shipmentItem.OrderItemId);
-                if (product is null)
-                    continue;
-
-                await _productService.ReverseBookedInventoryAsync(product, shipmentItem, message);
-            }
-        }
-    }
-
-    /// <summary>
     /// Returns the stock by specified order
     /// </summary>
     /// <param name="order">Order</param>
@@ -1579,10 +1540,6 @@ public partial class OrderProcessingService : IOrderProcessingService
             //reduce (cancel) back reward points (previously awarded for this order)
             await ReduceRewardPointsAsync(order);
 
-            //Adjust inventory for already shipped shipments
-            //only products with "use multiple warehouses"
-            await ReverseBookedInventoryAsync(order, string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.DeleteOrder"), order.Id));
-
             //Adjust inventory
             await ReturnOrderStockAsync(order, string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.DeleteOrder"), order.Id));
         }
@@ -1618,9 +1575,6 @@ public partial class OrderProcessingService : IOrderProcessingService
 
         shipment.ShippedDateUtc = DateTime.UtcNow;
         await _shipmentService.UpdateShipmentAsync(shipment);
-
-        //process products with "Multiple warehouse" support enabled
-        await BookReservedInventoryAsync(shipment, string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.Ship"), shipment.OrderId));
 
         //check whether we have more items to ship
         if (await _orderService.HasItemsToAddToShipmentAsync(order) || await _orderService.HasItemsToShipAsync(order))
@@ -1716,13 +1670,6 @@ public partial class OrderProcessingService : IOrderProcessingService
         //add a note
         await AddOrderNoteAsync(order, $"Shipment# {shipment.Id} has been delivered");
 
-        if (order.PickupInStore)
-        {
-            // Shipment has been collected by customer.
-            // We must process products with "Multiple warehouse" support enabled.
-            await BookReservedInventoryAsync(shipment, string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.ReadyForPickupByCustomer"), shipment.OrderId));
-        }
-
         if (notifyCustomer)
         {
             //send email notification
@@ -1784,9 +1731,6 @@ public partial class OrderProcessingService : IOrderProcessingService
         if (_orderSettings.DeleteGiftCardUsageHistory)
             await _giftCardService.DeleteGiftCardUsageHistoryAsync(order);
 
-        //Adjust inventory for already shipped shipments
-        //only products with "use multiple warehouses"
-        await ReverseBookedInventoryAsync(order, string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.CancelOrder"), order.Id));
 
         //Adjust inventory
         await ReturnOrderStockAsync(order, string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.CancelOrder"), order.Id));

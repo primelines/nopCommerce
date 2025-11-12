@@ -800,7 +800,7 @@ public partial class ShoppingCartController : BasePublicController
         }
 
         //stock
-        var stockAvailability = await _productService.FormatStockMessageAsync(product, attributeXml);
+        var stockAvailability = await _productService.FormatStockMessageAsync(product);
 
         //conditional attributes
         var enabledAttributeMappingIds = new List<int>();

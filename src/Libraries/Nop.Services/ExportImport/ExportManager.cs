@@ -1276,10 +1276,6 @@ public partial class ExportManager : IExportManager
             await xmlWriter.WriteStringAsync("DeliveryDateId", product.DeliveryDateId, await IgnoreExportProductPropertyAsync(p => p.DeliveryDate));
             await xmlWriter.WriteStringAsync("IsTaxExempt", product.IsTaxExempt);
             await xmlWriter.WriteStringAsync("TaxCategoryId", product.TaxCategoryId);
-            await xmlWriter.WriteStringAsync("ManageInventoryMethodId", product.ManageInventoryMethodId);
-            await xmlWriter.WriteStringAsync("ProductAvailabilityRangeId", product.ProductAvailabilityRangeId, await IgnoreExportProductPropertyAsync(p => p.ProductAvailabilityRange));
-            await xmlWriter.WriteStringAsync("UseMultipleWarehouses", product.UseMultipleWarehouses, await IgnoreExportProductPropertyAsync(p => p.UseMultipleWarehouses));
-            await xmlWriter.WriteStringAsync("WarehouseId", product.WarehouseId, await IgnoreExportProductPropertyAsync(p => p.Warehouse));
             await xmlWriter.WriteStringAsync("StockQuantity", product.StockQuantity);
             await xmlWriter.WriteStringAsync("DisplayStockAvailability", product.DisplayStockAvailability, await IgnoreExportProductPropertyAsync(p => p.DisplayStockAvailability));
             await xmlWriter.WriteStringAsync("DisplayStockQuantity", product.DisplayStockQuantity, await IgnoreExportProductPropertyAsync(p => p.DisplayStockAvailability));
@@ -1600,17 +1596,6 @@ public partial class ExportManager : IExportManager
                 DropDownElements = (await _taxCategoryService.GetAllTaxCategoriesAsync()).Select(tc => tc as BaseEntity).ToSelectList(p => (p as TaxCategory)?.Name ?? string.Empty),
                 AllowBlank = true
             },
-            new PropertyByName<Product>("ManageInventoryMethod", (p, _) => p.ManageInventoryMethodId)
-            {
-                DropDownElements = await ManageInventoryMethod.DontManageStock.ToSelectListAsync(useLocalization: false)
-            },
-            new PropertyByName<Product>("ProductAvailabilityRange", (p, _) => p.ProductAvailabilityRangeId, await IgnoreExportProductPropertyAsync(p => p.ProductAvailabilityRange))
-            {
-                DropDownElements = (await _dateRangeService.GetAllProductAvailabilityRangesAsync()).Select(range => range as BaseEntity).ToSelectList(p => (p as ProductAvailabilityRange)?.Name ?? string.Empty),
-                AllowBlank = true
-            },
-            new PropertyByName<Product>("UseMultipleWarehouses", (p, _) => p.UseMultipleWarehouses, await IgnoreExportProductPropertyAsync(p => p.UseMultipleWarehouses)),
-            new PropertyByName<Product>("WarehouseId", (p, _) => p.WarehouseId, await IgnoreExportProductPropertyAsync(p => p.Warehouse)),
             new PropertyByName<Product>("StockQuantity", (p, _) => p.StockQuantity),
             new PropertyByName<Product>("DisplayStockAvailability", (p, _) => p.DisplayStockAvailability, await IgnoreExportProductPropertyAsync(p => p.DisplayStockAvailability)),
             new PropertyByName<Product>("DisplayStockQuantity", (p, _) => p.DisplayStockQuantity, await IgnoreExportProductPropertyAsync(p => p.DisplayStockAvailability)),

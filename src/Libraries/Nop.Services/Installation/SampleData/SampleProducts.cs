@@ -213,12 +213,6 @@ public partial class SampleProducts
         public LowStockActivity LowStockActivity { get; set; }
 
         /// <summary>
-        /// Gets or sets the value indicating how to manage inventory
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ManageInventoryMethod ManageInventoryMethod { get; set; }
-
-        /// <summary>
         /// Gets or sets a value of used product template name
         /// </summary>
         public string ProductTemplateName { get; set; }

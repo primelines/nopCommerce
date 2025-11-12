@@ -150,7 +150,6 @@ public class FixedByWeightByTotalComputationMethod : BasePlugin, IShippingRateCo
             var storeId = getShippingOptionRequest.StoreId != 0 ? getShippingOptionRequest.StoreId : store.Id;
             var countryId = getShippingOptionRequest.ShippingAddress.CountryId ?? 0;
             var stateProvinceId = getShippingOptionRequest.ShippingAddress.StateProvinceId ?? 0;
-            var warehouseId = getShippingOptionRequest.WarehouseFrom?.Id ?? 0;
             var zip = getShippingOptionRequest.ShippingAddress.ZipPostalCode;
 
             //get subtotal of shipped items
@@ -172,7 +171,7 @@ public class FixedByWeightByTotalComputationMethod : BasePlugin, IShippingRateCo
                 var rate = decimal.Zero;
 
                 var shippingByWeightByTotalRecord = await _shippingByWeightByTotalService.FindRecordsAsync(
-                    shippingMethod.Id, storeId, warehouseId, countryId, stateProvinceId, zip, weight, subTotal);
+                    shippingMethod.Id, storeId, countryId, stateProvinceId, zip, weight, subTotal);
                 if (shippingByWeightByTotalRecord == null)
                 {
                     if (_fixedByWeightByTotalSettings.LimitMethodsToCreated)

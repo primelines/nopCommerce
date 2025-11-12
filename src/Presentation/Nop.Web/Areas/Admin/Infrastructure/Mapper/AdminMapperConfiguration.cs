@@ -114,7 +114,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
         CreateTaxMaps();
         CreateTopicsMaps();
         CreateVendorsMaps();
-        CreateWarehouseMaps();
         CreateMenuMaps();
 
         //add some generic mapping rules
@@ -511,7 +510,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.AvailableProductTemplates, options => options.Ignore())
             .ForMember(model => model.AvailableTaxCategories, options => options.Ignore())
             .ForMember(model => model.AvailableVendors, options => options.Ignore())
-            .ForMember(model => model.AvailableWarehouses, options => options.Ignore())
             .ForMember(model => model.BaseDimensionIn, options => options.Ignore())
             .ForMember(model => model.BaseWeightIn, options => options.Ignore())
             .ForMember(model => model.CopyProductModel, options => options.Ignore())
@@ -535,7 +533,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.AddVideoModel, options => options.Ignore())
             .ForMember(model => model.ProductSpecificationAttributeSearchModel, options => options.Ignore())
             .ForMember(model => model.AvailableProductTags, options => options.Ignore())
-            .ForMember(model => model.ProductWarehouseInventoryModels, options => options.Ignore())
             .ForMember(model => model.RelatedProductSearchModel, options => options.Ignore())
             .ForMember(model => model.SelectedCategoryIds, options => options.Ignore())
             .ForMember(model => model.SelectedManufacturerIds, options => options.Ignore())
@@ -555,7 +552,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(entity => entity.Deleted, options => options.Ignore())
             .ForMember(entity => entity.GiftCardType, options => options.Ignore())
             .ForMember(entity => entity.LowStockActivity, options => options.Ignore())
-            .ForMember(entity => entity.ManageInventoryMethod, options => options.Ignore())
             .ForMember(entity => entity.NotApprovedRatingSum, options => options.Ignore())
             .ForMember(entity => entity.NotApprovedTotalReviews, options => options.Ignore())
             .ForMember(entity => entity.UpdatedOnUtc, options => options.Ignore());
@@ -1606,8 +1602,7 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.PrimaryStoreCurrencyCode, options => options.Ignore())
             .ForMember(model => model.ShippingOriginAddress, options => options.Ignore())
             .ForMember(model => model.ShippingOriginAddress_OverrideForStore, options => options.Ignore())
-            .ForMember(model => model.ShipToSameAddress_OverrideForStore, options => options.Ignore())
-            .ForMember(model => model.UseWarehouseLocation_OverrideForStore, options => options.Ignore());
+            .ForMember(model => model.ShipToSameAddress_OverrideForStore, options => options.Ignore());
         CreateMap<ShippingSettingsModel, ShippingSettings>()
             .ForMember(settings => settings.ActivePickupPointProviderSystemNames, options => options.Ignore())
             .ForMember(settings => settings.ActiveShippingRateComputationMethodSystemNames, options => options.Ignore())
@@ -1757,17 +1752,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
         CreateMap<VendorSettingsModel, VendorSettings>()
             .ForMember(settings => settings.DefaultVendorPageSizeOptions, options => options.Ignore())
             .ForMember(settings => settings.MaximumProductPicturesNumber, options => options.Ignore());
-    }
-
-    /// <summary>
-    /// Create warehouse maps 
-    /// </summary>
-    protected virtual void CreateWarehouseMaps()
-    {
-        CreateMap<Warehouse, WarehouseModel>()
-            .ForMember(entity => entity.Address, options => options.Ignore());
-        CreateMap<WarehouseModel, Warehouse>()
-            .ForMember(entity => entity.AddressId, options => options.Ignore());
     }
 
     /// <summary>

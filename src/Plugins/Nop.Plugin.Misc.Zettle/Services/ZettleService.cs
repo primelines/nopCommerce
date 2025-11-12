@@ -608,7 +608,7 @@ public class ZettleService
     {
         //ensure that inventory is tracked for the product
         var product = await _productService.GetProductByIdAsync(productRecord.Record?.ProductId ?? 0);
-        if (product is null || product.ManageInventoryMethod == Core.Domain.Catalog.ManageInventoryMethod.DontManageStock)
+        if (product is null )
             return null;
 
         var productChange = new CreateTrackingRequest.ProductBalanceChange
@@ -660,10 +660,8 @@ public class ZettleService
                 var combination = await _productAttributeService.GetProductAttributeCombinationByIdAsync(combinationRecord.Record.CombinationId);
 
                 //get initial quantity
-                var quantity = changeType == InventoryBalanceChangeType.StartTracking
-                    ? (product.ManageInventoryMethod == Core.Domain.Catalog.ManageInventoryMethod.ManageStockByAttributes
-                        ? (combination?.StockQuantity ?? 0) - combinationRecord.StockQuantity
-                        : (product.StockQuantity / combinations.Count) - combinationRecord.StockQuantity)
+                var quantity = changeType == InventoryBalanceChangeType.StartTracking ?  
+                    (product.StockQuantity / combinations.Count) - combinationRecord.StockQuantity
                     : combinationRecord.QuantityAdjustment ?? 0;
                 if (quantity == 0)
                     return null;

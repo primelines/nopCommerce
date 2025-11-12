@@ -119,7 +119,6 @@ public partial interface IProductService
     /// <param name="manufacturerIds">Manufacturer identifiers</param>
     /// <param name="storeId">Store identifier; 0 to load all records</param>
     /// <param name="vendorId">Vendor identifier; 0 to load all records</param>
-    /// <param name="warehouseId">Warehouse identifier; 0 to load all records</param>
     /// <param name="excludeFeaturedProducts">A value indicating whether loaded products are marked as featured (relates only to categories and manufacturers); "false" (by default) to load all records; "true" to exclude featured products from results</param>
     /// <param name="priceMin">Minimum price; null to load all records</param>
     /// <param name="priceMax">Maximum price; null to load all records</param>
@@ -149,7 +148,6 @@ public partial interface IProductService
         IList<int> manufacturerIds = null,
         int storeId = 0,
         int vendorId = 0,
-        int warehouseId = 0,
         bool excludeFeaturedProducts = false,
         decimal? priceMin = null,
         decimal? priceMax = null,
@@ -255,34 +253,14 @@ public partial interface IProductService
     int[] ParseAllowedQuantities(Product product);
 
     /// <summary>
-    /// Get total quantity
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="useReservedQuantity">
-    /// A value indicating whether we should consider "Reserved Quantity" property 
-    /// when "multiple warehouses" are used
-    /// </param>
-    /// <param name="warehouseId">
-    /// Warehouse identifier. Used to limit result to certain warehouse.
-    /// Used only with "multiple warehouses" enabled.
-    /// </param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    Task<int> GetTotalStockQuantityAsync(Product product, bool useReservedQuantity = true, int warehouseId = 0);
-
-
-    /// <summary>
     /// Formats the stock availability/quantity message
     /// </summary>
     /// <param name="product">Product</param>
-    /// <param name="attributesXml">Selected product attributes in XML format (if specified)</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the stock message
     /// </returns>
-    Task<string> FormatStockMessageAsync(Product product, string attributesXml);
+    Task<string> FormatStockMessageAsync(Product product);
 
     /// <summary>
     /// Formats SKU
@@ -351,25 +329,6 @@ public partial interface IProductService
     /// <returns>A task that represents the asynchronous operation</returns>
     Task AdjustInventoryAsync(Product product, int quantityToChange, string attributesXml = "", string message = "");
 
-    /// <summary>
-    /// Book the reserved quantity
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
-    /// <param name="quantity">Quantity, must be negative</param>
-    /// <param name="message">Message for the stock quantity history</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task BookReservedInventoryAsync(Product product, int warehouseId, int quantity, string message = "");
-
-    /// <summary>
-    /// Reverse booked inventory (if acceptable)
-    /// </summary>
-    /// <param name="product">product</param>
-    /// <param name="shipmentItem">Shipment item</param>
-    /// <returns>Quantity reversed</returns>
-    /// <param name="message">Message for the stock quantity history</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task<int> ReverseBookedInventoryAsync(Product product, ShipmentItem shipmentItem, string message = "");
 
     #endregion
 
@@ -665,38 +624,6 @@ public partial interface IProductService
 
     #endregion
 
-    #region Product warehouses
-
-    /// <summary>
-    /// Get a product warehouse-inventory records by product identifier
-    /// </summary>
-    /// <param name="productId">Product identifier</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task<IList<ProductWarehouseInventory>> GetAllProductWarehouseInventoryRecordsAsync(int productId);
-
-    /// <summary>
-    /// Deletes a ProductWarehouseInventory
-    /// </summary>
-    /// <param name="pwi">ProductWarehouseInventory</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task DeleteProductWarehouseInventoryAsync(ProductWarehouseInventory pwi);
-
-    /// <summary>
-    /// Inserts a ProductWarehouseInventory
-    /// </summary>
-    /// <param name="pwi">ProductWarehouseInventory</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task InsertProductWarehouseInventoryAsync(ProductWarehouseInventory pwi);
-
-    /// <summary>
-    /// Updates a record to manage product inventory per warehouse
-    /// </summary>
-    /// <param name="pwi">Record to manage product inventory per warehouse</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task UpdateProductWarehouseInventoryAsync(ProductWarehouseInventory pwi);
-
-    #endregion
-
     #region Stock quantity history
 
     /// <summary>
@@ -705,18 +632,15 @@ public partial interface IProductService
     /// <param name="product">Product</param>
     /// <param name="quantityAdjustment">Quantity adjustment</param>
     /// <param name="stockQuantity">Current stock quantity</param>
-    /// <param name="warehouseId">Warehouse identifier</param>
     /// <param name="message">Message</param>
     /// <param name="combinationId">Product attribute combination identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddStockQuantityHistoryEntryAsync(Product product, int quantityAdjustment, int stockQuantity,
-        int warehouseId = 0, string message = "", int? combinationId = null);
+    Task AddStockQuantityHistoryEntryAsync(Product product, int quantityAdjustment, int stockQuantity, string message = "", int? combinationId = null);
 
     /// <summary>
     /// Get the history of the product stock quantity changes
     /// </summary>
     /// <param name="product">Product</param>
-    /// <param name="warehouseId">Warehouse identifier; pass 0 to load all entries</param>
     /// <param name="combinationId">Product attribute combination identifier; pass 0 to load all entries</param>
     /// <param name="pageIndex">Page index</param>
     /// <param name="pageSize">Page size</param>
@@ -724,7 +648,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of stock quantity change entries
     /// </returns>
-    Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, int warehouseId = 0, int combinationId = 0,
+    Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, int combinationId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     #endregion
