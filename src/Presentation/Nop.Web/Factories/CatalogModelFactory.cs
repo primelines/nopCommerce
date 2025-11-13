@@ -551,9 +551,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             Id = category.Id,
             Name = await _localizationService.GetLocalizedAsync(category, x => x.Name),
             Description = await _localizationService.GetLocalizedAsync(category, x => x.Description),
-            MetaKeywords = await _localizationService.GetLocalizedAsync(category, x => x.MetaKeywords),
-            MetaDescription = await _localizationService.GetLocalizedAsync(category, x => x.MetaDescription),
-            MetaTitle = await _localizationService.GetLocalizedAsync(category, x => x.MetaTitle),
             SeName = await _urlRecordService.GetSeNameAsync(category),
             CatalogProductsModel = await PrepareCategoryProductsModelAsync(category, command),
             PictureModel = await PrepareCategoryPictureModelAsync(category)
@@ -796,9 +793,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             Id = manufacturer.Id,
             Name = await _localizationService.GetLocalizedAsync(manufacturer, x => x.Name),
             Description = await _localizationService.GetLocalizedAsync(manufacturer, x => x.Description),
-            MetaKeywords = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaKeywords),
-            MetaDescription = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaDescription),
-            MetaTitle = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaTitle),
             SeName = await _urlRecordService.GetSeNameAsync(manufacturer),
             CatalogProductsModel = await PrepareManufacturerProductsModelAsync(manufacturer, command),
             PictureModel = await PrepareManufacturerPictureModelAsync(manufacturer)
@@ -951,9 +945,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                 Id = manufacturer.Id,
                 Name = await _localizationService.GetLocalizedAsync(manufacturer, x => x.Name),
                 Description = await _localizationService.GetLocalizedAsync(manufacturer, x => x.Description),
-                MetaKeywords = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaKeywords),
-                MetaDescription = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaDescription),
-                MetaTitle = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaTitle),
                 SeName = await _urlRecordService.GetSeNameAsync(manufacturer),
                 //prepare picture model
                 PictureModel = await PrepareManufacturerPictureModelAsync(manufacturer)
@@ -1034,9 +1025,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             Id = vendor.Id,
             Name = await _localizationService.GetLocalizedAsync(vendor, x => x.Name),
             Description = await _localizationService.GetLocalizedAsync(vendor, x => x.Description),
-            MetaKeywords = await _localizationService.GetLocalizedAsync(vendor, x => x.MetaKeywords),
-            MetaDescription = await _localizationService.GetLocalizedAsync(vendor, x => x.MetaDescription),
-            MetaTitle = await _localizationService.GetLocalizedAsync(vendor, x => x.MetaTitle),
             SeName = await _urlRecordService.GetSeNameAsync(vendor),
             AllowCustomersToContactVendors = _vendorSettings.AllowCustomersToContactVendors,
             CatalogProductsModel = await PrepareVendorProductsModelAsync(vendor, command),
@@ -1150,9 +1138,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                 Id = vendor.Id,
                 Name = await _localizationService.GetLocalizedAsync(vendor, x => x.Name),
                 Description = await _localizationService.GetLocalizedAsync(vendor, x => x.Description),
-                MetaKeywords = await _localizationService.GetLocalizedAsync(vendor, x => x.MetaKeywords),
-                MetaDescription = await _localizationService.GetLocalizedAsync(vendor, x => x.MetaDescription),
-                MetaTitle = await _localizationService.GetLocalizedAsync(vendor, x => x.MetaTitle),
                 SeName = await _urlRecordService.GetSeNameAsync(vendor),
                 AllowCustomersToContactVendors = _vendorSettings.AllowCustomersToContactVendors,
                 PictureModel = await PrepareVendorPictureModelAsync(vendor)
@@ -1344,9 +1329,6 @@ public partial class CatalogModelFactory : ICatalogModelFactory
         var model = new ProductsByTagModel
         {
             Id = productTag.Id,
-            MetaKeywords = await _localizationService.GetLocalizedAsync(productTag, x => x.MetaKeywords),
-            MetaDescription = await _localizationService.GetLocalizedAsync(productTag, x => x.MetaDescription),
-            MetaTitle = await _localizationService.GetLocalizedAsync(productTag, x => x.MetaTitle),
             TagName = await _localizationService.GetLocalizedAsync(productTag, y => y.Name),
             TagSeName = await _urlRecordService.GetSeNameAsync(productTag),
             CatalogProductsModel = await PrepareTagProductsModelAsync(productTag, command)

@@ -226,12 +226,6 @@ public partial class SettingModelFactory : ISettingModelFactory
         model.ProviderTypeId = (int)artificialIntelligenceSettings.ProviderType;
         model.AllowProductDescriptionGeneration = artificialIntelligenceSettings.AllowProductDescriptionGeneration;
         model.ProductDescriptionQuery = artificialIntelligenceSettings.ProductDescriptionQuery;
-        model.AllowMetaTitleGeneration = artificialIntelligenceSettings.AllowMetaTitleGeneration;
-        model.MetaTitleQuery = artificialIntelligenceSettings.MetaTitleQuery;
-        model.AllowMetaKeywordsGeneration = artificialIntelligenceSettings.AllowMetaKeywordsGeneration;
-        model.MetaKeywordsQuery = artificialIntelligenceSettings.MetaKeywordsQuery;
-        model.AllowMetaDescriptionGeneration = artificialIntelligenceSettings.AllowMetaDescriptionGeneration;
-        model.MetaDescriptionQuery = artificialIntelligenceSettings.MetaDescriptionQuery;
 
         //prepare available translation services
         var availableProviderType = await ArtificialIntelligenceProviderType.Gemini.ToSelectListAsync(false);
@@ -513,7 +507,6 @@ public partial class SettingModelFactory : ISettingModelFactory
             PageTitleSeparator = seoSettings.PageTitleSeparator,
             PageTitleSeoAdjustment = (int)seoSettings.PageTitleSeoAdjustment,
             PageTitleSeoAdjustmentValues = await seoSettings.PageTitleSeoAdjustment.ToSelectListAsync(),
-            GenerateProductMetaDescription = seoSettings.GenerateProductMetaDescription,
             ConvertNonWesternChars = seoSettings.ConvertNonWesternChars,
             CanonicalUrlsEnabled = seoSettings.CanonicalUrlsEnabled,
             WwwRequirement = (int)seoSettings.WwwRequirement,
@@ -531,7 +524,6 @@ public partial class SettingModelFactory : ISettingModelFactory
         //fill in overridden values
         model.PageTitleSeparator_OverrideForStore = await _settingService.SettingExistsAsync(seoSettings, x => x.PageTitleSeparator, storeId);
         model.PageTitleSeoAdjustment_OverrideForStore = await _settingService.SettingExistsAsync(seoSettings, x => x.PageTitleSeoAdjustment, storeId);
-        model.GenerateProductMetaDescription_OverrideForStore = await _settingService.SettingExistsAsync(seoSettings, x => x.GenerateProductMetaDescription, storeId);
         model.ConvertNonWesternChars_OverrideForStore = await _settingService.SettingExistsAsync(seoSettings, x => x.ConvertNonWesternChars, storeId);
         model.CanonicalUrlsEnabled_OverrideForStore = await _settingService.SettingExistsAsync(seoSettings, x => x.CanonicalUrlsEnabled, storeId);
         model.WwwRequirement_OverrideForStore = await _settingService.SettingExistsAsync(seoSettings, x => x.WwwRequirement, storeId);

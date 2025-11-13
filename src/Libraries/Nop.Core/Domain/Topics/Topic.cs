@@ -9,7 +9,7 @@ namespace Nop.Core.Domain.Topics;
 /// <summary>
 /// Represents a topic
 /// </summary>
-public partial class Topic : BaseEntity, ILocalizedEntity, ISlugSupported, IStoreMappingSupported, IAclSupported, IMetaTagsSupported
+public partial class Topic : BaseEntity, ILocalizedEntity, ISlugSupported, IStoreMappingSupported, IAclSupported
 {
     /// <summary>
     /// Gets or sets the name
@@ -60,21 +60,6 @@ public partial class Topic : BaseEntity, ILocalizedEntity, ISlugSupported, IStor
     /// Gets or sets a value of used topic template identifier
     /// </summary>
     public int TopicTemplateId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta keywords
-    /// </summary>
-    public string MetaKeywords { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta description
-    /// </summary>
-    public string MetaDescription { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta title
-    /// </summary>
-    public string MetaTitle { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is subject to ACL

@@ -76,9 +76,6 @@ public class BlogModelFactoryTests : BaseNopTest
         await _blogModelFactory.PrepareBlogPostModelAsync(model, blogPost, true);
 
         model.Id.Should().Be(blogPost.Id);
-        model.MetaTitle.Should().Be(blogPost.MetaTitle);
-        model.MetaDescription.Should().Be(blogPost.MetaDescription);
-        model.MetaKeywords.Should().Be(blogPost.MetaKeywords);
         model.SeName = model.Title.Replace(" ", "-").ToLowerInvariant();
         model.Title.Should().Be(blogPost.Title);
         model.Body.Should().Be(blogPost.Body);
@@ -99,9 +96,6 @@ public class BlogModelFactoryTests : BaseNopTest
         await _blogModelFactory.PrepareBlogPostModelAsync(model, blogPost, false);
 
         model.Id.Should().Be(blogPost.Id);
-        model.MetaTitle.Should().Be(blogPost.MetaTitle);
-        model.MetaDescription.Should().Be(blogPost.MetaDescription);
-        model.MetaKeywords.Should().Be(blogPost.MetaKeywords);
         model.SeName = model.Title.Replace(" ", "-").ToLowerInvariant();
         model.Title.Should().Be(blogPost.Title);
         model.Body.Should().Be(blogPost.Body);

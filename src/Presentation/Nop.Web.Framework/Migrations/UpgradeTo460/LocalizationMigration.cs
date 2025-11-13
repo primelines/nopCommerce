@@ -370,10 +370,6 @@ public class LocalizationMigration : MigrationBase
             ["Admin.Catalog.Products.Copy.CopyImages.Hint"] = "Admin.Catalog.Products.Copy.CopyMultimedia.Hint",
 
             //#43
-            ["Admin.Configuration.Settings.GeneralCommon.DefaultMetaDescription"] = "Admin.Configuration.Stores.Fields.DefaultMetaDescription",
-            ["Admin.Configuration.Settings.GeneralCommon.DefaultMetaDescription.Hint"] = "Admin.Configuration.Stores.Fields.DefaultMetaDescription.Hint",
-            ["Admin.Configuration.Settings.GeneralCommon.DefaultMetaKeywords"] = "Admin.Configuration.Stores.Fields.DefaultMetaKeywords",
-            ["Admin.Configuration.Settings.GeneralCommon.DefaultMetaKeywords.Hint"] = "Admin.Configuration.Stores.Fields.DefaultMetaKeywords.Hint",
             ["Admin.Configuration.Settings.GeneralCommon.DefaultTitle"] = "Admin.Configuration.Stores.Fields.DefaultTitle",
             ["Admin.Configuration.Settings.GeneralCommon.DefaultTitle.Hint"] = "Admin.Configuration.Stores.Fields.DefaultTitle.Hint",
             ["Admin.Configuration.Settings.GeneralCommon.HomepageDescription"] = "Admin.Configuration.Stores.Fields.HomepageDescription",

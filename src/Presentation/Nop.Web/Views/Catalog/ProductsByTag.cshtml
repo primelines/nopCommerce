@@ -11,10 +11,10 @@
     Layout = "_ColumnsTwo";
 
     //title
-    NopHtml.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : T("PageTitle.ProductsByTag", Model.TagName).Text);
-    //meta
-    NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
-    NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
+    NopHtml.AddTitleParts(T("PageTitle.ProductsByTag", Model.TagName).Text);
+    // //meta
+    // NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
+    // NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
 
     //page class
     NopHtml.AppendPageCssClassParts("html-product-tag-page");

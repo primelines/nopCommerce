@@ -25,27 +25,4 @@ public partial interface IArtificialIntelligenceService
     /// </returns>
     Task<string> CreateProductDescriptionAsync(string productName, string keywords, ToneOfVoiceType toneOfVoice, string instruction, string customToneOfVoice = null, int languageId = 0);
 
-    /// <summary>
-    /// Create meta tags by artificial intelligence
-    /// </summary>
-    /// <param name="entity">The entity to which need to generate meta tags</param>
-    /// <param name="languageId">The language identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the generated meta tags
-    /// </returns>
-    Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsForLocalizedEntityAsync<TEntity>(TEntity entity, int languageId)
-        where TEntity : BaseEntity, IMetaTagsSupported, ILocalizedEntity;
-
-    /// <summary>
-    /// Create meta tags by artificial intelligence
-    /// </summary>
-    /// <param name="entity">The entity to which need to generate meta tags</param>
-    /// <param name="languageId">The language identifier; leave 0 to use <see cref="LocalizationSettings.DefaultAdminLanguageId"/></param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the generated meta tags
-    /// </returns>
-    Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync<TEntity>(TEntity entity, int languageId = 0)
-        where TEntity : BaseEntity, IMetaTagsSupported;
 }

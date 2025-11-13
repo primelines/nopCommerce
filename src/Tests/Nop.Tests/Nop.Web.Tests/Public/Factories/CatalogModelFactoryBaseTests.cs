@@ -81,9 +81,6 @@ public class CatalogModelFactoryBaseTests : WebTest
         model.Id.Should().Be(_category.Id);
         model.Name.Should().Be(_category.Name);
         model.Description.Should().Be(_category.Description);
-        model.MetaKeywords.Should().Be(_category.MetaKeywords);
-        model.MetaDescription.Should().Be(_category.MetaDescription);
-        model.MetaTitle.Should().Be(_category.MetaTitle);
 
         model.CategoryBreadcrumb.Any().Should().BeTrue();
         model.CategoryBreadcrumb.FirstOrDefault()?.Name.Should().Be("Computers");
@@ -136,9 +133,6 @@ public class CatalogModelFactoryBaseTests : WebTest
         model.Id.Should().Be(_manufacturer.Id);
         model.Name.Should().Be(_manufacturer.Name);
         model.Description.Should().Be(_manufacturer.Description);
-        model.MetaKeywords.Should().Be(_manufacturer.MetaKeywords);
-        model.MetaDescription.Should().Be(_manufacturer.MetaDescription);
-        model.MetaTitle.Should().Be(_manufacturer.MetaTitle);
     }
 
     [Test]
@@ -195,9 +189,6 @@ public class CatalogModelFactoryBaseTests : WebTest
         model.Id.Should().Be(_vendor.Id);
         model.Name.Should().Be(_vendor.Name);
         model.Description.Should().Be(_vendor.Description);
-        model.MetaKeywords.Should().Be(_vendor.MetaKeywords);
-        model.MetaDescription.Should().Be(_vendor.MetaDescription);
-        model.MetaTitle.Should().Be(_vendor.MetaTitle);
     }
 
     [Test]

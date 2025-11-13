@@ -99,21 +99,6 @@ public partial class ManufacturerController : BaseAdminController
                 localized.Description,
                 localized.LanguageId);
 
-            await _localizedEntityService.SaveLocalizedValueAsync(manufacturer,
-                x => x.MetaKeywords,
-                localized.MetaKeywords,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(manufacturer,
-                x => x.MetaDescription,
-                localized.MetaDescription,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(manufacturer,
-                x => x.MetaTitle,
-                localized.MetaTitle,
-                localized.LanguageId);
-
             //search engine name
             var seName = await _urlRecordService.ValidateSeNameAsync(manufacturer, localized.SeName, localized.Name, false);
             await _urlRecordService.SaveSlugAsync(manufacturer, seName, localized.LanguageId);

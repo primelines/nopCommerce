@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
-using Nop.Web.Framework.Models.ArtificialIntelligence;
 using Nop.Web.Framework.Models.Translation;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
@@ -11,8 +10,7 @@ namespace Nop.Web.Areas.Admin.Models.Catalog;
 /// Represents a category model
 /// </summary>
 public partial record CategoryModel : BaseNopEntityModel, IAclSupportedModel, IDiscountSupportedModel,
-    ITranslationSupportedModel, ILocalizedModel<CategoryLocalizedModel>, IStoreMappingSupportedModel,
-    IMetaTagsSupportedModel
+    ITranslationSupportedModel, ILocalizedModel<CategoryLocalizedModel>, IStoreMappingSupportedModel
 {
     #region Ctor
 
@@ -52,15 +50,6 @@ public partial record CategoryModel : BaseNopEntityModel, IAclSupportedModel, ID
     public int CategoryTemplateId { get; set; }
 
     public IList<SelectListItem> AvailableCategoryTemplates { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.MetaKeywords")]
-    public string MetaKeywords { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.MetaDescription")]
-    public string MetaDescription { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.MetaTitle")]
-    public string MetaTitle { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.SeName")]
     public string SeName { get; set; }
@@ -135,7 +124,7 @@ public partial record CategoryModel : BaseNopEntityModel, IAclSupportedModel, ID
     #endregion
 }
 
-public partial record CategoryLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
+public partial record CategoryLocalizedModel : ILocalizedLocaleModel
 {
     public int LanguageId { get; set; }
 
@@ -144,15 +133,6 @@ public partial record CategoryLocalizedModel : ILocalizedLocaleModel, IMetaTagsS
 
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.Description")]
     public string Description { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.MetaKeywords")]
-    public string MetaKeywords { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.MetaDescription")]
-    public string MetaDescription { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.MetaTitle")]
-    public string MetaTitle { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.SeName")]
     public string SeName { get; set; }

@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Orders;
 using Nop.Web.Framework.Models;
-using Nop.Web.Framework.Models.ArtificialIntelligence;
 using Nop.Web.Framework.Mvc.ModelBinding;
 using Nop.Web.Models.Media;
 using Nop.Web.Models.ShoppingCart;
 
 namespace Nop.Web.Models.Catalog;
 
-public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupportedModel
+public partial record ProductDetailsModel : BaseNopEntityModel
 {
     public ProductDetailsModel()
     {
@@ -44,9 +43,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
     public string ShortDescription { get; set; }
     public string FullDescription { get; set; }
     public string JsonLd { get; set; }
-    public string MetaKeywords { get; set; }
-    public string MetaDescription { get; set; }
-    public string MetaTitle { get; set; }
     public string SeName { get; set; }
 
     public bool ShowSku { get; set; }

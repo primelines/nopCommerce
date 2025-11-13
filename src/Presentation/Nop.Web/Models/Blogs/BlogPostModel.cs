@@ -1,9 +1,8 @@
 ﻿using Nop.Web.Framework.Models;
-using Nop.Web.Framework.Models.ArtificialIntelligence;
 
 namespace Nop.Web.Models.Blogs;
 
-public partial record BlogPostModel : BaseNopEntityModel, IMetaTagsSupportedModel
+public partial record BlogPostModel : BaseNopEntityModel
 {
     public BlogPostModel()
     {
@@ -12,9 +11,6 @@ public partial record BlogPostModel : BaseNopEntityModel, IMetaTagsSupportedMode
         AddNewComment = new AddBlogCommentModel();
     }
 
-    public string MetaKeywords { get; set; }
-    public string MetaDescription { get; set; }
-    public string MetaTitle { get; set; }
     public string SeName { get; set; }
 
     public string Title { get; set; }

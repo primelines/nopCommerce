@@ -103,21 +103,6 @@ public partial class CategoryController : BaseAdminController
                 localized.Description,
                 localized.LanguageId);
 
-            await _localizedEntityService.SaveLocalizedValueAsync(category,
-                x => x.MetaKeywords,
-                localized.MetaKeywords,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(category,
-                x => x.MetaDescription,
-                localized.MetaDescription,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(category,
-                x => x.MetaTitle,
-                localized.MetaTitle,
-                localized.LanguageId);
-
             //search engine name
             var seName = await _urlRecordService.ValidateSeNameAsync(category, localized.SeName, localized.Name, false);
             await _urlRecordService.SaveSlugAsync(category, seName, localized.LanguageId);

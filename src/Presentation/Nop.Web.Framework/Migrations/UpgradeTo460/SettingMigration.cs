@@ -350,8 +350,6 @@ public class SettingMigration : MigrationBase
 
         //#43
         var metaTitleKey = $"{nameof(SeoSettings)}.DefaultTitle".ToLower();
-        var metaKeywordsKey = $"{nameof(SeoSettings)}.DefaultMetaKeywords".ToLower();
-        var metaDescriptionKey = $"{nameof(SeoSettings)}.DefaultMetaDescription".ToLower();
         var homepageTitleKey = $"{nameof(SeoSettings)}.HomepageTitle".ToLower();
         var homepageDescriptionKey = $"{nameof(SeoSettings)}.HomepageDescription".ToLower();
 
@@ -361,19 +359,11 @@ public class SettingMigration : MigrationBase
         foreach (var store in storeService.GetAllStores())
         {
             var metaTitle = settingService.GetSettingByKey<string>(metaTitleKey, storeId: store.Id) ?? settingService.GetSettingByKey<string>(metaTitleKey);
-            var metaKeywords = settingService.GetSettingByKey<string>(metaKeywordsKey, storeId: store.Id) ?? settingService.GetSettingByKey<string>(metaKeywordsKey);
-            var metaDescription = settingService.GetSettingByKey<string>(metaDescriptionKey, storeId: store.Id) ?? settingService.GetSettingByKey<string>(metaDescriptionKey);
             var homepageTitle = settingService.GetSettingByKey<string>(homepageTitleKey, storeId: store.Id) ?? settingService.GetSettingByKey<string>(homepageTitleKey);
             var homepageDescription = settingService.GetSettingByKey<string>(homepageDescriptionKey, storeId: store.Id) ?? settingService.GetSettingByKey<string>(homepageDescriptionKey);
 
             if (metaTitle != null)
                 store.DefaultTitle = metaTitle;
-
-            if (metaKeywords != null)
-                store.DefaultMetaKeywords = metaKeywords;
-
-            if (metaDescription != null)
-                store.DefaultMetaDescription = metaDescription;
 
             if (homepageTitle != null)
                 store.HomepageTitle = homepageTitle;
@@ -385,8 +375,6 @@ public class SettingMigration : MigrationBase
         }
 
         settingRepository.Delete(setting => setting.Name == metaTitleKey);
-        settingRepository.Delete(setting => setting.Name == metaKeywordsKey);
-        settingRepository.Delete(setting => setting.Name == metaDescriptionKey);
         settingRepository.Delete(setting => setting.Name == homepageTitleKey);
         settingRepository.Delete(setting => setting.Name == homepageDescriptionKey);
     }

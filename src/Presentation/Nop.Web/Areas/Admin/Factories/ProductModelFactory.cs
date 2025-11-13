@@ -816,9 +816,6 @@ public partial class ProductModelFactory : IProductModelFactory
                 locale.Name = await _localizationService.GetLocalizedAsync(product, entity => entity.Name, languageId, false, false);
                 locale.FullDescription = await _localizationService.GetLocalizedAsync(product, entity => entity.FullDescription, languageId, false, false);
                 locale.ShortDescription = await _localizationService.GetLocalizedAsync(product, entity => entity.ShortDescription, languageId, false, false);
-                locale.MetaKeywords = await _localizationService.GetLocalizedAsync(product, entity => entity.MetaKeywords, languageId, false, false);
-                locale.MetaDescription = await _localizationService.GetLocalizedAsync(product, entity => entity.MetaDescription, languageId, false, false);
-                locale.MetaTitle = await _localizationService.GetLocalizedAsync(product, entity => entity.MetaTitle, languageId, false, false);
                 locale.SeName = await _urlRecordService.GetSeNameAsync(product, languageId, false, false);
             };
         }
@@ -1568,9 +1565,6 @@ public partial class ProductModelFactory : IProductModelFactory
             localizedModelConfiguration = async (locale, languageId) =>
             {
                 locale.Name = await _localizationService.GetLocalizedAsync(productTag, entity => entity.Name, languageId, false, false);
-                locale.MetaKeywords = await _localizationService.GetLocalizedAsync(productTag, entity => entity.MetaKeywords, languageId, false, false);
-                locale.MetaDescription = await _localizationService.GetLocalizedAsync(productTag, entity => entity.MetaDescription, languageId, false, false);
-                locale.MetaTitle = await _localizationService.GetLocalizedAsync(productTag, entity => entity.MetaTitle, languageId, false, false);
             };
         }
 

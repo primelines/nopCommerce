@@ -18,27 +18,6 @@ public class StoreMigration : ForwardOnlyMigration
                 .AlterColumn(nameof(Store.Deleted)).AsBoolean();
         }
 
-        if (!Schema.Table(nameof(Store)).Column(nameof(Store.DefaultTitle)).Exists())
-            //add new column
-            Alter.Table(nameof(Store))
-                .AddColumn(nameof(Store.DefaultTitle)).AsString(int.MaxValue).Nullable();
-        else
-            Alter.Table(nameof(Store)).AlterColumn(nameof(Store.DefaultTitle)).AsString(int.MaxValue).Nullable();
-
-        if (!Schema.Table(nameof(Store)).Column(nameof(Store.DefaultMetaDescription)).Exists())
-            //add new column
-            Alter.Table(nameof(Store))
-                .AddColumn(nameof(Store.DefaultMetaDescription)).AsString(int.MaxValue).Nullable();
-        else
-            Alter.Table(nameof(Store)).AlterColumn(nameof(Store.DefaultMetaDescription)).AsString(int.MaxValue).Nullable();
-
-        if (!Schema.Table(nameof(Store)).Column(nameof(Store.DefaultMetaKeywords)).Exists())
-            //add new column
-            Alter.Table(nameof(Store))
-                .AddColumn(nameof(Store.DefaultMetaKeywords)).AsString(int.MaxValue).Nullable();
-        else
-            Alter.Table(nameof(Store)).AlterColumn(nameof(Store.DefaultMetaKeywords)).AsString(int.MaxValue).Nullable();
-
         if (!Schema.Table(nameof(Store)).Column(nameof(Store.HomepageDescription)).Exists())
             //add new column
             Alter.Table(nameof(Store))

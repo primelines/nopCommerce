@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Nop.Api.Framework.Dtos;
 
 namespace Nop.Api.DTOs.Topics;
@@ -25,19 +25,6 @@ public partial record TopicDto : BaseNopEntityDto
 
     [JsonProperty("body")]
     public string Body { get; set; }
-
-
-    [JsonProperty("meta_keywords")]
-    public string MetaKeywords { get; set; }
-
-
-    [JsonProperty("meta_description")]
-    public string MetaDescription { get; set; }
-
-
-    [JsonProperty("meta_title")]
-    public string MetaTitle { get; set; }
-
 
     [JsonProperty("se_name")]
     public string SeName { get; set; }

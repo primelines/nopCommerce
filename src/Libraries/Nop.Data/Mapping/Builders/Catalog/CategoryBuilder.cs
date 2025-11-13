@@ -18,8 +18,6 @@ public partial class CategoryBuilder : NopEntityBuilder<Category>
     {
         table
             .WithColumn(nameof(Category.Name)).AsString(400).NotNullable()
-            .WithColumn(nameof(Category.MetaKeywords)).AsString(400).Nullable()
-            .WithColumn(nameof(Category.MetaTitle)).AsString(400).Nullable()
             .WithColumn(nameof(Category.PageSizeOptions)).AsString(200).Nullable();
     }
 

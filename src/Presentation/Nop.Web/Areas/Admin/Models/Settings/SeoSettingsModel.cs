@@ -24,10 +24,6 @@ public partial record SeoSettingsModel : BaseNopModel, ISettingsModel
     public bool PageTitleSeoAdjustment_OverrideForStore { get; set; }
     public SelectList PageTitleSeoAdjustmentValues { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.GenerateProductMetaDescription")]
-    public bool GenerateProductMetaDescription { get; set; }
-    public bool GenerateProductMetaDescription_OverrideForStore { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.ConvertNonWesternChars")]
     public bool ConvertNonWesternChars { get; set; }
     public bool ConvertNonWesternChars_OverrideForStore { get; set; }

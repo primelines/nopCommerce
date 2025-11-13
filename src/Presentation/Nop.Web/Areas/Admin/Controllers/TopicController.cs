@@ -69,21 +69,6 @@ public partial class TopicController : BaseAdminController
                 localized.Body,
                 localized.LanguageId);
 
-            await _localizedEntityService.SaveLocalizedValueAsync(topic,
-                x => x.MetaKeywords,
-                localized.MetaKeywords,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(topic,
-                x => x.MetaDescription,
-                localized.MetaDescription,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(topic,
-                x => x.MetaTitle,
-                localized.MetaTitle,
-                localized.LanguageId);
-
             //search engine name
             var seName = await _urlRecordService.ValidateSeNameAsync(topic, localized.SeName, localized.Title, false);
             await _urlRecordService.SaveSlugAsync(topic, seName, localized.LanguageId);

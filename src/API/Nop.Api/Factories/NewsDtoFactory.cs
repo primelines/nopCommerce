@@ -1,4 +1,4 @@
-using Nop.Core;
+﻿using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
@@ -90,9 +90,6 @@ public partial class NewsDtoFactory : INewsDtoFactory
         ArgumentNullException.ThrowIfNull(newsItem);
 
         model.Id = newsItem.Id;
-        model.MetaTitle = newsItem.MetaTitle;
-        model.MetaDescription = newsItem.MetaDescription;
-        model.MetaKeywords = newsItem.MetaKeywords;
         model.SeName = await _urlRecordService.GetSeNameAsync(newsItem, newsItem.LanguageId, ensureTwoPublishedLanguages: false);
         model.Title = newsItem.Title;
         model.Short = newsItem.Short;

@@ -7,7 +7,7 @@ namespace Nop.Core.Domain.Blogs;
 /// <summary>
 /// Represents a blog post
 /// </summary>
-public partial class BlogPost : BaseEntity, ISlugSupported, IStoreMappingSupported, IMetaTagsSupported
+public partial class BlogPost : BaseEntity, ISlugSupported, IStoreMappingSupported
 {
     /// <summary>
     /// Gets or sets the language identifier
@@ -53,21 +53,6 @@ public partial class BlogPost : BaseEntity, ISlugSupported, IStoreMappingSupport
     /// Gets or sets the blog post end date and time
     /// </summary>
     public DateTime? EndDateUtc { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta keywords
-    /// </summary>
-    public string MetaKeywords { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta description
-    /// </summary>
-    public string MetaDescription { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta title
-    /// </summary>
-    public string MetaTitle { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores

@@ -2,7 +2,6 @@
 using Nop.Core.Domain.Catalog;
 using Nop.Web.Areas.Admin.Models.Common;
 using Nop.Web.Framework.Models;
-using Nop.Web.Framework.Models.ArtificialIntelligence;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Areas.Admin.Models.Vendors;
@@ -10,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Vendors;
 /// <summary>
 /// Represents a vendor model
 /// </summary>
-public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLocalizedModel>, IMetaTagsSupportedModel
+public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLocalizedModel>
 {
     #region Ctor
 
@@ -51,15 +50,6 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
 
     [NopResourceDisplayName("Admin.Vendors.Fields.DisplayOrder")]
     public int DisplayOrder { get; set; }
-
-    [NopResourceDisplayName("Admin.Vendors.Fields.MetaKeywords")]
-    public string MetaKeywords { get; set; }
-
-    [NopResourceDisplayName("Admin.Vendors.Fields.MetaDescription")]
-    public string MetaDescription { get; set; }
-
-    [NopResourceDisplayName("Admin.Vendors.Fields.MetaTitle")]
-    public string MetaTitle { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.Fields.SeName")]
     public string SeName { get; set; }
@@ -139,7 +129,7 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
     #endregion
 }
 
-public partial record VendorLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
+public partial record VendorLocalizedModel : ILocalizedLocaleModel
 {
     public int LanguageId { get; set; }
 
@@ -148,15 +138,6 @@ public partial record VendorLocalizedModel : ILocalizedLocaleModel, IMetaTagsSup
 
     [NopResourceDisplayName("Admin.Vendors.Fields.Description")]
     public string Description { get; set; }
-
-    [NopResourceDisplayName("Admin.Vendors.Fields.MetaKeywords")]
-    public string MetaKeywords { get; set; }
-
-    [NopResourceDisplayName("Admin.Vendors.Fields.MetaDescription")]
-    public string MetaDescription { get; set; }
-
-    [NopResourceDisplayName("Admin.Vendors.Fields.MetaTitle")]
-    public string MetaTitle { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.Fields.SeName")]
     public string SeName { get; set; }

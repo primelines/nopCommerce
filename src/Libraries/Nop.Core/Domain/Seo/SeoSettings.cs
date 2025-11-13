@@ -18,11 +18,6 @@ public partial class SeoSettings : ISettings
     public PageTitleSeoAdjustment PageTitleSeoAdjustment { get; set; }
 
     /// <summary>
-    /// A value indicating whether product META descriptions will be generated automatically (if not entered)
-    /// </summary>
-    public bool GenerateProductMetaDescription { get; set; }
-
-    /// <summary>
     /// A value indicating whether we should convert non-western chars to western ones
     /// </summary>
     public bool ConvertNonWesternChars { get; set; }

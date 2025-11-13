@@ -2247,24 +2247,6 @@
   <LocaleResource Name="Admin.Catalog.Categories.Fields.ManuallyPriceRange.Hint">
     <Value>Check to enter price range manually, otherwise the automatic calculation of price range is enabled (based on prices of available products). Set price range manually if you have complex discount rules.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Categories.Fields.MetaDescription">
-    <Value>Meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Categories.Fields.MetaDescription.Hint">
-    <Value>Meta description to be added to category page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Categories.Fields.MetaKeywords">
-    <Value>Meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Categories.Fields.MetaKeywords.Hint">
-    <Value>Meta keywords to be added to category page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Categories.Fields.MetaTitle">
-    <Value>Meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Categories.Fields.MetaTitle.Hint">
-    <Value>Override the page title. The default is the name of the category.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Categories.Fields.Name">
     <Value>Name</Value>
   </LocaleResource>
@@ -2525,24 +2507,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.ManufacturerTemplate.Hint">
     <Value>Choose a manufacturer template. This template defines how this manufacturer (and its products) will be displayed.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaDescription">
-    <Value>Meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaDescription.Hint">
-    <Value>Meta description to be added to manufacturer page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaKeywords">
-    <Value>Meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaKeywords.Hint">
-    <Value>Meta keywords to be added to manufacturer page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaTitle">
-    <Value>Meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaTitle.Hint">
-    <Value>Override the page title. The default is the name of the manufacturer.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Name">
     <Value>Name</Value>
@@ -3176,24 +3140,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.Manufacturers.NoManufacturersAvailable">
     <Value>No manufacturers available.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MetaDescription">
-    <Value>Meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MetaDescription.Hint">
-    <Value>Meta description to be added to product page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MetaKeywords">
-    <Value>Meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MetaKeywords.Hint">
-    <Value>Meta keywords to be added to product page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MetaTitle">
-    <Value>Meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.MetaTitle.Hint">
-    <Value>Override the page title. The default is the name of the product.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.MinimumAgeToPurchase">
     <Value>Minimum age to purchase</Value>
@@ -4193,24 +4139,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.ProductTags.EditTagDetails">
     <Value>Edit product tag details</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.ProductTags.Fields.MetaKeywords">
-    <Value>Meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.ProductTags.Fields.MetaKeywords.Hint">
-    <Value>Meta keywords to be added to product tag page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.ProductTags.Fields.MetaDescription">
-    <Value>Meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.ProductTags.Fields.MetaDescription.Hint">
-    <Value>Meta description to be added to product tag page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.ProductTags.Fields.MetaTitle">
-    <Value>Meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.ProductTags.Fields.MetaTitle.Hint">
-    <Value>Override the page title. The default is the name of the product tag.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.ProductTags.Fields.Name">
     <Value>Tag name</Value>
@@ -5823,24 +5751,6 @@
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.AllowViewUnpublishedProductPage.Hint">
     <Value>Check to allow viewing of unpublished product details page. This way SEO won't be affected by search crawlers when a product is temporary unpublished. Please note that a store owner always has access to unpublished products.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaDescription">
-    <Value>Allow to generate meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaDescription.Hint">
-    <Value>Check to allow generation of meta description with artificial intelligence services. Please note that this functionality will not change any meta description that you have added, or edited, manually.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaKeywords">
-    <Value>Allow to generate meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaKeywords.Hint">
-    <Value>Check to allow generation of meta keywords with artificial intelligence services. Please note that this functionality will not change any meta keywords that you have added, or edited, manually.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaTitle">
-    <Value>Allow to generate meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaTitle.Hint">
-    <Value>Check to allow generation of meta title with artificial intelligence services. Please note that this functionality will not change any meta title that you have added, or edited, manually.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateProductDescription">
     <Value>Allow to generate product description</Value>
   </LocaleResource>
@@ -5849,24 +5759,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.Info">
     <Value><![CDATA[<p>Artificial intelligence functionality allows you to use third-party AI services such as <a href='https://www.deepseek.com/' target='_blank'>DeepSeek</a>, <a href='https://gemini.google.com/' target='_blank'>Gemini</a> or <a href='https://chatgpt.com/' target='_blank'>ChatGPT</a> to automatically generate content. This could be either product descriptions or meta tags for specific pages or entities.</p>]]></Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaDescriptionQuery">
-    <Value>AI query to generate meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaDescriptionQuery.Hint">
-    <Value>Set the query to generate meta description with artificial intelligence.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaKeywordsQuery">
-    <Value>AI query to generate meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaKeywordsQuery.Hint">
-    <Value>Set the query to generate meta keywords with artificial intelligence.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaTitleQuery">
-    <Value>AI query to generate meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaTitleQuery.Hint">
-    <Value>Set the query to generate meta title with artificial intelligence.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ArtificialIntelligence.ChatGptApiKey">
     <Value>API key</Value>
@@ -7703,12 +7595,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FooterCustomHtml.Hint">
     <Value>Enter custom HTML here for footer section.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.GenerateProductMetaDescription">
-    <Value>Generate product META description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.GenerateProductMetaDescription.Hint">
-    <Value>When enabled, product META descriptions will be automatically generated (if not specified on the product details page) based on product short description.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.GoogleTranslateApiKey">
     <Value>API key</Value>
@@ -9800,18 +9686,6 @@
   <LocaleResource Name="Admin.Configuration.Stores.Fields.DefaultLanguage.Hint">
     <Value>This property allows a store owner to specify a default language for a store. If not specified, then the default language display order will be used.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Stores.Fields.DefaultMetaDescription">
-    <Value>Default meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Stores.Fields.DefaultMetaDescription.Hint">
-    <Value>The default meta description for pages in your store. You can override this for individual categories / products / manufacturer pages.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Stores.Fields.DefaultMetaKeywords">
-    <Value>Default meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Stores.Fields.DefaultMetaKeywords.Hint">
-    <Value>The default meta keywords for pages in your store. You can override these for individual categories / products / manufacturer pages.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Stores.Fields.DefaultTitle">
     <Value>Default page title</Value>
   </LocaleResource>
@@ -10471,24 +10345,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.Blog.BlogPosts.Fields.LimitedToStores.Hint">
     <Value>Option to limit this blog post to a certain store. If you have multiple stores, choose one or several from the list. If you don't use this option just leave this field empty.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Blog.BlogPosts.Fields.MetaDescription">
-    <Value>Meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Blog.BlogPosts.Fields.MetaDescription.Hint">
-    <Value>Meta description to be added to blog post page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Blog.BlogPosts.Fields.MetaKeywords">
-    <Value>Meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Blog.BlogPosts.Fields.MetaKeywords.Hint">
-    <Value>Meta keywords to be added to blog post page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Blog.BlogPosts.Fields.MetaTitle">
-    <Value>Meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Blog.BlogPosts.Fields.MetaTitle.Hint">
-    <Value>Override the page title. The default is the title of the blog post.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.Blog.BlogPosts.Fields.SeName">
     <Value>Search engine friendly page name</Value>
@@ -11408,18 +11264,6 @@
   <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.MetaDescription.Hint">
     <Value>Meta description to be added to news page header.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.MetaKeywords">
-    <Value>Meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.MetaKeywords.Hint">
-    <Value>Meta keywords to be added to news page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.MetaTitle">
-    <Value>Meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.MetaTitle.Hint">
-    <Value>Override the page title. The default is the title of the news.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.Published">
     <Value>Published</Value>
   </LocaleResource>
@@ -11656,24 +11500,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.Topics.Fields.LimitedToStores.Hint">
     <Value>Option to limit this topic to a certain store. If you have multiple stores, choose one or several from the list. If you don't use this option just leave this field empty.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Topics.Fields.MetaDescription">
-    <Value>Meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Topics.Fields.MetaDescription.Hint">
-    <Value>Meta description to be added to topic page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Topics.Fields.MetaKeywords">
-    <Value>Meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Topics.Fields.MetaKeywords.Hint">
-    <Value>Meta keywords to be added to topic page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Topics.Fields.MetaTitle">
-    <Value>Meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.Topics.Fields.MetaTitle.Hint">
-    <Value>Override the page title. The default is the name of the topic.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.Topics.Fields.Password">
     <Value>Password</Value>
@@ -16606,24 +16432,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ManuallyPriceRange.Hint">
     <Value>Check to enter price range manually, otherwise the automatic calculation of price range is enabled (based on prices of available products). Set price range manually if you have complex discount rules.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Vendors.Fields.MetaDescription">
-    <Value>Meta description</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Vendors.Fields.MetaDescription.Hint">
-    <Value>Meta description to be added to vendor page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Vendors.Fields.MetaKeywords">
-    <Value>Meta keywords</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Vendors.Fields.MetaKeywords.Hint">
-    <Value>Meta keywords to be added to vendor page header.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Vendors.Fields.MetaTitle">
-    <Value>Meta title</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Vendors.Fields.MetaTitle.Hint">
-    <Value>Override the page title. The default is the name of the vendor.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.Name">
     <Value>Name</Value>

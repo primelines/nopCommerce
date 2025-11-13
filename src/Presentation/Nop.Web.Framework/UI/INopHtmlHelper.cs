@@ -41,14 +41,6 @@ public partial interface INopHtmlHelper
     void AppendMetaDescriptionParts(string part);
 
     /// <summary>
-    /// Generate all description parts
-    /// </summary>
-    /// <param name="part">Meta description part</param>
-    /// <returns>A task that represents the asynchronous operation
-    /// The task result contains generated HTML string</returns>
-    Task<IHtmlContent> GenerateMetaDescriptionAsync(string part = "");
-
-    /// <summary>
     /// Add meta keyword element to the <![CDATA[<head>]]>
     /// </summary>
     /// <param name="part">Meta keyword part</param>
@@ -59,14 +51,6 @@ public partial interface INopHtmlHelper
     /// </summary>
     /// <param name="part">Meta keyword part</param>
     void AppendMetaKeywordParts(string part);
-
-    /// <summary>
-    /// Generate all keyword parts
-    /// </summary>
-    /// <param name="part">Meta keyword part</param>
-    /// <returns>A task that represents the asynchronous operation
-    /// The task result contains generated HTML string</returns>
-    Task<IHtmlContent> GenerateMetaKeywordsAsync(string part = "");
 
     /// <summary>
     /// Add script element

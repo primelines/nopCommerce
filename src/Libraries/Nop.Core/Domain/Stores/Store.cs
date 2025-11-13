@@ -14,21 +14,11 @@ public partial class Store : BaseEntity, ILocalizedEntity, ISoftDeletedEntity
     public string Name { get; set; }
 
     /// <summary>
-    /// Gets or sets the meta keywords
-    /// </summary>
-    public string DefaultMetaKeywords { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta description
-    /// </summary>
-    public string DefaultMetaDescription { get; set; }
 
     /// <summary>
     /// Gets or sets the meta title
     /// </summary>
     public string DefaultTitle { get; set; }
-
-    /// <summary>
     /// Home page title
     /// </summary>
     public string HomepageTitle { get; set; }

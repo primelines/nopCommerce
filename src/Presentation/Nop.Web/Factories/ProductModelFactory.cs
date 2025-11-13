@@ -1305,9 +1305,6 @@ public partial class ProductModelFactory : IProductModelFactory
             Name = await _localizationService.GetLocalizedAsync(product, x => x.Name),
             ShortDescription = await _localizationService.GetLocalizedAsync(product, x => x.ShortDescription),
             FullDescription = await _localizationService.GetLocalizedAsync(product, x => x.FullDescription),
-            MetaKeywords = await _localizationService.GetLocalizedAsync(product, x => x.MetaKeywords),
-            MetaDescription = await _localizationService.GetLocalizedAsync(product, x => x.MetaDescription),
-            MetaTitle = await _localizationService.GetLocalizedAsync(product, x => x.MetaTitle),
             SeName = await _urlRecordService.GetSeNameAsync(product),
             ShowSku = _catalogSettings.ShowSkuOnProductDetailsPage,
             Sku = product.Sku,
@@ -1322,13 +1319,6 @@ public partial class ProductModelFactory : IProductModelFactory
             AllowAddingOnlyExistingAttributeCombinations = product.AllowAddingOnlyExistingAttributeCombinations,
             DisplayAttributeCombinationImagesOnly = product.DisplayAttributeCombinationImagesOnly
         };
-
-        //automatically generate product description?
-        if (_seoSettings.GenerateProductMetaDescription && string.IsNullOrEmpty(model.MetaDescription))
-        {
-            //based on short description
-            model.MetaDescription = model.ShortDescription;
-        }
 
         //shipping info
         model.IsShipEnabled = product.IsShipEnabled;

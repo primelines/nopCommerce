@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
-using Nop.Web.Framework.Models.ArtificialIntelligence;
 using Nop.Web.Framework.Models.Translation;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
@@ -11,8 +10,7 @@ namespace Nop.Web.Areas.Admin.Models.Catalog;
 /// Represents a manufacturer model
 /// </summary>
 public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel, IDiscountSupportedModel,
-    ITranslationSupportedModel, ILocalizedModel<ManufacturerLocalizedModel>, IStoreMappingSupportedModel,
-    IMetaTagsSupportedModel
+    ITranslationSupportedModel, ILocalizedModel<ManufacturerLocalizedModel>, IStoreMappingSupportedModel
 {
     #region Ctor
 
@@ -52,15 +50,6 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
     public int ManufacturerTemplateId { get; set; }
 
     public IList<SelectListItem> AvailableManufacturerTemplates { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.MetaKeywords")]
-    public string MetaKeywords { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.MetaDescription")]
-    public string MetaDescription { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.MetaTitle")]
-    public string MetaTitle { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.SeName")]
     public string SeName { get; set; }
@@ -125,7 +114,7 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
     #endregion
 }
 
-public partial record ManufacturerLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
+public partial record ManufacturerLocalizedModel : ILocalizedLocaleModel
 {
     public int LanguageId { get; set; }
 
@@ -134,15 +123,6 @@ public partial record ManufacturerLocalizedModel : ILocalizedLocaleModel, IMetaT
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.Description")]
     public string Description { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.MetaKeywords")]
-    public string MetaKeywords { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.MetaDescription")]
-    public string MetaDescription { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.MetaTitle")]
-    public string MetaTitle { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.SeName")]
     public string SeName { get; set; }

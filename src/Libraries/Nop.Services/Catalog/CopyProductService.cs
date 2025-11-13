@@ -551,18 +551,6 @@ public partial class CopyProductService : ICopyProductService
             if (!string.IsNullOrEmpty(fullDescription))
                 await _localizedEntityService.SaveLocalizedValueAsync(productCopy, x => x.FullDescription, fullDescription, lang.Id);
 
-            var metaKeywords = await _localizationService.GetLocalizedAsync(product, x => x.MetaKeywords, lang.Id, false, false);
-            if (!string.IsNullOrEmpty(metaKeywords))
-                await _localizedEntityService.SaveLocalizedValueAsync(productCopy, x => x.MetaKeywords, metaKeywords, lang.Id);
-
-            var metaDescription = await _localizationService.GetLocalizedAsync(product, x => x.MetaDescription, lang.Id, false, false);
-            if (!string.IsNullOrEmpty(metaDescription))
-                await _localizedEntityService.SaveLocalizedValueAsync(productCopy, x => x.MetaDescription, metaDescription, lang.Id);
-
-            var metaTitle = await _localizationService.GetLocalizedAsync(product, x => x.MetaTitle, lang.Id, false, false);
-            if (!string.IsNullOrEmpty(metaTitle))
-                await _localizedEntityService.SaveLocalizedValueAsync(productCopy, x => x.MetaTitle, metaTitle, lang.Id);
-
             //search engine name
             await _urlRecordService.SaveSlugAsync(productCopy, await _urlRecordService.ValidateSeNameAsync(productCopy, string.Empty, name, false), lang.Id);
         }
@@ -591,9 +579,6 @@ public partial class CopyProductService : ICopyProductService
             FullDescription = product.FullDescription,
             VendorId = product.VendorId,
             ProductTemplateId = product.ProductTemplateId,
-            MetaKeywords = product.MetaKeywords,
-            MetaDescription = product.MetaDescription,
-            MetaTitle = product.MetaTitle,
             AllowCustomerReviews = product.AllowCustomerReviews,
             LimitedToStores = product.LimitedToStores,
             SubjectToAcl = product.SubjectToAcl,

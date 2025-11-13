@@ -58,15 +58,6 @@ public partial record ProductDetailsDto : BaseNopEntityDto
     [JsonProperty("json_ld")]
     public string JsonLd { get; set; }
 
-    [JsonProperty("meta_keywords")]
-    public string MetaKeywords { get; set; }
-
-    [JsonProperty("meta_description")]
-    public string MetaDescription { get; set; }
-
-    [JsonProperty("meta_title")]
-    public string MetaTitle { get; set; }
-
     [JsonProperty("se_name")]
     public string SeName { get; set; }
 

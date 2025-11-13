@@ -10,7 +10,7 @@ namespace Nop.Core.Domain.Catalog;
 /// <summary>
 /// Represents a manufacturer
 /// </summary>
-public partial class Manufacturer : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountManufacturerMapping>, ISoftDeletedEntity, IMetaTagsSupported
+public partial class Manufacturer : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountManufacturerMapping>, ISoftDeletedEntity
 {
     /// <summary>
     /// Gets or sets the name
@@ -26,21 +26,6 @@ public partial class Manufacturer : BaseEntity, ILocalizedEntity, ISlugSupported
     /// Gets or sets a value of used manufacturer template identifier
     /// </summary>
     public int ManufacturerTemplateId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta keywords
-    /// </summary>
-    public string MetaKeywords { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta description
-    /// </summary>
-    public string MetaDescription { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta title
-    /// </summary>
-    public string MetaTitle { get; set; }
 
     /// <summary>
     /// Gets or sets the parent picture identifier

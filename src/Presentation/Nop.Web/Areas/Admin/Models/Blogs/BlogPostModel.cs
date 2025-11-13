@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
-using Nop.Web.Framework.Models.ArtificialIntelligence;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Areas.Admin.Models.Blogs;
@@ -9,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Blogs;
 /// <summary>
 /// Represents a blog post model
 /// </summary>
-public partial record BlogPostModel : BaseNopEntityModel, IStoreMappingSupportedModel, IMetaTagsSupportedModel
+public partial record BlogPostModel : BaseNopEntityModel, IStoreMappingSupportedModel
 {
     #region Ctor
 
@@ -63,15 +62,6 @@ public partial record BlogPostModel : BaseNopEntityModel, IStoreMappingSupported
     [NopResourceDisplayName("Admin.ContentManagement.Blog.BlogPosts.Fields.EndDate")]
     [UIHint("DateTimeNullable")]
     public DateTime? EndDateUtc { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Blog.BlogPosts.Fields.MetaKeywords")]
-    public string MetaKeywords { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Blog.BlogPosts.Fields.MetaDescription")]
-    public string MetaDescription { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Blog.BlogPosts.Fields.MetaTitle")]
-    public string MetaTitle { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.BlogPosts.Fields.SeName")]
     public string SeName { get; set; }

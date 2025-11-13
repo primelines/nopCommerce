@@ -109,21 +109,6 @@ public partial class VendorController : BaseAdminController
                 localized.Description,
                 localized.LanguageId);
 
-            await _localizedEntityService.SaveLocalizedValueAsync(vendor,
-                x => x.MetaKeywords,
-                localized.MetaKeywords,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(vendor,
-                x => x.MetaDescription,
-                localized.MetaDescription,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(vendor,
-                x => x.MetaTitle,
-                localized.MetaTitle,
-                localized.LanguageId);
-
             //search engine name
             var seName = await _urlRecordService.ValidateSeNameAsync(vendor, localized.SeName, localized.Name, false);
             await _urlRecordService.SaveSlugAsync(vendor, seName, localized.LanguageId);

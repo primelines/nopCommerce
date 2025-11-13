@@ -203,9 +203,6 @@ public partial class ManufacturerModelFactory : IManufacturerModelFactory
             {
                 locale.Name = await _localizationService.GetLocalizedAsync(manufacturer, entity => entity.Name, languageId, false, false);
                 locale.Description = await _localizationService.GetLocalizedAsync(manufacturer, entity => entity.Description, languageId, false, false);
-                locale.MetaKeywords = await _localizationService.GetLocalizedAsync(manufacturer, entity => entity.MetaKeywords, languageId, false, false);
-                locale.MetaDescription = await _localizationService.GetLocalizedAsync(manufacturer, entity => entity.MetaDescription, languageId, false, false);
-                locale.MetaTitle = await _localizationService.GetLocalizedAsync(manufacturer, entity => entity.MetaTitle, languageId, false, false);
                 locale.SeName = await _urlRecordService.GetSeNameAsync(manufacturer, languageId, false, false);
             };
         }

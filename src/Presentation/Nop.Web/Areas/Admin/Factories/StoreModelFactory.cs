@@ -106,8 +106,6 @@ public partial class StoreModelFactory : IStoreModelFactory
             {
                 locale.Name = await _localizationService.GetLocalizedAsync(store, entity => entity.Name, languageId, false, false);
                 locale.DefaultTitle = await _localizationService.GetLocalizedAsync(store, entity => entity.DefaultTitle, languageId, false, false);
-                locale.DefaultMetaDescription = await _localizationService.GetLocalizedAsync(store, entity => entity.DefaultMetaDescription, languageId, false, false);
-                locale.DefaultMetaKeywords = await _localizationService.GetLocalizedAsync(store, entity => entity.DefaultMetaKeywords, languageId, false, false);
                 locale.HomepageDescription = await _localizationService.GetLocalizedAsync(store, entity => entity.HomepageDescription, languageId, false, false);
                 locale.HomepageTitle = await _localizationService.GetLocalizedAsync(store, entity => entity.HomepageTitle, languageId, false, false);
             };

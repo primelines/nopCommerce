@@ -221,18 +221,6 @@ public partial class ProductController : BaseAdminController
                 x => x.FullDescription,
                 localized.FullDescription,
                 localized.LanguageId);
-            await _localizedEntityService.SaveLocalizedValueAsync(product,
-                x => x.MetaKeywords,
-                localized.MetaKeywords,
-                localized.LanguageId);
-            await _localizedEntityService.SaveLocalizedValueAsync(product,
-                x => x.MetaDescription,
-                localized.MetaDescription,
-                localized.LanguageId);
-            await _localizedEntityService.SaveLocalizedValueAsync(product,
-                x => x.MetaTitle,
-                localized.MetaTitle,
-                localized.LanguageId);
 
             //search engine name
             var seName = await _urlRecordService.ValidateSeNameAsync(product, localized.SeName, localized.Name, false);
@@ -247,18 +235,6 @@ public partial class ProductController : BaseAdminController
             await _localizedEntityService.SaveLocalizedValueAsync(productTag,
                 x => x.Name,
                 localized.Name,
-                localized.LanguageId);
-            await _localizedEntityService.SaveLocalizedValueAsync(productTag,
-                x => x.MetaKeywords,
-                localized.MetaKeywords,
-                localized.LanguageId);
-            await _localizedEntityService.SaveLocalizedValueAsync(productTag,
-                x => x.MetaDescription,
-                localized.MetaDescription,
-                localized.LanguageId);
-            await _localizedEntityService.SaveLocalizedValueAsync(productTag,
-                x => x.MetaTitle,
-                localized.MetaTitle,
                 localized.LanguageId);
 
             var seName = await _urlRecordService.ValidateSeNameAsync(productTag, string.Empty, localized.Name, false);
@@ -2294,9 +2270,6 @@ public partial class ProductController : BaseAdminController
         if (ModelState.IsValid)
         {
             productTag.Name = model.Name;
-            productTag.MetaDescription = model.MetaDescription;
-            productTag.MetaKeywords = model.MetaKeywords;
-            productTag.MetaTitle = model.MetaTitle;
             await _productTagService.UpdateProductTagAsync(productTag);
 
             //locales

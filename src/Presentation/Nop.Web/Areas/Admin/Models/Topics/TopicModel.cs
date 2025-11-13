@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
-using Nop.Web.Framework.Models.ArtificialIntelligence;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Areas.Admin.Models.Topics;
@@ -9,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Topics;
 /// <summary>
 /// Represents a topic model
 /// </summary>
-public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILocalizedModel<TopicLocalizedModel>, IStoreMappingSupportedModel, IMetaTagsSupportedModel
+public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILocalizedModel<TopicLocalizedModel>, IStoreMappingSupportedModel
 {
     #region Ctor
 
@@ -64,15 +63,6 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
 
     public IList<SelectListItem> AvailableTopicTemplates { get; set; }
 
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.MetaKeywords")]
-    public string MetaKeywords { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.MetaDescription")]
-    public string MetaDescription { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.MetaTitle")]
-    public string MetaTitle { get; set; }
-
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.SeName")]
     public string SeName { get; set; }
 
@@ -102,7 +92,7 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
     #endregion
 }
 
-public partial record TopicLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
+public partial record TopicLocalizedModel : ILocalizedLocaleModel
 {
     public int LanguageId { get; set; }
 
@@ -111,15 +101,6 @@ public partial record TopicLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupp
 
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.Body")]
     public string Body { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.MetaKeywords")]
-    public string MetaKeywords { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.MetaDescription")]
-    public string MetaDescription { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.MetaTitle")]
-    public string MetaTitle { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.SeName")]
     public string SeName { get; set; }

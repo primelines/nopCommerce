@@ -21,8 +21,6 @@ public partial class BlogPostBuilder : NopEntityBuilder<BlogPost>
         table
             .WithColumn(nameof(BlogPost.Title)).AsString(int.MaxValue).NotNullable()
             .WithColumn(nameof(BlogPost.Body)).AsString(int.MaxValue).NotNullable()
-            .WithColumn(nameof(BlogPost.MetaKeywords)).AsString(400).Nullable()
-            .WithColumn(nameof(BlogPost.MetaTitle)).AsString(400).Nullable()
             .WithColumn(nameof(BlogPost.LanguageId)).AsInt32().ForeignKey<Language>();
     }
 

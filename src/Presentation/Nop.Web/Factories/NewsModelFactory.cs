@@ -90,9 +90,6 @@ public partial class NewsModelFactory : INewsModelFactory
         ArgumentNullException.ThrowIfNull(newsItem);
 
         model.Id = newsItem.Id;
-        model.MetaTitle = newsItem.MetaTitle;
-        model.MetaDescription = newsItem.MetaDescription;
-        model.MetaKeywords = newsItem.MetaKeywords;
         model.SeName = await _urlRecordService.GetSeNameAsync(newsItem, newsItem.LanguageId, ensureTwoPublishedLanguages: false);
         model.Title = newsItem.Title;
         model.Short = newsItem.Short;

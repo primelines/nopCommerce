@@ -61,9 +61,6 @@ public partial class TopicModelFactory : ITopicModelFactory
             IsPasswordProtected = topic.IsPasswordProtected,
             Title = topic.IsPasswordProtected ? string.Empty : await _localizationService.GetLocalizedAsync(topic, x => x.Title),
             Body = topic.IsPasswordProtected ? string.Empty : await _localizationService.GetLocalizedAsync(topic, x => x.Body),
-            MetaKeywords = await _localizationService.GetLocalizedAsync(topic, x => x.MetaKeywords),
-            MetaDescription = await _localizationService.GetLocalizedAsync(topic, x => x.MetaDescription),
-            MetaTitle = await _localizationService.GetLocalizedAsync(topic, x => x.MetaTitle),
             SeName = await _urlRecordService.GetSeNameAsync(topic),
             TopicTemplateId = topic.TopicTemplateId
         };

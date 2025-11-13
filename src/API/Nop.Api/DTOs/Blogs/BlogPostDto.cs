@@ -13,16 +13,6 @@ public partial record BlogPostDto : BaseNopEntityDto
         AddNewComment = new AddBlogCommentDto();
     }
 
-
-    [JsonProperty("meta_keywords")]
-    public string MetaKeywords { get; set; }
-
-    [JsonProperty("meta_description")]
-    public string MetaDescription { get; set; }
-
-    [JsonProperty("meta_title")]
-    public string MetaTitle { get; set; }
-
     [JsonProperty("se_name")]
     public string SeName { get; set; }
 

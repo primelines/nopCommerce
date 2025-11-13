@@ -10,7 +10,7 @@ namespace Nop.Core.Domain.Catalog;
 /// <summary>
 /// Represents a product
 /// </summary>
-public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountProductMapping>, ISoftDeletedEntity, IMetaTagsSupported
+public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountProductMapping>, ISoftDeletedEntity
 {
     /// <summary>
     /// Gets or sets the name
@@ -36,21 +36,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets a vendor identifier
     /// </summary>
     public int VendorId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta keywords
-    /// </summary>
-    public string MetaKeywords { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta description
-    /// </summary>
-    public string MetaDescription { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta title
-    /// </summary>
-    public string MetaTitle { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the product allows customer reviews

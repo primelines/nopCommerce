@@ -96,7 +96,7 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
     protected virtual async Task<(string title, string text)> GetTitleAndTextAsync<TEntity>(TEntity entity, int languageId, string languageName,
         Expression<Func<TEntity, string>> titleSelector, Expression<Func<TEntity, string>> textSelector,
         string textRequiredLocale, string titleRequiredLocale)
-        where TEntity : BaseEntity, ILocalizedEntity, IMetaTagsSupported
+        where TEntity : BaseEntity, ILocalizedEntity
     {
         var getTitle = titleSelector.Compile();
         var getText = textSelector.Compile();
@@ -127,7 +127,7 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
     protected virtual async Task<(string title, string text)> GetTitleAndTextAsync<TEntity>(TEntity entity, string languageName,
         Func<TEntity, string> titleSelector, Func<TEntity, string> textSelector,
         string textRequiredLocale, string titleRequiredLocale)
-        where TEntity : BaseEntity, IMetaTagsSupported
+        where TEntity : BaseEntity
     {
         var title = titleSelector(entity);
         var text = textSelector(entity);
@@ -160,104 +160,6 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
             throw new NopException(string.Format(await _localizationService.GetResourceAsync(textRequiredLocale), languageName));
 
         return (title, text);
-    }
-
-    /// <summary>
-    /// Create meta tags by artificial intelligence
-    /// </summary>
-    /// <param name="entity">The entity to which need to generate meta tags</param>
-    /// <param name="currentMetaTitle">Current entity meta title</param>
-    /// <param name="currentMetaKeywords">Current entity meta keywords</param>
-    /// <param name="currentMetaDescription">Current entity meta description</param>
-    /// <param name="languageId">Target language identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the generated meta tags
-    /// </returns>
-    protected virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync<TEntity>(TEntity entity,
-        string currentMetaTitle, string currentMetaKeywords, string currentMetaDescription, int languageId)
-        where TEntity : BaseEntity, IMetaTagsSupported
-    {
-        var title = string.Empty;
-        var text = string.Empty;
-        var metaTitle = string.Empty;
-        var metaKeywords = string.Empty;
-        var metaDescription = string.Empty;
-
-        var currentLanguage = await _languageService.GetLanguageByIdAsync(languageId != 0 ? languageId : _localizationSettings.DefaultAdminLanguageId);
-
-        (title, text) = entity switch
-        {
-            Product product => await GetTitleAndTextAsync(product, languageId, currentLanguage.Name, p => p.Name, p => p.FullDescription,
-                "Admin.ArtificialIntelligence.ProductDescriptionRequired", "Admin.ArtificialIntelligence.ProductNameRequired"),
-            Category category => await GetTitleAndTextAsync(category, languageId, currentLanguage.Name, c => c.Name, c => c.Description,
-                "Admin.ArtificialIntelligence.CategoryDescriptionRequired", "Admin.ArtificialIntelligence.CategoryNameRequired"),
-            BlogPost blogPost => await GetTitleAndTextAsync(blogPost, currentLanguage.Name, bp => bp.Title, bp => bp.Body,
-                "Admin.ArtificialIntelligence.BlogPostBodyRequired", "Admin.ArtificialIntelligence.BlogPostTitleRequired"),
-            Manufacturer manufacturer => await GetTitleAndTextAsync(manufacturer, languageId, currentLanguage.Name, m => m.Name, m => m.Description,
-                "Admin.ArtificialIntelligence.ManufacturerDescriptionRequired", "Admin.ArtificialIntelligence.ManufacturerNameRequired"),
-            NewsItem newsItem => await GetTitleAndTextAsync(newsItem, currentLanguage.Name, n => n.Title, n => n.Full,
-                "Admin.ArtificialIntelligence.NewsItemFullRequired", "Admin.ArtificialIntelligence.NewsItemTitleRequired"),
-            Topic topic => await GetTitleAndTextAsync(topic, languageId, currentLanguage.Name, t => t.Title, t => t.Body,
-                "Admin.ArtificialIntelligence.TopicBodyRequired", "Admin.ArtificialIntelligence.TopicTitleRequired"),
-            Vendor vendor => await GetTitleAndTextAsync(vendor, languageId, currentLanguage.Name, v => v.Name, v => v.Description,
-                "Admin.ArtificialIntelligence.VendorDescriptionRequired", "Admin.ArtificialIntelligence.VendorNameRequired"),
-            _ => (title, text)
-        };
-
-        try
-        {
-            if (_artificialIntelligenceSettings.AllowMetaTitleGeneration && string.IsNullOrEmpty(currentMetaTitle))
-            {
-                var metaTitleQueryFormat = string.IsNullOrEmpty(_artificialIntelligenceSettings.MetaTitleQuery)
-                    ? ArtificialIntelligenceDefaults.MetaTitleQuery
-                    : _artificialIntelligenceSettings.MetaTitleQuery;
-                var metaTitleQuery = string.Format(metaTitleQueryFormat, title, text, currentLanguage.Name);
-                var result = await _httpClient.SendQueryAsync(metaTitleQuery);
-                metaTitle = result.Trim('"');
-            }
-            else
-            {
-                metaTitle = currentMetaTitle;
-            }
-
-            if (_artificialIntelligenceSettings.AllowMetaKeywordsGeneration && string.IsNullOrEmpty(currentMetaKeywords))
-            {
-                var metaKeywordsQueryFormat = string.IsNullOrEmpty(_artificialIntelligenceSettings.MetaKeywordsQuery)
-                    ? ArtificialIntelligenceDefaults.MetaKeywordsQuery
-                    : _artificialIntelligenceSettings.MetaKeywordsQuery;
-                var metaKeywordsQuery = string.Format(metaKeywordsQueryFormat, title, text, currentLanguage.Name);
-                metaKeywords = await _httpClient.SendQueryAsync(metaKeywordsQuery);
-            }
-            else
-            {
-                metaKeywords = currentMetaKeywords;
-            }
-
-            if (_artificialIntelligenceSettings.AllowMetaDescriptionGeneration && string.IsNullOrEmpty(currentMetaDescription))
-            {
-                var metaDescriptionQueryFormat = string.IsNullOrEmpty(_artificialIntelligenceSettings.MetaDescriptionQuery)
-                    ? ArtificialIntelligenceDefaults.MetaDescriptionQuery
-                    : _artificialIntelligenceSettings.MetaDescriptionQuery;
-                var metaDescriptionQuery = string.Format(metaDescriptionQueryFormat, title, text, currentLanguage.Name);
-                var result = await _httpClient.SendQueryAsync(metaDescriptionQuery);
-                metaDescription = result.Trim('"');
-            }
-            else
-            {
-                metaDescription = currentMetaDescription;
-            }
-
-        }
-        catch (Exception e)
-        {
-            var customer = await _workContext.GetCurrentCustomerAsync();
-            await _logger.ErrorAsync(e.Message, e, customer);
-
-            throw new NopException(e.Message);
-        }
-
-        return (metaTitle, metaKeywords, metaDescription);
     }
 
     #endregion
@@ -300,50 +202,6 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
 
             throw new NopException(string.Format(await _localizationService.GetResourceAsync("ArtificialIntelligence.CreateProductFailed"), e.Message));
         }
-    }
-
-    /// <summary>
-    /// Create meta tags by artificial intelligence
-    /// </summary>
-    /// <param name="entity">The entity to which need to generate meta tags</param>
-    /// <param name="languageId">The language identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the generated meta tags
-    /// </returns>
-    public virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsForLocalizedEntityAsync<TEntity>(TEntity entity, int languageId)
-        where TEntity : BaseEntity, IMetaTagsSupported, ILocalizedEntity
-    {
-        var currentMetaTitle = languageId == 0
-            ? entity.MetaTitle
-            : await _localizationService.GetLocalizedAsync(entity, mt => mt.MetaTitle, languageId, false);
-        var currentMetaKeywords = languageId == 0
-            ? entity.MetaKeywords
-            : await _localizationService.GetLocalizedAsync(entity, mt => mt.MetaKeywords, languageId, false);
-        var currentMetaDescription = languageId == 0
-            ? entity.MetaDescription
-            : await _localizationService.GetLocalizedAsync(entity, mt => mt.MetaDescription, languageId, false);
-
-        return await CreateMetaTagsAsync(entity, currentMetaTitle, currentMetaKeywords, currentMetaDescription, languageId);
-    }
-
-    /// <summary>
-    /// Create meta tags by artificial intelligence
-    /// </summary>
-    /// <param name="entity">The entity to which need to generate meta tags</param>
-    /// <param name="languageId">The language identifier; leave 0 to use <see cref="LocalizationSettings.DefaultAdminLanguageId"/></param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the generated meta tags
-    /// </returns>
-    public virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync<TEntity>(TEntity entity, int languageId = 0)
-        where TEntity : BaseEntity, IMetaTagsSupported
-    {
-        var metaTitle = entity.MetaTitle;
-        var metaKeywords = entity.MetaKeywords;
-        var metaDescription = entity.MetaDescription;
-
-        return await CreateMetaTagsAsync(entity, metaTitle, metaKeywords, metaDescription, languageId);
     }
 
     #endregion

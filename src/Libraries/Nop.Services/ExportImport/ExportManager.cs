@@ -213,9 +213,6 @@ public partial class ExportManager : IExportManager
             await WriteLocalizedPropertyXmlAsync(category, c => c.Name, xmlWriter, languages);
             await WriteLocalizedPropertyXmlAsync(category, c => c.Description, xmlWriter, languages);
             await xmlWriter.WriteStringAsync("CategoryTemplateId", category.CategoryTemplateId);
-            await WriteLocalizedPropertyXmlAsync(category, c => c.MetaKeywords, xmlWriter, languages, await IgnoreExportCategoryPropertyAsync());
-            await WriteLocalizedPropertyXmlAsync(category, c => c.MetaDescription, xmlWriter, languages, await IgnoreExportCategoryPropertyAsync());
-            await WriteLocalizedPropertyXmlAsync(category, c => c.MetaTitle, xmlWriter, languages, await IgnoreExportCategoryPropertyAsync());
             await WriteLocalizedSeNameXmlAsync(category, xmlWriter, languages, await IgnoreExportCategoryPropertyAsync());
             await xmlWriter.WriteStringAsync("ParentCategoryId", category.ParentCategoryId);
             await xmlWriter.WriteStringAsync("PictureId", category.PictureId);
@@ -1022,9 +1019,6 @@ public partial class ExportManager : IExportManager
             await WriteLocalizedPropertyXmlAsync(manufacturer, m => m.Name, xmlWriter, languages);
             await WriteLocalizedPropertyXmlAsync(manufacturer, m => m.Description, xmlWriter, languages);
             await xmlWriter.WriteStringAsync("ManufacturerTemplateId", manufacturer.ManufacturerTemplateId);
-            await WriteLocalizedPropertyXmlAsync(manufacturer, m => m.MetaKeywords, xmlWriter, languages, await IgnoreExportManufacturerPropertyAsync());
-            await WriteLocalizedPropertyXmlAsync(manufacturer, m => m.MetaDescription, xmlWriter, languages, await IgnoreExportManufacturerPropertyAsync());
-            await WriteLocalizedPropertyXmlAsync(manufacturer, m => m.MetaTitle, xmlWriter, languages, await IgnoreExportManufacturerPropertyAsync());
             await WriteLocalizedSeNameXmlAsync(manufacturer, xmlWriter, languages, await IgnoreExportManufacturerPropertyAsync());
             await xmlWriter.WriteStringAsync("PictureId", manufacturer.PictureId);
             await xmlWriter.WriteStringAsync("PageSize", manufacturer.PageSize, await IgnoreExportManufacturerPropertyAsync());
@@ -1088,9 +1082,6 @@ public partial class ExportManager : IExportManager
         {
             new PropertyByName<Manufacturer>("Id", (p, _) => p.Id),
             new PropertyByName<Manufacturer>("Name", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.Name, l.Id, false)),
-            new PropertyByName<Manufacturer>("MetaKeywords", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.MetaKeywords, l.Id, false)),
-            new PropertyByName<Manufacturer>("MetaDescription", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.MetaDescription, l.Id, false)),
-            new PropertyByName<Manufacturer>("MetaTitle", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.MetaTitle, l.Id, false)),
             new PropertyByName<Manufacturer>("SeName", async (p, l) => await _urlRecordService.GetSeNameAsync(p, l.Id, returnDefaultValue: false), await IgnoreExportManufacturerPropertyAsync())
         };
 
@@ -1101,9 +1092,6 @@ public partial class ExportManager : IExportManager
             new PropertyByName<Manufacturer>("Name", (p, _) => p.Name),
             new PropertyByName<Manufacturer>("Description", (p, _) => p.Description),
             new PropertyByName<Manufacturer>("ManufacturerTemplateId", (p, _) => p.ManufacturerTemplateId),
-            new PropertyByName<Manufacturer>("MetaKeywords", (p, _)=> p.MetaKeywords, await IgnoreExportManufacturerPropertyAsync()),
-            new PropertyByName<Manufacturer>("MetaDescription", (p, _) => p.MetaDescription, await IgnoreExportManufacturerPropertyAsync()),
-            new PropertyByName<Manufacturer>("MetaTitle", (p, _) => p.MetaTitle, await IgnoreExportManufacturerPropertyAsync()),
             new PropertyByName<Manufacturer>("SeName", async (p, _) => await _urlRecordService.GetSeNameAsync(p, 0), await IgnoreExportManufacturerPropertyAsync()),
             new PropertyByName<Manufacturer>("Picture", async (p, _) => await GetPicturesAsync(p.PictureId)),
             new PropertyByName<Manufacturer>("PageSize", (p, _) => p.PageSize, await IgnoreExportManufacturerPropertyAsync()),
@@ -1175,9 +1163,6 @@ public partial class ExportManager : IExportManager
         {
             new PropertyByName<Category>("Id", (p, _) => p.Id),
             new PropertyByName<Category>("Name", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.Name, l.Id, false)),
-            new PropertyByName<Category>("MetaKeywords", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.MetaKeywords, l.Id, false)),
-            new PropertyByName<Category>("MetaDescription", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.MetaDescription, l.Id, false)),
-            new PropertyByName<Category>("MetaTitle", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.MetaTitle, l.Id, false)),
             new PropertyByName<Category>("SeName", async (p, l) => await _urlRecordService.GetSeNameAsync(p, l.Id, returnDefaultValue: false), await IgnoreExportCategoryPropertyAsync())
         };
 
@@ -1188,9 +1173,6 @@ public partial class ExportManager : IExportManager
             new PropertyByName<Category>("Name", (p, _) => p.Name),
             new PropertyByName<Category>("Description", (p, _) => p.Description),
             new PropertyByName<Category>("CategoryTemplateId", (p, _) => p.CategoryTemplateId),
-            new PropertyByName<Category>("MetaKeywords", (p, _) => p.MetaKeywords, await IgnoreExportCategoryPropertyAsync()),
-            new PropertyByName<Category>("MetaDescription", (p, _) => p.MetaDescription, await IgnoreExportCategoryPropertyAsync()),
-            new PropertyByName<Category>("MetaTitle", (p, _) => p.MetaTitle, await IgnoreExportCategoryPropertyAsync()),
             new PropertyByName<Category>("SeName", async (p, _) => await _urlRecordService.GetSeNameAsync(p, 0), await IgnoreExportCategoryPropertyAsync()),
             new PropertyByName<Category>("ParentCategoryId", (p, _) => p.ParentCategoryId),
             new PropertyByName<Category>("ParentCategoryName", async (p, _) =>
@@ -1257,9 +1239,6 @@ public partial class ExportManager : IExportManager
             //vendor can't change this field
             await xmlWriter.WriteStringAsync("VendorId", product.VendorId, await IgnoreExportProductPropertyAsync(p => p.Vendor) || currentVendor != null);
             await xmlWriter.WriteStringAsync("ProductTemplateId", product.ProductTemplateId, await IgnoreExportProductPropertyAsync(p => p.ProductTemplate));
-            await WriteLocalizedPropertyXmlAsync(product, p => p.MetaKeywords, xmlWriter, languages, await IgnoreExportProductPropertyAsync(p => p.Seo));
-            await WriteLocalizedPropertyXmlAsync(product, p => p.MetaDescription, xmlWriter, languages, await IgnoreExportProductPropertyAsync(p => p.Seo));
-            await WriteLocalizedPropertyXmlAsync(product, p => p.MetaTitle, xmlWriter, languages, await IgnoreExportProductPropertyAsync(p => p.Seo));
             await WriteLocalizedSeNameXmlAsync(product, xmlWriter, languages, await IgnoreExportProductPropertyAsync(p => p.Seo));
             await xmlWriter.WriteStringAsync("AllowCustomerReviews", product.AllowCustomerReviews, await IgnoreExportProductPropertyAsync(p => p.AllowCustomerReviews));
             await xmlWriter.WriteStringAsync("SKU", product.Sku);
@@ -1534,9 +1513,6 @@ public partial class ExportManager : IExportManager
             new PropertyByName<Product>("Name", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.Name, l.Id, false)),
             new PropertyByName<Product>("ShortDescription", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.ShortDescription, l.Id, false)),
             new PropertyByName<Product>("FullDescription", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.FullDescription, l.Id, false)),
-            new PropertyByName<Product>("MetaKeywords", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.MetaKeywords, l.Id, false)),
-            new PropertyByName<Product>("MetaDescription", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.MetaDescription, l.Id, false)),
-            new PropertyByName<Product>("MetaTitle", async (p, l) => await _localizationService.GetLocalizedAsync(p, x => x.MetaTitle, l.Id, false)),
             new PropertyByName<Product>("SeName", async (p, l) => await _urlRecordService.GetSeNameAsync(p, l.Id, returnDefaultValue: false), await IgnoreExportProductPropertyAsync(p => p.Seo))
         };
 
@@ -1565,9 +1541,6 @@ public partial class ExportManager : IExportManager
             {
                 DropDownElements = (await _productTemplateService.GetAllProductTemplatesAsync()).Select(pt => pt as BaseEntity).ToSelectList(p => (p as ProductTemplate)?.Name ?? string.Empty)
             },
-            new PropertyByName<Product>("MetaKeywords", (p, _) => p.MetaKeywords, await IgnoreExportProductPropertyAsync(p => p.Seo)),
-            new PropertyByName<Product>("MetaDescription", (p, _) => p.MetaDescription, await IgnoreExportProductPropertyAsync(p => p.Seo)),
-            new PropertyByName<Product>("MetaTitle", (p, _) => p.MetaTitle, await IgnoreExportProductPropertyAsync(p => p.Seo)),
             new PropertyByName<Product>("SeName", async (p, _) => await _urlRecordService.GetSeNameAsync(p, 0), await IgnoreExportProductPropertyAsync(p => p.Seo)),
             new PropertyByName<Product>("AllowCustomerReviews", (p, _) => p.AllowCustomerReviews, await IgnoreExportProductPropertyAsync(p => p.AllowCustomerReviews)),
             new PropertyByName<Product>("Published", (p, _) => p.Published, await IgnoreExportProductPropertyAsync(p => p.Published)),

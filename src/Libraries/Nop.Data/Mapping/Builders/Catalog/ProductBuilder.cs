@@ -18,8 +18,6 @@ public partial class ProductBuilder : NopEntityBuilder<Product>
     {
         table
             .WithColumn(nameof(Product.Name)).AsString(400).NotNullable()
-            .WithColumn(nameof(Product.MetaKeywords)).AsString(400).Nullable()
-            .WithColumn(nameof(Product.MetaTitle)).AsString(400).Nullable()
             .WithColumn(nameof(Product.Sku)).AsString(400).Nullable()
             .WithColumn(nameof(Product.ManufacturerPartNumber)).AsString(400).Nullable()
             .WithColumn(nameof(Product.Gtin)).AsString(400).Nullable()

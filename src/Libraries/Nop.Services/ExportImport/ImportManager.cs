@@ -486,15 +486,6 @@ public partial class ImportManager : IImportManager
                 case "CategoryTemplateId":
                     category.CategoryTemplateId = property.IntValue;
                     break;
-                case "MetaKeywords":
-                    category.MetaKeywords = property.StringValue;
-                    break;
-                case "MetaDescription":
-                    category.MetaDescription = property.StringValue;
-                    break;
-                case "MetaTitle":
-                    category.MetaTitle = property.StringValue;
-                    break;
                 case "ParentCategoryId":
                     if (!isParentCategorySet)
                     {
@@ -679,15 +670,6 @@ public partial class ImportManager : IImportManager
                     case "Description":
                         await _localizedEntityService.SaveLocalizedValueAsync(category, c => c.Description, property.StringValue, language.Id);
                         break;
-                    case "MetaKeywords":
-                        await _localizedEntityService.SaveLocalizedValueAsync(category, c => c.MetaKeywords, property.StringValue, language.Id);
-                        break;
-                    case "MetaDescription":
-                        await _localizedEntityService.SaveLocalizedValueAsync(category, c => c.MetaDescription, property.StringValue, language.Id);
-                        break;
-                    case "MetaTitle":
-                        await _localizedEntityService.SaveLocalizedValueAsync(category, m => m.MetaTitle, property.StringValue, language.Id);
-                        break;
                     case "SeName":
                         //search engine name
                         if (setSeName)
@@ -729,15 +711,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "Description":
                         await _localizedEntityService.SaveLocalizedValueAsync(manufacturer, m => m.Description, property.StringValue, language.Id);
-                        break;
-                    case "MetaKeywords":
-                        await _localizedEntityService.SaveLocalizedValueAsync(manufacturer, m => m.MetaKeywords, property.StringValue, language.Id);
-                        break;
-                    case "MetaDescription":
-                        await _localizedEntityService.SaveLocalizedValueAsync(manufacturer, m => m.MetaDescription, property.StringValue, language.Id);
-                        break;
-                    case "MetaTitle":
-                        await _localizedEntityService.SaveLocalizedValueAsync(manufacturer, m => m.MetaTitle, property.StringValue, language.Id);
                         break;
                     case "SeName":
                         //search engine name
@@ -1677,15 +1650,6 @@ public partial class ImportManager : IImportManager
                         case "FullDescription":
                             await _localizedEntityService.SaveLocalizedValueAsync(product, p => p.FullDescription, property.StringValue, language.Id);
                             break;
-                        case "MetaKeywords":
-                            await _localizedEntityService.SaveLocalizedValueAsync(product, p => p.MetaKeywords, property.StringValue, language.Id);
-                            break;
-                        case "MetaDescription":
-                            await _localizedEntityService.SaveLocalizedValueAsync(product, p => p.MetaDescription, property.StringValue, language.Id);
-                            break;
-                        case "MetaTitle":
-                            await _localizedEntityService.SaveLocalizedValueAsync(product, p => p.MetaTitle, property.StringValue, language.Id);
-                            break;
                         case "SeName":
                             //search engine name
                             var localizedSeName = await _urlRecordService.ValidateSeNameAsync(product, property.StringValue, localizedName, false);
@@ -2166,15 +2130,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "ProductTemplate":
                         product.ProductTemplateId = property.IntValue;
-                        break;
-                    case "MetaKeywords":
-                        product.MetaKeywords = property.StringValue;
-                        break;
-                    case "MetaDescription":
-                        product.MetaDescription = property.StringValue;
-                        break;
-                    case "MetaTitle":
-                        product.MetaTitle = property.StringValue;
                         break;
                     case "AllowCustomerReviews":
                         product.AllowCustomerReviews = property.BooleanValue;
@@ -2768,15 +2723,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "ManufacturerTemplateId":
                         manufacturer.ManufacturerTemplateId = property.IntValue;
-                        break;
-                    case "MetaKeywords":
-                        manufacturer.MetaKeywords = property.StringValue;
-                        break;
-                    case "MetaDescription":
-                        manufacturer.MetaDescription = property.StringValue;
-                        break;
-                    case "MetaTitle":
-                        manufacturer.MetaTitle = property.StringValue;
                         break;
                     case "Picture":
                         var picture = await LoadPictureAsync(manager.GetDefaultProperty("Picture").StringValue, manufacturer.Name, isNew ? null : (int?)manufacturer.PictureId);

@@ -223,25 +223,6 @@ public partial class NopHtmlHelper : INopHtmlHelper
     }
 
     /// <summary>
-    /// Generate all description parts
-    /// </summary>
-    /// <param name="part">Meta description part</param>
-    /// <returns>A task that represents the asynchronous operation
-    /// The task result contains generated HTML string</returns>
-    public virtual async Task<IHtmlContent> GenerateMetaDescriptionAsync(string part = "")
-    {
-        AppendMetaDescriptionParts(part);
-
-        var metaDescription = string.Join(", ", _metaDescriptionParts.AsEnumerable().Reverse().ToArray());
-        var result = !string.IsNullOrEmpty(metaDescription)
-            ? metaDescription
-            : await _localizationService.Value.GetLocalizedAsync(await _storeContext.GetCurrentStoreAsync(),
-                s => s.DefaultMetaDescription);
-
-        return new HtmlString(_htmlEncoder.Encode(result ?? string.Empty));
-    }
-
-    /// <summary>
     /// Add meta keyword element to the <![CDATA[<head>]]>
     /// </summary>
     /// <param name="part">Meta keyword part</param>
@@ -263,25 +244,6 @@ public partial class NopHtmlHelper : INopHtmlHelper
             return;
 
         _metaKeywordParts.Insert(0, part);
-    }
-
-    /// <summary>
-    /// Generate all keyword parts
-    /// </summary>
-    /// <param name="part">Meta keyword part</param>
-    /// <returns>A task that represents the asynchronous operation
-    /// The task result contains generated HTML string</returns>
-    public virtual async Task<IHtmlContent> GenerateMetaKeywordsAsync(string part = "")
-    {
-        AppendMetaKeywordParts(part);
-
-        var metaKeyword = string.Join(", ", _metaKeywordParts.AsEnumerable().Reverse().ToArray());
-        var result = !string.IsNullOrEmpty(metaKeyword)
-            ? metaKeyword
-            : await _localizationService.Value.GetLocalizedAsync(await _storeContext.GetCurrentStoreAsync(),
-                s => s.DefaultMetaKeywords);
-
-        return new HtmlString(_htmlEncoder.Encode(result ?? string.Empty));
     }
 
     /// <summary>

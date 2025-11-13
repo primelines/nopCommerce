@@ -87,9 +87,6 @@ public partial class BlogModelFactory : IBlogModelFactory
         ArgumentNullException.ThrowIfNull(blogPost);
 
         model.Id = blogPost.Id;
-        model.MetaTitle = blogPost.MetaTitle;
-        model.MetaDescription = blogPost.MetaDescription;
-        model.MetaKeywords = blogPost.MetaKeywords;
         model.SeName = await _urlRecordService.GetSeNameAsync(blogPost, blogPost.LanguageId, ensureTwoPublishedLanguages: false);
         model.Title = blogPost.Title;
         model.Body = blogPost.Body;

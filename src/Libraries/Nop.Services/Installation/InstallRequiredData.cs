@@ -64,9 +64,6 @@ public partial class InstallationService
         {
             new() {
                 Name = "Your store name",
-                DefaultTitle = "Your store",
-                DefaultMetaKeywords = string.Empty,
-                DefaultMetaDescription = string.Empty,
                 HomepageTitle = "Home page title",
                 HomepageDescription = "Home page description",
                 Url = storeUrl,
@@ -1302,7 +1299,6 @@ public partial class InstallationService
         {
             PageTitleSeparator = ". ",
             PageTitleSeoAdjustment = PageTitleSeoAdjustment.PagenameAfterStorename,
-            GenerateProductMetaDescription = true,
             ConvertNonWesternChars = false,
             AllowUnicodeCharsInUrls = true,
             CanonicalUrlsEnabled = false,
@@ -1476,12 +1472,6 @@ public partial class InstallationService
             RequestTimeout = ArtificialIntelligenceDefaults.RequestTimeout,
             AllowProductDescriptionGeneration = true,
             ProductDescriptionQuery = ArtificialIntelligenceDefaults.ProductDescriptionQuery,
-            AllowMetaTitleGeneration = true,
-            MetaTitleQuery = ArtificialIntelligenceDefaults.MetaTitleQuery,
-            AllowMetaKeywordsGeneration = true,
-            MetaKeywordsQuery = ArtificialIntelligenceDefaults.MetaKeywordsQuery,
-            AllowMetaDescriptionGeneration = true,
-            MetaDescriptionQuery = ArtificialIntelligenceDefaults.MetaDescriptionQuery
         });
 
         await SaveSettingAsync(dictionary, new LocalizationSettings

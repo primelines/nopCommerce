@@ -18,10 +18,10 @@
     if (!Model.IsPasswordProtected)
     {
         //title
-        NopHtml.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
-        //meta
-        NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
-        NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
+        NopHtml.AddTitleParts(Model.Title);
+        // //meta
+        // NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
+        // NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
     }
 
     if (seoSettings.CanonicalUrlsEnabled)

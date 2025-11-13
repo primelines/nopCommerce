@@ -392,9 +392,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
             Id = category.Id,
             Name = await _localizationService.GetLocalizedAsync(category, x => x.Name),
             Description = await _localizationService.GetLocalizedAsync(category, x => x.Description),
-            MetaKeywords = await _localizationService.GetLocalizedAsync(category, x => x.MetaKeywords),
-            MetaDescription = await _localizationService.GetLocalizedAsync(category, x => x.MetaDescription),
-            MetaTitle = await _localizationService.GetLocalizedAsync(category, x => x.MetaTitle),
             SeName = await _urlRecordService.GetSeNameAsync(category),
             CatalogProducts = await PrepareCategoryProductsModelAsync(category, command)
         };
@@ -861,9 +858,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
             Id = manufacturer.Id,
             Name = await _localizationService.GetLocalizedAsync(manufacturer, x => x.Name),
             Description = await _localizationService.GetLocalizedAsync(manufacturer, x => x.Description),
-            MetaKeywords = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaKeywords),
-            MetaDescription = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaDescription),
-            MetaTitle = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaTitle),
             SeName = await _urlRecordService.GetSeNameAsync(manufacturer),
             CatalogProducts = await PrepareManufacturerProductsModelAsync(manufacturer, command)
         };
@@ -1012,9 +1006,6 @@ public partial class CatalogDtoFactory : ICatalogDtoFactory
                 Id = manufacturer.Id,
                 Name = await _localizationService.GetLocalizedAsync(manufacturer, x => x.Name),
                 Description = await _localizationService.GetLocalizedAsync(manufacturer, x => x.Description),
-                MetaKeywords = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaKeywords),
-                MetaDescription = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaDescription),
-                MetaTitle = await _localizationService.GetLocalizedAsync(manufacturer, x => x.MetaTitle),
                 SeName = await _urlRecordService.GetSeNameAsync(manufacturer),
             };
 

@@ -10,7 +10,7 @@ namespace Nop.Core.Domain.Catalog;
 /// <summary>
 /// Represents a category
 /// </summary>
-public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountCategoryMapping>, ISoftDeletedEntity, IMetaTagsSupported
+public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountCategoryMapping>, ISoftDeletedEntity
 {
     /// <summary>
     /// Gets or sets the name
@@ -26,21 +26,6 @@ public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IA
     /// Gets or sets a value of used category template identifier
     /// </summary>
     public int CategoryTemplateId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta keywords
-    /// </summary>
-    public string MetaKeywords { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta description
-    /// </summary>
-    public string MetaDescription { get; set; }
-
-    /// <summary>
-    /// Gets or sets the meta title
-    /// </summary>
-    public string MetaTitle { get; set; }
 
     /// <summary>
     /// Gets or sets the parent category identifier

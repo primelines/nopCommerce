@@ -69,21 +69,6 @@ public partial class StoreController : BaseAdminController
                 localized.LanguageId);
 
             await _localizedEntityService.SaveLocalizedValueAsync(store,
-                x => x.DefaultTitle,
-                localized.DefaultTitle,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(store,
-                x => x.DefaultMetaDescription,
-                localized.DefaultMetaDescription,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(store,
-                x => x.DefaultMetaKeywords,
-                localized.DefaultMetaKeywords,
-                localized.LanguageId);
-
-            await _localizedEntityService.SaveLocalizedValueAsync(store,
                 x => x.HomepageDescription,
                 localized.HomepageDescription,
                 localized.LanguageId);
