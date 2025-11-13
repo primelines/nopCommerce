@@ -152,15 +152,15 @@ public partial class ProductService : IProductService
         if (!isMinimumStockReached && !_catalogSettings.PublishBackProductWhenCancellingOrders)
             return;
 
-        switch (product.LowStockActivity)
+        switch (_catalogSettings.LowStockActivityId)
         {
-            case LowStockActivity.DisableBuyButton:
+            case (int) LowStockActivity.DisableBuyButton:
                 product.DisableBuyButton = isMinimumStockReached;
                 product.DisableWishlistButton = isMinimumStockReached;
                 await UpdateProductAsync(product);
                 break;
 
-            case LowStockActivity.Unpublish:
+            case (int) LowStockActivity.Unpublish:
                 product.Published = !isMinimumStockReached;
                 await UpdateProductAsync(product);
                 break;
@@ -208,7 +208,7 @@ public partial class ProductService : IProductService
     /// </returns>
     protected virtual async Task<string> GetStockMessageForAttributesAsync(Product product, string attributesXml)
     {
-        if (!product.DisplayStockAvailability)
+        if (!_catalogSettings.DisplayStockAvailability)
             return string.Empty;
 
         string stockMessage;
@@ -220,9 +220,9 @@ public partial class ProductService : IProductService
             var stockQuantity = combination.StockQuantity;
             if (stockQuantity > 0)
             {
-                if (product.MinStockQuantity >= stockQuantity && product.LowStockActivity == LowStockActivity.Nothing)
+                if (product.MinStockQuantity >= stockQuantity && _catalogSettings.LowStockActivityId == (int) LowStockActivity.Nothing)
                 {
-                    stockMessage = product.DisplayStockQuantity
+                    stockMessage = _catalogSettings.DisplayStockQuantity
                         ?
                         //display "low stock" with stock quantity
                         string.Format(await _localizationService.GetResourceAsync("Products.Availability.LowStockWithQuantity"), stockQuantity)
@@ -232,7 +232,7 @@ public partial class ProductService : IProductService
                 }
                 else
                 {
-                    stockMessage = product.DisplayStockQuantity
+                    stockMessage = _catalogSettings.DisplayStockQuantity
                         ?
                         //display "in stock" with stock quantity
                         string.Format(await _localizationService.GetResourceAsync("Products.Availability.InStockWithQuantity"), stockQuantity)
@@ -305,7 +305,7 @@ public partial class ProductService : IProductService
     /// </returns>
     protected virtual async Task<string> GetStockMessageAsync(Product product)
     {
-        if (!product.DisplayStockAvailability)
+        if (!_catalogSettings.DisplayStockAvailability)
             return string.Empty;
 
         var stockMessage = string.Empty;
@@ -313,9 +313,9 @@ public partial class ProductService : IProductService
 
         if (stockQuantity > 0)
         {
-            if (product.MinStockQuantity >= stockQuantity && product.LowStockActivity == LowStockActivity.Nothing)
+            if (product.MinStockQuantity >= stockQuantity && _catalogSettings.LowStockActivityId == (int) LowStockActivity.Nothing)
             {
-                stockMessage = product.DisplayStockQuantity
+                stockMessage = _catalogSettings.DisplayStockQuantity
                     ?
                     //display "low stock" with stock quantity
                     string.Format(await _localizationService.GetResourceAsync("Products.Availability.LowStockWithQuantity"), stockQuantity)
@@ -325,7 +325,7 @@ public partial class ProductService : IProductService
             }
             else
             {
-                stockMessage = product.DisplayStockQuantity
+                stockMessage = _catalogSettings.DisplayStockQuantity
                     ?
                     //display "in stock" with stock quantity
                     string.Format(await _localizationService.GetResourceAsync("Products.Availability.InStockWithQuantity"), stockQuantity)

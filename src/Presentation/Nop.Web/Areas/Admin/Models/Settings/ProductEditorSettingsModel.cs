@@ -75,8 +75,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.Warehouse")]
     public bool Warehouse { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.DisplayStockAvailability")]
-    public bool DisplayStockAvailability { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.MinimumStockQuantity")]
     public bool MinimumStockQuantity { get; set; }

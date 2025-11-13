@@ -428,7 +428,6 @@ public class ExportManagerTests : ServiceTest
             { "TaxCategory", "TaxCategoryId" },
             { "ManageInventoryMethod", "ManageInventoryMethodId" },
             { "ProductAvailabilityRange", "ProductAvailabilityRangeId" },
-            { "LowStockActivity", "LowStockActivityId" },
             { "BackorderMode", "BackorderModeId" },
             { "BasepriceUnit", "BasepriceUnitId" },
             { "BasepriceBaseUnit", "BasepriceBaseUnitId" },

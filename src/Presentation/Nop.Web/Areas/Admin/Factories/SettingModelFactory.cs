@@ -1184,6 +1184,7 @@ public partial class SettingModelFactory : ISettingModelFactory
         model.PrimaryStoreCurrencyCode = (await _currencyService.GetCurrencyByIdAsync(_currencySettings.PrimaryStoreCurrencyId))?.CurrencyCode;
         model.AttributeValueOutOfStockDisplayTypes = await catalogSettings.AttributeValueOutOfStockDisplayType.ToSelectListAsync();
         model.ProductUrlStructureTypes = await ((ProductUrlStructureType)catalogSettings.ProductUrlStructureTypeId).ToSelectListAsync();
+        model.LowStockActivitys = await ((LowStockActivity)catalogSettings.LowStockActivityId).ToSelectListAsync();
         model.AvailableViewModes.Add(new SelectListItem
         {
             Text = await _localizationService.GetResourceAsync("Admin.Catalog.ViewMode.Grid"),
@@ -1290,6 +1291,9 @@ public partial class SettingModelFactory : ISettingModelFactory
             model.AllowCustomersToSearchWithCategoryName_OverrideForStore = await _settingService.SettingExistsAsync(catalogSettings, x => x.AllowCustomersToSearchWithCategoryName, storeId);
             model.DisplayAllPicturesOnCatalogPages_OverrideForStore = await _settingService.SettingExistsAsync(catalogSettings, x => x.DisplayAllPicturesOnCatalogPages, storeId);
             model.ProductUrlStructureTypeId_OverrideForStore = await _settingService.SettingExistsAsync(catalogSettings, x => x.ProductUrlStructureTypeId, storeId);
+            model.DisplayStockAvailability_OverrideForStore = await _settingService.SettingExistsAsync(catalogSettings, x => x.DisplayStockAvailability, storeId);
+            model.DisplayStockQuantity_OverrideForStore = await _settingService.SettingExistsAsync(catalogSettings, x => x.DisplayStockQuantity, storeId);
+            model.LowStockActivityId_OverrideForStore = await _settingService.SettingExistsAsync(catalogSettings, x => x.LowStockActivityId, storeId);
         }
 
         //prepare nested search model

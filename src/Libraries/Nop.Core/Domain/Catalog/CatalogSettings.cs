@@ -604,4 +604,31 @@ public partial class CatalogSettings : ISettings
     /// Gets or sets a number of reviews per page on vendor reviews page
     /// </summary>
     public int VendorProductReviewsPageSize { get; set; }
+
+
+
+    // setting moved from Product
+
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to display stock availability
+    /// </summary>
+    /// #################### الاختيار لينا مش للعميل وعلى مستوى المنتجات كلها 
+    /// فى الستنج
+    public bool DisplayStockAvailability { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to display stock quantity
+    /// </summary>
+    /// #################### الاختيار لينا مش للعميل وعلى مستوى المنتجات كلها 
+    /// فى الستنج
+    public bool DisplayStockQuantity { get; set; }
+
+    /// <summary>
+    /// Gets or sets the low stock activity identifier
+    /// </summary>
+    /// #################### ايه اللى هيحصل للمنتج الخلصان او اللى قرب يخلص احنا اللى بنقرره على مستوى الموقع
+    /// فى الستنج
+    public int LowStockActivityId { get; set; }
+
 }

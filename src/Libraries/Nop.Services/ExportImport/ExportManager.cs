@@ -1251,10 +1251,7 @@ public partial class ExportManager : IExportManager
             await xmlWriter.WriteStringAsync("IsTaxExempt", product.IsTaxExempt);
             await xmlWriter.WriteStringAsync("TaxCategoryId", product.TaxCategoryId);
             await xmlWriter.WriteStringAsync("StockQuantity", product.StockQuantity);
-            await xmlWriter.WriteStringAsync("DisplayStockAvailability", product.DisplayStockAvailability, await IgnoreExportProductPropertyAsync(p => p.DisplayStockAvailability));
-            await xmlWriter.WriteStringAsync("DisplayStockQuantity", product.DisplayStockQuantity, await IgnoreExportProductPropertyAsync(p => p.DisplayStockAvailability));
             await xmlWriter.WriteStringAsync("MinStockQuantity", product.MinStockQuantity, await IgnoreExportProductPropertyAsync(p => p.MinimumStockQuantity));
-            await xmlWriter.WriteStringAsync("LowStockActivityId", product.LowStockActivityId, await IgnoreExportProductPropertyAsync(p => p.LowStockActivity));
             await xmlWriter.WriteStringAsync("NotifyAdminForQuantityBelow", product.NotifyAdminForQuantityBelow, await IgnoreExportProductPropertyAsync(p => p.NotifyAdminForQuantityBelow));
             await xmlWriter.WriteStringAsync("BackorderModeId", product.BackorderModeId, await IgnoreExportProductPropertyAsync(p => p.Backorders));
             await xmlWriter.WriteStringAsync("AllowBackInStockSubscriptions", product.AllowBackInStockSubscriptions, await IgnoreExportProductPropertyAsync(p => p.AllowBackInStockSubscriptions));
@@ -1556,13 +1553,7 @@ public partial class ExportManager : IExportManager
                 AllowBlank = true
             },
             new PropertyByName<Product>("StockQuantity", (p, _) => p.StockQuantity),
-            new PropertyByName<Product>("DisplayStockAvailability", (p, _) => p.DisplayStockAvailability, await IgnoreExportProductPropertyAsync(p => p.DisplayStockAvailability)),
-            new PropertyByName<Product>("DisplayStockQuantity", (p, _) => p.DisplayStockQuantity, await IgnoreExportProductPropertyAsync(p => p.DisplayStockAvailability)),
             new PropertyByName<Product>("MinStockQuantity", (p, _) => p.MinStockQuantity, await IgnoreExportProductPropertyAsync(p => p.MinimumStockQuantity)),
-            new PropertyByName<Product>("LowStockActivity", (p, _) => p.LowStockActivityId, await IgnoreExportProductPropertyAsync(p => p.LowStockActivity))
-            {
-                DropDownElements = await LowStockActivity.Nothing.ToSelectListAsync(useLocalization: false)
-            },
             new PropertyByName<Product>("NotifyAdminForQuantityBelow", (p, _) => p.NotifyAdminForQuantityBelow, await IgnoreExportProductPropertyAsync(p => p.NotifyAdminForQuantityBelow)),
             new PropertyByName<Product>("BackorderMode", (p, _) => p.BackorderModeId, await IgnoreExportProductPropertyAsync(p => p.Backorders))
             {

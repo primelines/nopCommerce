@@ -123,10 +123,6 @@ public partial class SampleProducts
         /// </summary>
         public int StockQuantity { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to display stock availability
-        /// </summary>
-        public bool DisplayStockAvailability { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity when admin should be notified
@@ -188,12 +184,6 @@ public partial class SampleProducts
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public BackorderMode BackorderMode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the low stock activity
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public LowStockActivity LowStockActivity { get; set; }
 
         /// <summary>
         /// Gets or sets a value of used product template name

@@ -4,7 +4,6 @@
 <script>
     $(function() {
         $("#@Html.IdFor(model => model.BackorderModeId)").change(toggleManageStock);
-        $("#@Html.IdFor(model => model.DisplayStockAvailability)").click(toggleManageStock);
 
         toggleManageStock();
     });
@@ -21,8 +20,6 @@
             $('#pnlWarehouse').hideElement();
             $('#pnlMultipleWarehouses').hideElement();
             $('#pnlStockQuantity').hideElement();
-            $('#pnlDisplayStockAvailability').hideElement();
-            $('#pnlDisplayStockQuantity').hideElement();
             $('#pnlMinStockQuantity').hideElement();
             $('#pnlLowStockActivity').hideElement();
             $('#pnlNotifyForQuantityBelow').hideElement();
@@ -32,13 +29,6 @@
             $('[data-card-name=product-stock-quantity-history]').hideElement();
         } else if (selectedManageInventoryMethodId == manageStockId) {
             $('#pnlUseMultipleWarehouses').showElement();
-
-            $('#pnlDisplayStockAvailability').showElement();
-            if ($('#@Html.IdFor(model => model.DisplayStockAvailability)').is(':checked')) {
-                $('#pnlDisplayStockQuantity').showElement();
-            } else {
-                $('#pnlDisplayStockQuantity').hideElement();
-            }
 
             $('#pnlMinStockQuantity').showElement();
             $('#pnlLowStockActivity').showElement();
@@ -69,13 +59,6 @@
             $('#pnlWarehouse').showElement();
             $('#pnlMultipleWarehouses').hideElement();
             $('#pnlStockQuantity').hideElement();
-            $('#pnlDisplayStockAvailability').showElement();
-
-            if ($('#@Html.IdFor(model => model.DisplayStockAvailability)').is(':checked')) {
-                $('#pnlDisplayStockQuantity').showElement();
-            } else {
-                $('#pnlDisplayStockQuantity').hideElement();
-            }
             $('#pnlMinStockQuantity').showElement();
             $('#pnlLowStockActivity').showElement();
             $('#pnlNotifyForQuantityBelow').hideElement();
@@ -100,26 +83,6 @@
                 <span asp-validation-for="StockQuantity"></span>
             </div>
         </div>
-        <div class="form-group row @(Model.ProductEditorSettingsModel.DisplayStockAvailability ? null : "advanced-setting")" id="pnlDisplayStockAvailability">
-            <div class="col-md-3">
-                <nop-label asp-for="DisplayStockAvailability" />
-            </div>
-            <div class="col-md-9">
-                <nop-editor asp-for="DisplayStockAvailability" />
-                <span asp-validation-for="DisplayStockAvailability"></span>
-            </div>
-        </div>
-        <nop-nested-setting asp-for="DisplayStockAvailability" disable-auto-generation="true">
-            <div class="form-group row @(Model.ProductEditorSettingsModel.DisplayStockAvailability ? null : "advanced-setting")" id="pnlDisplayStockQuantity">
-                <div class="col-md-3">
-                    <nop-label asp-for="DisplayStockQuantity" />
-                </div>
-                <div class="col-md-9">
-                    <nop-editor asp-for="DisplayStockQuantity" />
-                    <span asp-validation-for="DisplayStockQuantity"></span>
-                </div>
-            </div>
-        </nop-nested-setting>
         <div class="form-group row @(Model.ProductEditorSettingsModel.MinimumStockQuantity ? null : "advanced-setting")" id="pnlMinStockQuantity">
             <div class="col-md-3">
                 <nop-label asp-for="MinStockQuantity" />
@@ -127,15 +90,6 @@
             <div class="col-md-9">
                 <nop-editor asp-for="MinStockQuantity" />
                 <span asp-validation-for="MinStockQuantity"></span>
-            </div>
-        </div>
-        <div class="form-group row @(Model.ProductEditorSettingsModel.LowStockActivity ? null : "advanced-setting")" id="pnlLowStockActivity">
-            <div class="col-md-3">
-                <nop-label asp-for="LowStockActivityId" />
-            </div>
-            <div class="col-md-9">
-                <nop-select asp-for="LowStockActivityId" asp-items="@(await ((LowStockActivity)Model.LowStockActivityId).ToSelectListAsync())" />
-                <span asp-validation-for="LowStockActivityId"></span>
             </div>
         </div>
         <div class="form-group row @(Model.ProductEditorSettingsModel.NotifyAdminForQuantityBelow ? null : "advanced-setting")" id="pnlNotifyForQuantityBelow">

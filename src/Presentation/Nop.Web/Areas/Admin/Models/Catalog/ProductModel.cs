@@ -138,17 +138,8 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.StockQuantity")]
     public string StockQuantityStr { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.DisplayStockAvailability")]
-    public bool DisplayStockAvailability { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.DisplayStockQuantity")]
-    public bool DisplayStockQuantity { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.MinStockQuantity")]
     public int MinStockQuantity { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.LowStockActivity")]
-    public int LowStockActivityId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.NotifyAdminForQuantityBelow")]
     public int NotifyAdminForQuantityBelow { get; set; }

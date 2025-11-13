@@ -416,6 +416,10 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.DisplayAllPicturesOnCatalogPages_OverrideForStore, options => options.Ignore())
             .ForMember(model => model.ProductUrlStructureTypeId_OverrideForStore, mo => mo.Ignore())
             .ForMember(model => model.ProductUrlStructureTypes, mo => mo.Ignore())
+            .ForMember(model => model.LowStockActivitys, mo => mo.Ignore())
+            .ForMember(model => model.DisplayStockAvailability_OverrideForStore, mo => mo.Ignore())
+            .ForMember(model => model.DisplayStockQuantity_OverrideForStore, mo => mo.Ignore())
+            .ForMember(model => model.LowStockActivityId_OverrideForStore, mo => mo.Ignore())
             .ForMember(model => model.ShowSearchBoxCategories_OverrideForStore, mo => mo.Ignore())
             .ForMember(model => model.ArtificialIntelligenceSettingsModel, mo => mo.Ignore());
         CreateMap<CatalogSettingsModel, CatalogSettings>()
@@ -438,6 +442,9 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(settings => settings.UseLinksInRequiredProductWarnings, options => options.Ignore())
             .ForMember(settings => settings.UseStandardSearchWhenSearchProviderThrowsException, options => options.Ignore())
             .ForMember(settings => settings.ActiveSearchProviderSystemName, options => options.Ignore())
+            .ForMember(settings => settings.DisplayStockAvailability, options => options.Ignore())
+            .ForMember(settings => settings.DisplayStockQuantity, options => options.Ignore())
+            .ForMember(settings => settings.LowStockActivityId, options => options.Ignore())
             .ForMember(settings => settings.VendorProductReviewsPageSize, options => options.Ignore());        
 
         CreateMap<ProductCategory, CategoryProductModel>()
@@ -550,7 +557,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(entity => entity.BackorderMode, options => options.Ignore())
             .ForMember(entity => entity.CreatedOnUtc, options => options.Ignore())
             .ForMember(entity => entity.Deleted, options => options.Ignore())
-            .ForMember(entity => entity.LowStockActivity, options => options.Ignore())
             .ForMember(entity => entity.NotApprovedRatingSum, options => options.Ignore())
             .ForMember(entity => entity.NotApprovedTotalReviews, options => options.Ignore())
             .ForMember(entity => entity.UpdatedOnUtc, options => options.Ignore());

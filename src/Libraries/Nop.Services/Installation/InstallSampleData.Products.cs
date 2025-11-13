@@ -193,8 +193,6 @@ public partial class InstallationService
                 StockQuantity = sample.StockQuantity,
                 NotifyAdminForQuantityBelow = sample.NotifyAdminForQuantityBelow,
                 AllowBackInStockSubscriptions = sample.AllowBackInStockSubscriptions,
-                DisplayStockAvailability = sample.DisplayStockAvailability,
-                LowStockActivity = sample.LowStockActivity,
                 BackorderMode = sample.BackorderMode,
                 OrderMinimumQuantity = sample.OrderMinimumQuantity,
                 OrderMaximumQuantity = sample.OrderMaximumQuantity,

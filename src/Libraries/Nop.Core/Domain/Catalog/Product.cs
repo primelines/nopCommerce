@@ -158,6 +158,11 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public string AllowedQuantities { get; set; }
 
     /// <summary>
+    /// Gets or sets the quantity when admin should be notified
+    /// </summary>
+    public int NotifyAdminForQuantityBelow { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether to display attribute combination images only
     /// </summary>
     public bool DisplayAttributeCombinationImagesOnly { get; set; }
@@ -266,50 +271,4 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
         set => BackorderModeId = (int)value;
     }
 
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to display stock availability
-    /// </summary>
-    /// #################### الاختيار لينا مش للعميل وعلى مستوى المنتجات كلها 
-    /// فى الستنج
-    public bool DisplayStockAvailability { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to display stock quantity
-    /// </summary>
-    /// #################### الاختيار لينا مش للعميل وعلى مستوى المنتجات كلها 
-    /// فى الستنج
-    public bool DisplayStockQuantity { get; set; }
-
-    /// <summary>
-    /// Gets or sets the low stock activity identifier
-    /// </summary>
-    /// #################### ايه اللى هيحصل للمنتج الخلصان او اللى قرب يخلص احنا اللى بنقرره على مستوى الموقع
-    /// فى الستنج
-    public int LowStockActivityId { get; set; }
-
-
-    /// <summary>
-    /// Gets or sets the quantity when admin should be notified
-    /// </summary>
-    /// #################### هيبقى فيه تنبيه دايما من الموقع للفيندور
-    /// true all the time
-    public int NotifyAdminForQuantityBelow { get; set; }
-
-
-
-
-
-
-
-
-
-    /// <summary>
-    /// Gets or sets the low stock activity
-    /// </summary>
-    public LowStockActivity LowStockActivity
-    {
-        get => (LowStockActivity)LowStockActivityId;
-        set => LowStockActivityId = (int)value;
-    }
 }

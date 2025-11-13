@@ -425,4 +425,23 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     public ArtificialIntelligenceSettingsModel ArtificialIntelligenceSettingsModel { get; set; }
 
     #endregion
+
+
+    #region Moved from Product
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.DisplayStockAvailability")]
+    public int DisplayStockAvailability { get; set; }
+    public bool DisplayStockAvailability_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.DisplayStockQuantity")]
+    public int DisplayStockQuantity { get; set; }
+    public bool DisplayStockQuantity_OverrideForStore { get; set; }
+
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.LowStockActivity")]
+    public int LowStockActivityId { get; set; }
+    public bool LowStockActivityId_OverrideForStore { get; set; }
+    public SelectList LowStockActivitys { get; set; }
+
+    #endregion
 }

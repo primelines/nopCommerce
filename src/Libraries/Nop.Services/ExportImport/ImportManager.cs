@@ -2166,17 +2166,8 @@ public partial class ImportManager : IImportManager
                     case "StockQuantity":
                         product.StockQuantity = property.IntValue;
                         break;
-                    case "DisplayStockAvailability":
-                        product.DisplayStockAvailability = property.BooleanValue;
-                        break;
-                    case "DisplayStockQuantity":
-                        product.DisplayStockQuantity = property.BooleanValue;
-                        break;
                     case "MinStockQuantity":
                         product.MinStockQuantity = property.IntValue;
-                        break;
-                    case "LowStockActivity":
-                        product.LowStockActivityId = property.IntValue;
                         break;
                     case "NotifyAdminForQuantityBelow":
                         product.NotifyAdminForQuantityBelow = property.IntValue;

@@ -114,11 +114,6 @@ public partial class ProductEditorSettings : ISettings
     public bool Warehouse { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Display stock availability' field is shown
-    /// </summary>
-    public bool DisplayStockAvailability { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Minimum stock quantity' field is shown
     /// </summary>
     public bool MinimumStockQuantity { get; set; }

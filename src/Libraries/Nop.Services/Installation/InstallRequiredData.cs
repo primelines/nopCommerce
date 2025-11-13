@@ -1459,6 +1459,9 @@ public partial class InstallationService
             DisplayAllPicturesOnCatalogPages = false,
             ProductUrlStructureTypeId = (int)ProductUrlStructureType.Product,
             ActiveSearchProviderSystemName = string.Empty,
+            DisplayStockAvailability = true,
+            DisplayStockQuantity = true,
+            LowStockActivityId = (int) LowStockActivity.Unpublish,
             UseStandardSearchWhenSearchProviderThrowsException = true
         });
 
