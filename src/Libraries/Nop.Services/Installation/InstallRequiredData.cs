@@ -2233,7 +2233,6 @@ public partial class InstallationService
         {
             Email = "builtin@search_engine_record.com",
             CustomerGuid = Guid.NewGuid(),
-            AdminComment = "Built-in system guest record used for requests from search engines.",
             Active = true,
             IsSystemAccount = true,
             SystemName = NopCustomerDefaults.SearchEngineCustomerName,
@@ -2251,7 +2250,6 @@ public partial class InstallationService
         {
             Email = "builtin@background-task-record.com",
             CustomerGuid = Guid.NewGuid(),
-            AdminComment = "Built-in system record used for background tasks.",
             Active = true,
             IsSystemAccount = true,
             SystemName = NopCustomerDefaults.BackgroundTaskCustomerName,

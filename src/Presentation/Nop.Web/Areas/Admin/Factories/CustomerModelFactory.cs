@@ -668,7 +668,6 @@ public partial class CustomerModelFactory : ICustomerModelFactory
                 model.Email = customer.Email;
                 model.Username = customer.Username;
                 model.VendorId = customer.VendorId;
-                model.AdminComment = customer.AdminComment;
                 model.IsTaxExempt = customer.IsTaxExempt;
                 model.Active = customer.Active;
                 model.FirstName = customer.FirstName;

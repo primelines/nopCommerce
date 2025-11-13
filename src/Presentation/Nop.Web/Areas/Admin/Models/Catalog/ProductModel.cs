@@ -85,9 +85,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.FullDescription")]
     public string FullDescription { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.AdminComment")]
-    public string AdminComment { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.MetaKeywords")]
     public string MetaKeywords { get; set; }
 

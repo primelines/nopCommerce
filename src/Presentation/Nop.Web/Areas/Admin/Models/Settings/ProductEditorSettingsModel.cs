@@ -15,9 +15,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.ProductTemplate")]
     public bool ProductTemplate { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.AdminComment")]
-    public bool AdminComment { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.Vendor")]
     public bool Vendor { get; set; }
 

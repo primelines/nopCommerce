@@ -1254,7 +1254,6 @@ public partial class ExportManager : IExportManager
             await WriteLocalizedPropertyXmlAsync(product, p => p.Name, xmlWriter, languages);
             await WriteLocalizedPropertyXmlAsync(product, p => p.ShortDescription, xmlWriter, languages);
             await WriteLocalizedPropertyXmlAsync(product, p => p.FullDescription, xmlWriter, languages);
-            await xmlWriter.WriteStringAsync("AdminComment", product.AdminComment, await IgnoreExportProductPropertyAsync(p => p.AdminComment));
             //vendor can't change this field
             await xmlWriter.WriteStringAsync("VendorId", product.VendorId, await IgnoreExportProductPropertyAsync(p => p.Vendor) || currentVendor != null);
             await xmlWriter.WriteStringAsync("ProductTemplateId", product.ProductTemplateId, await IgnoreExportProductPropertyAsync(p => p.ProductTemplate));

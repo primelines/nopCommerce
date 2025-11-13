@@ -26,28 +26,24 @@ public class AffiliateServiceTests : ServiceTest<Affiliate>
         {
             Active = true,
             AddressId = 1,
-            AdminComment = "Test admin comment",
             FriendlyUrlName = "TestActiveAffiliate1"
         };
         _activeAffiliate2 = new Affiliate
         {
             Active = true,
             AddressId = 1,
-            AdminComment = "Test admin comment",
             FriendlyUrlName = "TestActiveAffiliate2"
         };
         _notActiveAffiliate = new Affiliate
         {
             Active = false,
             AddressId = 1,
-            AdminComment = "Test admin comment",
             FriendlyUrlName = "TestNotActiveAffiliate"
         };
         _activeDeletedAffiliate = new Affiliate
         {
             Active = true,
             AddressId = 1,
-            AdminComment = "Test admin comment",
             FriendlyUrlName = "TestActiveDeletedAffiliate",
             Deleted = true
         };
@@ -55,7 +51,6 @@ public class AffiliateServiceTests : ServiceTest<Affiliate>
         {
             Active = false,
             AddressId = 1,
-            AdminComment = "Test admin comment",
             FriendlyUrlName = "TestNotActiveDeletedAffiliate",
             Deleted = true
         };
@@ -145,7 +140,6 @@ public class AffiliateServiceTests : ServiceTest<Affiliate>
             {
                 Active = true,
                 AddressId = 1,
-                AdminComment = "Test admin comment",
                 FriendlyUrlName = "TestActiveAffiliate"
             };
 
@@ -153,7 +147,6 @@ public class AffiliateServiceTests : ServiceTest<Affiliate>
             {
                 Active = true,
                 AddressId = 1,
-                AdminComment = "Test comment",
                 FriendlyUrlName = "TestActiveAffiliate"
             };
 
@@ -165,7 +158,7 @@ public class AffiliateServiceTests : ServiceTest<Affiliate>
                 Update = _affiliateService.UpdateAffiliateAsync,
                 Delete = _affiliateService.DeleteAffiliateAsync,
                 GetById = _affiliateService.GetAffiliateByIdAsync,
-                IsEqual = (first, second) => first.Active == second.Active && first.AddressId == second.AddressId && first.AdminComment.Equals(second.AdminComment) && first.FriendlyUrlName.Equals(second.FriendlyUrlName) && first.Deleted == second.Deleted
+                IsEqual = (first, second) => first.Active == second.Active && first.AddressId == second.AddressId && first.FriendlyUrlName.Equals(second.FriendlyUrlName) && first.Deleted == second.Deleted
             };
         }
     }

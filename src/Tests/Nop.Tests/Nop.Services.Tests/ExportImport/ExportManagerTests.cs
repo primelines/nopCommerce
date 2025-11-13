@@ -339,7 +339,7 @@ public class ExportManagerTests : ServiceTest
         var customer = customers.First();
 
         var ignore = new List<string> { "Id", "ExternalAuthenticationRecords", "ShoppingCartItems",
-            "ReturnRequests", "BillingAddress", "ShippingAddress", "Addresses", "AdminComment",
+            "ReturnRequests", "BillingAddress", "ShippingAddress", "Addresses",
             "EmailToRevalidate", "HasShoppingCartItems", "RequireReLogin", "FailedLoginAttempts",
             "CannotLoginUntilDateUtc", "Deleted", "IsSystemAccount", "SystemName", "LastIpAddress",
             "LastLoginDateUtc", "LastActivityDateUtc", "RegisteredInStoreId", "BillingAddressId", "ShippingAddressId",
@@ -435,7 +435,7 @@ public class ExportManagerTests : ServiceTest
             { "SKU", "Sku" },
         };
 
-        var ignore = new List<string> { "Categories", "Manufacturers", "AdminComment",
+        var ignore = new List<string> { "Categories", "Manufacturers",
              "BackorderMode", "DownloadActivationType", "GiftCardType", "LowStockActivity",
             "ManageInventoryMethod", "ProductCategories",
             "ProductManufacturers", "ProductPictures", "ProductReviews", "ProductSpecificationAttributes",

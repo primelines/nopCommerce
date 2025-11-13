@@ -57,7 +57,6 @@ public class DiscountServiceTests : ServiceTest
         return new Customer
         {
             CustomerGuid = Guid.NewGuid(),
-            AdminComment = string.Empty,
             Active = true,
             Deleted = false,
             CreatedOnUtc = new DateTime(2010, 01, 01),

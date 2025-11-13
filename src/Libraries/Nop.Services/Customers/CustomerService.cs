@@ -493,7 +493,6 @@ public partial class CustomerService : ICustomerService
             {
                 Email = "builtin@background-task-record.com",
                 CustomerGuid = Guid.NewGuid(),
-                AdminComment = "Built-in system record used for background tasks.",
                 Active = true,
                 IsSystemAccount = true,
                 SystemName = NopCustomerDefaults.BackgroundTaskCustomerName,
@@ -531,7 +530,6 @@ public partial class CustomerService : ICustomerService
             {
                 Email = "builtin@search_engine_record.com",
                 CustomerGuid = Guid.NewGuid(),
-                AdminComment = "Built-in system guest record used for requests from search engines.",
                 Active = true,
                 IsSystemAccount = true,
                 SystemName = NopCustomerDefaults.SearchEngineCustomerName,

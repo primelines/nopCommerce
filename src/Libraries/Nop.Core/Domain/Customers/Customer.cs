@@ -139,11 +139,6 @@ public partial class Customer : BaseEntity, ISoftDeletedEntity
     public string EmailToRevalidate { get; set; }
 
     /// <summary>
-    /// Gets or sets the admin comment
-    /// </summary>
-    public string AdminComment { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the customer is tax exempt
     /// </summary>
     public bool IsTaxExempt { get; set; }

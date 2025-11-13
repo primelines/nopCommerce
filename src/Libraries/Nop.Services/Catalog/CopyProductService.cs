@@ -591,7 +591,6 @@ public partial class CopyProductService : ICopyProductService
             FullDescription = product.FullDescription,
             VendorId = product.VendorId,
             ProductTemplateId = product.ProductTemplateId,
-            AdminComment = product.AdminComment,
             MetaKeywords = product.MetaKeywords,
             MetaDescription = product.MetaDescription,
             MetaTitle = product.MetaTitle,

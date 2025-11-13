@@ -44,9 +44,6 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
     [NopResourceDisplayName("Admin.Vendors.Fields.Picture")]
     public int PictureId { get; set; }
 
-    [NopResourceDisplayName("Admin.Vendors.Fields.AdminComment")]
-    public string AdminComment { get; set; }
-
     public AddressModel Address { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.Fields.Active")]

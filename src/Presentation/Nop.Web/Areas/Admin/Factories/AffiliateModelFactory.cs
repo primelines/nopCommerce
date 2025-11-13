@@ -202,7 +202,6 @@ public partial class AffiliateModelFactory : IAffiliateModelFactory
             //whether to fill in some of properties
             if (!excludeProperties)
             {
-                model.AdminComment = affiliate.AdminComment;
                 model.FriendlyUrlName = affiliate.FriendlyUrlName;
                 model.Active = affiliate.Active;
             }

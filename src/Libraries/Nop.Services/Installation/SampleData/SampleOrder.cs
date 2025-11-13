@@ -340,11 +340,6 @@ public partial class SampleOrder
         public decimal? TotalWeight { get; set; }
 
         /// <summary>
-        /// Gets or sets the admin comment
-        /// </summary>
-        public string AdminComment { get; set; } = string.Empty;
-
-        /// <summary>
         /// Gets or sets sample shipment items
         /// </summary>
         public List<SampleShipmentItem> ShipmentItems { get; set; } = new();

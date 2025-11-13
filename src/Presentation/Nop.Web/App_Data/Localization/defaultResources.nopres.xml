@@ -1557,12 +1557,6 @@
   <LocaleResource Name="Admin.Affiliates.Fields.Active.Hint">
     <Value>A value indicating whether the affiliate is active.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Affiliates.Fields.AdminComment">
-    <Value>Admin comment</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Affiliates.Fields.AdminComment.Hint">
-    <Value>Admin comment. For internal use.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Affiliates.Fields.FriendlyUrlName">
     <Value>Friendly URL name</Value>
   </LocaleResource>
@@ -2963,12 +2957,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AdditionalShippingCharge.Hint">
     <Value>The additional shipping charge.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.AdminComment">
-    <Value>Admin comment</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.AdminComment.Hint">
-    <Value>This comment is for internal use only, not visible for customers.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AgeVerification">
     <Value>Age verification</Value>
@@ -8590,9 +8578,6 @@
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.AdditionalShippingCharge">
     <Value>Additional shipping charge</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.AdminComment">
-    <Value>Admin comment</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.AgeVerification">
     <Value>Age verification</Value>
   </LocaleResource>
@@ -9754,12 +9739,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Shipping.Warehouses.Fields.Address">
     <Value>Address</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Shipping.Warehouses.Fields.AdminComment">
-    <Value>Admin comment</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Shipping.Warehouses.Fields.AdminComment.Hint">
-    <Value>Admin comment. For internal use.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Shipping.Warehouses.Fields.Name">
     <Value>Name</Value>
@@ -12170,12 +12149,6 @@
   <LocaleResource Name="Admin.Customers.Customers.Fields.Active.Hint">
     <Value>Is this customer's account active. To disable/suspend a customer's account, uncheck this.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Customers.Customers.Fields.AdminComment">
-    <Value>Admin comment</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Customers.Customers.Fields.AdminComment.Hint">
-    <Value>Admin comment. For internal use.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Customers.Customers.Fields.Affiliate">
     <Value>Affiliate</Value>
   </LocaleResource>
@@ -14012,15 +13985,6 @@
   <LocaleResource Name="Admin.Orders.Shipments.AddNew.Title">
     <Value>Add a new shipment to order #{0}</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Orders.Shipments.AdminComment">
-    <Value>Admin comment</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Orders.Shipments.AdminComment.Button">
-    <Value>Set admin comment</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Orders.Shipments.AdminComment.Hint">
-    <Value>Admin comment. For internal use.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Orders.Shipments.BackToOrder">
     <Value>back to order details</Value>
   </LocaleResource>
@@ -14509,12 +14473,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Promotions.Discounts.EditDiscountDetails">
     <Value>Edit discount details</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Promotions.Discounts.Fields.AdminComment">
-    <Value>Admin comment</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Promotions.Discounts.Fields.AdminComment.Hint">
-    <Value>This comment is for internal use only, not visible for customers.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Promotions.Discounts.Fields.AppliedToSubCategories">
     <Value>Apply to subcategories</Value>
@@ -16606,12 +16564,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.Active.Hint">
     <Value>A value indicating whether the vendor is active.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Vendors.Fields.AdminComment">
-    <Value>Admin comment</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Vendors.Fields.AdminComment.Hint">
-    <Value>Admin comment. For internal use.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.AllowCustomersToSelectPageSize">
     <Value>Allow customers to select page size</Value>

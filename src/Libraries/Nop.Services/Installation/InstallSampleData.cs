@@ -1653,7 +1653,6 @@ public partial class InstallationService
             Name = sv.Name,
             Email = sv.Email,
             Description = sv.Description,
-            AdminComment = sv.AdminComment,
             Active = sv.Active,
             DisplayOrder = sv.DisplayOrder,
             PageSize = sv.PageSize,
@@ -1830,7 +1829,6 @@ public partial class InstallationService
                 TotalWeight = ss.TotalWeight,
                 ReadyForPickupDateUtc = DateTime.UtcNow,
                 DeliveryDateUtc = DateTime.UtcNow,
-                AdminComment = ss.AdminComment,
                 CreatedOnUtc = DateTime.UtcNow
             }, ss))).ToList();
 

@@ -512,7 +512,6 @@ public partial class CustomerController : BaseAdminController
         {
             try
             {
-                customer.AdminComment = model.AdminComment;
                 customer.IsTaxExempt = model.IsTaxExempt;
                 customer.MustChangePassword = model.MustChangePassword;
 

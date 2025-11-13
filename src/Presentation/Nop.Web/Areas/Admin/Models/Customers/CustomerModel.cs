@@ -144,9 +144,6 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.RegisteredInStore")]
     public string RegisteredInStore { get; set; }
 
-    [NopResourceDisplayName("Admin.Customers.Customers.Fields.AdminComment")]
-    public string AdminComment { get; set; }
-
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.IsTaxExempt")]
     public bool IsTaxExempt { get; set; }
 

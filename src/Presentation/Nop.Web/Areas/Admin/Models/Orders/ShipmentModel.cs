@@ -63,8 +63,6 @@ public partial record ShipmentModel : BaseNopEntityModel
 
     public DateTime? DeliveryDateUtc { get; set; }
 
-    [NopResourceDisplayName("Admin.Orders.Shipments.AdminComment")]
-    public string AdminComment { get; set; }
 
     public List<ShipmentItemModel> Items { get; set; }
 

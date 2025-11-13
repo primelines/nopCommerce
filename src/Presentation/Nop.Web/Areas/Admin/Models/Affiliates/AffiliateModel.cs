@@ -25,9 +25,6 @@ public partial record AffiliateModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.Affiliates.Fields.URL")]
     public string Url { get; set; }
 
-    [NopResourceDisplayName("Admin.Affiliates.Fields.AdminComment")]
-    public string AdminComment { get; set; }
-
     [NopResourceDisplayName("Admin.Affiliates.Fields.FriendlyUrlName")]
     public string FriendlyUrlName { get; set; }
 

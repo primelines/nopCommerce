@@ -21,11 +21,6 @@ public partial class SampleVendor
     public string Description { get; set; }
 
     /// <summary>
-    /// Gets or sets the admin comment
-    /// </summary>
-    public string AdminComment { get; set; } = string.Empty;
-
-    /// <summary>
     /// Gets or sets a value indicating whether the entity is active
     /// </summary>
     public bool Active { get; set; }

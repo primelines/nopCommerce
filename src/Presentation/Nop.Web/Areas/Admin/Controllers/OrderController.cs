@@ -1721,7 +1721,6 @@ public partial class OrderController : BaseAdminController
             OrderId = order.Id,
             TrackingNumber = model.TrackingNumber,
             TotalWeight = null,
-            AdminComment = model.AdminComment,
             CreatedOnUtc = DateTime.UtcNow
         };
 
@@ -1903,26 +1902,6 @@ public partial class OrderController : BaseAdminController
         await _shipmentService.UpdateShipmentAsync(shipment);
 
         await _eventPublisher.PublishAsync(new ShipmentTrackingNumberSetEvent(shipment));
-
-        return RedirectToAction("ShipmentDetails", new { id = shipment.Id });
-    }
-
-    [HttpPost, ActionName("ShipmentDetails")]
-    [FormValueRequired("setadmincomment")]
-    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> SetShipmentAdminComment(ShipmentModel model)
-    {
-        //try to get a shipment with the specified id
-        var shipment = await _shipmentService.GetShipmentByIdAsync(model.Id);
-        if (shipment == null)
-            return RedirectToAction("List");
-
-        //a vendor should have access only to his products
-        if (await _workContext.GetCurrentVendorAsync() != null && !await HasAccessToShipmentAsync(shipment))
-            return RedirectToAction("List");
-
-        shipment.AdminComment = model.AdminComment;
-        await _shipmentService.UpdateShipmentAsync(shipment);
 
         return RedirectToAction("ShipmentDetails", new { id = shipment.Id });
     }

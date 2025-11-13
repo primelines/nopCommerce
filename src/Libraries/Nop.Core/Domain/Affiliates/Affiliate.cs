@@ -13,11 +13,6 @@ public partial class Affiliate : BaseEntity, ISoftDeletedEntity
     public int AddressId { get; set; }
 
     /// <summary>
-    /// Gets or sets the admin comment
-    /// </summary>
-    public string AdminComment { get; set; }
-
-    /// <summary>
     /// Gets or sets the friendly name for generated affiliate URL (by default affiliate ID is used)
     /// </summary>
     public string FriendlyUrlName { get; set; }

@@ -14,11 +14,6 @@ public partial class ProductEditorSettings : ISettings
     public bool ProductTemplate { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Admin comment' field is shown
-    /// </summary>
-    public bool AdminComment { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Vendor' field is shown
     /// </summary>
     public bool Vendor { get; set; }

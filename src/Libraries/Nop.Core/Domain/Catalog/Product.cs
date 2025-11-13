@@ -28,11 +28,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public string FullDescription { get; set; }
 
     /// <summary>
-    /// Gets or sets the admin comment
-    /// </summary>
-    public string AdminComment { get; set; }
-
-    /// <summary>
     /// Gets or sets a value of used product template identifier
     /// </summary>
     public int ProductTemplateId { get; set; }
