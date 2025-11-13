@@ -359,7 +359,6 @@ public class ZettleRecordService
                 Sku = item.Product.Sku,
                 Description = item.Product.ShortDescription,
                 Price = item.Product.Price,
-                ProductCost = item.Product.ProductCost,
                 CategoryName = item.Category.Name,
                 ImageUrl = item.Record.ImageUrl,
                 ImageSyncEnabled = item.Record.ImageSyncEnabled,
@@ -377,7 +376,6 @@ public class ZettleRecordService
                 Sku = group.FirstOrDefault().Sku,
                 Description = group.FirstOrDefault().Description,
                 Price = group.FirstOrDefault().Price,
-                ProductCost = group.FirstOrDefault().ProductCost,
                 CategoryName = group
                     .OrderBy(item => item.ProductCategoryDisplayOrder)
                     .ThenBy(item => item.ProductCategoryId)

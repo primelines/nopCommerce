@@ -1056,7 +1056,6 @@ public partial class OrderProcessingService : IOrderProcessingService
                 UnitPriceExclTax = scUnitPriceExclTax.price,
                 PriceInclTax = scSubTotalInclTax.price,
                 PriceExclTax = scSubTotalExclTax.price,
-                OriginalProductCost = await _priceCalculationService.GetProductCostAsync(product, sc.AttributesXml),
                 AttributeDescription = attributeDescription,
                 AttributesXml = sc.AttributesXml,
                 Quantity = sc.Quantity,
@@ -1438,7 +1437,6 @@ public partial class OrderProcessingService : IOrderProcessingService
                  updatedShoppingCartItem.Quantity, false, updatedShoppingCartItem.Id));
 
             updatedOrderItem.ItemWeight = await _shippingService.GetShoppingCartItemWeightAsync(updatedShoppingCartItem);
-            updatedOrderItem.OriginalProductCost = await _priceCalculationService.GetProductCostAsync(product, updatedShoppingCartItem.AttributesXml);
             updatedOrderItem.AttributeDescription = await _productAttributeFormatter.FormatAttributesAsync(product,
                 updatedShoppingCartItem.AttributesXml, customer, store);
 

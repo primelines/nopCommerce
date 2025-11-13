@@ -243,12 +243,6 @@ public class Product : ApiResponse
         public ProductPrice Price { get; set; }
 
         /// <summary>
-        /// Gets or sets the cost price
-        /// </summary>
-        [JsonProperty(PropertyName = "costPrice")]
-        public ProductPrice CostPrice { get; set; }
-
-        /// <summary>
         /// Gets or sets the options
         /// </summary>
         [JsonProperty(PropertyName = "options")]

@@ -40,10 +40,6 @@ public class ProductToSync
     /// </summary>
     public decimal Price { get; set; }
 
-    /// <summary>
-    /// Gets or sets the original product cost
-    /// </summary>
-    public decimal ProductCost { get; set; }
 
     /// <summary>
     /// Gets or sets the category name

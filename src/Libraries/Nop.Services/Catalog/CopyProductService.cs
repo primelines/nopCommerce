@@ -611,7 +611,6 @@ public partial class CopyProductService : ICopyProductService
             PreOrderAvailabilityStartDateTimeUtc = product.PreOrderAvailabilityStartDateTimeUtc,
             Price = product.Price,
             OldPrice = product.OldPrice,
-            ProductCost = product.ProductCost,
             Weight = product.Weight,
             Length = product.Length,
             Width = product.Width,

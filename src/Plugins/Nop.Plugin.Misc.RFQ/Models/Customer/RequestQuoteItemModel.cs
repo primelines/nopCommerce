@@ -17,8 +17,6 @@ public record RequestQuoteItemModel : BaseNopEntityModel
 
     public string UnitPriceText { get; set; }
 
-    public string OriginalProductCost { get; set; }
-
     public string AttributeInfo { get; set; }
 
     public string ProductSeName { get; set; }

@@ -55,16 +55,6 @@ public partial interface IPriceCalculationService
         bool includeDiscounts,
         int quantity);
 
-    /// <summary>
-    /// Gets the product cost (one item)
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="attributesXml">Shopping cart item attributes in XML</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the product cost (one item)
-    /// </returns>
-    Task<decimal> GetProductCostAsync(Product product, string attributesXml);
 
     /// <summary>
     /// Get a price adjustment of a product attribute value

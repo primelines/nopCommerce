@@ -555,7 +555,6 @@ public partial class OrderReportService : IOrderReportService
                     OrderTaxSum = result.Sum(o => o.OrderTax),
                     OrderTotalSum = result.Sum(o => o.OrderTotal),
                     OrderRefundedAmountSum = result.Sum(o => o.RefundedAmount),
-                    OrderTotalCost = orderItems.Sum(oi => (decimal?)oi.OriginalProductCost * oi.Quantity)
                 },
             GroupByOptions.Week => from oq in query
                 group oq by oq.CreatedOnUtc.AddMinutes(utcOffsetInMinutes).AddDays(-(int)oq.CreatedOnUtc.AddMinutes(utcOffsetInMinutes).DayOfWeek).Date into result
@@ -570,7 +569,6 @@ public partial class OrderReportService : IOrderReportService
                     OrderTaxSum = result.Sum(o => o.OrderTax),
                     OrderTotalSum = result.Sum(o => o.OrderTotal),
                     OrderRefundedAmountSum = result.Sum(o => o.RefundedAmount),
-                    OrderTotalCost = orderItems.Sum(oi => (decimal?)oi.OriginalProductCost * oi.Quantity)
                 },
             GroupByOptions.Month => from oq in query
                 group oq by oq.CreatedOnUtc.AddMinutes(utcOffsetInMinutes).AddDays(1 - oq.CreatedOnUtc.AddMinutes(utcOffsetInMinutes).Day).Date into result
@@ -585,7 +583,6 @@ public partial class OrderReportService : IOrderReportService
                     OrderTaxSum = result.Sum(o => o.OrderTax),
                     OrderTotalSum = result.Sum(o => o.OrderTotal),
                     OrderRefundedAmountSum = result.Sum(o => o.RefundedAmount),
-                    OrderTotalCost = orderItems.Sum(oi => (decimal?)oi.OriginalProductCost * oi.Quantity)
                 },
             _ => throw new ArgumentException("Wrong groupBy parameter", nameof(groupBy)),
         };
@@ -602,8 +599,7 @@ public partial class OrderReportService : IOrderReportService
                          - orderItem.OrderShippingExclTaxSum
                          - orderItem.OrderPaymentFeeExclTaxSum
                          - orderItem.OrderTaxSum
-                         - orderItem.OrderRefundedAmountSum
-                         - Convert.ToDecimal(orderItem.OrderTotalCost),
+                         - orderItem.OrderRefundedAmountSum,
                 Shipping = orderItem.OrderShippingExclTaxSum.ToString(CultureInfo.CurrentCulture),
                 Tax = orderItem.OrderTaxSum.ToString(CultureInfo.CurrentCulture),
                 OrderTotal = orderItem.OrderTotalSum.ToString(CultureInfo.CurrentCulture)
@@ -934,7 +930,6 @@ public partial class OrderReportService : IOrderReportService
                       oNote.OrderId == o.Id && oNote.Note.Contains(orderNotes)))
             select orderItem;
 
-        var productCost = Convert.ToDecimal(await query.SumAsync(orderItem => (decimal?)orderItem.OriginalProductCost * orderItem.Quantity));
 
         var reportSummary = await GetOrderAverageReportLineAsync(
             storeId,
@@ -957,8 +952,7 @@ public partial class OrderReportService : IOrderReportService
                      - reportSummary.SumShippingExclTax
                      - reportSummary.OrderPaymentFeeExclTaxSum
                      - reportSummary.SumTax
-                     - reportSummary.SumRefundedAmount
-                     - productCost;
+                     - reportSummary.SumRefundedAmount;
         return profit;
     }
 

@@ -362,42 +362,6 @@ public partial class PriceCalculationService : IPriceCalculationService
         return (rezPriceWithoutDiscount, rezPrice, discountAmount, appliedDiscounts);
     }
 
-    /// <summary>
-    /// Gets the product cost (one item)
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="attributesXml">Shopping cart item attributes in XML</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the product cost (one item)
-    /// </returns>
-    public virtual async Task<decimal> GetProductCostAsync(Product product, string attributesXml)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        var cost = product.ProductCost;
-        var attributeValues = await _productAttributeParser.ParseProductAttributeValuesAsync(attributesXml);
-        foreach (var attributeValue in attributeValues)
-        {
-            switch (attributeValue.AttributeValueType)
-            {
-                case AttributeValueType.Simple:
-                    //simple attribute
-                    cost += attributeValue.Cost;
-                    break;
-                case AttributeValueType.AssociatedToProduct:
-                    //bundled product
-                    var associatedProduct = await _productService.GetProductByIdAsync(attributeValue.AssociatedProductId);
-                    if (associatedProduct != null)
-                        cost += associatedProduct.ProductCost * attributeValue.Quantity;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        return cost;
-    }
 
     /// <summary>
     /// Get a price adjustment of a product attribute value

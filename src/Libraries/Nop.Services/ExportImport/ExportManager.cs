@@ -1269,7 +1269,6 @@ public partial class ExportManager : IExportManager
             await xmlWriter.WriteStringAsync("PreOrderAvailabilityStartDateTimeUtc", product.PreOrderAvailabilityStartDateTimeUtc, await IgnoreExportProductPropertyAsync(p => p.AvailableForPreOrder));
             await xmlWriter.WriteStringAsync("Price", product.Price);
             await xmlWriter.WriteStringAsync("OldPrice", product.OldPrice, await IgnoreExportProductPropertyAsync(p => p.OldPrice));
-            await xmlWriter.WriteStringAsync("ProductCost", product.ProductCost, await IgnoreExportProductPropertyAsync(p => p.ProductCost));
             await xmlWriter.WriteStringAsync("Weight", product.Weight, await IgnoreExportProductPropertyAsync(p => p.Weight));
             await xmlWriter.WriteStringAsync("Length", product.Length, await IgnoreExportProductPropertyAsync(p => p.Dimensions));
             await xmlWriter.WriteStringAsync("Width", product.Width, await IgnoreExportProductPropertyAsync(p => p.Dimensions));
@@ -1582,7 +1581,6 @@ public partial class ExportManager : IExportManager
             new PropertyByName<Product>("PreOrderAvailabilityStartDateTimeUtc", (p, _) => p.PreOrderAvailabilityStartDateTimeUtc, await IgnoreExportProductPropertyAsync(p => p.AvailableForPreOrder)),
             new PropertyByName<Product>("Price", (p, _) => p.Price),
             new PropertyByName<Product>("OldPrice", (p, _) => p.OldPrice, await IgnoreExportProductPropertyAsync(p => p.OldPrice)),
-            new PropertyByName<Product>("ProductCost", (p, _) => p.ProductCost, await IgnoreExportProductPropertyAsync(p => p.ProductCost)),
             new PropertyByName<Product>("Weight", (p, _) => p.Weight, await IgnoreExportProductPropertyAsync(p => p.Weight)),
             new PropertyByName<Product>("Length", (p, _) => p.Length, await IgnoreExportProductPropertyAsync(p => p.Dimensions)),
             new PropertyByName<Product>("Width", (p, _) => p.Width, await IgnoreExportProductPropertyAsync(p => p.Dimensions)),

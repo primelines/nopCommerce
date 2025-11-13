@@ -38,11 +38,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int VendorId { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the product allows customer reviews
-    /// </summary>
-    public bool AllowCustomerReviews { get; set; }
-
-    /// <summary>
     /// Gets or sets the rating sum (approved reviews)
     /// </summary>
     public int ApprovedRatingSum { get; set; }
@@ -133,29 +128,9 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int StockQuantity { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to display stock availability
-    /// </summary>
-    public bool DisplayStockAvailability { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to display stock quantity
-    /// </summary>
-    public bool DisplayStockQuantity { get; set; }
-
-    /// <summary>
     /// Gets or sets the minimum stock quantity
     /// </summary>
     public int MinStockQuantity { get; set; }
-
-    /// <summary>
-    /// Gets or sets the low stock activity identifier
-    /// </summary>
-    public int LowStockActivityId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the quantity when admin should be notified
-    /// </summary>
-    public int NotifyAdminForQuantityBelow { get; set; }
 
     /// <summary>
     /// Gets or sets a value backorder mode identifier
@@ -221,11 +196,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets the old price
     /// </summary>
     public decimal OldPrice { get; set; }
-
-    /// <summary>
-    /// Gets or sets the product cost
-    /// </summary>
-    public decimal ProductCost { get; set; }
 
     /// <summary>
     /// Gets or sets the weight
@@ -295,6 +265,53 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
         get => (BackorderMode)BackorderModeId;
         set => BackorderModeId = (int)value;
     }
+
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to display stock availability
+    /// </summary>
+    /// #################### الاختيار لينا مش للعميل وعلى مستوى المنتجات كلها 
+    /// فى الستنج
+    public bool DisplayStockAvailability { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to display stock quantity
+    /// </summary>
+    /// #################### الاختيار لينا مش للعميل وعلى مستوى المنتجات كلها 
+    /// فى الستنج
+    public bool DisplayStockQuantity { get; set; }
+
+    /// <summary>
+    /// Gets or sets the low stock activity identifier
+    /// </summary>
+    /// #################### ايه اللى هيحصل للمنتج الخلصان او اللى قرب يخلص احنا اللى بنقرره على مستوى الموقع
+    /// فى الستنج
+    public int LowStockActivityId { get; set; }
+
+
+
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the product allows customer reviews
+    /// </summary>
+    /// #################### كله هيبقى مسموح فيه الرفيو
+    /// ture all the time
+    public bool AllowCustomerReviews { get; set; }
+
+    /// <summary>
+    /// Gets or sets the quantity when admin should be notified
+    /// </summary>
+    /// #################### هيبقى فيه تنبيه دايما من الموقع للفيندور
+    /// true all the time
+    public int NotifyAdminForQuantityBelow { get; set; }
+
+
+
+
+
+
+
+
 
     /// <summary>
     /// Gets or sets the low stock activity

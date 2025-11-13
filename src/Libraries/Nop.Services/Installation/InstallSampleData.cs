@@ -1810,7 +1810,6 @@ public partial class InstallationService
                 UnitPriceExclTax = oi.UnitPriceExclTax,
                 PriceInclTax = oi.PriceInclTax,
                 PriceExclTax = oi.PriceExclTax,
-                OriginalProductCost = oi.OriginalProductCost,
                 AttributeDescription = oi.AttributeDescription,
                 AttributesXml = oi.AttributesXml,
                 Quantity = oi.Quantity,

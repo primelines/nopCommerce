@@ -109,10 +109,6 @@
                                         @Html.Raw(Model.CustomerItems[i].AttributeInfo)
                                     </td>
                                     <td>
-                                        <label>@T("Plugins.Misc.RFQ.OriginalProductPrice"):</label>
-                                        <span>@Model.CustomerItems[i].OriginalProductCost</span>
-                                    </td>
-                                    <td>
                                         <label for="@Html.IdFor(m => m.CustomerItems[i].Quantity)">@T("Plugins.Misc.RFQ.CustomerRequest.RequestedQty"):</label>
                                         <span>
                                         @if (Model.CustomerItems[i].Editable)

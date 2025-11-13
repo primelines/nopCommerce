@@ -433,11 +433,6 @@ public class ZettleService
                             Amount = preparePrice(product.Price),
                             CurrencyId = accountInfo.Currency
                         };
-                        variant.CostPrice = new Product.ProductVariant.ProductPrice
-                        {
-                            Amount = preparePrice(product.ProductCost),
-                            CurrencyId = accountInfo.Currency
-                        };
                     }
                     request.Variants = [variant];
                 }
@@ -498,11 +493,6 @@ public class ZettleService
                             var attributesCost = attributeValues
                                 .Where(value => value.AttributeValueType == Core.Domain.Catalog.AttributeValueType.Simple)
                                 .Sum(value => value.Cost);
-                            variant.CostPrice = new Product.ProductVariant.ProductPrice
-                            {
-                                Amount = preparePrice(product.ProductCost + attributesCost),
-                                CurrencyId = accountInfo.Currency
-                            };
                         }
 
                         variant.Options = await (await _productAttributeParser.ParseProductAttributeMappingsAsync(combination.Combination.AttributesXml))

@@ -1598,7 +1598,6 @@ public partial class ImportManager : IImportManager
                 PriceInclTax = totalInclTax,
                 ProductId = orderItemProduct.Id,
                 Quantity = quantity,
-                OriginalProductCost = orderItemProduct.ProductCost,
                 UnitPriceExclTax = priceExclTax,
                 UnitPriceInclTax = priceInclTax
             };
@@ -2220,9 +2219,6 @@ public partial class ImportManager : IImportManager
                         break;
                     case "OldPrice":
                         product.OldPrice = property.DecimalValue;
-                        break;
-                    case "ProductCost":
-                        product.ProductCost = property.DecimalValue;
                         break;
                     case "Weight":
                         product.Weight = property.DecimalValue;

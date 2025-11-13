@@ -3210,12 +3210,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.ProductAvailabilityRange.None">
     <Value>None</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.ProductCost">
-    <Value>Product cost</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.ProductCost.Hint">
-    <Value>Product cost is a prime product cost. This field is only for internal use, not visible for customers.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.ProductTags">
     <Value>Product tags</Value>
   </LocaleResource>
@@ -8565,9 +8559,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.ProductAvailabilityRange">
     <Value>Product availability range</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.ProductCost">
-    <Value>Product cost</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.ProductTags">
     <Value>Product tags</Value>

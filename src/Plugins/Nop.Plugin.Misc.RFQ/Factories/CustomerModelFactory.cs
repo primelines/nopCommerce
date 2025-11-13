@@ -200,7 +200,6 @@ public class CustomerModelFactory
         {
             Id = item.Id,
             Quantity = item.RequestedQty,
-            OriginalProductCost = await _priceFormatter.FormatPriceAsync(item.OriginalProductPrice, true, currentCurrency),
             ProductName = product != null ? await _localizationService.GetLocalizedAsync(product, x => x.Name) : await _localizationService.GetResourceAsync("Plugins.Misc.RFQ.ProductDeleted"),
             ProductSeName = product != null ? await _urlRecordService.GetSeNameAsync(product) : string.Empty,
             UnitPrice = unitPrice,

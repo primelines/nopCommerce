@@ -49,11 +49,6 @@ public partial class ProductEditorSettings : ISettings
     public bool GTIN { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Product cost' field is shown
-    /// </summary>
-    public bool ProductCost { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Tier prices' field is shown
     /// </summary>
     public bool TierPrices { get; set; }

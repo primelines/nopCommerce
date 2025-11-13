@@ -1446,7 +1446,6 @@ public partial class OrderController : BaseAdminController
                 UnitPriceExclTax = model.UnitPriceExclTax,
                 PriceInclTax = model.SubTotalInclTax,
                 PriceExclTax = model.SubTotalExclTax,
-                OriginalProductCost = await _priceCalculationService.GetProductCostAsync(product, attributesXml),
                 AttributeDescription = attributeDescription,
                 AttributesXml = attributesXml,
                 Quantity = model.Quantity,
