@@ -3745,7 +3745,6 @@ public partial class ProductController : BaseAdminController
                 OrderMaximumQuantity = 10000,
                 TaxCategoryId = _defaultTaxCategoryId,
                 IsShipEnabled = true,
-                AllowCustomerReviews = true,
                 VendorId = _vendorId
             };
 

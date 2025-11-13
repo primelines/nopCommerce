@@ -289,15 +289,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int LowStockActivityId { get; set; }
 
 
-
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the product allows customer reviews
-    /// </summary>
-    /// #################### كله هيبقى مسموح فيه الرفيو
-    /// ture all the time
-    public bool AllowCustomerReviews { get; set; }
-
     /// <summary>
     /// Gets or sets the quantity when admin should be notified
     /// </summary>

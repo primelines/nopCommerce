@@ -10,9 +10,6 @@ public partial record ProductReviewOverviewModel : BaseNopModel
     public int RatingSum { get; set; }
 
     public int TotalReviews { get; set; }
-
-    public bool AllowCustomerReviews { get; set; }
-
     public bool CanAddNewReview { get; set; }
     public bool CanCurrentCustomerLeaveReview { get; set; }
 }

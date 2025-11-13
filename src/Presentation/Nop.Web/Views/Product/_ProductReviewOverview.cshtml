@@ -7,8 +7,7 @@
         ratingPercent = ((Model.RatingSum * 100) / Model.TotalReviews) / 5;
     }
 }
-@if (Model.AllowCustomerReviews)
-{
+
     <div class="product-reviews-overview">
         <div class="product-review-box">
             <div class="rating">
@@ -32,4 +31,3 @@
             </div>
         }
     </div>
-}

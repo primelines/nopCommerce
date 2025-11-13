@@ -181,7 +181,6 @@ public partial class InstallationService
                 ShortDescription = sample.ShortDescription,
                 FullDescription = sample.FullDescription,
                 ProductTemplateId = await getProductTemplate(sample.ProductTemplateName),
-                AllowCustomerReviews = sample.AllowCustomerReviews,
                 Price = sample.Price,
                 OldPrice = sample.OldPrice,
                 IsShipEnabled = sample.IsShipEnabled,

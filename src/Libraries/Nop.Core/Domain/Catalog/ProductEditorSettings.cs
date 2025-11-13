@@ -29,11 +29,6 @@ public partial class ProductEditorSettings : ISettings
     public bool ACL { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Allow customer reviews' field is shown
-    /// </summary>
-    public bool AllowCustomerReviews { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Product tags' field is shown
     /// </summary>
     public bool ProductTags { get; set; }

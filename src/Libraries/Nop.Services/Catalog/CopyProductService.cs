@@ -579,7 +579,6 @@ public partial class CopyProductService : ICopyProductService
             FullDescription = product.FullDescription,
             VendorId = product.VendorId,
             ProductTemplateId = product.ProductTemplateId,
-            AllowCustomerReviews = product.AllowCustomerReviews,
             LimitedToStores = product.LimitedToStores,
             SubjectToAcl = product.SubjectToAcl,
             Sku = newSku,

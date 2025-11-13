@@ -88,12 +88,6 @@ public partial class SampleProducts
         /// </summary>
         public string FullDescription { get; set; }
 
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the product allows customer reviews
-        /// </summary>
-        public bool AllowCustomerReviews { get; set; }
-
         /// <summary>
         /// Gets or sets the SKU
         /// </summary>

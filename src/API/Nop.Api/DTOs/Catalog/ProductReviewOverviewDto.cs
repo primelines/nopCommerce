@@ -18,11 +18,6 @@ public partial record ProductReviewOverviewDto : BaseNopDto
     [JsonProperty("total_reviews")]
     public int TotalReviews { get; set; }
 
-
-    [JsonProperty("allow_customer_reviews")]
-    public bool AllowCustomerReviews { get; set; }
-
-
     [JsonProperty("can_add_new_review")]
     public bool CanAddNewReview { get; set; }
 

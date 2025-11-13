@@ -2130,9 +2130,6 @@ public partial class ImportManager : IImportManager
                     case "ProductTemplate":
                         product.ProductTemplateId = property.IntValue;
                         break;
-                    case "AllowCustomerReviews":
-                        product.AllowCustomerReviews = property.BooleanValue;
-                        break;
                     case "Published":
                         product.Published = property.BooleanValue;
                         break;

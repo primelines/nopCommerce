@@ -487,7 +487,6 @@
       {
         "Name": "Build your own computer",
         "Sku": "COMP_CUST",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -611,7 +610,6 @@
       {
         "Name": "Digital Storm VANQUISH Custom Performance PC",
         "Sku": "DS_VA3_PC",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -638,7 +636,6 @@
       {
         "Name": "Lenovo IdeaCentre",
         "Sku": "LE_IC_600",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -665,7 +662,6 @@
       {
         "Name": "Apple MacBook Pro",
         "Sku": "AP_MBP_13",
-        "AllowCustomerReviews": true,
          "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -717,7 +713,6 @@
       {
         "Name": "Asus Laptop",
         "Sku": "AS_551_LP",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -774,7 +769,6 @@
       {
         "Name": "Samsung Premium Ultrabook",
         "Sku": "SM_900_PU",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -831,7 +825,6 @@
       {
         "Name": "HP Spectre XT Pro UltraBook",
         "Sku": "HP_SPX_UB",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -889,7 +882,6 @@
       {
         "Name": "HP Envy 15.6-Inch Sleekbook",
         "Sku": "HP_ESB_15",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -947,7 +939,6 @@
       {
         "Name": "Lenovo Thinkpad Carbon Laptop",
         "Sku": "LE_TX1_CL",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -990,7 +981,6 @@
       {
         "Name": "Adobe Photoshop",
         "Sku": "AD_CS4_PH",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1017,7 +1007,6 @@
       {
         "Name": "Microsoft Windows OS",
         "Sku": "MS_WIN_8P",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1044,7 +1033,6 @@
       {
         "Name": "Sound Forge Pro (recurring)",
         "Sku": "SF_PRO_11",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1071,7 +1059,6 @@
       {
         "Name": "Nikon D5500 DSLR",
         "Sku": "N5500DS_0",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1098,7 +1085,6 @@
       {
         "Name": "Leica T Mirrorless Digital Camera",
         "Sku": "LT_MIR_DC",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1125,7 +1111,6 @@
       {
         "Name": "Apple iCam",
         "Sku": "APPLE_CAM",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1152,7 +1137,6 @@
       {
         "Name": "HTC smartphone",
         "Sku": "M8_HTC_5L",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1179,7 +1163,6 @@
       {
         "Name": "HTC One Mini Blue",
         "Sku": "OM_HTC_BL",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1206,7 +1189,6 @@
       {
         "Name": "Nokia Lumia 1020",
         "Sku": "N_1020_LU",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1233,7 +1215,6 @@
       {
         "Name": "Apple iPhone 16 128GB",
         "Sku": "A_16_128T",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1260,7 +1241,6 @@
       {
         "Name": "Samsung Galaxy S24 256GB",
         "Sku": "SG_24_256B",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1287,7 +1267,6 @@
       {
         "Name": "Beats Pill Wireless Speaker",
         "Sku": "BP_20_WSP",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1329,7 +1308,6 @@
       {
         "Name": "Universal 7-8 Inch Tablet Cover",
         "Sku": "TC_78I_UN",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1356,7 +1334,6 @@
       {
         "Name": "Portable Sound Speakers",
         "Sku": "PT_SPK_SN",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1382,7 +1359,6 @@
       {
         "Name": "Nike Floral Roshe Customized Running Shoes",
         "Sku": "NK_FRC_RS",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1476,7 +1452,6 @@
       {
         "Name": "adidas Consortium Campus 80s Running Shoes",
         "Sku": "AD_C80_RS",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1576,7 +1551,6 @@
       {
         "Name": "Nike SB Zoom Stefan Janoski \"Medium Mint\"",
         "Sku": "NK_ZSJ_MM",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1613,7 +1587,6 @@
       {
         "Name": "Nike Tailwind Loose Short-Sleeve Running Shirt",
         "Sku": "NK_TLS_RS",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1674,7 +1647,6 @@
       {
         "Name": "Oversized Women T-Shirt",
         "Sku": "WM_OVR_TS",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1715,7 +1687,6 @@
       {
         "Name": "Custom T-Shirt",
         "Sku": "CS_TSHIRT",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1751,7 +1722,6 @@
       {
         "Name": "Levi's 511 Jeans",
         "Sku": "LV_511_JN",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1793,7 +1763,6 @@
       {
         "Name": "Obey Propaganda Hat",
         "Sku": "OB_HAT_PR",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1845,7 +1814,6 @@
       {
         "Name": "Reversible Horseferry Check Belt",
         "Sku": "RH_CHK_BL",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "DisplayStockAvailability": true,
         "NotifyAdminForQuantityBelow": 1,
@@ -1872,7 +1840,6 @@
       {
         "Name": "Ray Ban Aviator Sunglasses",
         "Sku": "RB_AVR_SG",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1899,7 +1866,6 @@
       {
         "Name": "Fahrenheit 451 by Ray Bradbury",
         "Sku": "FR_451_RB",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1928,7 +1894,6 @@
       {
         "Name": "First Prize Pies",
         "Sku": "FIRST_PRP",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1956,7 +1921,6 @@
       {
         "Name": "Pride and Prejudice",
         "Sku": "PRIDE_PRJ",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -1984,7 +1948,6 @@
       {
         "Name": "Elegant Gemstone Necklace (rental)",
         "Sku": "EG_GEM_NL",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -2011,7 +1974,6 @@
       {
         "Name": "Flower Girl Bracelet",
         "Sku": "FL_GIRL_B",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -2039,7 +2001,6 @@
       {
         "Name": "Vintage Style Engagement Ring",
         "Sku": "VS_ENG_RN",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -2066,7 +2027,6 @@
       {
         "Name": "$25 Virtual Gift Card",
         "Sku": "VG_CR_025",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -2088,7 +2048,6 @@
       {
         "Name": "$50 Physical Gift Card",
         "Sku": "PG_CR_050",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -2115,7 +2074,6 @@
       {
         "Name": "$100 Physical Gift Card",
         "Sku": "PG_CR_100",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -2141,7 +2099,6 @@
       {
         "Name": "Night Visions",
         "Sku": "NIGHT_VSN",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -2163,7 +2120,6 @@
       {
         "Name": "If You Wait (donation)",
         "Sku": "IF_YOU_WT",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,
@@ -2184,7 +2140,6 @@
       {
         "Name": "Science & Faith",
         "Sku": "SCI_FAITH",
-        "AllowCustomerReviews": true,
         "IsShipEnabled": true,
         "StockQuantity": 10000,
         "DisplayStockAvailability": true,

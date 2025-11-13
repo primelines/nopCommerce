@@ -363,7 +363,7 @@ public partial class ProductController : BasePublicController
     public virtual async Task<IActionResult> ProductReviews([FromRoute] int productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
-        if (product == null || product.Deleted || !product.Published || !product.AllowCustomerReviews)
+        if (product == null || product.Deleted || !product.Published )
             return Error();
 
         var model = new ProductReviewsDto();
@@ -397,7 +397,7 @@ public partial class ProductController : BasePublicController
         var product = await _productService.GetProductByIdAsync(productId);
         var currentStore = await _storeContext.GetCurrentStoreAsync();
 
-        if (product == null || product.Deleted || !product.Published || !product.AllowCustomerReviews ||
+        if (product == null || product.Deleted || !product.Published || 
             !await _productReviewService.CanAddReviewAsync(product.Id, _catalogSettings.ShowProductReviewsPerStore ? currentStore.Id : 0))
             return Error();
 

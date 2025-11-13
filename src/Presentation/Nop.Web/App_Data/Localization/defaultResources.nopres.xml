@@ -2937,12 +2937,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.AllowBackInStockSubscriptions.Hint">
     <Value>Allow customers to subscribe to a notification list for a product that has gone out of stock.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.AllowCustomerReviews">
-    <Value>Allow customer reviews</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.AllowCustomerReviews.Hint">
-    <Value>Check to allow customers to review this product.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AllowedQuantities">
     <Value>Allowed quantities</Value>
   </LocaleResource>
@@ -8448,9 +8442,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.AllowBackInStockSubscriptions">
     <Value>Allow back in stock subscriptions</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.AllowCustomerReviews">
-    <Value>Allow customer reviews</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.AllowedQuantities">
     <Value>Allowed quantities</Value>

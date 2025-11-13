@@ -87,9 +87,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.SeName")]
     public string SeName { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.AllowCustomerReviews")]
-    public bool AllowCustomerReviews { get; set; }
-
     public IList<SelectListItem> AvailableProductTags { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductTags")]

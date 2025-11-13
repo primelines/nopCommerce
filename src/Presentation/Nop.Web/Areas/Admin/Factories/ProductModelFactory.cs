@@ -829,7 +829,6 @@ public partial class ProductModelFactory : IProductModelFactory
             model.OrderMaximumQuantity = 10000;
             model.TaxCategoryId = _taxSettings.DefaultTaxCategoryId;
             model.IsShipEnabled = true;
-            model.AllowCustomerReviews = true;
             model.Published = true;
         }
 
