@@ -260,9 +260,7 @@ public partial class ProductService : IProductService
         }
         else
         {
-            //no combination configured
-            if (product.AllowAddingOnlyExistingAttributeCombinations)
-            {
+
                 var allIds = (await _productAttributeService.GetProductAttributeMappingsByProductIdAsync(product.Id)).Where(pa => pa.IsRequired).Select(pa => pa.Id).ToList();
                 var exIds = (await _productAttributeParser.ParseProductAttributeMappingsAsync(attributesXml)).Select(pa => pa.Id).ToList();
 
@@ -291,11 +289,7 @@ public partial class ProductService : IProductService
                     ? await _localizationService.GetResourceAsync("Products.Availability.OutOfStock")
                     : string.Format(await _localizationService.GetResourceAsync("Products.Availability.AvailabilityRange"),
                         await _localizationService.GetLocalizedAsync(productAvailabilityRange, range => range.Name));
-            }
-            else
-            {
-                stockMessage = await _localizationService.GetResourceAsync("Products.Availability.InStock");
-            }
+
         }
 
         return stockMessage;

@@ -28,7 +28,6 @@
             $('#pnlNotifyForQuantityBelow').hideElement();
             $('#pnlAllowBackInStockSubscriptions').hideElement();
             $('#pnlBackorders').hideElement();
-            $('#pnlAllowAddingOnlyExistingAttributeCombinations').hideElement();
 
             $('[data-card-name=product-stock-quantity-history]').hideElement();
         } else if (selectedManageInventoryMethodId == manageStockId) {
@@ -62,7 +61,6 @@
                 $('#pnlProductAvailabilityRange').hideElement();
             }
 
-            $('#pnlAllowAddingOnlyExistingAttributeCombinations').hideElement();
 
             $('[data-card-name=product-stock-quantity-history]').showElement();
         } else {
@@ -83,7 +81,6 @@
             $('#pnlNotifyForQuantityBelow').hideElement();
             $('#pnlAllowBackInStockSubscriptions').hideElement();
             $('#pnlBackorders').hideElement();
-            $('#pnlAllowAddingOnlyExistingAttributeCombinations').showElement();
 
             $('[data-card-name=product-stock-quantity-history]').showElement();
         }
@@ -202,15 +199,6 @@
             <div class="col-md-9">
                 <nop-editor asp-for="AllowedQuantities" />
                 <span asp-validation-for="AllowedQuantities"></span>
-            </div>
-        </div>
-        <div class="form-group row @(Model.ProductEditorSettingsModel.AllowAddingOnlyExistingAttributeCombinations ? null : "advanced-setting")" id="pnlAllowAddingOnlyExistingAttributeCombinations">
-            <div class="col-md-3">
-                <nop-label asp-for="AllowAddingOnlyExistingAttributeCombinations" />
-            </div>
-            <div class="col-md-9">
-                <nop-editor asp-for="AllowAddingOnlyExistingAttributeCombinations" />
-                <span asp-validation-for="AllowAddingOnlyExistingAttributeCombinations"></span>
             </div>
         </div>
         <div class="form-group row @(Model.ProductEditorSettingsModel.NotReturnable ? null : "advanced-setting")">

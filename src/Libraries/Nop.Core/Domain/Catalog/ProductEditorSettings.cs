@@ -168,10 +168,6 @@ public partial class ProductEditorSettings : ISettings
     /// </summary>
     public bool AllowedQuantities { get; set; }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether 'Allow only existing attribute combinations' field is shown
-    /// </summary>
-    public bool AllowAddingOnlyExistingAttributeCombinations { get; set; }
     
     /// <summary>
     /// Gets or sets a value indicating whether 'Not returnable' field is shown

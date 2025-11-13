@@ -2931,12 +2931,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.AgeVerification.DateOfBirthDisabled">
     <Value><![CDATA[It looks like you have <a href="{0}" target="_blank">Date of Birth</a> setting disabled.]]></Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.AllowAddingOnlyExistingAttributeCombinations">
-    <Value>Allow only existing attribute combinations</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.AllowAddingOnlyExistingAttributeCombinations.Hint">
-    <Value>Check to allow adding to the cart/wishlist only attribute combinations that exist and have stock greater than zero. In this case you have to create all existing product attribute combinations that you have in stock.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AllowBackInStockSubscriptions">
     <Value>Allow back in stock subscriptions</Value>
   </LocaleResource>
@@ -8457,9 +8451,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.AgeVerification">
     <Value>Age verification</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.AllowAddingOnlyExistingAttributeCombinations">
-    <Value>Allow only existing attribute combinations</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.AllowBackInStockSubscriptions">
     <Value>Allow back in stock subscriptions</Value>

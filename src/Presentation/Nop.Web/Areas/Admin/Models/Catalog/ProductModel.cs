@@ -171,9 +171,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.AllowedQuantities")]
     public string AllowedQuantities { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.AllowAddingOnlyExistingAttributeCombinations")]
-    public bool AllowAddingOnlyExistingAttributeCombinations { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.DisplayAttributeCombinationImagesOnly")]
     public bool DisplayAttributeCombinationImagesOnly { get; set; }
 

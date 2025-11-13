@@ -342,7 +342,7 @@
         </script>
     </div>
 
-    if (Model.AllowAddingOnlyExistingAttributeCombinations && catalogSettings.AttributeValueOutOfStockDisplayType == AttributeValueOutOfStockDisplayType.Disable)
+    if (catalogSettings.AttributeValueOutOfStockDisplayType == AttributeValueOutOfStockDisplayType.Disable)
     {
         <script src="~/js/public.combinationsbehavior.js" asp-location="Footer"></script>
 
@@ -365,7 +365,7 @@
     var attributeChangeHandlerFuncName = $"attribute_change_handler_{Model.Id}";
     if (catalogSettings.AjaxProcessAttributeChange)
     {
-        if (Model.AllowAddingOnlyExistingAttributeCombinations && catalogSettings.AttributeValueOutOfStockDisplayType == AttributeValueOutOfStockDisplayType.Disable)
+        if (catalogSettings.AttributeValueOutOfStockDisplayType == AttributeValueOutOfStockDisplayType.Disable)
         {
             <script asp-location="Footer">
                 $(function() {

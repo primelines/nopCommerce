@@ -2200,9 +2200,6 @@ public partial class ImportManager : IImportManager
                     case "AllowedQuantities":
                         product.AllowedQuantities = property.StringValue;
                         break;
-                    case "AllowAddingOnlyExistingAttributeCombinations":
-                        product.AllowAddingOnlyExistingAttributeCombinations = property.BooleanValue;
-                        break;
                     case "NotReturnable":
                         product.NotReturnable = property.BooleanValue;
                         break;

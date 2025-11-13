@@ -107,9 +107,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
 
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.AllowedQuantities")]
     public bool AllowedQuantities { get; set; }
-
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.AllowAddingOnlyExistingAttributeCombinations")]
-    public bool AllowAddingOnlyExistingAttributeCombinations { get; set; }
     
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.NotReturnable")]
     public bool NotReturnable { get; set; }

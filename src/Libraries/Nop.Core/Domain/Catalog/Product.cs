@@ -183,12 +183,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public string AllowedQuantities { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether we allow adding to the cart/wishlist only attribute combinations that exist and have stock greater than zero.
-    /// This option is used only when we have "manage inventory" set to "track inventory by product attributes"
-    /// </summary>
-    public bool AllowAddingOnlyExistingAttributeCombinations { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether to display attribute combination images only
     /// </summary>
     public bool DisplayAttributeCombinationImagesOnly { get; set; }

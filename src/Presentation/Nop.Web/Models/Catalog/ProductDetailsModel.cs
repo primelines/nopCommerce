@@ -105,8 +105,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel
 
     public bool InStock { get; set; }
 
-    public bool AllowAddingOnlyExistingAttributeCombinations { get; set; }
-
     #region Nested Classes
 
     public partial record ProductBreadcrumbModel : BaseNopModel

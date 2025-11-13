@@ -1319,7 +1319,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
             StockAvailability = await _productService.FormatStockMessageAsync(product),
             DisplayDiscontinuedMessage = !product.Published && _catalogSettings.DisplayDiscontinuedMessageForUnpublishedProducts,
             AvailableEndDate = product.AvailableEndDateTimeUtc,
-            AllowAddingOnlyExistingAttributeCombinations = product.AllowAddingOnlyExistingAttributeCombinations,
             DisplayAttributeCombinationImagesOnly = product.DisplayAttributeCombinationImagesOnly
         };
 

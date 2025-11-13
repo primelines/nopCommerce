@@ -604,7 +604,6 @@ public partial class CopyProductService : ICopyProductService
             OrderMinimumQuantity = product.OrderMinimumQuantity,
             OrderMaximumQuantity = product.OrderMaximumQuantity,
             AllowedQuantities = product.AllowedQuantities,
-            AllowAddingOnlyExistingAttributeCombinations = product.AllowAddingOnlyExistingAttributeCombinations,
             NotReturnable = product.NotReturnable,
             DisableBuyButton = product.DisableBuyButton,
             DisableWishlistButton = product.DisableWishlistButton,

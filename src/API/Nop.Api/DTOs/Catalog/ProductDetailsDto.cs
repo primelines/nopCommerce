@@ -189,9 +189,4 @@ public partial record ProductDetailsDto : BaseNopEntityDto
     [JsonProperty("in_stock")]
     public bool InStock { get; set; }
 
-
-    [JsonProperty("allow_adding_only_existing_attribute_combinations")]
-    public bool AllowAddingOnlyExistingAttributeCombinations { get; set; }
-
-
 }
