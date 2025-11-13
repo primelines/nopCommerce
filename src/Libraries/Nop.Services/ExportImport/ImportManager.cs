@@ -2146,15 +2146,6 @@ public partial class ImportManager : IImportManager
                     case "Gtin":
                         product.Gtin = property.StringValue;
                         break;
-                    case "IsGiftCard":
-                        product.IsGiftCard = property.BooleanValue;
-                        break;
-                    case "GiftCardType":
-                        product.GiftCardTypeId = property.IntValue;
-                        break;
-                    case "OverriddenGiftCardAmount":
-                        product.OverriddenGiftCardAmount = property.DecimalValue;
-                        break;
                     case "IsShipEnabled":
                         product.IsShipEnabled = property.BooleanValue;
                         break;

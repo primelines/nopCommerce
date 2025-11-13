@@ -104,16 +104,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.GTIN")]
     public virtual string Gtin { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsGiftCard")]
-    public bool IsGiftCard { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.GiftCardType")]
-    public int GiftCardTypeId { get; set; }
-
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.OverriddenGiftCardAmount")]
-    [UIHint("DecimalNullable")]
-    public decimal? OverriddenGiftCardAmount { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsShipEnabled")]
     public bool IsShipEnabled { get; set; }
 

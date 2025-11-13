@@ -383,11 +383,6 @@ public class AdminModelFactory
         await PrepareProductAttributeModelsAsync(model.ProductAttributes, customer, product);
         model.HasCondition = model.ProductAttributes.Any(attribute => attribute.HasCondition);
 
-        //gift card
-        model.GiftCard.IsGiftCard = product.IsGiftCard;
-        if (model.GiftCard.IsGiftCard)
-            model.GiftCard.GiftCardType = product.GiftCardType;
-
         return model;
     }
 

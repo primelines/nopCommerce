@@ -1067,8 +1067,6 @@ public partial class OrderProcessingService : IOrderProcessingService
 
             await _orderService.InsertOrderItemAsync(orderItem);
 
-            //gift cards
-            await AddGiftCardsAsync(product, sc.AttributesXml, sc.Quantity, orderItem, scUnitPriceExclTax.price);
 
             //inventory
             await _productService.AdjustInventoryAsync(product, -sc.Quantity, sc.AttributesXml,
@@ -1090,10 +1088,8 @@ public partial class OrderProcessingService : IOrderProcessingService
     /// <param name="unitPriceExclTax">Unit price exclude tax, it set as amount if not set specific amount and product.OverriddenGiftCardAmount isn't set to</param>
     /// <param name="amount">Amount</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task AddGiftCardsAsync(Product product, string attributesXml, int quantity, OrderItem orderItem, decimal? unitPriceExclTax = null, decimal? amount = null)
+    protected virtual async Task AddGiftCardsAsync(GiftCard product, string attributesXml, int quantity, OrderItem orderItem, decimal? unitPriceExclTax = null, decimal amount = 0)
     {
-        if (!product.IsGiftCard)
-            return;
 
         _productAttributeParser.GetGiftCardAttribute(attributesXml, out var giftCardRecipientName, out var giftCardRecipientEmail, out var giftCardSenderName, out var giftCardSenderEmail, out var giftCardMessage);
 
@@ -1103,7 +1099,7 @@ public partial class OrderProcessingService : IOrderProcessingService
             {
                 GiftCardType = product.GiftCardType,
                 PurchasedWithOrderItemId = orderItem.Id,
-                Amount = amount ?? product.OverriddenGiftCardAmount ?? unitPriceExclTax ?? 0,
+                Amount = amount ,
                 IsGiftCardActivated = false,
                 GiftCardCouponCode = _giftCardService.GenerateGiftCardCode(),
                 RecipientName = giftCardRecipientName,
@@ -1446,8 +1442,6 @@ public partial class OrderProcessingService : IOrderProcessingService
             updatedOrderItem.AttributeDescription = await _productAttributeFormatter.FormatAttributesAsync(product,
                 updatedShoppingCartItem.AttributesXml, customer, store);
 
-            //gift cards
-            await AddGiftCardsAsync(product, updatedShoppingCartItem.AttributesXml, updatedShoppingCartItem.Quantity, updatedOrderItem, updatedOrderItem.UnitPriceExclTax);
         }
 
         await _orderTotalCalculationService.UpdateOrderTotalsAsync(updateOrderParameters, restoredCart);

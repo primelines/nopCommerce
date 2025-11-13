@@ -518,12 +518,6 @@ public partial class DiscountService : IDiscountService
                 ShoppingCartType.ShoppingCart, storeId: store.Id);
 
             var cartProductIds = cart.Select(ci => ci.ProductId).ToArray();
-
-            if (await _productService.HasAnyGiftCardProductAsync(cartProductIds))
-            {
-                result.Errors = new List<string> { await _localizationService.GetResourceAsync("ShoppingCart.Discount.CannotBeUsedWithGiftCards") };
-                return result;
-            }
         }
 
         //check date range

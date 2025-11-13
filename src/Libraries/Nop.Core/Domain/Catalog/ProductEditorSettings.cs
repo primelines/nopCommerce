@@ -89,11 +89,6 @@ public partial class ProductEditorSettings : ISettings
     public bool PAngV { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Is gift card' field is shown
-    /// </summary>
-    public bool IsGiftCard { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Free shipping' field is shown
     /// </summary>
     public bool FreeShipping { get; set; }

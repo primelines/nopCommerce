@@ -1424,7 +1424,7 @@ public partial class OrderController : BaseAdminController
 
         //warnings
         warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(customer, ShoppingCartType.ShoppingCart, product, model.Quantity, attributesXml));
-        warnings.AddRange(await _shoppingCartService.GetShoppingCartItemGiftCardWarningsAsync(ShoppingCartType.ShoppingCart, product, attributesXml));
+
         if (!warnings.Any())
         {
             //no errors
@@ -1482,33 +1482,6 @@ public partial class OrderController : BaseAdminController
             });
 
             await LogEditOrderAsync(order.Id);
-
-            //gift cards
-            if (product.IsGiftCard)
-            {
-                _productAttributeParser.GetGiftCardAttribute(
-                    attributesXml, out var recipientName, out var recipientEmail, out var senderName, out var senderEmail, out var giftCardMessage);
-
-                for (var i = 0; i < orderItem.Quantity; i++)
-                {
-                    var gc = new GiftCard
-                    {
-                        GiftCardType = product.GiftCardType,
-                        PurchasedWithOrderItemId = orderItem.Id,
-                        Amount = model.UnitPriceExclTax,
-                        IsGiftCardActivated = false,
-                        GiftCardCouponCode = _giftCardService.GenerateGiftCardCode(),
-                        RecipientName = recipientName,
-                        RecipientEmail = recipientEmail,
-                        SenderName = senderName,
-                        SenderEmail = senderEmail,
-                        Message = giftCardMessage,
-                        IsRecipientNotified = false,
-                        CreatedOnUtc = DateTime.UtcNow
-                    };
-                    await _giftCardService.InsertGiftCardAsync(gc);
-                }
-            }
 
             //redirect to order details page
             foreach (var warning in updateOrderParameters.Warnings)

@@ -1404,30 +1404,6 @@ public partial class ProductModelFactory : IProductModelFactory
         //'Add to cart' model
         model.AddToCart = await PrepareProductAddToCartModelAsync(product, updatecartitem);
         var customer = await _workContext.GetCurrentCustomerAsync();
-        //gift card
-        if (product.IsGiftCard)
-        {
-            model.GiftCard.IsGiftCard = true;
-            model.GiftCard.GiftCardType = product.GiftCardType;
-
-            if (updatecartitem == null)
-            {
-                model.GiftCard.SenderName = await _customerService.GetCustomerFullNameAsync(customer);
-                model.GiftCard.SenderEmail = customer.Email;
-            }
-            else
-            {
-                _productAttributeParser.GetGiftCardAttribute(updatecartitem.AttributesXml,
-                    out var giftCardRecipientName, out var giftCardRecipientEmail,
-                    out var giftCardSenderName, out var giftCardSenderEmail, out var giftCardMessage);
-
-                model.GiftCard.RecipientName = giftCardRecipientName;
-                model.GiftCard.RecipientEmail = giftCardRecipientEmail;
-                model.GiftCard.SenderName = giftCardSenderName;
-                model.GiftCard.SenderEmail = giftCardSenderEmail;
-                model.GiftCard.Message = giftCardMessage;
-            }
-        }
 
         //product attributes
         model.ProductAttributes = await PrepareProductAttributeModelsAsync(product, updatecartitem);

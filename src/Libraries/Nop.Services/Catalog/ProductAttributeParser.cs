@@ -135,8 +135,6 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// <param name="attributesXml">Attributes in XML format</param>
     protected virtual void AddGiftCardsAttributesXml(Product product, IFormCollection form, ref string attributesXml)
     {
-        if (!product.IsGiftCard)
-            return;
 
         var recipientName = "";
         var recipientEmail = "";

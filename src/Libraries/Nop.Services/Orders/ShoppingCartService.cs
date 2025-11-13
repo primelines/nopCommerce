@@ -160,20 +160,6 @@ public partial class ShoppingCartService : IShoppingCartService
         if (!attributesEqual)
             return false;
 
-        //gift cards
-        if (product.IsGiftCard)
-        {
-            _productAttributeParser.GetGiftCardAttribute(attributesXml, out var giftCardRecipientName1, out var _, out var giftCardSenderName1, out var _, out var _);
-
-            _productAttributeParser.GetGiftCardAttribute(shoppingCartItem.AttributesXml, out var giftCardRecipientName2, out var _, out var giftCardSenderName2, out var _, out var _);
-
-            var giftCardsAreEqual = giftCardRecipientName1.Equals(giftCardRecipientName2, StringComparison.InvariantCultureIgnoreCase)
-                                    && giftCardSenderName1.Equals(giftCardSenderName2, StringComparison.InvariantCultureIgnoreCase);
-            if (!giftCardsAreEqual)
-                return false;
-        }
-
-
         return false;
     }
 
@@ -796,15 +782,11 @@ public partial class ShoppingCartService : IShoppingCartService
     /// The task result contains the warnings
     /// </returns>
     public virtual async Task<IList<string>> GetShoppingCartItemGiftCardWarningsAsync(ShoppingCartType shoppingCartType,
-        Product product, string attributesXml)
+        GiftCard product, string attributesXml)
     {
         ArgumentNullException.ThrowIfNull(product);
 
         var warnings = new List<string>();
-
-        //gift cards
-        if (!product.IsGiftCard)
-            return warnings;
 
         var customer = await _workContext.GetCurrentCustomerAsync();
         var giftCards = await _giftCardService.GetActiveGiftCardsAppliedByCustomerAsync(customer);
@@ -873,11 +855,6 @@ public partial class ShoppingCartService : IShoppingCartService
         //selected attributes
         if (getAttributesWarnings)
             warnings.AddRange(await GetShoppingCartItemAttributeWarningsAsync(customer, shoppingCartType, product, quantity, attributesXml, false, false, false, shoppingCartItemId));
-
-        //gift cards
-        if (getGiftCardWarnings)
-            warnings.AddRange(await GetShoppingCartItemGiftCardWarningsAsync(shoppingCartType, product, attributesXml));
-
 
         return warnings;
     }

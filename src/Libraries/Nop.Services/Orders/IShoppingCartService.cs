@@ -104,7 +104,7 @@ public partial interface IShoppingCartService
     /// The task result contains the warnings
     /// </returns>
     Task<IList<string>> GetShoppingCartItemGiftCardWarningsAsync(ShoppingCartType shoppingCartType,
-        Product product, string attributesXml);
+        GiftCard product, string attributesXml);
 
 
 

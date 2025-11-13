@@ -88,21 +88,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public string Gtin { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the product is gift card
-    /// </summary>
-    public bool IsGiftCard { get; set; }
-
-    /// <summary>
-    /// Gets or sets the gift card type identifier
-    /// </summary>
-    public int GiftCardTypeId { get; set; }
-
-    /// <summary>
-    /// Gets or sets gift card amount that can be used after purchase. If not specified, then product price will be used.
-    /// </summary>
-    public decimal? OverriddenGiftCardAmount { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the entity is ship enabled
     /// </summary>
     public bool IsShipEnabled { get; set; }
@@ -315,15 +300,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     {
         get => (BackorderMode)BackorderModeId;
         set => BackorderModeId = (int)value;
-    }
-
-    /// <summary>
-    /// Gets or sets the gift card type
-    /// </summary>
-    public GiftCardType GiftCardType
-    {
-        get => (GiftCardType)GiftCardTypeId;
-        set => GiftCardTypeId = (int)value;
     }
 
     /// <summary>

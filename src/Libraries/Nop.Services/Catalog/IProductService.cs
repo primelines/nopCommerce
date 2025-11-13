@@ -295,15 +295,6 @@ public partial interface IProductService
     /// </returns>
     Task<string> FormatGtinAsync(Product product, string attributesXml = null);
 
-    /// <summary>
-    /// Gets the value whether the sequence contains gift card products
-    /// </summary>
-    /// <param name="productIds">Product identifiers</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    Task<bool> HasAnyGiftCardProductAsync(int[] productIds);
 
     /// <summary>
     /// Returns a list of sku of not existing products

@@ -436,22 +436,6 @@ public partial class ShoppingCartController : BasePublicController
         }
     }
 
-    protected virtual async Task<string> GetGiftCardValidationErrorAsync(IList<ShoppingCartItem> cart, string giftcardcouponcode)
-    {
-        if (string.IsNullOrWhiteSpace(giftcardcouponcode))
-            return await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.WrongGiftCard");
-
-        var giftCard = (await _giftCardService.GetAllGiftCardsAsync(giftCardCouponCode: giftcardcouponcode)).FirstOrDefault();
-
-        if (giftCard == null || !await _giftCardService.IsGiftCardValidAsync(giftCard))
-            return await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.WrongGiftCard");
-
-        if (await _productService.HasAnyGiftCardProductAsync(cart.Select(c => c.ProductId).ToArray()))
-            return await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.DontWorkWithGiftCards");
-
-        return string.Empty;
-    }
-
     #endregion
 
     #region Shopping cart
@@ -1322,42 +1306,6 @@ public partial class ShoppingCartController : BasePublicController
 
         model = await _shoppingCartModelFactory.PrepareShoppingCartModelAsync(model, cart);
 
-        return View(model);
-    }
-
-    [HttpPost, ActionName("Cart")]
-    [FormValueRequired("applygiftcardcouponcode")]
-    public virtual async Task<IActionResult> ApplyGiftCard(string giftcardcouponcode, IFormCollection form)
-    {
-        //trim
-        if (giftcardcouponcode != null)
-            giftcardcouponcode = giftcardcouponcode.Trim();
-
-        //cart
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
-
-        //parse and save checkout attributes
-        await ParseAndSaveCheckoutAttributesAsync(cart, form);
-
-        var model = new ShoppingCartModel();
-
-        var validationError = await GetGiftCardValidationErrorAsync(cart, giftcardcouponcode);
-
-        if (string.IsNullOrEmpty(validationError))
-        {
-            await _customerService.ApplyGiftCardCouponCodeAsync(customer, giftcardcouponcode);
-            model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.Applied");
-            model.GiftCardBox.IsApplied = true;
-        }
-        else
-        {
-            model.GiftCardBox.Message = validationError;
-            model.GiftCardBox.IsApplied = false;
-        }
-
-        model = await _shoppingCartModelFactory.PrepareShoppingCartModelAsync(model, cart);
         return View(model);
     }
 

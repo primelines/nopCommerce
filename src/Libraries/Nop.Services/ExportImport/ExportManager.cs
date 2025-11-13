@@ -1244,9 +1244,6 @@ public partial class ExportManager : IExportManager
             await xmlWriter.WriteStringAsync("SKU", product.Sku);
             await xmlWriter.WriteStringAsync("ManufacturerPartNumber", product.ManufacturerPartNumber, await IgnoreExportProductPropertyAsync(p => p.ManufacturerPartNumber));
             await xmlWriter.WriteStringAsync("Gtin", product.Gtin, await IgnoreExportProductPropertyAsync(p => p.GTIN));
-            await xmlWriter.WriteStringAsync("IsGiftCard", product.IsGiftCard, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard));
-            await xmlWriter.WriteStringAsync("GiftCardType", product.GiftCardType, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard));
-            await xmlWriter.WriteStringAsync("OverriddenGiftCardAmount", product.OverriddenGiftCardAmount, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard));
             await xmlWriter.WriteStringAsync("IsShipEnabled", product.IsShipEnabled);
             await xmlWriter.WriteStringAsync("IsFreeShipping", product.IsFreeShipping, await IgnoreExportProductPropertyAsync(p => p.FreeShipping));
             await xmlWriter.WriteStringAsync("ShipSeparately", product.ShipSeparately, await IgnoreExportProductPropertyAsync(p => p.ShipSeparately));
@@ -1547,12 +1544,6 @@ public partial class ExportManager : IExportManager
             new PropertyByName<Product>("SKU", (p, _) => p.Sku),
             new PropertyByName<Product>("ManufacturerPartNumber", (p, _) => p.ManufacturerPartNumber, await IgnoreExportProductPropertyAsync(p => p.ManufacturerPartNumber)),
             new PropertyByName<Product>("Gtin", (p, _) => p.Gtin, await IgnoreExportProductPropertyAsync(p => p.GTIN)),
-            new PropertyByName<Product>("IsGiftCard", (p, _) => p.IsGiftCard, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard)),
-            new PropertyByName<Product>("GiftCardType", (p, _) => p.GiftCardTypeId, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard))
-            {
-                DropDownElements = await GiftCardType.Virtual.ToSelectListAsync(useLocalization: false)
-            },
-            new PropertyByName<Product>("OverriddenGiftCardAmount", (p, _) => p.OverriddenGiftCardAmount, await IgnoreExportProductPropertyAsync(p => p.IsGiftCard)),
             new PropertyByName<Product>("IsShipEnabled", (p, _) => p.IsShipEnabled),
             new PropertyByName<Product>("IsFreeShipping", (p, _) => p.IsFreeShipping, await IgnoreExportProductPropertyAsync(p => p.FreeShipping)),
             new PropertyByName<Product>("ShipSeparately", (p, _) => p.ShipSeparately, await IgnoreExportProductPropertyAsync(p => p.ShipSeparately)),

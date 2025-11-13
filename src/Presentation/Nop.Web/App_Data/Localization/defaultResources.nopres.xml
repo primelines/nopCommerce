@@ -3084,15 +3084,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.IsFreeShipping.Hint">
     <Value>Check if this product comes with FREE shipping.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.IsGiftCard">
-    <Value>Is gift card</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.IsGiftCard.Hint">
-    <Value>Check if it is a gift card. After adding gift card products to the shopping cart and completing the purchases, you can then search and view the list of all the purchased gift cards by selecting Gift Cards from the Sales menu.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.IsShipEnabled">
-    <Value>Shipping enabled</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.IsShipEnabled.Hint">
     <Value>Check if the product can be shipped. You can manage shipping settings by selecting Configuration &gt; Shipping.</Value>
   </LocaleResource>
@@ -12886,30 +12877,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.GiftCards.Fields.CustomOrderNumber.Hint">
     <Value>The gift card was purchased with this order.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.GiftCards.Fields.GiftCardCouponCode">
-    <Value>Coupon code</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.GiftCards.Fields.GiftCardCouponCode.Alert.FailedGenerate">
-    <Value>Failed to generate code.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.GiftCards.Fields.GiftCardCouponCode.Generate">
-    <Value>Generate code</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.GiftCards.Fields.GiftCardCouponCode.Hint">
-    <Value>The gift card coupon code (used during checkout).</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.GiftCards.Fields.GiftCardType">
-    <Value>Gift card type</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.GiftCards.Fields.GiftCardType.Hint">
-    <Value>The gift card type.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.GiftCards.Fields.IsGiftCardActivated">
-    <Value>Is gift card activated</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.GiftCards.Fields.IsGiftCardActivated.Hint">
-    <Value>Determines whether gift this card is activated and can be used.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.GiftCards.Fields.IsRecipientNotified">
     <Value>Is recipient notified</Value>

@@ -15,7 +15,6 @@ public record AddProductModel : BaseNopModel
     public AddProductModel()
     {
         ProductAttributes = new List<ProductAttributeModel>();
-        GiftCard = new GiftCardModel();
         Warnings = new List<string>();
     }
 
@@ -37,8 +36,6 @@ public record AddProductModel : BaseNopModel
 
     //product attributes
     public IList<ProductAttributeModel> ProductAttributes { get; set; }
-    //gift card info
-    public GiftCardModel GiftCard { get; set; }
 
     public List<string> Warnings { get; set; }
 
@@ -89,26 +86,6 @@ public record AddProductModel : BaseNopModel
         public bool CustomerEntersQty { get; set; }
 
         public int Quantity { get; set; }
-    }
-
-    public record GiftCardModel : BaseNopModel
-    {
-        public bool IsGiftCard { get; set; }
-
-        [NopResourceDisplayName("Admin.GiftCards.Fields.RecipientName")]
-        public string RecipientName { get; set; }
-        [DataType(DataType.EmailAddress)]
-        [NopResourceDisplayName("Admin.GiftCards.Fields.RecipientEmail")]
-        public string RecipientEmail { get; set; }
-        [NopResourceDisplayName("Admin.GiftCards.Fields.SenderName")]
-        public string SenderName { get; set; }
-        [DataType(DataType.EmailAddress)]
-        [NopResourceDisplayName("Admin.GiftCards.Fields.SenderEmail")]
-        public string SenderEmail { get; set; }
-        [NopResourceDisplayName("Admin.GiftCards.Fields.Message")]
-        public string Message { get; set; }
-
-        public GiftCardType GiftCardType { get; set; }
     }
 
     #endregion

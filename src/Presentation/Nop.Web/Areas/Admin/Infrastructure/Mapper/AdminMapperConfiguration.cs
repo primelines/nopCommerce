@@ -550,7 +550,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(entity => entity.BackorderMode, options => options.Ignore())
             .ForMember(entity => entity.CreatedOnUtc, options => options.Ignore())
             .ForMember(entity => entity.Deleted, options => options.Ignore())
-            .ForMember(entity => entity.GiftCardType, options => options.Ignore())
             .ForMember(entity => entity.LowStockActivity, options => options.Ignore())
             .ForMember(entity => entity.NotApprovedRatingSum, options => options.Ignore())
             .ForMember(entity => entity.NotApprovedTotalReviews, options => options.Ignore())

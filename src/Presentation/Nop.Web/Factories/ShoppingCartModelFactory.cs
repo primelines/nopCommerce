@@ -398,8 +398,7 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
         //3. has attribute or gift card?
         //4. visible individually?
         cartItemModel.AllowItemEditing = _shoppingCartSettings.AllowCartItemEditing &&
-                                         (!string.IsNullOrEmpty(cartItemModel.AttributeInfo) ||
-                                          product.IsGiftCard);
+                                         !string.IsNullOrEmpty(cartItemModel.AttributeInfo);
 
         //allowed quantities
         var allowedQuantities = _productService.ParseAllowedQuantities(product);
@@ -496,8 +495,7 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
         //3. has attribute or gift card?
         //4. visible individually?
         cartItemModel.AllowItemEditing = _shoppingCartSettings.AllowCartItemEditing &&
-                                         (!string.IsNullOrEmpty(cartItemModel.AttributeInfo) ||
-                                          product.IsGiftCard);
+                                         !string.IsNullOrEmpty(cartItemModel.AttributeInfo);
 
         //allowed quantities
         var allowedQuantities = _productService.ParseAllowedQuantities(product);

@@ -100,11 +100,6 @@ public partial class SampleProducts
         public string Sku { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the product is gift card
-        /// </summary>
-        public bool IsGiftCard { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the entity is ship enabled
         /// </summary>
         public bool IsShipEnabled { get; set; }
@@ -199,12 +194,6 @@ public partial class SampleProducts
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public BackorderMode BackorderMode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the gift card type
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public GiftCardType GiftCardType { get; set; }
 
         /// <summary>
         /// Gets or sets the low stock activity

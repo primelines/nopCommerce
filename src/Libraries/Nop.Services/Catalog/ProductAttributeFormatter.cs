@@ -107,7 +107,7 @@ public partial class ProductAttributeFormatter : IProductAttributeFormatter
     /// </returns>
     public virtual async Task<string> FormatAttributesAsync(Product product, string attributesXml,
         Customer customer, Store store, string separator = "<br />", bool htmlEncode = true, bool renderPrices = true,
-        bool renderProductAttributes = true, bool renderGiftCardAttributes = true,
+        bool renderProductAttributes = true, 
         bool allowHyperlinks = true)
     {
         var result = new StringBuilder();
@@ -243,40 +243,6 @@ public partial class ProductAttributeFormatter : IProductAttributeFormatter
                 }
             }
         }
-
-        //gift cards
-        if (!renderGiftCardAttributes)
-            return result.ToString();
-
-        if (!product.IsGiftCard)
-            return result.ToString();
-
-        _productAttributeParser.GetGiftCardAttribute(attributesXml, out var giftCardRecipientName, out var giftCardRecipientEmail, out var giftCardSenderName, out var giftCardSenderEmail, out var _);
-
-        //sender
-        var giftCardFrom = product.GiftCardType == GiftCardType.Virtual ?
-            string.Format(await _localizationService.GetResourceAsync("GiftCardAttribute.From.Virtual"), giftCardSenderName, giftCardSenderEmail) :
-            string.Format(await _localizationService.GetResourceAsync("GiftCardAttribute.From.Physical"), giftCardSenderName);
-        //recipient
-        var giftCardFor = product.GiftCardType == GiftCardType.Virtual ?
-            string.Format(await _localizationService.GetResourceAsync("GiftCardAttribute.For.Virtual"), giftCardRecipientName, giftCardRecipientEmail) :
-            string.Format(await _localizationService.GetResourceAsync("GiftCardAttribute.For.Physical"), giftCardRecipientName);
-
-        //encode (if required)
-        if (htmlEncode)
-        {
-            giftCardFrom = WebUtility.HtmlEncode(giftCardFrom);
-            giftCardFor = WebUtility.HtmlEncode(giftCardFor);
-        }
-
-        if (!string.IsNullOrEmpty(result.ToString()))
-        {
-            result.Append(separator);
-        }
-
-        result.Append(giftCardFrom);
-        result.Append(separator);
-        result.Append(giftCardFor);
 
         return result.ToString();
     }

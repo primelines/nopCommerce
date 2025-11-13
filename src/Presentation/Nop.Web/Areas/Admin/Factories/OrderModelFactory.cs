@@ -1283,11 +1283,6 @@ public partial class OrderModelFactory : IOrderModelFactory
         await PrepareProductAttributeModelsAsync(model.ProductAttributes, order, product);
         model.HasCondition = model.ProductAttributes.Any(attribute => attribute.HasCondition);
 
-        //gift card
-        model.GiftCard.IsGiftCard = product.IsGiftCard;
-        if (model.GiftCard.IsGiftCard)
-            model.GiftCard.GiftCardType = product.GiftCardType;
-
         return model;
     }
 

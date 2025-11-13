@@ -202,8 +202,6 @@ public partial class InstallationService
                 Published = sample.Published,
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow,
-                IsGiftCard = sample.IsGiftCard,
-                GiftCardType = sample.GiftCardType,
             };
 
             if (!string.IsNullOrEmpty(sample.ProductAvailabilityRange))

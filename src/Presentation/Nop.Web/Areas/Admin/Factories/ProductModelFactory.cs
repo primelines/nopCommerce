@@ -1765,7 +1765,7 @@ public partial class ProductModelFactory : IProductModelFactory
                 if (combination != null)
                 {
                     stockQuantityHistoryModel.AttributeCombination = await _productAttributeFormatter
-                        .FormatAttributesAsync(product, combination.AttributesXml, currentCustomer, currentStore, renderGiftCardAttributes: false);
+                        .FormatAttributesAsync(product, combination.AttributesXml, currentCustomer, currentStore);
                 }
 
                 stockQuantityHistoryModel.WarehouseName =  await _localizationService.GetResourceAsync("Admin.Catalog.Products.Fields.Warehouse.None");

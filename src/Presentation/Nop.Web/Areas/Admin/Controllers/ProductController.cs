@@ -3296,12 +3296,6 @@ public partial class ProductController : BaseAdminController
             return Json(new { Result = await _localizationService.GetResourceAsync("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AssociatedProduct.HasAttributes") });
         }
 
-        //gift card
-        if (associatedProduct.IsGiftCard)
-        {
-            return Json(new { Result = await _localizationService.GetResourceAsync("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AssociatedProduct.GiftCard") });
-        }
-
         return Json(new { Result = string.Empty });
     }
 
