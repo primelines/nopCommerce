@@ -401,24 +401,6 @@ public partial class CopyProductService : ICopyProductService
     }
 
     /// <summary>
-    /// Copy related products mapping
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="productCopy">New product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task CopyRelatedProductsMappingAsync(Product product, Product productCopy)
-    {
-        foreach (var relatedProduct in await _productService.GetRelatedProductsByProductId1Async(product.Id, true))
-            await _productService.InsertRelatedProductAsync(
-                new RelatedProduct
-                {
-                    ProductId1 = productCopy.Id,
-                    ProductId2 = relatedProduct.ProductId2,
-                    DisplayOrder = relatedProduct.DisplayOrder
-                });
-    }
-
-    /// <summary>
     /// Copy manufacturer mapping
     /// </summary>
     /// <param name="product">Product</param>
@@ -679,8 +661,6 @@ public partial class CopyProductService : ICopyProductService
         await CopyCategoriesMappingAsync(product, productCopy);
         //product <-> manufacturers mappings
         await CopyManufacturersMappingAsync(product, productCopy);
-        //product <-> related products mappings
-        await CopyRelatedProductsMappingAsync(product, productCopy);
         //product <-> cross sells mappings
         await CopyCrossSellsMappingAsync(product, productCopy);
         //product <-> attributes mappings

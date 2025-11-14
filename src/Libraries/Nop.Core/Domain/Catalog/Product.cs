@@ -12,6 +12,8 @@ namespace Nop.Core.Domain.Catalog;
 /// </summary>
 public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountProductMapping>, ISoftDeletedEntity
 {
+    #region Basic information
+
     /// <summary>
     /// Gets or sets the name
     /// </summary>
@@ -38,6 +40,30 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int VendorId { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the entity is published
+    /// </summary>
+    public bool Published { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the entity has been deleted
+    /// </summary>
+    public bool Deleted { get; set; }
+
+    /// <summary>
+    /// Gets or sets the date and time of product creation
+    /// </summary>
+    public DateTime CreatedOnUtc { get; set; }
+
+    /// <summary>
+    /// Gets or sets the date and time of product update
+    /// </summary>
+    public DateTime UpdatedOnUtc { get; set; }
+
+    #endregion
+
+    #region Reviews & ratings
+
+    /// <summary>
     /// Gets or sets the rating sum (approved reviews)
     /// </summary>
     public int ApprovedRatingSum { get; set; }
@@ -57,6 +83,10 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// </summary>
     public int NotApprovedTotalReviews { get; set; }
 
+    #endregion
+
+    #region Access control & store mapping
+
     /// <summary>
     /// Gets or sets a value indicating whether the entity is subject to ACL
     /// </summary>
@@ -66,6 +96,10 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores
     /// </summary>
     public bool LimitedToStores { get; set; }
+
+    #endregion
+
+    #region Identification (SKU & GTIN)
 
     /// <summary>
     /// Gets or sets the SKU
@@ -81,6 +115,10 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets the Global Trade Item Number (GTIN). These identifiers include UPC (in North America), EAN (in Europe), JAN (in Japan), and ISBN (for books).
     /// </summary>
     public string Gtin { get; set; }
+
+    #endregion
+
+    #region Shipping
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is ship enabled
@@ -108,6 +146,15 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int DeliveryDateId { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether this product is returnable (a customer is allowed to submit return request with this product)
+    /// </summary>
+    public bool NotReturnable { get; set; }
+
+    #endregion
+
+    #region Tax
+
+    /// <summary>
     /// Gets or sets a value indicating whether the product is marked as tax exempt
     /// </summary>
     public bool IsTaxExempt { get; set; }
@@ -116,6 +163,10 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets the tax category identifier
     /// </summary>
     public int TaxCategoryId { get; set; }
+
+    #endregion
+
+    #region Inventory & stock
 
     /// <summary>
     /// Gets or sets a product availability range identifier
@@ -143,6 +194,24 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public bool AllowBackInStockSubscriptions { get; set; }
 
     /// <summary>
+    /// Gets or sets the quantity when admin should be notified
+    /// </summary>
+    public int NotifyAdminForQuantityBelow { get; set; }
+
+    /// <summary>
+    /// Gets or sets the backorder mode
+    /// </summary>
+    public BackorderMode BackorderMode
+    {
+        get => (BackorderMode)BackorderModeId;
+        set => BackorderModeId = (int)value;
+    }
+
+    #endregion
+
+    #region Order quantity limits
+
+    /// <summary>
     /// Gets or sets the order minimum quantity
     /// </summary>
     public int OrderMinimumQuantity { get; set; }
@@ -157,20 +226,14 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// </summary>
     public string AllowedQuantities { get; set; }
 
-    /// <summary>
-    /// Gets or sets the quantity when admin should be notified
-    /// </summary>
-    public int NotifyAdminForQuantityBelow { get; set; }
+    #endregion
+
+    #region Catalog behavior & UI flags
 
     /// <summary>
     /// Gets or sets a value indicating whether to display attribute combination images only
     /// </summary>
     public bool DisplayAttributeCombinationImagesOnly { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether this product is returnable (a customer is allowed to submit return request with this product)
-    /// </summary>
-    public bool NotReturnable { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to disable buy (Add to cart) button
@@ -182,6 +245,10 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// </summary>
     public bool DisableWishlistButton { get; set; }
 
+    #endregion
+
+    #region Pre-order
+
     /// <summary>
     /// Gets or sets a value indicating whether this item is available for Pre-Order
     /// </summary>
@@ -192,6 +259,10 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// </summary>
     public DateTime? PreOrderAvailabilityStartDateTimeUtc { get; set; }
 
+    #endregion
+
+    #region Pricing
+
     /// <summary>
     /// Gets or sets the price
     /// </summary>
@@ -201,6 +272,10 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets the old price
     /// </summary>
     public decimal OldPrice { get; set; }
+
+    #endregion
+
+    #region Physical dimensions
 
     /// <summary>
     /// Gets or sets the weight
@@ -222,6 +297,10 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// </summary>
     public decimal Height { get; set; }
 
+    #endregion
+
+    #region Catalog availability window
+
     /// <summary>
     /// Gets or sets the available start date and time
     /// </summary>
@@ -232,25 +311,9 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// </summary>
     public DateTime? AvailableEndDateTimeUtc { get; set; }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether the entity is published
-    /// </summary>
-    public bool Published { get; set; }
+    #endregion
 
-    /// <summary>
-    /// Gets or sets a value indicating whether the entity has been deleted
-    /// </summary>
-    public bool Deleted { get; set; }
-
-    /// <summary>
-    /// Gets or sets the date and time of product creation
-    /// </summary>
-    public DateTime CreatedOnUtc { get; set; }
-
-    /// <summary>
-    /// Gets or sets the date and time of product update
-    /// </summary>
-    public DateTime UpdatedOnUtc { get; set; }
+    #region Compliance & age verification
 
     /// <summary>
     /// Gets or sets a value indicating whether <see cref="MinimumAgeToPurchase"/> should be specified
@@ -262,13 +325,5 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// </summary>
     public int MinimumAgeToPurchase { get; set; }
 
-    /// <summary>
-    /// Gets or sets the backorder mode
-    /// </summary>
-    public BackorderMode BackorderMode
-    {
-        get => (BackorderMode)BackorderModeId;
-        set => BackorderModeId = (int)value;
-    }
-
+    #endregion
 }

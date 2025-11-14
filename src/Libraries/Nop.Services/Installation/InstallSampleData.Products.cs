@@ -334,15 +334,6 @@ public partial class InstallationService
         //search engine names
         await InsertSearchEngineNamesAsync(allProducts, product => product.Name);
 
-        //related products
-        if (jsonData.RelatedProducts.Any())
-            await _dataProvider.BulkInsertEntitiesAsync(await jsonData.RelatedProducts.SelectAwait(async rp =>
-                new RelatedProduct
-                {
-                    ProductId1 = await getProductId(rp.FirstProductSku),
-                    ProductId2 = await getProductId(rp.SecondProductSku)
-                }).ToListAsync());
-
         //reviews
         using (var random = new SecureRandomNumberGenerator())
             foreach (var product in allProducts)

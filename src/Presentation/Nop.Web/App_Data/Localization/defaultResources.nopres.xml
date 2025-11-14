@@ -3915,24 +3915,6 @@
   <LocaleResource Name="Admin.Catalog.Products.PurchasedWithOrders.Hint">
     <Value>Here you can see a list of orders in which this product was purchased.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.RelatedProducts">
-    <Value>Related products</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.RelatedProducts.AddNew">
-    <Value>Add new related product</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.RelatedProducts.Fields.DisplayOrder">
-    <Value>Display order</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.RelatedProducts.Fields.Product">
-    <Value>Product</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.RelatedProducts.Hint">
-    <Value>The Related Products option provides the opportunity to advertise products that are not part of the selected category, to your visitors. These products are displayed on the product details pages.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.RelatedProducts.SaveBeforeEdit">
-    <Value>You need to save the product before you can add related products for this product page.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Shipping">
     <Value>Shipping</Value>
   </LocaleResource>
@@ -8547,9 +8529,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.PurchasedWithOrders">
     <Value>Purchased with orders</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.RelatedProducts">
-    <Value>Related products</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Seo">
     <Value>SEO</Value>
@@ -19076,9 +19055,6 @@
   <LocaleResource Name="Products.Discontinued">
     <Value>Sorry - this product is no longer available</Value>
   </LocaleResource>
-  <LocaleResource Name="Products.DownloadSample">
-    <Value>Download sample</Value>
-  </LocaleResource>
   <LocaleResource Name="Products.EmailAFriend">
     <Value>Email a friend</Value>
   </LocaleResource>
@@ -19261,9 +19237,6 @@
   </LocaleResource>
   <LocaleResource Name="Products.RecentlyViewedProducts">
     <Value>Recently viewed products</Value>
-  </LocaleResource>
-  <LocaleResource Name="Products.RelatedProducts">
-    <Value>Related products</Value>
   </LocaleResource>
   <LocaleResource Name="Products.Sku">
     <Value>SKU</Value>

@@ -323,61 +323,6 @@ public partial interface IProductService
 
     #endregion
 
-    #region Related products
-
-    /// <summary>
-    /// Deletes a related product
-    /// </summary>
-    /// <param name="relatedProduct">Related product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task DeleteRelatedProductAsync(RelatedProduct relatedProduct);
-
-    /// <summary>
-    /// Gets related products by product identifier
-    /// </summary>
-    /// <param name="productId1">The first product identifier</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related products
-    /// </returns>
-    Task<IList<RelatedProduct>> GetRelatedProductsByProductId1Async(int productId1, bool showHidden = false);
-
-    /// <summary>
-    /// Gets a related product
-    /// </summary>
-    /// <param name="relatedProductId">Related product identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related product
-    /// </returns>
-    Task<RelatedProduct> GetRelatedProductByIdAsync(int relatedProductId);
-
-    /// <summary>
-    /// Inserts a related product
-    /// </summary>
-    /// <param name="relatedProduct">Related product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task InsertRelatedProductAsync(RelatedProduct relatedProduct);
-
-    /// <summary>
-    /// Updates a related product
-    /// </summary>
-    /// <param name="relatedProduct">Related product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task UpdateRelatedProductAsync(RelatedProduct relatedProduct);
-
-    /// <summary>
-    /// Finds a related product item by specified identifiers
-    /// </summary>
-    /// <param name="source">Source</param>
-    /// <param name="productId1">The first product identifier</param>
-    /// <param name="productId2">The second product identifier</param>
-    /// <returns>Related product</returns>
-    RelatedProduct FindRelatedProduct(IList<RelatedProduct> source, int productId1, int productId2);
-
-    #endregion
-
     #region Cross-sell products
 
     /// <summary>

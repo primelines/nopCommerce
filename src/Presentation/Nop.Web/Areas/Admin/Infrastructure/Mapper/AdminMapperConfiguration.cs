@@ -540,7 +540,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.AddVideoModel, options => options.Ignore())
             .ForMember(model => model.ProductSpecificationAttributeSearchModel, options => options.Ignore())
             .ForMember(model => model.AvailableProductTags, options => options.Ignore())
-            .ForMember(model => model.RelatedProductSearchModel, options => options.Ignore())
             .ForMember(model => model.SelectedCategoryIds, options => options.Ignore())
             .ForMember(model => model.SelectedManufacturerIds, options => options.Ignore())
             .ForMember(model => model.SeName, options => options.Ignore())
@@ -667,9 +666,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
 
         CreateMap<ProductTemplate, ProductTemplateModel>();
         CreateMap<ProductTemplateModel, ProductTemplate>();
-
-        CreateMap<RelatedProduct, RelatedProductModel>()
-            .ForMember(model => model.Product2Name, options => options.Ignore());
 
         CreateMap<SpecificationAttribute, SpecificationAttributeModel>()
             .ForMember(model => model.SpecificationAttributeOptionSearchModel, options => options.Ignore())

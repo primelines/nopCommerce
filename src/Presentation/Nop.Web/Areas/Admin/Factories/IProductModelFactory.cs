@@ -61,37 +61,6 @@ public partial interface IProductModelFactory
     Task<AddRequiredProductListModel> PrepareAddRequiredProductListModelAsync(AddRequiredProductSearchModel searchModel);
 
     /// <summary>
-    /// Prepare paged related product list model
-    /// </summary>
-    /// <param name="searchModel">Related product search model</param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related product list model
-    /// </returns>
-    Task<RelatedProductListModel> PrepareRelatedProductListModelAsync(RelatedProductSearchModel searchModel, Product product);
-
-    /// <summary>
-    /// Prepare related product search model to add to the product
-    /// </summary>
-    /// <param name="searchModel">Related product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related product search model to add to the product
-    /// </returns>
-    Task<AddRelatedProductSearchModel> PrepareAddRelatedProductSearchModelAsync(AddRelatedProductSearchModel searchModel);
-
-    /// <summary>
-    /// Prepare paged related product list model to add to the product
-    /// </summary>
-    /// <param name="searchModel">Related product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related product list model to add to the product
-    /// </returns>
-    Task<AddRelatedProductListModel> PrepareAddRelatedProductListModelAsync(AddRelatedProductSearchModel searchModel);
-
-    /// <summary>
     /// Prepare paged cross-sell product list model
     /// </summary>
     /// <param name="searchModel">Cross-sell product search model</param>

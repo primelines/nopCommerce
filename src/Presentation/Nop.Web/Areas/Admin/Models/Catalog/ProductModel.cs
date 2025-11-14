@@ -50,7 +50,6 @@ public partial record ProductModel : BaseNopEntityModel,
         AvailableProductTags = new List<SelectListItem>();
         SelectedProductTags = new List<string>();
 
-        RelatedProductSearchModel = new RelatedProductSearchModel();
         CrossSellProductSearchModel = new CrossSellProductSearchModel();
         FilterLevelValueSearchModel = new FilterLevelValueSearchModel();
         ProductPictureSearchModel = new ProductPictureSearchModel();
@@ -281,8 +280,6 @@ public partial record ProductModel : BaseNopEntityModel,
 
     //stock quantity history
     public StockQuantityHistoryModel StockQuantityHistory { get; set; }
-
-    public RelatedProductSearchModel RelatedProductSearchModel { get; set; }
 
     public CrossSellProductSearchModel CrossSellProductSearchModel { get; set; }
 

@@ -95,19 +95,11 @@
                         @await Html.PartialAsync("_SKU_Man_GTIN_Ven", Model)
                         <!--delivery-->
                         @await Html.PartialAsync("_DeliveryInfo", Model)
-                        <!--sample download-->
-                        @await Html.PartialAsync("_DownloadSample", Model)
                         <!--attributes-->
                         @{
                             var dataDictAttributes = new ViewDataDictionary(ViewData);
                             dataDictAttributes.TemplateInfo.HtmlFieldPrefix = $"attributes_{Model.Id}";
                             @await Html.PartialAsync("_ProductAttributes", Model, dataDictAttributes)
-                        }
-                        <!--gift card-->
-                        @{
-                            var dataDictGiftCard = new ViewDataDictionary(ViewData);
-                            dataDictGiftCard.TemplateInfo.HtmlFieldPrefix = $"giftcard_{Model.Id}";
-                            @await Html.PartialAsync("_GiftCardInfo", Model.GiftCard, dataDictGiftCard)
                         }
                         <!--price & add to cart & estimate shipping-->
                         @{
@@ -154,7 +146,6 @@
                     @await Html.PartialAsync("_ProductTags", Model.ProductTags)
                 </section>
                 @await Component.InvokeAsync(typeof(ProductsAlsoPurchasedViewComponent), new { productId = Model.Id })
-                @await Component.InvokeAsync(typeof(RelatedProductsViewComponent), new { productId = Model.Id })
                 @await Component.InvokeAsync(typeof(CompatibleWithFilterLevelValuesViewComponent), new { productId = Model.Id })
             </article>
         </form>

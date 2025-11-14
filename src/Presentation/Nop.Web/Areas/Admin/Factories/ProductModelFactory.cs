@@ -363,25 +363,6 @@ public partial class ProductModelFactory : IProductModelFactory
     }
 
     /// <summary>
-    /// Prepare related product search model
-    /// </summary>
-    /// <param name="searchModel">Related product search model</param>
-    /// <param name="product">Product</param>
-    /// <returns>Related product search model</returns>
-    protected virtual RelatedProductSearchModel PrepareRelatedProductSearchModel(RelatedProductSearchModel searchModel, Product product)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-        ArgumentNullException.ThrowIfNull(product);
-
-        searchModel.ProductId = product.Id;
-
-        //prepare page parameters
-        searchModel.SetGridPageSize();
-
-        return searchModel;
-    }
-
-    /// <summary>
     /// Prepare cross-sell product search model
     /// </summary>
     /// <param name="searchModel">Cross-sell product search model</param>
@@ -798,7 +779,6 @@ public partial class ProductModelFactory : IProductModelFactory
             await PrepareCopyProductModelAsync(model.CopyProductModel, product);
 
             //prepare nested search model
-            PrepareRelatedProductSearchModel(model.RelatedProductSearchModel, product);
             PrepareCrossSellProductSearchModel(model.CrossSellProductSearchModel, product);
             PrepareFilterLevelValuesSearchModel(model.FilterLevelValueSearchModel, product);
             PrepareProductPictureSearchModel(model.ProductPictureSearchModel, product);
@@ -958,116 +938,6 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //prepare grid model
         var model = await new AddRequiredProductListModel().PrepareToGridAsync(searchModel, products, () =>
-        {
-            return products.SelectAwait(async product =>
-            {
-                var productModel = product.ToModel<ProductModel>();
-
-                productModel.SeName = await _urlRecordService.GetSeNameAsync(product, 0, true, false);
-
-                return productModel;
-            });
-        });
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare paged related product list model
-    /// </summary>
-    /// <param name="searchModel">Related product search model</param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related product list model
-    /// </returns>
-    public virtual async Task<RelatedProductListModel> PrepareRelatedProductListModelAsync(RelatedProductSearchModel searchModel, Product product)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-        ArgumentNullException.ThrowIfNull(product);
-
-        //get related products
-        var relatedProducts = (await _productService
-            .GetRelatedProductsByProductId1Async(productId1: product.Id, showHidden: true)).ToPagedList(searchModel);
-
-        //prepare grid model
-        var model = await new RelatedProductListModel().PrepareToGridAsync(searchModel, relatedProducts, () =>
-        {
-            return relatedProducts.SelectAwait(async relatedProduct =>
-            {
-                //fill in model values from the entity
-                var relatedProductModel = relatedProduct.ToModel<RelatedProductModel>();
-
-                //fill in additional values (not existing in the entity)
-                relatedProductModel.Product2Name = (await _productService.GetProductByIdAsync(relatedProduct.ProductId2))?.Name;
-
-                return relatedProductModel;
-            });
-        });
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare related product search model to add to the product
-    /// </summary>
-    /// <param name="searchModel">Related product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related product search model to add to the product
-    /// </returns>
-    public virtual async Task<AddRelatedProductSearchModel> PrepareAddRelatedProductSearchModelAsync(AddRelatedProductSearchModel searchModel)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-
-        searchModel.IsLoggedInAsVendor = await _workContext.GetCurrentVendorAsync() != null;
-
-        //prepare available categories
-        await _baseAdminModelFactory.PrepareCategoriesAsync(searchModel.AvailableCategories);
-
-        //prepare available manufacturers
-        await _baseAdminModelFactory.PrepareManufacturersAsync(searchModel.AvailableManufacturers);
-
-        //prepare available stores
-        await _baseAdminModelFactory.PrepareStoresAsync(searchModel.AvailableStores);
-
-        //prepare available vendors
-        await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
-
-
-        //prepare page parameters
-        searchModel.SetPopupGridPageSize();
-
-        return searchModel;
-    }
-
-    /// <summary>
-    /// Prepare paged related product list model to add to the product
-    /// </summary>
-    /// <param name="searchModel">Related product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related product list model to add to the product
-    /// </returns>
-    public virtual async Task<AddRelatedProductListModel> PrepareAddRelatedProductListModelAsync(AddRelatedProductSearchModel searchModel)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-
-        //a vendor should have access only to his products
-        var currentVendor = await _workContext.GetCurrentVendorAsync();
-        if (currentVendor != null)
-            searchModel.SearchVendorId = currentVendor.Id;
-
-        //get products
-        var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
-            storeId: searchModel.SearchStoreId,
-            vendorId: searchModel.SearchVendorId,
-            keywords: searchModel.SearchProductName,
-            pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
-
-        //prepare grid model
-        var model = await new AddRelatedProductListModel().PrepareToGridAsync(searchModel, products, () =>
         {
             return products.SelectAwait(async product =>
             {

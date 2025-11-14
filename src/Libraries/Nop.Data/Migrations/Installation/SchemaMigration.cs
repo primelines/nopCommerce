@@ -73,7 +73,6 @@ public class SchemaMigration : ForwardOnlyMigration
         Create.TableFor<Product>();
         Create.TableFor<ProductTemplate>();
         Create.TableFor<BackInStockSubscription>();
-        Create.TableFor<RelatedProduct>();
         Create.TableFor<FilterLevelValue>();
         Create.TableFor<FilterLevelValueProductMapping>();
         Create.TableFor<ReviewType>();

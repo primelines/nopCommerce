@@ -234,23 +234,6 @@ public static partial class NopCatalogDefaults
     #region Products
 
     /// <summary>
-    /// Key for "related" product displayed on the product details page
-    /// </summary>
-    /// <remarks>
-    /// {0} : current product id
-    /// {1} : show hidden records?
-    /// </remarks>
-    public static CacheKey RelatedProductsCacheKey => new("Nop.relatedproduct.byproduct.{0}-{1}");
-
-    /// <summary>
-    /// Gets a key pattern to clear cache
-    /// </summary>
-    /// <remarks>
-    /// {0} : product ID
-    /// </remarks>
-    public static string RelatedProductsPrefix => "Nop.relatedproduct.byproduct.{0}";
-
-    /// <summary>
     /// Key for "related" product identifiers displayed on the product details page
     /// </summary>
     /// <remarks>

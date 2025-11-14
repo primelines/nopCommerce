@@ -621,28 +621,6 @@ public partial class CatalogController : BasePublicController
         return Ok(model);
     }
 
-    [HttpGet]
-    [Route("GetRelatedProducts", Name = "GetRelatedProducts")]
-    [ProducesResponseType(typeof(IList<ProductOverviewDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetRelatedProducts(int productId, int? productThumbPictureSize)
-    {
-        //load and cache report
-        var productIds = (await _productService.GetRelatedProductsByProductId1Async(productId)).Select(x => x.ProductId2).ToArray();
-
-        //load products
-        var products = await (await _productService.GetProductsByIdsAsync(productIds))
-            //ACL and store mapping
-            .WhereAwait(async p => await _aclService.AuthorizeAsync(p) && await _storeMappingService.AuthorizeAsync(p))
-            //availability dates
-            .Where(p => _productService.ProductIsAvailable(p)).ToListAsync();
-
-        if (!products.Any())
-            return Content(string.Empty);
-
-        var model = (await _productModelFactory.PrepareProductOverviewDtosAsync(products, true, true, productThumbPictureSize)).ToList();
-        return Ok(model);
-    }
-
 
     [HttpGet]
     [Route("GetPopularProductTags", Name = "GetPopularProductTags")]

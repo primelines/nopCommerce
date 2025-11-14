@@ -14,11 +14,6 @@ public partial class SampleProducts
     /// </summary>
     public List<SampleProduct> Products { get; set; } = new();
 
-    /// <summary>
-    /// Gets or sets related products
-    /// </summary>
-    public List<SampleRelatedProduct> RelatedProducts { get; set; } = new();
-
     #region Nested classes
 
     /// <summary>
@@ -50,22 +45,6 @@ public partial class SampleProducts
         /// Gets or sets a download file name
         /// </summary>
         public string DownloadFileName { get; set; }
-    }
-
-    /// <summary>
-    /// Represents a related product
-    /// </summary>
-    public partial class SampleRelatedProduct
-    {
-        /// <summary>
-        /// Gets or sets the first product identifier
-        /// </summary>
-        public string FirstProductSku { get; set; }
-
-        /// <summary>
-        /// Gets or sets the second product identifier
-        /// </summary>
-        public string SecondProductSku { get; set; }
     }
 
     /// <summary>

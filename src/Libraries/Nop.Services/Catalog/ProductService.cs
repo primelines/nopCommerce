@@ -50,7 +50,6 @@ public partial class ProductService : IProductService
     protected readonly IRepository<ProductSpecificationAttribute> _productSpecificationAttributeRepository;
     protected readonly IRepository<ProductTag> _productTagRepository;
     protected readonly IRepository<ProductVideo> _productVideoRepository;
-    protected readonly IRepository<RelatedProduct> _relatedProductRepository;
     protected readonly IRepository<Shipment> _shipmentRepository;
     protected readonly IRepository<StockQuantityHistory> _stockQuantityHistoryRepository;
     protected readonly IRepository<TierPrice> _tierPriceRepository;
@@ -89,7 +88,6 @@ public partial class ProductService : IProductService
         IRepository<ProductSpecificationAttribute> productSpecificationAttributeRepository,
         IRepository<ProductTag> productTagRepository,
         IRepository<ProductVideo> productVideoRepository,
-        IRepository<RelatedProduct> relatedProductRepository,
         IRepository<Shipment> shipmentRepository,
         IRepository<StockQuantityHistory> stockQuantityHistoryRepository,
         IRepository<TierPrice> tierPriceRepository,
@@ -123,7 +121,6 @@ public partial class ProductService : IProductService
         _productSpecificationAttributeRepository = productSpecificationAttributeRepository;
         _productTagRepository = productTagRepository;
         _productVideoRepository = productVideoRepository;
-        _relatedProductRepository = relatedProductRepository;
         _shipmentRepository = shipmentRepository;
         _stockQuantityHistoryRepository = stockQuantityHistoryRepository;
         _tierPriceRepository = tierPriceRepository;
@@ -1322,88 +1319,6 @@ public partial class ProductService : IProductService
 
     #endregion
 
-    #region Related products
-
-    /// <summary>
-    /// Deletes a related product
-    /// </summary>
-    /// <param name="relatedProduct">Related product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeleteRelatedProductAsync(RelatedProduct relatedProduct)
-    {
-        await _relatedProductRepository.DeleteAsync(relatedProduct);
-    }
-
-    /// <summary>
-    /// Gets related products by product identifier
-    /// </summary>
-    /// <param name="productId">The first product identifier</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related products
-    /// </returns>
-    public virtual async Task<IList<RelatedProduct>> GetRelatedProductsByProductId1Async(int productId, bool showHidden = false)
-    {
-        var query = from rp in _relatedProductRepository.Table
-            join p in _productRepository.Table on rp.ProductId2 equals p.Id
-            where rp.ProductId1 == productId &&
-                  !p.Deleted &&
-                  (showHidden || p.Published)
-            orderby rp.DisplayOrder, rp.Id
-            select rp;
-
-        var relatedProducts = await _staticCacheManager.GetAsync(_staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.RelatedProductsCacheKey, productId, showHidden), async () => await query.ToListAsync());
-
-        return relatedProducts;
-    }
-
-    /// <summary>
-    /// Gets a related product
-    /// </summary>
-    /// <param name="relatedProductId">Related product identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the related product
-    /// </returns>
-    public virtual async Task<RelatedProduct> GetRelatedProductByIdAsync(int relatedProductId)
-    {
-        return await _relatedProductRepository.GetByIdAsync(relatedProductId, cache => default);
-    }
-
-    /// <summary>
-    /// Inserts a related product
-    /// </summary>
-    /// <param name="relatedProduct">Related product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertRelatedProductAsync(RelatedProduct relatedProduct)
-    {
-        await _relatedProductRepository.InsertAsync(relatedProduct);
-    }
-
-    /// <summary>
-    /// Updates a related product
-    /// </summary>
-    /// <param name="relatedProduct">Related product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateRelatedProductAsync(RelatedProduct relatedProduct)
-    {
-        await _relatedProductRepository.UpdateAsync(relatedProduct);
-    }
-
-    /// <summary>
-    /// Finds a related product item by specified identifiers
-    /// </summary>
-    /// <param name="source">Source</param>
-    /// <param name="productId1">The first product identifier</param>
-    /// <param name="productId2">The second product identifier</param>
-    /// <returns>Related product</returns>
-    public virtual RelatedProduct FindRelatedProduct(IList<RelatedProduct> source, int productId1, int productId2)
-    {
-        return source.FirstOrDefault(rp => rp.ProductId1 == productId1 && rp.ProductId2 == productId2);
-    }
-
-    #endregion
 
     #region Cross-sell products
 

@@ -185,11 +185,6 @@ public partial class ProductEditorSettings : ISettings
     public bool Published { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Related products' block is shown
-    /// </summary>
-    public bool RelatedProducts { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Cross-sells products' block is shown
     /// </summary>
     public bool CrossSellsProducts { get; set; }

@@ -48,10 +48,6 @@ public class Indexes : ForwardOnlyMigration
             .OnColumn(nameof(ShoppingCartItem.CustomerId)).Ascending()
             .WithOptions().NonClustered();
 
-        Create.Index("IX_RelatedProduct_ProductId1").OnTable(nameof(RelatedProduct))
-            .OnColumn(nameof(RelatedProduct.ProductId1)).Ascending()
-            .WithOptions().NonClustered();
-
         Create.Index("IX_QueuedEmail_SentOnUtc_DontSendBeforeDateUtc_Extended").OnTable(nameof(QueuedEmail))
             .OnColumn(nameof(QueuedEmail.SentOnUtc)).Ascending()
             .OnColumn(nameof(QueuedEmail.DontSendBeforeDateUtc)).Ascending()
