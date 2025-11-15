@@ -39,7 +39,6 @@ public partial class ProductController : BasePublicController
     protected readonly CaptchaSettings _captchaSettings;
     protected readonly CatalogSettings _catalogSettings;
     protected readonly IAclService _aclService;
-    protected readonly ICompareProductsService _compareProductsService;
     protected readonly ICustomerActivityService _customerActivityService;
     protected readonly ICustomerService _customerService;
     protected readonly IEventPublisher _eventPublisher;
@@ -74,7 +73,6 @@ public partial class ProductController : BasePublicController
     public ProductController(IProductReviewService productReviewService, CaptchaSettings captchaSettings,
         CatalogSettings catalogSettings,
         IAclService aclService,
-        ICompareProductsService compareProductsService,
         ICustomerActivityService customerActivityService,
         ICustomerService customerService,
         IEventPublisher eventPublisher,
@@ -106,7 +104,6 @@ public partial class ProductController : BasePublicController
         _captchaSettings = captchaSettings;
         _catalogSettings = catalogSettings;
         _aclService = aclService;
-        _compareProductsService = compareProductsService;
         _customerActivityService = customerActivityService;
         _customerService = customerService;
         _eventPublisher = eventPublisher;
@@ -619,112 +616,6 @@ public partial class ProductController : BasePublicController
         //If we got this far, something failed, redisplay form
         model = await _productModelFactory.PrepareProductEmailAFriendDtoAsync(model, product, true);
         return Ok(model);
-    }
-
-    #endregion
-
-    #region Comparing products
-
-
-    [HttpGet]
-    [Route("AddProductToCompareList/{productId}", Name = "AddProductToCompareList")]
-    [ProducesResponseType(typeof(AddProductToCompareListResponse), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    public virtual async Task<IActionResult> AddProductToCompareList([FromRoute] int productId)
-    {
-        var product = await _productService.GetProductByIdAsync(productId);
-        if (product == null || product.Deleted || !product.Published)
-            return Ok(new
-            {
-                success = false,
-                message = "No product found with the specified ID"
-            });
-
-        if (!_catalogSettings.CompareProductsEnabled)
-            return Ok(new
-            {
-                success = false,
-                message = "Product comparison is disabled"
-            });
-
-        await _compareProductsService.AddProductToCompareListAsync(productId);
-
-        //activity log
-        await _customerActivityService.InsertActivityAsync("PublicStore.AddToCompareList",
-            string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.AddToCompareList"), product.Name), product);
-
-        return Ok(new
-        {
-            success = true,
-            message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToCompareList.Link"), Url.RouteUrl("CompareProducts"))
-            //use the code below (commented) if you want a customer to be automatically redirected to the compare products page
-            //redirect = Url.RouteUrl("CompareProducts"),
-        });
-    }
-
-    [HttpGet]
-    [Route("RemoveProductFromCompareList/{productId}", Name = "RemoveProductFromCompareList")]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public virtual async Task<IActionResult> RemoveProductFromCompareList([FromRoute] int productId)
-    {
-        var product = await _productService.GetProductByIdAsync(productId);
-        if (product == null)
-            return Error();
-
-        if (!_catalogSettings.CompareProductsEnabled)
-            return Error(errorMessage: "Disabled from settings");
-
-        await _compareProductsService.RemoveProductFromCompareListAsync(productId);
-
-        return RedirectToRoute("CompareProducts");
-    }
-
-    [HttpGet]
-    [Route("CompareProducts", Name = "CompareProducts")]
-    [ProducesResponseType(typeof(CompareProductsDto), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public virtual async Task<IActionResult> CompareProducts()
-    {
-        if (!_catalogSettings.CompareProductsEnabled)
-            return Error(errorMessage: "Disabled from settings");
-
-        var model = new CompareProductsDto
-        {
-            IncludeShortDescriptionInCompareProducts = _catalogSettings.IncludeShortDescriptionInCompareProducts,
-            IncludeFullDescriptionInCompareProducts = _catalogSettings.IncludeFullDescriptionInCompareProducts,
-        };
-
-        var products = await (await _compareProductsService.GetComparedProductsAsync())
-            //ACL and store mapping
-            .WhereAwait(async p => await _aclService.AuthorizeAsync(p) && await _storeMappingService.AuthorizeAsync(p))
-            //availability dates
-            .Where(p => _productService.ProductIsAvailable(p)).ToListAsync();
-
-        //prepare model
-        var poModels = (await _productModelFactory.PrepareProductOverviewDtosAsync(products, prepareSpecificationAttributes: true))
-            .ToList();
-        foreach (var poModel in poModels)
-        {
-            model.Products.Add(poModel);
-        }
-
-        return Ok(model);
-    }
-
-    [HttpGet]
-    [Route("ClearCompareList", Name = "ClearCompareList")]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public virtual IActionResult ClearCompareList()
-    {
-        if (!_catalogSettings.CompareProductsEnabled)
-            return Error(errorMessage: "Disabled from settings");
-
-        _compareProductsService.ClearCompareProducts();
-
-        return RedirectToRoute("CompareProducts");
     }
 
     #endregion

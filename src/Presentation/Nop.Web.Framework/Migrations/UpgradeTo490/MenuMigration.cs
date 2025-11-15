@@ -223,18 +223,6 @@ public class MenuMigration : Migration
         {
             MenuId = footerCustomerService.Id,
             MenuItemType = MenuItemType.StandardPage,
-            RouteName = NopRouteNames.General.COMPARE_PRODUCTS,
-            Title = "Compare products list",
-            Published = IsSettingEnabled("displaydefaultfooteritemsettings.displaycompareproductsfooteritem", out var displaycompareproductsfooteritem) && catalogSettings.CompareProductsEnabled
-        });
-
-        if (displaycompareproductsfooteritem is not null)
-            _settingService.DeleteSetting(displaycompareproductsfooteritem);
-
-        _menuItemRepository.Insert(new M.MenuItem
-        {
-            MenuId = footerCustomerService.Id,
-            MenuItemType = MenuItemType.StandardPage,
             RouteName = NopRouteNames.General.NEW_PRODUCTS,
             Title = "New products",
             Published = IsSettingEnabled("displaydefaultfooteritemsettings.displaynewproductsfooteritem", out var displaynewproductsfooteritem) && catalogSettings.NewProductsEnabled

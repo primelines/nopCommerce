@@ -167,9 +167,7 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     public string NewProductsPageSizeOptions { get; set; }
     public bool NewProductsPageSizeOptions_OverrideForStore { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.CompareProductsEnabled")]
-    public bool CompareProductsEnabled { get; set; }
-    public bool CompareProductsEnabled_OverrideForStore { get; set; }
+
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ShowBestsellersOnHomepage")]
     public bool ShowBestsellersOnHomepage { get; set; }
@@ -274,14 +272,6 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ProductsByTagManuallyPriceRange")]
     public bool ProductsByTagManuallyPriceRange { get; set; }
     public bool ProductsByTagManuallyPriceRange_OverrideForStore { get; set; }
-
-    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.IncludeShortDescriptionInCompareProducts")]
-    public bool IncludeShortDescriptionInCompareProducts { get; set; }
-    public bool IncludeShortDescriptionInCompareProducts_OverrideForStore { get; set; }
-
-    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.IncludeFullDescriptionInCompareProducts")]
-    public bool IncludeFullDescriptionInCompareProducts { get; set; }
-    public bool IncludeFullDescriptionInCompareProducts_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ManufacturersBlockItemsToDisplay")]
     public int ManufacturersBlockItemsToDisplay { get; set; }

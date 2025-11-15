@@ -153,11 +153,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"{lang}/boards",
             defaults: new { controller = "Boards", action = "Index" });
 
-        //compare products
-        endpointRouteBuilder.MapControllerRoute(name: "CompareProducts",
-            pattern: $"{lang}/compareproducts/",
-            defaults: new { controller = "Product", action = "CompareProducts" });
-
         //product tags
         endpointRouteBuilder.MapControllerRoute(name: "ProductTagsAll",
             pattern: $"{lang}/producttag/all/",
@@ -182,11 +177,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
         endpointRouteBuilder.MapControllerRoute(name: "AddProductToCart-Details",
             pattern: $"addproducttocart/details/{{productId:min(0)}}/{{shoppingCartTypeId:min(0)}}",
             defaults: new { controller = "ShoppingCart", action = "AddProductToCart_Details" });
-
-        //comparing products (AJAX)
-        endpointRouteBuilder.MapControllerRoute(name: "AddProductToCompare",
-            pattern: $"compareproducts/add/{{productId:min(0)}}",
-            defaults: new { controller = "Product", action = "AddProductToCompareList" });
 
         //product email a friend
         endpointRouteBuilder.MapControllerRoute(name: "ProductEmailAFriend",
@@ -467,10 +457,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"poll/vote",
             defaults: new { controller = "Poll", action = "Vote" });
 
-        //comparing products
-        endpointRouteBuilder.MapControllerRoute(name: "RemoveProductFromCompareList",
-            pattern: $"{lang}/compareproducts/remove/{{productId}}",
-            defaults: new { controller = "Product", action = "RemoveProductFromCompareList" });
 
         endpointRouteBuilder.MapControllerRoute(name: "ClearCompareList",
             pattern: $"{lang}/clearcomparelist/",

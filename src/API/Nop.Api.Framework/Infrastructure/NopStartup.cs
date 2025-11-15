@@ -135,7 +135,6 @@ public partial class NopStartup : INopStartup
         //services
         services.AddScoped<IBackInStockSubscriptionService, BackInStockSubscriptionService>();
         services.AddScoped<ICategoryService, CategoryService>();
-        services.AddScoped<ICompareProductsService, CompareProductsService>();
         services.AddScoped<IRecentlyViewedProductsService, RecentlyViewedProductsService>();
         services.AddScoped<IManufacturerService, ManufacturerService>();
         services.AddScoped<IPriceFormatter, PriceFormatter>();

@@ -1378,9 +1378,6 @@ public partial class InstallationService
             NewProductsPageSize = 6,
             NewProductsAllowCustomersToSelectPageSize = true,
             NewProductsPageSizeOptions = "6, 3, 9",
-            CompareProductsEnabled = true,
-            CompareProductsNumber = 4,
-            ProductSearchAutoCompleteEnabled = true,
             ProductSearchEnabled = true,
             ProductSearchAutoCompleteNumberOfProducts = 10,
             ShowLinkToAllResultInSearchAutoComplete = false,
@@ -1401,8 +1398,6 @@ public partial class InstallationService
             AjaxProcessAttributeChange = true,
             NumberOfProductTags = 15,
             ProductsByTagPageSize = 6,
-            IncludeShortDescriptionInCompareProducts = false,
-            IncludeFullDescriptionInCompareProducts = false,
             IncludeFeaturedProductsInNormalLists = false,
             UseLinksInRequiredProductWarnings = true,
             DisplayTierPricesWithDiscounts = true,
@@ -1952,7 +1947,6 @@ public partial class InstallationService
 
         await SaveSettingAsync(dictionary, new CookieSettings
         {
-            CompareProductsCookieExpires = 24 * 10,
             RecentlyViewedProductsCookieExpires = 24 * 10,
             CustomerCookieExpires = 24 * 365
         });
@@ -1978,7 +1972,6 @@ public partial class InstallationService
                 "/catalog/searchtermautocomplete",
                 "/addproducttocart/catalog/*",
                 "/addproducttocart/details/*",
-                "/compareproducts/add/*",
                 "/backinstocksubscribe/*",
                 "/subscribenewsletter",
                 "/t-popup/*",
@@ -2027,8 +2020,6 @@ public partial class InstallationService
                 "/checkout/paymentinfo",
                 "/checkout/paymentmethod",
                 "/clearcomparelist",
-                "/compareproducts",
-                "/compareproducts/add/*",
                 "/customer/avatar",
                 "/customer/activation",
                 "/customer/addresses",
@@ -3647,14 +3638,6 @@ public partial class InstallationService
                 MenuItemType = MenuItemType.StandardPage,
                 RouteName = NopRouteNames.General.RECENTLY_VIEWED_PRODUCTS,
                 Title = "Recently viewed products",
-                Published = true
-            },
-            new MenuItem
-            {
-                MenuId = footerCustomerService.Id,
-                MenuItemType = MenuItemType.StandardPage,
-                RouteName = NopRouteNames.General.COMPARE_PRODUCTS,
-                Title = "Compare products list",
                 Published = true
             },
             new MenuItem

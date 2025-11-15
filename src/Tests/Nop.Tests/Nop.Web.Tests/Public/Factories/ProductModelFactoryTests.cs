@@ -181,9 +181,6 @@ public class ProductModelFactoryTests : WebTest
                                               !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART) ||
                                               !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES);
 
-                //compare products
-                priceModel.DisableAddToCompareListButton = !_catalogSettings.CompareProductsEnabled;
-
                 //pre-order
                 if (product.AvailableForPreOrder)
                 {

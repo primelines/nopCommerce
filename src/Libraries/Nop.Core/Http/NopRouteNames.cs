@@ -51,11 +51,6 @@ public static partial class NopRouteNames
         public const string SEARCH = "ProductSearch";        
 
         /// <summary>
-        /// Gets the compare products route name
-        /// </summary>
-        public const string COMPARE_PRODUCTS = "CompareProducts";
-
-        /// <summary>
         /// Gets the new products route name
         /// </summary>
         public const string NEW_PRODUCTS = "NewProducts";

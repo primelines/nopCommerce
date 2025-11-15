@@ -92,7 +92,6 @@
                         <!--compare, email a friend-->
                         <div class="overview-buttons">
                             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsInsideOverviewButtonsBefore, additionalData = Model })
-                            @await Html.PartialAsync("_CompareProductsButton", Model)
                             @await Html.PartialAsync("_ProductEmailAFriendButton", Model)
                             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsInsideOverviewButtonsAfter, additionalData = Model })
                         </div>

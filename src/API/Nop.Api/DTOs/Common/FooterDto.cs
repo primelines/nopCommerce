@@ -33,9 +33,6 @@ public partial record FooterDto : BaseNopDto
     [JsonProperty("blog_enabled")]
     public bool BlogEnabled { get; set; }
 
-    [JsonProperty("compare_products_enabled")]
-    public bool CompareProductsEnabled { get; set; }
-
     [JsonProperty("forum_enabled")]
     public bool ForumEnabled { get; set; }
 
@@ -86,9 +83,6 @@ public partial record FooterDto : BaseNopDto
 
     [JsonProperty("display_recently_viewed_products_footer_item")]
     public bool DisplayRecentlyViewedProductsFooterItem { get; set; }
-
-    [JsonProperty("display_compare_products_footer_item")]
-    public bool DisplayCompareProductsFooterItem { get; set; }
 
     [JsonProperty("display_new_products_footer_item")]
     public bool DisplayNewProductsFooterItem { get; set; }

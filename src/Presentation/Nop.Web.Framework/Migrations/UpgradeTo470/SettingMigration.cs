@@ -84,7 +84,7 @@ public class SettingMigration : MigrationBase
             "/cart/estimateshipping", "/cart/selectshippingoption", "/customer/addressdelete",
             "/customer/removeexternalassociation", "/customer/checkusernameavailability",
             "/catalog/searchtermautocomplete", "/catalog/getcatalogroot", "/addproducttocart/catalog/*",
-            "/addproducttocart/details/*", "/compareproducts/add/*", "/backinstocksubscribe/*",
+            "/addproducttocart/details/*", "/backinstocksubscribe/*",
             "/subscribenewsletter", "/t-popup/*", "/setproductreviewhelpfulness", "/poll/vote",
             "/country/getstatesbycountryid/", "/eucookielawaccept", "/topic/authenticate",
             "/category/products/", "/product/combinations", "/uploadfileproductattribute/*",

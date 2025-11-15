@@ -5787,12 +5787,6 @@
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.CategoryBreadcrumbEnabled.Hint">
     <Value>Select to enable the category path (breadcrumb). This is the bar at the top of the screen that indicates which categories and subcategories the product was viewed in on the product pages. Each sub-element of the bar is a separate hyperlink.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.CompareProductsEnabled">
-    <Value>'Compare Products' enabled</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.CompareProductsEnabled.Hint">
-    <Value>Check to allow customers to use the 'Compare Products' option in your store.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.DefaultViewMode">
     <Value>Default view mode</Value>
   </LocaleResource>
@@ -5960,18 +5954,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.IgnoreStoreLimitations.Hint">
     <Value>Check to ignore "limit per store" rules configured for entities (sitewide). Recommended to enable this setting if you have only one store or don't use it. It can significantly improve performance.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.IncludeFullDescriptionInCompareProducts">
-    <Value>Include full description in compare products</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.IncludeFullDescriptionInCompareProducts.Hint">
-    <Value>Check to display product full description on the compare products page.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.IncludeShortDescriptionInCompareProducts">
-    <Value>Include short description in compare products</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.IncludeShortDescriptionInCompareProducts.Hint">
-    <Value>Check to display product short description on the compare products page.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ManufacturersBlockItemsToDisplay">
     <Value>Number of manufacturers to display</Value>
@@ -17936,9 +17918,6 @@
   <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Homepage">
     <Value>Homepage</Value>
   </LocaleResource>
-  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.CompareProducts">
-    <Value>Compare products list</Value>
-  </LocaleResource>
   <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.CustomerAddresses">
     <Value>Addresses</Value>
   </LocaleResource>
@@ -18469,9 +18448,6 @@
   </LocaleResource>
   <LocaleResource Name="PageTitle.Checkout">
     <Value>Checkout</Value>
-  </LocaleResource>
-  <LocaleResource Name="PageTitle.CompareProducts">
-    <Value>Compare Products</Value>
   </LocaleResource>
   <LocaleResource Name="PageTitle.ContactUs">
     <Value>Contact Us</Value>

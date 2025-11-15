@@ -35,7 +35,6 @@ public static partial class NopSeoDefaults
     "cart",
     "checkout",
     "clearcomparelist",
-    "compareproducts",
     "contactus",
     "install",
     "login",

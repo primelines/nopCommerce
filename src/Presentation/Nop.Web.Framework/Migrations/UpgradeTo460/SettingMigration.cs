@@ -237,8 +237,6 @@ public class SettingMigration : MigrationBase
                 "/checkout/paymentinfo",
                 "/checkout/paymentmethod",
                 "/clearcomparelist",
-                "/compareproducts",
-                "/compareproducts/add/*",
                 "/customer/avatar",
                 "/customer/activation",
                 "/customer/addresses",

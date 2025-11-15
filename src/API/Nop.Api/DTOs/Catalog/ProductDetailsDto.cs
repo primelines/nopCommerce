@@ -123,10 +123,6 @@ public partial record ProductDetailsDto : BaseNopEntityDto
     [JsonProperty("email_a_friend_enabled")]
     public bool EmailAFriendEnabled { get; set; }
 
-    [JsonProperty("compare_products_enabled")]
-    public bool CompareProductsEnabled { get; set; }
-
-
     [JsonProperty("page_share_code")]
     public string PageShareCode { get; set; }
 

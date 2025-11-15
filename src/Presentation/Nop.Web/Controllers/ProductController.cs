@@ -33,7 +33,6 @@ public partial class ProductController : BasePublicController
     protected readonly CaptchaSettings _captchaSettings;
     protected readonly CatalogSettings _catalogSettings;
     protected readonly IAclService _aclService;
-    protected readonly ICompareProductsService _compareProductsService;
     protected readonly ICustomerActivityService _customerActivityService;
     protected readonly ICustomerService _customerService;
     protected readonly IEventPublisher _eventPublisher;
@@ -66,7 +65,6 @@ public partial class ProductController : BasePublicController
     public ProductController(CaptchaSettings captchaSettings,
         CatalogSettings catalogSettings,
         IAclService aclService,
-        ICompareProductsService compareProductsService,
         ICustomerActivityService customerActivityService,
         ICustomerService customerService,
         IEventPublisher eventPublisher,
@@ -95,7 +93,6 @@ public partial class ProductController : BasePublicController
         _captchaSettings = captchaSettings;
         _catalogSettings = catalogSettings;
         _aclService = aclService;
-        _compareProductsService = compareProductsService;
         _customerActivityService = customerActivityService;
         _customerService = customerService;
         _eventPublisher = eventPublisher;
@@ -472,95 +469,6 @@ public partial class ProductController : BasePublicController
         //If we got this far, something failed, redisplay form
         model = await _productModelFactory.PrepareProductEmailAFriendModelAsync(model, product, true);
         return View(model);
-    }
-
-    #endregion
-
-    #region Comparing products
-
-    [HttpPost]
-    public virtual async Task<IActionResult> AddProductToCompareList(int productId)
-    {
-        var product = await _productService.GetProductByIdAsync(productId);
-        if (product == null || product.Deleted || !product.Published)
-            return Json(new
-            {
-                success = false,
-                message = "No product found with the specified ID"
-            });
-
-        if (!_catalogSettings.CompareProductsEnabled)
-            return Json(new
-            {
-                success = false,
-                message = "Product comparison is disabled"
-            });
-
-        await _compareProductsService.AddProductToCompareListAsync(productId);
-
-        //activity log
-        await _customerActivityService.InsertActivityAsync("PublicStore.AddToCompareList",
-            string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.AddToCompareList"), product.Name), product);
-
-        return Json(new
-        {
-            success = true,
-            message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToCompareList.Link"), Url.RouteUrl(NopRouteNames.General.COMPARE_PRODUCTS))
-            //use the code below (commented) if you want a customer to be automatically redirected to the compare products page
-            //redirect = Url.RouteUrl(NopRouteNames.General.COMPARE_PRODUCTS),
-        });
-    }
-
-    public virtual async Task<IActionResult> RemoveProductFromCompareList(int productId)
-    {
-        var product = await _productService.GetProductByIdAsync(productId);
-        if (product == null)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        if (!_catalogSettings.CompareProductsEnabled)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        await _compareProductsService.RemoveProductFromCompareListAsync(productId);
-
-        return RedirectToRoute(NopRouteNames.General.COMPARE_PRODUCTS);
-    }
-
-    public virtual async Task<IActionResult> CompareProducts()
-    {
-        if (!_catalogSettings.CompareProductsEnabled)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var model = new CompareProductsModel
-        {
-            IncludeShortDescriptionInCompareProducts = _catalogSettings.IncludeShortDescriptionInCompareProducts,
-            IncludeFullDescriptionInCompareProducts = _catalogSettings.IncludeFullDescriptionInCompareProducts,
-        };
-
-        var products = await (await _compareProductsService.GetComparedProductsAsync())
-            //ACL and store mapping
-            .WhereAwait(async p => await _aclService.AuthorizeAsync(p) && await _storeMappingService.AuthorizeAsync(p))
-            //availability dates
-            .Where(p => _productService.ProductIsAvailable(p)).ToListAsync();
-
-        //prepare model
-        var poModels = (await _productModelFactory.PrepareProductOverviewModelsAsync(products, prepareSpecificationAttributes: true))
-            .ToList();
-        foreach (var poModel in poModels)
-        {
-            model.Products.Add(poModel);
-        }
-
-        return View(model);
-    }
-
-    public virtual IActionResult ClearCompareList()
-    {
-        if (!_catalogSettings.CompareProductsEnabled)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        _compareProductsService.ClearCompareProducts();
-
-        return RedirectToRoute(NopRouteNames.General.COMPARE_PRODUCTS);
     }
 
     #endregion

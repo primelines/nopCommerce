@@ -164,11 +164,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"{lang}/boards",
             defaults: new { controller = "Boards", action = "Index" });
 
-        //compare products
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.General.COMPARE_PRODUCTS,
-            pattern: $"{lang}/compareproducts/",
-            defaults: new { controller = "Product", action = "CompareProducts" });
-
         //product tags
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.General.PRODUCT_TAGS,
             pattern: $"{lang}/producttag/all/",
@@ -197,11 +192,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_DETAILS,
             pattern: $"addproducttocart/details/{{productId:min(0)}}/{{shoppingCartTypeId:min(0)}}",
             defaults: new { controller = "ShoppingCart", action = "AddProductToCart_Details" });
-
-        //comparing products (AJAX)
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.ADD_PRODUCT_TO_COMPARE,
-            pattern: $"compareproducts/add/{{productId:min(0)}}",
-            defaults: new { controller = "Product", action = "AddProductToCompareList" });
 
         //product email a friend
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Standard.PRODUCT_EMAIL_FRIEND,
@@ -485,11 +475,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.POLL_VOTE,
             pattern: $"poll/vote",
             defaults: new { controller = "Poll", action = "Vote" });
-
-        //comparing products
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Standard.REMOVE_PRODUCT_FROM_COMPARE_LIST,
-            pattern: $"{lang}/compareproducts/remove/{{productId}}",
-            defaults: new { controller = "Product", action = "RemoveProductFromCompareList" });
 
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Standard.CLEAR_COMPARE_LIST,
             pattern: $"{lang}/clearcomparelist/",

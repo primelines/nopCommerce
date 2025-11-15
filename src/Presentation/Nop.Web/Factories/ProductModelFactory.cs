@@ -313,8 +313,6 @@ public partial class ProductModelFactory : IProductModelFactory
             DisableBuyButton = 
                 !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART) ||
                 !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES),
-            //compare products
-            DisableAddToCompareListButton = !_catalogSettings.CompareProductsEnabled,
             //currency code
             CurrencyCode = currentCurrency.CurrencyCode,
             ForceRedirectionAfterAddingToCart = forceRedirectionAfterAddingToCart
@@ -1289,8 +1287,6 @@ public partial class ProductModelFactory : IProductModelFactory
         var store = await _storeContext.GetCurrentStoreAsync();
         //email a friend
         model.EmailAFriendEnabled = _catalogSettings.EmailAFriendEnabled;
-        //compare products
-        model.CompareProductsEnabled = _catalogSettings.CompareProductsEnabled;
         //store name
         model.CurrentStoreName = await _localizationService.GetLocalizedAsync(store, x => x.Name);
 

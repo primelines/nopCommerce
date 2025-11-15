@@ -73,7 +73,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel
     public bool DisplayAttributeCombinationImagesOnly { get; set; }
 
     public bool EmailAFriendEnabled { get; set; }
-    public bool CompareProductsEnabled { get; set; }
 
     public string PageShareCode { get; set; }
 

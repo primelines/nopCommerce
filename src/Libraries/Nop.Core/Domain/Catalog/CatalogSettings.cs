@@ -200,21 +200,11 @@ public partial class CatalogSettings : ISettings
     public string NewProductsPageSizeOptions { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether "Compare products" feature is enabled
-    /// </summary>
-    public bool CompareProductsEnabled { get; set; }
-
-    /// <summary>
-    /// Gets or sets an allowed number of products to be compared
-    /// </summary>
-    public int CompareProductsNumber { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether autocomplete is enabled
     /// </summary>
     public bool ProductSearchAutoCompleteEnabled { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the search box is displayed
     /// </summary>
     public bool ProductSearchEnabled { get; set; }
@@ -343,16 +333,6 @@ public partial class CatalogSettings : ISettings
     /// Gets or sets a value indicating whether the price range should be entered manually on 'products by tag' page
     /// </summary>
     public bool ProductsByTagManuallyPriceRange { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to include "Short description" in compare products
-    /// </summary>
-    public bool IncludeShortDescriptionInCompareProducts { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to include "Full description" in compare products
-    /// </summary>
-    public bool IncludeFullDescriptionInCompareProducts { get; set; }
 
     /// <summary>
     /// An option indicating whether products on category and manufacturer pages should include featured products as well
