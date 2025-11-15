@@ -323,65 +323,6 @@ public partial interface IProductService
 
     #endregion
 
-    #region Cross-sell products
-
-    /// <summary>
-    /// Deletes a cross-sell product
-    /// </summary>
-    /// <param name="crossSellProduct">Cross-sell</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task DeleteCrossSellProductAsync(CrossSellProduct crossSellProduct);
-
-    /// <summary>
-    /// Gets cross-sell products by product identifier
-    /// </summary>
-    /// <param name="productId1">The first product identifier</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell products
-    /// </returns>
-    Task<IList<CrossSellProduct>> GetCrossSellProductsByProductId1Async(int productId1, bool showHidden = false);
-
-    /// <summary>
-    /// Gets a cross-sell product
-    /// </summary>
-    /// <param name="crossSellProductId">Cross-sell product identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell product
-    /// </returns>
-    Task<CrossSellProduct> GetCrossSellProductByIdAsync(int crossSellProductId);
-
-    /// <summary>
-    /// Inserts a cross-sell product
-    /// </summary>
-    /// <param name="crossSellProduct">Cross-sell product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    Task InsertCrossSellProductAsync(CrossSellProduct crossSellProduct);
-
-    /// <summary>
-    /// Gets a cross-sells
-    /// </summary>
-    /// <param name="cart">Shopping cart</param>
-    /// <param name="numberOfProducts">Number of products to return</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sells
-    /// </returns>
-    Task<IList<Product>> GetCrossSellProductsByShoppingCartAsync(IList<ShoppingCartItem> cart, int numberOfProducts);
-
-    /// <summary>
-    /// Finds a cross-sell product item by specified identifiers
-    /// </summary>
-    /// <param name="source">Source</param>
-    /// <param name="productId1">The first product identifier</param>
-    /// <param name="productId2">The second product identifier</param>
-    /// <returns>Cross-sell product</returns>
-    CrossSellProduct FindCrossSellProduct(IList<CrossSellProduct> source, int productId1, int productId2);
-
-    #endregion
-
     #region Tier prices
 
     /// <summary>

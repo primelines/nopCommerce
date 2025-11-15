@@ -185,11 +185,6 @@ public partial class ProductEditorSettings : ISettings
     public bool Published { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Cross-sells products' block is shown
-    /// </summary>
-    public bool CrossSellsProducts { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Filter level values products' block is shown
     /// </summary>
     public bool FilterLevelValuesProducts { get; set; }

@@ -72,10 +72,6 @@ public partial class ShoppingCartSettings : ISettings
     /// </summary>
     public bool ShowGiftCardBox { get; set; }
 
-    /// <summary>
-    /// Gets or sets a number of "Cross-sells" on shopping cart page
-    /// </summary>
-    public int CrossSellsNumber { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether "email a wishlist" feature is enabled

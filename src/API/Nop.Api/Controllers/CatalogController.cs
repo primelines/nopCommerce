@@ -554,36 +554,6 @@ public partial class CatalogController : BasePublicController
         return Ok(model);
     }
 
-
-
-    [HttpGet]
-    [Route("GetCrossSellProducts", Name = "GetCrossSellProducts")]
-    [ProducesResponseType(typeof(List<ProductOverviewDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetCrossSellProducts(int? productThumbPictureSize)
-    {
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), ShoppingCartType.ShoppingCart, store.Id);
-
-        var products = await (await _productService.GetCrossSellProductsByShoppingCartAsync(cart, _shoppingCartSettings.CrossSellsNumber))
-        //ACL and store mapping
-            .WhereAwait(async p => await _aclService.AuthorizeAsync(p) && await _storeMappingService.AuthorizeAsync(p))
-            //availability dates
-            .Where(p => _productService.ProductIsAvailable(p)).ToListAsync();
-
-        if (!products.Any())
-            return Content("");
-
-        //Cross-sell products are displayed on the shopping cart page.
-        //We know that the entire shopping cart page is not refresh
-        //even if "ShoppingCartSettings.DisplayCartAfterAddingProduct" setting  is enabled.
-        //That's why we force page refresh (redirect) in this case
-        var model = (await _productModelFactory.PrepareProductOverviewDtosAsync(products,
-                productThumbPictureSize: productThumbPictureSize, forceRedirectionAfterAddingToCart: true))
-            .ToList();
-
-        return Ok(model);
-    }
-
     [HttpGet]
     [Route("GetSearchBox", Name = "GetSearchBox")]
     [ProducesResponseType(typeof(SearchBoxDto), (int)HttpStatusCode.OK)]

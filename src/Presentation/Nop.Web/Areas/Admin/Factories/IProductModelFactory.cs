@@ -61,17 +61,6 @@ public partial interface IProductModelFactory
     Task<AddRequiredProductListModel> PrepareAddRequiredProductListModelAsync(AddRequiredProductSearchModel searchModel);
 
     /// <summary>
-    /// Prepare paged cross-sell product list model
-    /// </summary>
-    /// <param name="searchModel">Cross-sell product search model</param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell product list model
-    /// </returns>
-    Task<CrossSellProductListModel> PrepareCrossSellProductListModelAsync(CrossSellProductSearchModel searchModel, Product product);
-
-    /// <summary>
     /// Prepare paged filter level value list model
     /// </summary>
     /// <param name="searchModel">Filter level value search model</param>
@@ -81,27 +70,6 @@ public partial interface IProductModelFactory
     /// The task result contains the filter level value list model
     /// </returns>
     Task<FilterLevelValueListModel> PrepareFilterLevelValueListModelAsync(FilterLevelValueSearchModel searchModel, Product product);
-
-    /// <summary>
-    /// Prepare cross-sell product search model to add to the product
-    /// </summary>
-    /// <param name="searchModel">Cross-sell product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell product search model to add to the product
-    /// </returns>
-    Task<AddCrossSellProductSearchModel> PrepareAddCrossSellProductSearchModelAsync(AddCrossSellProductSearchModel searchModel);
-
-    /// <summary>
-    /// Prepare paged cross-sell product list model to add to the product
-    /// </summary>
-    /// <param name="searchModel">Cross-sell product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell product list model to add to the product
-    /// </returns>
-    Task<AddCrossSellProductListModel> PrepareAddCrossSellProductListModelAsync(AddCrossSellProductSearchModel searchModel);
-
 
     /// <summary>
     /// Prepare paged product picture list model

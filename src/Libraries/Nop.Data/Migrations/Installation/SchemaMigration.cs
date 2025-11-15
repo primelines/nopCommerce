@@ -100,7 +100,6 @@ public class SchemaMigration : ForwardOnlyMigration
         Create.TableFor<Category>();
         Create.TableFor<CategoryTemplate>();
         Create.TableFor<ProductCategory>();
-        Create.TableFor<CrossSellProduct>();
         Create.TableFor<Manufacturer>();
         Create.TableFor<ManufacturerTemplate>();
         Create.TableFor<ProductManufacturer>();

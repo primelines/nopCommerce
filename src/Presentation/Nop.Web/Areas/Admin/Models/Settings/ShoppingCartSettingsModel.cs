@@ -64,10 +64,6 @@ public partial record ShoppingCartSettingsModel : BaseNopModel, ISettingsModel
     public bool ShowGiftCardBox { get; set; }
     public bool ShowGiftCardBox_OverrideForStore { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ShoppingCart.CrossSellsNumber")]
-    public int CrossSellsNumber { get; set; }
-    public bool CrossSellsNumber_OverrideForStore { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ShoppingCart.EmailWishlistEnabled")]
     public bool EmailWishlistEnabled { get; set; }
     public bool EmailWishlistEnabled_OverrideForStore { get; set; }

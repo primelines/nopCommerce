@@ -118,9 +118,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.Published")]
     public bool Published { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.CrossSellsProducts")]
-    public bool CrossSellsProducts { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.FilterLevelValuesProducts")]
     public bool FilterLevelValuesProducts { get; set; }
 

@@ -31,9 +31,6 @@
     const string hideSeoBlockAttributeName = "ProductPage.HideSEOBlock";
     var hideSeoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSeoBlockAttributeName, defaultValue: true);
 
-    const string hideCrossSellsProductsBlockAttributeName = "ProductPage.HideCrossSellsProductsBlock";
-    var hideCrossSellsProductsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideCrossSellsProductsBlockAttributeName, defaultValue: true);
-
     const string hideFilterLevelValuesProductsBlockAttributeName = "ProductPage.HideFilterLevelValuesProductsBlock";
     var hideFilterLevelValuesProductsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideFilterLevelValuesProductsBlockAttributeName, defaultValue: true);
 
@@ -77,7 +74,6 @@
                 <nop-card asp-name="product-product-attributes" asp-icon="fas fa-paperclip" asp-title="@T("Admin.Catalog.Products.ProductAttributes")" asp-hide-block-attribute-name="@hideProductAttributesBlockAttributeName" asp-hide="@hideProductAttributesBlock" asp-advanced="@(!Model.ProductEditorSettingsModel.ProductAttributes)">@await Html.PartialAsync("_CreateOrUpdate.ProductAttributes", Model)</nop-card>
                 <nop-card asp-name="product-specification-attributes" asp-icon="fas fa-gear" asp-title="@T("Admin.Catalog.Attributes.SpecificationAttributes")" asp-hide-block-attribute-name="@hideSpecificationAttributeBlockAttributeName" asp-hide="@hideSpecificationAttributeBlock" asp-advanced="@(!Model.ProductEditorSettingsModel.SpecificationAttributes)">@await Html.PartialAsync("_CreateOrUpdate.SpecificationAttributes", Model)</nop-card>
                 <nop-card asp-name="product-seo" asp-icon="fas fa-magnifying-glass-plus" asp-title="@T("Admin.Common.SEO")" asp-hide-block-attribute-name="@hideSeoBlockAttributeName" asp-hide="@hideSeoBlock" asp-advanced="@(!Model.ProductEditorSettingsModel.Seo)">@await Html.PartialAsync("_CreateOrUpdate.Seo", Model)</nop-card>
-                <nop-card asp-name="product-crosssells-products" asp-icon="fas fa-shuffle" asp-title="@T("Admin.Catalog.Products.CrossSells")" asp-hide-block-attribute-name="@hideCrossSellsProductsBlockAttributeName" asp-hide="@hideCrossSellsProductsBlock" asp-advanced="@(!Model.ProductEditorSettingsModel.CrossSellsProducts)">@await Html.PartialAsync("_CreateOrUpdate.CrossSellsProducts", Model)</nop-card>
                 @if (filterLevelEnabled)
                 {
                     <nop-card asp-name="product-filter-level-values-products" asp-icon="fas fa-folder-tree" asp-title="@T("Admin.Catalog.Products.FilterLevelValues")" asp-hide-block-attribute-name="@hideFilterLevelValuesProductsBlockAttributeName" asp-hide="@hideFilterLevelValuesProductsBlock" asp-advanced="@(!Model.ProductEditorSettingsModel.FilterLevelValuesProducts)">@await Html.PartialAsync("_CreateOrUpdate.FilterLevelValuesProducts", Model)</nop-card>

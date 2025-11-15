@@ -363,25 +363,6 @@ public partial class ProductModelFactory : IProductModelFactory
     }
 
     /// <summary>
-    /// Prepare cross-sell product search model
-    /// </summary>
-    /// <param name="searchModel">Cross-sell product search model</param>
-    /// <param name="product">Product</param>
-    /// <returns>Cross-sell product search model</returns>
-    protected virtual CrossSellProductSearchModel PrepareCrossSellProductSearchModel(CrossSellProductSearchModel searchModel, Product product)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-        ArgumentNullException.ThrowIfNull(product);
-
-        searchModel.ProductId = product.Id;
-
-        //prepare page parameters
-        searchModel.SetGridPageSize();
-
-        return searchModel;
-    }
-
-    /// <summary>
     /// Prepare filter level values search model
     /// </summary>
     /// <param name="searchModel">Filter level value search model</param>
@@ -779,7 +760,6 @@ public partial class ProductModelFactory : IProductModelFactory
             await PrepareCopyProductModelAsync(model.CopyProductModel, product);
 
             //prepare nested search model
-            PrepareCrossSellProductSearchModel(model.CrossSellProductSearchModel, product);
             PrepareFilterLevelValuesSearchModel(model.FilterLevelValueSearchModel, product);
             PrepareProductPictureSearchModel(model.ProductPictureSearchModel, product);
             PrepareProductVideoSearchModel(model.ProductVideoSearchModel, product);
@@ -953,46 +933,6 @@ public partial class ProductModelFactory : IProductModelFactory
     }
 
     /// <summary>
-    /// Prepare paged cross-sell product list model
-    /// </summary>
-    /// <param name="searchModel">Cross-sell product search model</param>
-    /// <param name="product">Product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell product list model
-    /// </returns>
-    public virtual async Task<CrossSellProductListModel> PrepareCrossSellProductListModelAsync(CrossSellProductSearchModel searchModel, Product product)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-        ArgumentNullException.ThrowIfNull(product);
-
-        //get cross-sell products
-        var crossSellProducts = (await _productService
-            .GetCrossSellProductsByProductId1Async(productId1: product.Id, showHidden: true)).ToPagedList(searchModel);
-
-        //prepare grid model
-        var model = await new CrossSellProductListModel().PrepareToGridAsync(searchModel, crossSellProducts, () =>
-        {
-            return crossSellProducts.SelectAwait(async crossSellProduct =>
-            {
-                //fill in model values from the entity
-                var crossSellProductModel = new CrossSellProductModel
-                {
-                    Id = crossSellProduct.Id,
-                    ProductId2 = crossSellProduct.ProductId2
-                };
-
-                //fill in additional values (not existing in the entity)
-                crossSellProductModel.Product2Name = (await _productService.GetProductByIdAsync(crossSellProduct.ProductId2))?.Name;
-
-                return crossSellProductModel;
-            });
-        });
-
-        return model;
-    }
-
-    /// <summary>
     /// Prepare paged filter level value list model
     /// </summary>
     /// <param name="searchModel">Filter level value search model</param>
@@ -1030,80 +970,6 @@ public partial class ProductModelFactory : IProductModelFactory
                 };
 
                 return new ValueTask<FilterLevelValueModel>(filterLevelValueModel);
-            });
-        });
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare cross-sell product search model to add to the product
-    /// </summary>
-    /// <param name="searchModel">Cross-sell product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell product search model to add to the product
-    /// </returns>
-    public virtual async Task<AddCrossSellProductSearchModel> PrepareAddCrossSellProductSearchModelAsync(AddCrossSellProductSearchModel searchModel)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-
-        searchModel.IsLoggedInAsVendor = await _workContext.GetCurrentVendorAsync() != null;
-
-        //prepare available categories
-        await _baseAdminModelFactory.PrepareCategoriesAsync(searchModel.AvailableCategories);
-
-        //prepare available manufacturers
-        await _baseAdminModelFactory.PrepareManufacturersAsync(searchModel.AvailableManufacturers);
-
-        //prepare available stores
-        await _baseAdminModelFactory.PrepareStoresAsync(searchModel.AvailableStores);
-
-        //prepare available vendors
-        await _baseAdminModelFactory.PrepareVendorsAsync(searchModel.AvailableVendors);
-
-        //prepare page parameters
-        searchModel.SetPopupGridPageSize();
-
-        return searchModel;
-    }
-
-    /// <summary>
-    /// Prepare paged crossSell product list model to add to the product
-    /// </summary>
-    /// <param name="searchModel">CrossSell product search model to add to the product</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the crossSell product list model to add to the product
-    /// </returns>
-    public virtual async Task<AddCrossSellProductListModel> PrepareAddCrossSellProductListModelAsync(AddCrossSellProductSearchModel searchModel)
-    {
-        ArgumentNullException.ThrowIfNull(searchModel);
-
-        //a vendor should have access only to his products
-        var currentVendor = await _workContext.GetCurrentVendorAsync();
-        if (currentVendor != null)
-            searchModel.SearchVendorId = currentVendor.Id;
-
-        //get products
-        var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
-            storeId: searchModel.SearchStoreId,
-            vendorId: searchModel.SearchVendorId,
-            keywords: searchModel.SearchProductName,
-            pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
-
-        //prepare grid model
-        var model = await new AddCrossSellProductListModel().PrepareToGridAsync(searchModel, products, () =>
-        {
-            return products.SelectAwait(async product =>
-            {
-                var productModel = product.ToModel<ProductModel>();
-
-                productModel.SeName = await _urlRecordService.GetSeNameAsync(product, 0, true, false);
-
-                return productModel;
             });
         });
 

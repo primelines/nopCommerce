@@ -2892,21 +2892,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Copy.SKU.New">
     <Value>{0}-copy</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.CrossSells">
-    <Value>Cross-sells</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.CrossSells.AddNew">
-    <Value>Add new cross-sell product</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.CrossSells.Fields.Product">
-    <Value>Product</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.CrossSells.Hint">
-    <Value>The Cross-sell products option provides the opportunity to buy additional products that generally go with the selected product. They are displayed at the bottom of the checkout page.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.CrossSells.SaveBeforeEdit">
-    <Value>You need to save the product before you can add cross-sell products for this product page.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Deleted">
     <Value>The product has been deleted successfully.</Value>
   </LocaleResource>
@@ -8446,9 +8431,6 @@
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Button">
     <Value>Settings</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.CrossSellsProducts">
-    <Value>Cross-sells products</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.DeliveryDate">
     <Value>Delivery date</Value>
   </LocaleResource>
@@ -8853,12 +8835,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ShoppingCart.CartsSharedBetweenStores.Hint">
     <Value>Determines whether shopping carts (and wishlists) are shared between stores (in multi-store environment).</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ShoppingCart.CrossSellsNumber">
-    <Value>Number of 'Cross-Sells'</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ShoppingCart.CrossSellsNumber.Hint">
-    <Value>The number of 'Cross-Sells' to display on shopping cart page; 0 if you don't want to load cross-sells.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ShoppingCart.DisplayCartAfterAddingProduct">
     <Value>Display cart after adding a product</Value>
@@ -19960,9 +19936,6 @@
   </LocaleResource>
   <LocaleResource Name="ShoppingCart.ContinueShopping">
     <Value>Continue shopping</Value>
-  </LocaleResource>
-  <LocaleResource Name="ShoppingCart.CrossSells">
-    <Value>Based on your selection, you may be interested in the following items</Value>
   </LocaleResource>
   <LocaleResource Name="ShoppingCart.DateOfBirthRequired">
     <Value>This product has age restrictions. Please specify your age in the account details.</Value>

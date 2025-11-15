@@ -36,7 +36,6 @@ public partial class ProductService : IProductService
     protected readonly IProductAttributeParser _productAttributeParser;
     protected readonly IProductAttributeService _productAttributeService;
     protected readonly IRepository<Category> _categoryRepository;
-    protected readonly IRepository<CrossSellProduct> _crossSellProductRepository;
     protected readonly IRepository<DiscountProductMapping> _discountProductMappingRepository;
     protected readonly IRepository<LocalizedProperty> _localizedPropertyRepository;
     protected readonly IRepository<Manufacturer> _manufacturerRepository;
@@ -74,7 +73,6 @@ public partial class ProductService : IProductService
         IProductAttributeParser productAttributeParser,
         IProductAttributeService productAttributeService,
         IRepository<Category> categoryRepository,
-        IRepository<CrossSellProduct> crossSellProductRepository,
         IRepository<DiscountProductMapping> discountProductMappingRepository,
         IRepository<LocalizedProperty> localizedPropertyRepository,
         IRepository<Manufacturer> manufacturerRepository,
@@ -107,7 +105,6 @@ public partial class ProductService : IProductService
         _productAttributeParser = productAttributeParser;
         _productAttributeService = productAttributeService;
         _categoryRepository = categoryRepository;
-        _crossSellProductRepository = crossSellProductRepository;
         _discountProductMappingRepository = discountProductMappingRepository;
         _localizedPropertyRepository = localizedPropertyRepository;
         _manufacturerRepository = manufacturerRepository;
@@ -356,32 +353,6 @@ public partial class ProductService : IProductService
         }
 
         return stockMessage;
-    }
-
-    /// <summary>
-    /// Gets cross-sell products by product identifier
-    /// </summary>
-    /// <param name="productIds">The first product identifiers</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell products
-    /// </returns>
-    protected virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductIdsAsync(int[] productIds, bool showHidden = false)
-    {
-        if (productIds == null || productIds.Length == 0)
-            return new List<CrossSellProduct>();
-
-        var query = from csp in _crossSellProductRepository.Table
-            join p in _productRepository.Table on csp.ProductId2 equals p.Id
-            where productIds.Contains(csp.ProductId1) &&
-                  !p.Deleted &&
-                  (showHidden || p.Published)
-            orderby csp.Id
-            select csp;
-        var crossSellProducts = await query.ToListAsync();
-
-        return crossSellProducts;
     }
 
     #endregion
@@ -1315,96 +1286,6 @@ public partial class ProductService : IProductService
                 await AdjustInventoryAsync(associatedProduct, quantityToChange * attributeValue.Quantity, message);
             }
         }
-    }
-
-    #endregion
-
-
-    #region Cross-sell products
-
-    /// <summary>
-    /// Deletes a cross-sell product
-    /// </summary>
-    /// <param name="crossSellProduct">Cross-sell identifier</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeleteCrossSellProductAsync(CrossSellProduct crossSellProduct)
-    {
-        await _crossSellProductRepository.DeleteAsync(crossSellProduct);
-    }
-
-    /// <summary>
-    /// Gets cross-sell products by product identifier
-    /// </summary>
-    /// <param name="productId1">The first product identifier</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell products
-    /// </returns>
-    public virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductId1Async(int productId1, bool showHidden = false)
-    {
-        return await GetCrossSellProductsByProductIdsAsync([productId1], showHidden);
-    }
-
-    /// <summary>
-    /// Gets a cross-sell product
-    /// </summary>
-    /// <param name="crossSellProductId">Cross-sell product identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sell product
-    /// </returns>
-    public virtual async Task<CrossSellProduct> GetCrossSellProductByIdAsync(int crossSellProductId)
-    {
-        return await _crossSellProductRepository.GetByIdAsync(crossSellProductId, cache => default);
-    }
-
-    /// <summary>
-    /// Inserts a cross-sell product
-    /// </summary>
-    /// <param name="crossSellProduct">Cross-sell product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertCrossSellProductAsync(CrossSellProduct crossSellProduct)
-    {
-        await _crossSellProductRepository.InsertAsync(crossSellProduct);
-    }
-
-    /// <summary>
-    /// Gets a cross-sells
-    /// </summary>
-    /// <param name="cart">Shopping cart</param>
-    /// <param name="numberOfProducts">Number of products to return</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the cross-sells
-    /// </returns>
-    public virtual async Task<IList<Product>> GetCrossSellProductsByShoppingCartAsync(IList<ShoppingCartItem> cart, int numberOfProducts)
-    {
-        var result = new List<Product>();
-
-        if (numberOfProducts == 0 || cart?.Any() != true)
-            return result;
-
-        var cartProductIds = cart.Select(sci => sci.ProductId).ToHashSet();
-        return await (await GetCrossSellProductsByProductIdsAsync(cartProductIds.ToArray()))
-            .Select(cs => cs.ProductId2)
-            .Except(cartProductIds)
-            .SelectAwait(async cs => await GetProductByIdAsync(cs))
-            .Where(p => p != null && !p.Deleted && p.Published)
-            .Take(numberOfProducts)
-            .ToListAsync();
-    }
-
-    /// <summary>
-    /// Finds a cross-sell product item by specified identifiers
-    /// </summary>
-    /// <param name="source">Source</param>
-    /// <param name="productId1">The first product identifier</param>
-    /// <param name="productId2">The second product identifier</param>
-    /// <returns>Cross-sell product</returns>
-    public virtual CrossSellProduct FindCrossSellProduct(IList<CrossSellProduct> source, int productId1, int productId2)
-    {
-        return source.FirstOrDefault(csp => csp.ProductId1 == productId1 && csp.ProductId2 == productId2);
     }
 
     #endregion
