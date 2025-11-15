@@ -211,18 +211,6 @@ public class MenuMigration : Migration
         {
             MenuId = footerCustomerService.Id,
             MenuItemType = MenuItemType.StandardPage,
-            RouteName = NopRouteNames.General.RECENTLY_VIEWED_PRODUCTS,
-            Title = "Recently viewed products",
-            Published = IsSettingEnabled("displaydefaultfooteritemsettings.displayrecentlyviewedproductsfooteritem", out var displayrecentlyviewedproductsfooteritem) && catalogSettings.RecentlyViewedProductsEnabled
-        });
-
-        if (displayrecentlyviewedproductsfooteritem is not null)
-            _settingService.DeleteSetting(displayrecentlyviewedproductsfooteritem);
-
-        _menuItemRepository.Insert(new M.MenuItem
-        {
-            MenuId = footerCustomerService.Id,
-            MenuItemType = MenuItemType.StandardPage,
             RouteName = NopRouteNames.General.NEW_PRODUCTS,
             Title = "New products",
             Published = IsSettingEnabled("displaydefaultfooteritemsettings.displaynewproductsfooteritem", out var displaynewproductsfooteritem) && catalogSettings.NewProductsEnabled

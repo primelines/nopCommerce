@@ -1372,8 +1372,6 @@ public partial class InstallationService
             NotifyCustomerAboutProductReviewReply = false,
             EmailAFriendEnabled = true,
             AllowAnonymousUsersToEmailAFriend = false,
-            RecentlyViewedProductsNumber = 3,
-            RecentlyViewedProductsEnabled = true,
             NewProductsEnabled = true,
             NewProductsPageSize = 6,
             NewProductsAllowCustomersToSelectPageSize = true,
@@ -1947,7 +1945,6 @@ public partial class InstallationService
 
         await SaveSettingAsync(dictionary, new CookieSettings
         {
-            RecentlyViewedProductsCookieExpires = 24 * 10,
             CustomerCookieExpires = 24 * 365
         });
 
@@ -2037,7 +2034,6 @@ public partial class InstallationService
                 "/passwordrecovery/confirm",
                 "/poll/vote",
                 "/privatemessages",
-                "/recentlyviewedproducts",
                 "/returnrequest",
                 "/returnrequest/history",
                 "/rewardpoints/history",
@@ -3630,14 +3626,6 @@ public partial class InstallationService
                 MenuItemType = MenuItemType.StandardPage,
                 RouteName = NopRouteNames.General.BLOG,
                 Title = "Blog",
-                Published = true
-            },
-            new MenuItem
-            {
-                MenuId = footerCustomerService.Id,
-                MenuItemType = MenuItemType.StandardPage,
-                RouteName = NopRouteNames.General.RECENTLY_VIEWED_PRODUCTS,
-                Title = "Recently viewed products",
                 Published = true
             },
             new MenuItem

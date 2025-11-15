@@ -53,7 +53,6 @@ public partial class HomeController : BasePublicController
     protected readonly VendorSettings _vendorSettings;
     private readonly IShoppingCartService _shoppingCartService;
     private readonly ShoppingCartSettings _shoppingCartSettings;
-    private readonly IRecentlyViewedProductsService _recentlyViewedProductsService;
     private readonly IStaticCacheManager _staticCacheManager;
     private readonly IOrderReportService _orderReportService;
     private readonly INewsDtoFactory _newsDtoFactory;
@@ -87,7 +86,6 @@ public partial class HomeController : BasePublicController
         VendorSettings vendorSettings,
         IShoppingCartService shoppingCartService,
         ShoppingCartSettings shoppingCartSettings,
-        IRecentlyViewedProductsService recentlyViewedProductsService,
         IStaticCacheManager staticCacheManager,
         IOrderReportService orderReportService,
         INewsDtoFactory newsDtoFactory,
@@ -117,7 +115,6 @@ public partial class HomeController : BasePublicController
         _vendorSettings = vendorSettings;
         _shoppingCartService = shoppingCartService;
         _shoppingCartSettings = shoppingCartSettings;
-        _recentlyViewedProductsService = recentlyViewedProductsService;
         _staticCacheManager = staticCacheManager;
         _orderReportService = orderReportService;
         _newsDtoFactory = newsDtoFactory;

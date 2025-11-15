@@ -75,10 +75,6 @@ public static partial class NopRouteNames
         /// </summary>
         public const string PRODUCT_TAGS = "ProductTagsAll";
 
-        /// <summary>
-        /// Gets the recently viewed products route name
-        /// </summary>
-        public const string RECENTLY_VIEWED_PRODUCTS = "RecentlyViewedProducts";
 
         /// <summary>
         /// Gets the manufacturers route name

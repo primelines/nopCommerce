@@ -254,7 +254,6 @@ public class SettingMigration : MigrationBase
                 "/passwordrecovery/confirm",
                 "/poll/vote",
                 "/privatemessages",
-                "/recentlyviewedproducts",
                 "/returnrequest",
                 "/returnrequest/history",
                 "/rewardpoints/history",

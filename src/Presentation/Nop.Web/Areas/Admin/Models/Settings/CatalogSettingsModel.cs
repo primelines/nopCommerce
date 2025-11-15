@@ -143,14 +143,6 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     public bool AllowAnonymousUsersToEmailAFriend { get; set; }
     public bool AllowAnonymousUsersToEmailAFriend_OverrideForStore { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.RecentlyViewedProductsNumber")]
-    public int RecentlyViewedProductsNumber { get; set; }
-    public bool RecentlyViewedProductsNumber_OverrideForStore { get; set; }
-
-    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.RecentlyViewedProductsEnabled")]
-    public bool RecentlyViewedProductsEnabled { get; set; }
-    public bool RecentlyViewedProductsEnabled_OverrideForStore { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.NewProductsEnabled")]
     public bool NewProductsEnabled { get; set; }
     public bool NewProductsEnabled_OverrideForStore { get; set; }

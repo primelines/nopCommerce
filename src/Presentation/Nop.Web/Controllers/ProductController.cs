@@ -46,7 +46,6 @@ public partial class ProductController : BasePublicController
     protected readonly IProductModelFactory _productModelFactory;
     protected readonly IProductReviewService _productReviewService;
     protected readonly IProductService _productService;
-    protected readonly IRecentlyViewedProductsService _recentlyViewedProductsService;
     protected readonly IReviewTypeService _reviewTypeService;
     protected readonly IShoppingCartModelFactory _shoppingCartModelFactory;
     protected readonly IShoppingCartService _shoppingCartService;
@@ -78,7 +77,6 @@ public partial class ProductController : BasePublicController
         IProductModelFactory productModelFactory,
         IProductReviewService productReviewService,
         IProductService productService,
-        IRecentlyViewedProductsService recentlyViewedProductsService,
         IReviewTypeService reviewTypeService,
         IShoppingCartModelFactory shoppingCartModelFactory,
         IShoppingCartService shoppingCartService,
@@ -107,7 +105,6 @@ public partial class ProductController : BasePublicController
         _productReviewService = productReviewService;
         _productService = productService;
         _reviewTypeService = reviewTypeService;
-        _recentlyViewedProductsService = recentlyViewedProductsService;
         _shoppingCartModelFactory = shoppingCartModelFactory;
         _shoppingCartService = shoppingCartService;
         _storeContext = storeContext;
@@ -161,9 +158,6 @@ public partial class ProductController : BasePublicController
             if (product.Id != updatecartitem.ProductId)
                 return LocalRedirect(productUrl);
         }
-
-        //save as recently viewed
-        await _recentlyViewedProductsService.AddProductToRecentlyViewedListAsync(product.Id);
 
         //display "edit" (manage) link
         if (await _permissionService.AuthorizeAsync(StandardPermission.Security.ACCESS_ADMIN_PANEL) &&
@@ -259,23 +253,6 @@ public partial class ProductController : BasePublicController
 
         var model = await _productModelFactory.PrepareProductCombinationModelsAsync(product);
         return Ok(model);
-    }
-
-    #endregion
-
-    #region Recently viewed products
-
-    public virtual async Task<IActionResult> RecentlyViewedProducts()
-    {
-        if (!_catalogSettings.RecentlyViewedProductsEnabled)
-            return Content("");
-
-        var products = await _recentlyViewedProductsService.GetRecentlyViewedProductsAsync(_catalogSettings.RecentlyViewedProductsNumber);
-
-        var model = new List<ProductOverviewModel>();
-        model.AddRange(await _productModelFactory.PrepareProductOverviewModelsAsync(products));
-
-        return View(model);
     }
 
     #endregion

@@ -55,28 +55,6 @@
             </div>
         </div>
     </nop-nested-setting>
-    <div class="form-group row advanced-setting">
-        <div class="col-md-3">
-            <nop-override-store-checkbox asp-for="RecentlyViewedProductsEnabled_OverrideForStore" asp-input="RecentlyViewedProductsEnabled" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
-            <nop-label asp-for="RecentlyViewedProductsEnabled" />
-        </div>
-        <div class="col-md-9">
-            <nop-editor asp-for="RecentlyViewedProductsEnabled" />
-            <span asp-validation-for="RecentlyViewedProductsEnabled"></span>
-        </div>
-    </div>
-    <nop-nested-setting asp-for="RecentlyViewedProductsEnabled">
-        <div class="form-group row advanced-setting">
-            <div class="col-md-3">
-                <nop-override-store-checkbox asp-for="RecentlyViewedProductsNumber_OverrideForStore" asp-input="RecentlyViewedProductsNumber" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
-                <nop-label asp-for="RecentlyViewedProductsNumber" />
-            </div>
-            <div class="col-md-9">
-                <nop-editor asp-for="RecentlyViewedProductsNumber" />
-                <span asp-validation-for="RecentlyViewedProductsNumber"></span>
-            </div>
-        </div>
-    </nop-nested-setting>
     <div class="form-group row">
         <div class="col-md-3">
             <nop-override-store-checkbox asp-for="NewProductsEnabled_OverrideForStore" asp-input="NewProductsEnabled" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />

@@ -139,11 +139,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"{lang}/setstoretheme/{{themeName}}/{{returnUrl}}",
             defaults: new { controller = "Common", action = "SetStoreTheme" });
 
-        //recently viewed products
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.General.RECENTLY_VIEWED_PRODUCTS,
-            pattern: $"{lang}/recentlyviewedproducts/",
-            defaults: new { controller = "Product", action = "RecentlyViewedProducts" });
-
         //new products
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.General.NEW_PRODUCTS,
             pattern: $"{lang}/newproducts/",

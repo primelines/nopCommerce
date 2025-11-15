@@ -46,11 +46,6 @@ public static partial class NopCookieDefaults
     public static string ComparedProductsCookie => ".ComparedProducts";
 
     /// <summary>
-    /// Gets a cookie name of the recently viewed products
-    /// </summary>
-    public static string RecentlyViewedProductsCookie => ".RecentlyViewedProducts";
-
-    /// <summary>
     /// Gets a cookie name of the authentication
     /// </summary>
     public static string AuthenticationCookie => ".Authentication";

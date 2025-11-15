@@ -141,7 +141,6 @@ public partial class NopStartup : INopStartup
         services.AddScoped<IBackInStockSubscriptionService, BackInStockSubscriptionService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IFilterLevelValueService, FilterLevelValueService>();
-        services.AddScoped<IRecentlyViewedProductsService, RecentlyViewedProductsService>();
         services.AddScoped<IManufacturerService, ManufacturerService>();
         services.AddScoped<IPriceFormatter, PriceFormatter>();
         services.AddScoped<IProductAttributeFormatter, ProductAttributeFormatter>();

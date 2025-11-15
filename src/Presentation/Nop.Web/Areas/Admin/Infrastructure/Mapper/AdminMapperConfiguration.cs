@@ -367,8 +367,6 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.ProductSearchEnabled_OverrideForStore, options => options.Ignore())
             .ForMember(model => model.ProductSearchAutoCompleteNumberOfProducts_OverrideForStore, options => options.Ignore())
             .ForMember(model => model.ProductSearchTermMinimumLength_OverrideForStore, options => options.Ignore())
-            .ForMember(model => model.RecentlyViewedProductsEnabled_OverrideForStore, options => options.Ignore())
-            .ForMember(model => model.RecentlyViewedProductsNumber_OverrideForStore, options => options.Ignore())
             .ForMember(model => model.RemoveRequiredProducts_OverrideForStore, options => options.Ignore())
             .ForMember(model => model.SearchPageAllowCustomersToSelectPageSize_OverrideForStore, options => options.Ignore())
             .ForMember(model => model.SearchPagePageSizeOptions_OverrideForStore, options => options.Ignore())

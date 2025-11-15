@@ -36,8 +36,6 @@ public partial record FooterDto : BaseNopDto
     [JsonProperty("forum_enabled")]
     public bool ForumEnabled { get; set; }
 
-    [JsonProperty("recently_viewed_products_enabled")]
-    public bool RecentlyViewedProductsEnabled { get; set; }
 
     [JsonProperty("new_products_enabled")]
     public bool NewProductsEnabled { get; set; }
@@ -80,9 +78,6 @@ public partial record FooterDto : BaseNopDto
 
     [JsonProperty("display_forums_footer_item")]
     public bool DisplayForumsFooterItem { get; set; }
-
-    [JsonProperty("display_recently_viewed_products_footer_item")]
-    public bool DisplayRecentlyViewedProductsFooterItem { get; set; }
 
     [JsonProperty("display_new_products_footer_item")]
     public bool DisplayNewProductsFooterItem { get; set; }

@@ -169,15 +169,6 @@ public partial class CatalogSettings : ISettings
     /// </summary>
     public bool AllowAnonymousUsersToEmailAFriend { get; set; }
 
-    /// <summary>
-    /// Gets or sets a number of "Recently viewed products"
-    /// </summary>
-    public int RecentlyViewedProductsNumber { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether "Recently viewed products" feature is enabled
-    /// </summary>
-    public bool RecentlyViewedProductsEnabled { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether "New products" page is enabled

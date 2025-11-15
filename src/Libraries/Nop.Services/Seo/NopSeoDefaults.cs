@@ -47,7 +47,6 @@ public static partial class NopSeoDefaults
     "passwordrecovery",
     "privatemessages",
     "profile",
-    "recentlyviewedproducts",
     "register",
     "search",
     "sitemap",

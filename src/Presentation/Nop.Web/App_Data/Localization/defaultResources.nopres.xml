@@ -6135,18 +6135,6 @@
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductUrlStructureType.Hint">
     <Value>Select the product URL structure type (e.g. '/product-seo-name' or '/category-seo-name/product-seo-name' or '/manufacturer-seo-name/product-seo-name').</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.RecentlyViewedProductsEnabled">
-    <Value>'Recently viewed products' enabled</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.RecentlyViewedProductsEnabled.Hint">
-    <Value>Check to allow customers to use the 'Recently viewed products' feature in your store.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.RecentlyViewedProductsNumber">
-    <Value>Number of 'Recently viewed products'</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Catalog.RecentlyViewedProductsNumber.Hint">
-    <Value>The number of 'Recently viewed products' to display when 'Recently viewed products' option is enabled.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.RemoveRequiredProducts">
     <Value>Remove required products</Value>
   </LocaleResource>
@@ -17933,9 +17921,6 @@
   <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Search">
     <Value>Search</Value>
   </LocaleResource>
-  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.RecentlyViewedProducts">
-    <Value>Recently viewed products</Value>
-  </LocaleResource>
   <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.NewProducts">
     <Value>New products</Value>
   </LocaleResource>
@@ -18503,9 +18488,6 @@
   <LocaleResource Name="PageTitle.Profile">
     <Value>Profile</Value>
   </LocaleResource>
-  <LocaleResource Name="PageTitle.RecentlyViewedProducts">
-    <Value>Recently Viewed Products</Value>
-  </LocaleResource>
   <LocaleResource Name="PageTitle.Register">
     <Value>Register</Value>
   </LocaleResource>
@@ -19051,9 +19033,6 @@
   </LocaleResource>
   <LocaleResource Name="Products.QuantityShouldBePositive">
     <Value>Quantity should be positive</Value>
-  </LocaleResource>
-  <LocaleResource Name="Products.RecentlyViewedProducts">
-    <Value>Recently viewed products</Value>
   </LocaleResource>
   <LocaleResource Name="Products.Sku">
     <Value>SKU</Value>

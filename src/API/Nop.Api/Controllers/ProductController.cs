@@ -51,7 +51,6 @@ public partial class ProductController : BasePublicController
     protected readonly IProductAttributeParser _productAttributeParser;
     protected readonly IProductDtoFactory _productModelFactory;
     protected readonly IProductService _productService;
-    protected readonly IRecentlyViewedProductsService _recentlyViewedProductsService;
     protected readonly IReviewTypeService _reviewTypeService;
     protected readonly IShoppingCartDtoFactory _shoppingCartModelFactory;
     protected readonly IShoppingCartService _shoppingCartService;
@@ -85,7 +84,6 @@ public partial class ProductController : BasePublicController
         IProductAttributeParser productAttributeParser,
         IProductDtoFactory productModelFactory,
         IProductService productService,
-        IRecentlyViewedProductsService recentlyViewedProductsService,
         IReviewTypeService reviewTypeService,
         IShoppingCartDtoFactory shoppingCartModelFactory,
         IShoppingCartService shoppingCartService,
@@ -117,7 +115,6 @@ public partial class ProductController : BasePublicController
         _productModelFactory = productModelFactory;
         _productService = productService;
         _reviewTypeService = reviewTypeService;
-        _recentlyViewedProductsService = recentlyViewedProductsService;
         _shoppingCartModelFactory = shoppingCartModelFactory;
         _shoppingCartService = shoppingCartService;
         _storeContext = storeContext;
@@ -210,9 +207,6 @@ public partial class ProductController : BasePublicController
             if (product.Id != updatecartitem.ProductId)
                 return LocalRedirect(productUrl);
         }
-
-        //save as recently viewed
-        await _recentlyViewedProductsService.AddProductToRecentlyViewedListAsync(product.Id);
 
         //display "edit" (manage) link
         if (await _permissionService.AuthorizeAsync(StandardPermission.Security.ACCESS_ADMIN_PANEL) &&
@@ -324,27 +318,6 @@ public partial class ProductController : BasePublicController
             return NotFound();
 
         var model = await _productModelFactory.PrepareProductCombinationDtosAsync(product);
-        return Ok(model);
-    }
-
-    #endregion
-
-    #region Recently viewed products
-    [HttpGet]
-    [Route("RecentlyViewedProducts", Name = "RecentlyViewedProducts")]
-    [ProducesResponseType(typeof(IList<ProductOverviewDto>), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public virtual async Task<IActionResult> RecentlyViewedProducts()
-    {
-        if (!_catalogSettings.RecentlyViewedProductsEnabled)
-            return Content("");
-
-        var products = await _recentlyViewedProductsService.GetRecentlyViewedProductsAsync(_catalogSettings.RecentlyViewedProductsNumber);
-
-        var model = new List<ProductOverviewDto>();
-        model.AddRange(await _productModelFactory.PrepareProductOverviewDtosAsync(products));
-
         return Ok(model);
     }
 

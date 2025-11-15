@@ -52,7 +52,6 @@ public partial class CatalogController : BasePublicController
     protected readonly VendorSettings _vendorSettings;
     private readonly IShoppingCartService _shoppingCartService;
     private readonly ShoppingCartSettings _shoppingCartSettings;
-    private readonly IRecentlyViewedProductsService _recentlyViewedProductsService;
 
     #endregion
 
@@ -80,8 +79,7 @@ public partial class CatalogController : BasePublicController
         MediaSettings mediaSettings,
         VendorSettings vendorSettings,
         IShoppingCartService shoppingCartService,
-        ShoppingCartSettings shoppingCartSettings,
-        IRecentlyViewedProductsService recentlyViewedProductsService)
+        ShoppingCartSettings shoppingCartSettings)
     {
         _catalogSettings = catalogSettings;
         _aclService = aclService;
@@ -106,7 +104,6 @@ public partial class CatalogController : BasePublicController
         _vendorSettings = vendorSettings;
         _shoppingCartService = shoppingCartService;
         _shoppingCartSettings = shoppingCartSettings;
-        _recentlyViewedProductsService = recentlyViewedProductsService;
     }
 
     #endregion
@@ -560,34 +557,6 @@ public partial class CatalogController : BasePublicController
     public async Task<IActionResult> GetSearchBox()
     {
         var model = await _catalogModelFactory.PrepareSearchBoxDtoAsync();
-        return Ok(model);
-    }
-
-    [HttpGet]
-    [Route("GetRecentlyViewedProducts", Name = "GetRecentlyViewedProducts")]
-    [ProducesResponseType(typeof(List<ProductOverviewDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetRecentlyViewedProducts(int? productThumbPictureSize, bool? preparePriceModel)
-    {
-        if (!_catalogSettings.RecentlyViewedProductsEnabled)
-            return Content("");
-
-        var preparePictureDto = productThumbPictureSize.HasValue;
-        var products = await (await _recentlyViewedProductsService.GetRecentlyViewedProductsAsync(_catalogSettings.RecentlyViewedProductsNumber))
-            //ACL and store mapping
-            .WhereAwait(async p => await _aclService.AuthorizeAsync(p) && await _storeMappingService.AuthorizeAsync(p))
-            //availability dates
-            .Where(p => _productService.ProductIsAvailable(p)).ToListAsync();
-
-        if (!products.Any())
-            return Content("");
-
-        //prepare model
-        var model = new List<ProductOverviewDto>();
-        model.AddRange(await _productModelFactory.PrepareProductOverviewDtosAsync(products,
-            preparePriceModel.GetValueOrDefault(),
-            preparePictureDto,
-            productThumbPictureSize));
-
         return Ok(model);
     }
 
