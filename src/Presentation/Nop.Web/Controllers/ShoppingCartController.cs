@@ -293,7 +293,7 @@ public partial class ShoppingCartController : BasePublicController
     }
 
     protected virtual async Task SaveItemAsync(ShoppingCartItem updatecartitem, List<string> addToCartWarnings, Product product,
-        ShoppingCartType cartType, string attributes,int quantity)
+         string attributes,int quantity)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
@@ -301,15 +301,15 @@ public partial class ShoppingCartController : BasePublicController
         {
             //add to the cart
             addToCartWarnings.AddRange(await _shoppingCartService.AddToCartAsync(customer,
-                product, cartType, store.Id,
+                product, store.Id,
                 attributes, quantity, true));
         }
         else
         {
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, updatecartitem.ShoppingCartType, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
 
             var otherCartItemWithSameParameters = await _shoppingCartService.FindShoppingCartItemInTheCartAsync(
-                cart, updatecartitem.ShoppingCartType, product, attributes);
+                cart,  product, attributes);
             if (otherCartItemWithSameParameters != null &&
                 otherCartItemWithSameParameters.Id == updatecartitem.Id)
             {
@@ -328,7 +328,7 @@ public partial class ShoppingCartController : BasePublicController
         }
     }
 
-    protected virtual async Task<IActionResult> GetProductToCartDetailsAsync(List<string> addToCartWarnings, ShoppingCartType cartType,
+    protected virtual async Task<IActionResult> GetProductToCartDetailsAsync(List<string> addToCartWarnings, 
         Product product)
     {
         if (addToCartWarnings.Any())
@@ -345,45 +345,40 @@ public partial class ShoppingCartController : BasePublicController
         //added to the cart
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        switch (cartType)
+
+        //activity log
+        await _customerActivityService.InsertActivityAsync("PublicStore.AddToShoppingCart",
+            string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.AddToShoppingCart"), product.Name), product);
+
+        if (_shoppingCartSettings.DisplayCartAfterAddingProduct)
         {
-            case ShoppingCartType.ShoppingCart:
-            default:
+            //redirect to the shopping cart page
+            return Json(new
             {
-                //activity log
-                await _customerActivityService.InsertActivityAsync("PublicStore.AddToShoppingCart",
-                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.AddToShoppingCart"), product.Name), product);
-
-                if (_shoppingCartSettings.DisplayCartAfterAddingProduct)
-                {
-                    //redirect to the shopping cart page
-                    return Json(new
-                    {
-                        redirect = Url.RouteUrl(NopRouteNames.General.CART)
-                    });
-                }
-
-                //display notification message and update appropriate blocks
-                var shoppingCarts = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
-
-                var updateTopCartSectionHtml = string.Format(
-                    await _localizationService.GetResourceAsync("ShoppingCart.HeaderQuantity"),
-                    shoppingCarts.Sum(item => item.Quantity));
-
-                var updateFlyoutCartSectionHtml = _shoppingCartSettings.MiniShoppingCartEnabled
-                    ? await RenderViewComponentToStringAsync(typeof(FlyoutShoppingCartViewComponent))
-                    : string.Empty;
-
-                return Json(new
-                {
-                    success = true,
-                    message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheCart.Link"),
-                        Url.RouteUrl(NopRouteNames.General.CART)),
-                    updatetopcartsectionhtml = updateTopCartSectionHtml,
-                    updateflyoutcartsectionhtml = updateFlyoutCartSectionHtml
-                });
-            }
+                redirect = Url.RouteUrl(NopRouteNames.General.CART)
+            });
         }
+
+        //display notification message and update appropriate blocks
+        var shoppingCarts = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
+
+        var updateTopCartSectionHtml = string.Format(
+            await _localizationService.GetResourceAsync("ShoppingCart.HeaderQuantity"),
+            shoppingCarts.Sum(item => item.Quantity));
+
+        var updateFlyoutCartSectionHtml = _shoppingCartSettings.MiniShoppingCartEnabled
+            ? await RenderViewComponentToStringAsync(typeof(FlyoutShoppingCartViewComponent))
+            : string.Empty;
+
+        return Json(new
+        {
+            success = true,
+            message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheCart.Link"),
+                Url.RouteUrl(NopRouteNames.General.CART)),
+            updatetopcartsectionhtml = updateTopCartSectionHtml,
+            updateflyoutcartsectionhtml = updateFlyoutCartSectionHtml
+        });
+
     }
 
     #endregion
@@ -412,7 +407,7 @@ public partial class ShoppingCartController : BasePublicController
 
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
         //parse and save checkout attributes
         await ParseAndSaveCheckoutAttributesAsync(cart, form);
 
@@ -478,10 +473,9 @@ public partial class ShoppingCartController : BasePublicController
     //add product to cart using AJAX
     //currently we use this method on catalog pages (category/manufacturer/etc)
     [HttpPost]
-    public virtual async Task<IActionResult> AddProductToCart_Catalog(int productId, int shoppingCartTypeId,
+    public virtual async Task<IActionResult> AddProductToCart_Catalog(int productId,
         int quantity, bool forceredirection = false)
     {
-        var cartType = (ShoppingCartType)shoppingCartTypeId;
 
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null)
@@ -537,12 +531,12 @@ public partial class ShoppingCartController : BasePublicController
         //first, try to find existing shopping cart item
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, cartType, store.Id);
-        var shoppingCartItem = await _shoppingCartService.FindShoppingCartItemInTheCartAsync(cart, cartType, product);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
+        var shoppingCartItem = await _shoppingCartService.FindShoppingCartItemInTheCartAsync(cart, product);
         //if we already have the same product in the cart, then use the total quantity to validate
         var quantityToValidate = shoppingCartItem != null ? shoppingCartItem.Quantity + quantity : quantity;
         var addToCartWarnings = await _shoppingCartService
-            .GetShoppingCartItemWarningsAsync(customer, cartType,
+            .GetShoppingCartItemWarningsAsync(customer,
                 product, store.Id, string.Empty,
                 quantityToValidate, false, shoppingCartItem?.Id ?? 0, true, false, false, false);
         if (addToCartWarnings.Any())
@@ -559,7 +553,6 @@ public partial class ShoppingCartController : BasePublicController
         //now let's try adding product to the cart (now including product attribute validation, etc)
         addToCartWarnings = await _shoppingCartService.AddToCartAsync(customer: customer,
             product: product,
-            shoppingCartType: cartType,
             storeId: store.Id,
             attributesXml: attXml,
             quantity: quantity);
@@ -570,50 +563,43 @@ public partial class ShoppingCartController : BasePublicController
             return Json(new { redirect = redirectUrl });
         }
 
-        //added to the cart
-        switch (cartType)
+        //activity log
+        await _customerActivityService.InsertActivityAsync("PublicStore.AddToShoppingCart",
+            string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.AddToShoppingCart"), product.Name), product);
+
+        if (_shoppingCartSettings.DisplayCartAfterAddingProduct || forceredirection)
         {
-            case ShoppingCartType.ShoppingCart:
-            default:
+            //redirect to the shopping cart page
+            return Json(new
             {
-                //activity log
-                await _customerActivityService.InsertActivityAsync("PublicStore.AddToShoppingCart",
-                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.AddToShoppingCart"), product.Name), product);
-
-                if (_shoppingCartSettings.DisplayCartAfterAddingProduct || forceredirection)
-                {
-                    //redirect to the shopping cart page
-                    return Json(new
-                    {
-                        redirect = Url.RouteUrl(NopRouteNames.General.CART)
-                    });
-                }
-
-                //display notification message and update appropriate blocks
-                var shoppingCarts = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
-
-                var updatetopcartsectionhtml = string.Format(await _localizationService.GetResourceAsync("ShoppingCart.HeaderQuantity"),
-                    shoppingCarts.Sum(item => item.Quantity));
-
-                var updateflyoutcartsectionhtml = _shoppingCartSettings.MiniShoppingCartEnabled
-                    ? await RenderViewComponentToStringAsync(typeof(FlyoutShoppingCartViewComponent))
-                    : string.Empty;
-
-                return Json(new
-                {
-                    success = true,
-                    message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheCart.Link"), Url.RouteUrl(NopRouteNames.General.CART)),
-                    updatetopcartsectionhtml,
-                    updateflyoutcartsectionhtml
-                });
-            }
+                redirect = Url.RouteUrl(NopRouteNames.General.CART)
+            });
         }
+
+        //display notification message and update appropriate blocks
+        var shoppingCarts = await _shoppingCartService.GetShoppingCartAsync(customer,store.Id);
+
+        var updatetopcartsectionhtml = string.Format(await _localizationService.GetResourceAsync("ShoppingCart.HeaderQuantity"),
+            shoppingCarts.Sum(item => item.Quantity));
+
+        var updateflyoutcartsectionhtml = _shoppingCartSettings.MiniShoppingCartEnabled
+            ? await RenderViewComponentToStringAsync(typeof(FlyoutShoppingCartViewComponent))
+            : string.Empty;
+
+        return Json(new
+        {
+            success = true,
+            message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheCart.Link"), Url.RouteUrl(NopRouteNames.General.CART)),
+            updatetopcartsectionhtml,
+            updateflyoutcartsectionhtml
+        });
+
     }
 
     //add product to cart using AJAX
     //currently we use this method on the product details pages
     [HttpPost]
-    public virtual async Task<IActionResult> AddProductToCart_Details(int productId, int shoppingCartTypeId, IFormCollection form)
+    public virtual async Task<IActionResult> AddProductToCart_Details(int productId, IFormCollection form)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null)
@@ -638,7 +624,7 @@ public partial class ShoppingCartController : BasePublicController
         {
             var store = await _storeContext.GetCurrentStoreAsync();
             //search with the same cart type as specified
-            var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), (ShoppingCartType)shoppingCartTypeId, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), store.Id);
 
             updatecartitem = cart.FirstOrDefault(x => x.Id == updatecartitemid);
             //not found? let's ignore it. in this case we'll add a new item
@@ -670,14 +656,11 @@ public partial class ShoppingCartController : BasePublicController
         //product and gift card attributes
         var attributes = await _productAttributeParser.ParseProductAttributesAsync(product, form, addToCartWarnings);
 
-        var cartType = updatecartitem == null ? (ShoppingCartType)shoppingCartTypeId :
-            //if the item to update is found, then we ignore the specified "shoppingCartTypeId" parameter
-            updatecartitem.ShoppingCartType;
 
-        await SaveItemAsync(updatecartitem, addToCartWarnings, product, cartType, attributes, quantity);
+        await SaveItemAsync(updatecartitem, addToCartWarnings, product, attributes, quantity);
 
         //return result
-        return await GetProductToCartDetailsAsync(addToCartWarnings, cartType, product);
+        return await GetProductToCartDetailsAsync(addToCartWarnings, product);
     }
 
     //handle product attribute selection event. this way we return new price, overridden gtin/sku/mpn
@@ -709,7 +692,6 @@ public partial class ShoppingCartController : BasePublicController
             var (finalPrice, _, _) = await _shoppingCartService.GetUnitPriceAsync(product,
                 currentCustomer,
                 currentStore,
-                ShoppingCartType.ShoppingCart,
                 1, attributeXml, true);
             var (finalPriceWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, finalPrice);
             var finalPriceWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(finalPriceWithDiscountBase, await _workContext.GetWorkingCurrencyAsync());
@@ -819,7 +801,7 @@ public partial class ShoppingCartController : BasePublicController
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
 
         //save selected attributes
         await ParseAndSaveCheckoutAttributesAsync(cart, form);
@@ -1022,7 +1004,7 @@ public partial class ShoppingCartController : BasePublicController
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), store.Id);
         var model = new ShoppingCartModel();
         model = await _shoppingCartModelFactory.PrepareShoppingCartModelAsync(model, cart);
         return View(model);
@@ -1037,7 +1019,7 @@ public partial class ShoppingCartController : BasePublicController
 
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer,store.Id);
 
         //get identifiers of items to remove
         var itemIdsToRemove = form["removefromcart"]
@@ -1074,7 +1056,7 @@ public partial class ShoppingCartController : BasePublicController
         }).ToListAsync();
 
         //updated cart
-        cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        cart = await _shoppingCartService.GetShoppingCartAsync(customer,store.Id);
 
         //parse and save checkout attributes
         await ParseAndSaveCheckoutAttributesAsync(cart, form);
@@ -1114,7 +1096,7 @@ public partial class ShoppingCartController : BasePublicController
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer,store.Id);
 
         //parse and save checkout attributes
         await ParseAndSaveCheckoutAttributesAsync(cart, form);
@@ -1159,7 +1141,7 @@ public partial class ShoppingCartController : BasePublicController
         //cart
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer,store.Id);
 
         //parse and save checkout attributes
         await ParseAndSaveCheckoutAttributesAsync(cart, form);
@@ -1237,7 +1219,7 @@ public partial class ShoppingCartController : BasePublicController
             });
 
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(),store.Id);
         //parse and save checkout attributes
         await ParseAndSaveCheckoutAttributesAsync(cart, form);
 
@@ -1263,7 +1245,7 @@ public partial class ShoppingCartController : BasePublicController
             await _customerService.RemoveDiscountCouponCodeAsync(customer, discount.CouponCode);
 
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer,store.Id);
 
         model = await _shoppingCartModelFactory.PrepareShoppingCartModelAsync(model, cart);
         return View(model);
@@ -1286,7 +1268,7 @@ public partial class ShoppingCartController : BasePublicController
             await _customerService.RemoveGiftCardCouponCodeAsync(customer, gc.GiftCardCouponCode);
 
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer,store.Id);
 
         model = await _shoppingCartModelFactory.PrepareShoppingCartModelAsync(model, cart);
         return View(model);

@@ -103,12 +103,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 
-        //prepare available shopping cart types
-        await _baseAdminModelFactory.PrepareShoppingCartTypesAsync(searchModel.AvailableShoppingCartTypes, false);
-
-        //set default search values
-        searchModel.ShoppingCartType = ShoppingCartType.ShoppingCart;
-
         //prepare available billing countries
         searchModel.AvailableCountries = (await _countryService.GetAllCountriesForBillingAsync(showHidden: true))
             .Select(country => new SelectListItem { Text = country.Name, Value = country.Id.ToString() }).ToList();
@@ -141,7 +135,7 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
         ArgumentNullException.ThrowIfNull(searchModel);
 
         //get customers with shopping carts
-        var customers = await _customerService.GetCustomersWithShoppingCartsAsync(searchModel.ShoppingCartType,
+        var customers = await _customerService.GetCustomersWithShoppingCartsAsync(
             storeId: searchModel.StoreId,
             productId: searchModel.ProductId,
             createdFromUtc: searchModel.StartDate,
@@ -165,7 +159,7 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
                     ? customer.Email
                     : await _localizationService.GetResourceAsync("Admin.Customers.Guest");
                 shoppingCartModel.TotalItems = (await _shoppingCartService
-                        .GetShoppingCartAsync(customer, shoppingCartType: searchModel.ShoppingCartType,
+                        .GetShoppingCartAsync(customer,
                             storeId: searchModel.StoreId, productId: searchModel.ProductId, createdFromUtc: searchModel.StartDate, createdToUtc: searchModel.EndDate))
                     .Sum(item => item.Quantity);
 
@@ -192,7 +186,7 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
 
         //get shopping cart items
         var items = (await _shoppingCartService
-            .GetShoppingCartAsync(customer, shoppingCartType: searchModel.ShoppingCartType, storeId: searchModel.StoreId, productId: searchModel.ProductId, createdFromUtc: searchModel.StartDate, createdToUtc: searchModel.EndDate))
+            .GetShoppingCartAsync(customer, storeId: searchModel.StoreId, productId: searchModel.ProductId, createdFromUtc: searchModel.StartDate, createdToUtc: searchModel.EndDate))
             .ToPagedList(searchModel);
 
         var isSearchProduct = searchModel.ProductId > 0;

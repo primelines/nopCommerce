@@ -15,7 +15,6 @@ public partial record ShoppingCartSearchModel : BaseSearchModel
 
     public ShoppingCartSearchModel()
     {
-        AvailableShoppingCartTypes = new List<SelectListItem>();
         ShoppingCartItemSearchModel = new ShoppingCartItemSearchModel();
         AvailableStores = new List<SelectListItem>();
         AvailableCountries = new List<SelectListItem>();
@@ -24,9 +23,6 @@ public partial record ShoppingCartSearchModel : BaseSearchModel
     #endregion
 
     #region Properties
-
-    [NopResourceDisplayName("Admin.ShoppingCartType.ShoppingCartType")]
-    public ShoppingCartType ShoppingCartType { get; set; }
 
     [NopResourceDisplayName("Admin.ShoppingCartType.StartDate")]
     [UIHint("DateNullable")]
@@ -44,8 +40,6 @@ public partial record ShoppingCartSearchModel : BaseSearchModel
 
     [NopResourceDisplayName("Admin.ShoppingCartType.Store")]
     public int StoreId { get; set; }
-
-    public IList<SelectListItem> AvailableShoppingCartTypes { get; set; }
 
     public ShoppingCartItemSearchModel ShoppingCartItemSearchModel { get; set; }
 

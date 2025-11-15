@@ -1903,7 +1903,7 @@ public partial class ProductModelFactory : IProductModelFactory
 
                 productAttributeCombinationModel.PictureThumbnailUrl = pictureThumbnailUrl;
                 var warnings = (await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(currentCustomer,
-                        ShoppingCartType.ShoppingCart, product,
+                        product,
                         attributesXml: combination.AttributesXml,
                         ignoreNonCombinableAttributes: true)
                     ).Aggregate(string.Empty, (message, warning) => $"{message}{warning}<br />");

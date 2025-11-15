@@ -188,7 +188,7 @@ public class EventConsumer : IConsumer<AdminMenuCreatedEvent>,
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
 
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
 
         var quoteItems =
             await _rfqService.GetQuoteItemsByShoppingCartItemIdsAsync(cart.Select(sci => sci.Id).ToArray());

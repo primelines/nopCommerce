@@ -12,8 +12,6 @@ public partial record ShoppingCartItemSearchModel : BaseSearchModel
 
     public int CustomerId { get; set; }
 
-    public ShoppingCartType ShoppingCartType { get; set; }
-
     public DateTime? StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }

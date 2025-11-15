@@ -208,7 +208,7 @@ public class OmnisendEventsService
         ShoppingCartItem shoppingCartItem)
     {
         var customer = await _customerService.GetCustomerByIdAsync(shoppingCartItem.CustomerId);
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart,
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, 
             shoppingCartItem.StoreId);
 
         var cartId = await _omnisendCustomerService.GetCartIdAsync(customer);
@@ -231,7 +231,7 @@ public class OmnisendEventsService
     private async Task<StartedCheckoutProperty> PrepareStartedCheckoutPropertyAsync(Customer customer)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
 
         var cartSum = (await _orderTotalCalculationService.GetShoppingCartTotalAsync(cart)).shoppingCartTotal ?? 0;
         var cartId = await _omnisendCustomerService.GetCartIdAsync(customer);

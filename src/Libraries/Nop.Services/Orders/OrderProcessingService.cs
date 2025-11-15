@@ -416,7 +416,7 @@ public partial class OrderProcessingService : IOrderProcessingService
         details.CheckoutAttributeDescription = await _checkoutAttributeFormatter.FormatAttributesAsync(details.CheckoutAttributesXml, details.Customer);
 
         //load shopping cart
-        details.Cart = await _shoppingCartService.GetShoppingCartAsync(details.Customer, ShoppingCartType.ShoppingCart, processPaymentRequest.StoreId);
+        details.Cart = await _shoppingCartService.GetShoppingCartAsync(details.Customer, processPaymentRequest.StoreId);
 
         if (!details.Cart.Any())
             throw new NopException("Cart is empty");
@@ -432,7 +432,7 @@ public partial class OrderProcessingService : IOrderProcessingService
             var product = await _productService.GetProductByIdAsync(sci.ProductId);
 
             var sciWarnings = await _shoppingCartService.GetShoppingCartItemWarningsAsync(details.Customer,
-                sci.ShoppingCartType, product, processPaymentRequest.StoreId, sci.AttributesXml, sci.Quantity, false, sci.Id);
+                 product, processPaymentRequest.StoreId, sci.AttributesXml, sci.Quantity, false, sci.Id);
             if (sciWarnings.Any())
                 throw new NopException(sciWarnings.Aggregate(string.Empty, (current, next) => $"{current}{next};"));
         }
@@ -1432,7 +1432,7 @@ public partial class OrderProcessingService : IOrderProcessingService
             var product = await _productService.GetProductByIdAsync(updatedShoppingCartItem.ProductId);
             var store = await _storeService.GetStoreByIdAsync(updatedShoppingCartItem.StoreId);
 
-            updateOrderParameters.Warnings.AddRange(await _shoppingCartService.GetShoppingCartItemWarningsAsync(customer, updatedShoppingCartItem.ShoppingCartType,
+            updateOrderParameters.Warnings.AddRange(await _shoppingCartService.GetShoppingCartItemWarningsAsync(customer,
                 product, updatedOrder.StoreId, updatedShoppingCartItem.AttributesXml,
                  updatedShoppingCartItem.Quantity, false, updatedShoppingCartItem.Id));
 
@@ -1501,7 +1501,6 @@ public partial class OrderProcessingService : IOrderProcessingService
                 CustomerId = order.CustomerId,
                 ProductId = item.ProductId,
                 Quantity = item.Id == updatedOrderItemId ? updateOrderParameters.Quantity : item.Quantity,
-                ShoppingCartType = ShoppingCartType.ShoppingCart,
                 StoreId = order.StoreId
             }).ToList();
 
@@ -2434,7 +2433,7 @@ public partial class OrderProcessingService : IOrderProcessingService
             var product = await _productService.GetProductByIdAsync(orderItem.ProductId);
 
             warnings.AddRange(await _shoppingCartService.AddToCartAsync(customer, product,
-                ShoppingCartType.ShoppingCart, order.StoreId,
+                order.StoreId,
                 orderItem.AttributesXml,
                 orderItem.Quantity, false));
         }

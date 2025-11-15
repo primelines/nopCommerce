@@ -51,7 +51,7 @@ public class AddRfqComponent : NopViewComponent
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
 
         //is shopping cart created by quote
         if (await cart.AnyAwaitAsync(async shoppingCartItemModel => (await _rfqService.GetQuoteItemByShoppingCartItemIdAsync(shoppingCartItemModel.Id)) != null))

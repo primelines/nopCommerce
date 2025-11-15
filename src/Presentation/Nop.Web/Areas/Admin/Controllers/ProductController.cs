@@ -610,7 +610,7 @@ public partial class ProductController : BaseAdminController
             //new one
             var warnings = new List<string>();
             warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(await _workContext.GetCurrentCustomerAsync(),
-                ShoppingCartType.ShoppingCart, product, 1, attributesXml, true, true, true));
+                 product, 1, attributesXml, true, true, true));
             if (warnings.Any())
                 continue;
 
@@ -3168,7 +3168,7 @@ public partial class ProductController : BaseAdminController
             warnings.Add(await _localizationService.GetResourceAsync("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Alert.FailedValue"));
 
         warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(await _workContext.GetCurrentCustomerAsync(),
-            ShoppingCartType.ShoppingCart, product, 1, attributesXml, true));
+           product, 1, attributesXml, true));
 
         //check whether the same attribute combination already exists
         var existingCombination = await _productAttributeParser.FindProductAttributeCombinationAsync(product, attributesXml);
@@ -3320,7 +3320,7 @@ public partial class ProductController : BaseAdminController
             warnings.Add(await _localizationService.GetResourceAsync("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Alert.FailedValue"));
 
         warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(await _workContext.GetCurrentCustomerAsync(),
-            ShoppingCartType.ShoppingCart, product, 1, attributesXml, true));
+             product, 1, attributesXml, true));
 
         //check whether the same attribute combination already exists
         var existingCombination = await _productAttributeParser.FindProductAttributeCombinationAsync(product, attributesXml);

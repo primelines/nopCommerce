@@ -165,12 +165,12 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
 
         //add product to cart (without any attributes and options). used on catalog pages. (AJAX)
         endpointRouteBuilder.MapControllerRoute(name: "AddProductToCart-Catalog",
-            pattern: $"addproducttocart/catalog/{{productId:min(0)}}/{{shoppingCartTypeId:min(0)}}/{{quantity:min(0)}}",
+            pattern: $"addproducttocart/catalog/{{productId:min(0)}}/{{quantity:min(0)}}",
             defaults: new { controller = "ShoppingCart", action = "AddProductToCart_Catalog" });
 
         //add product to cart (with attributes and options). used on the product details pages. (AJAX)
         endpointRouteBuilder.MapControllerRoute(name: "AddProductToCart-Details",
-            pattern: $"addproducttocart/details/{{productId:min(0)}}/{{shoppingCartTypeId:min(0)}}",
+            pattern: $"addproducttocart/details/{{productId:min(0)}}",
             defaults: new { controller = "ShoppingCart", action = "AddProductToCart_Details" });
 
         //product email a friend

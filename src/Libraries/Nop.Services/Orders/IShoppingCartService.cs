@@ -54,7 +54,6 @@ public partial interface IShoppingCartService
     /// Gets shopping cart
     /// </summary>
     /// <param name="customer">Customer</param>
-    /// <param name="shoppingCartType">Shopping cart type; pass null to load all records</param>
     /// <param name="storeId">Store identifier; pass 0 to load all records</param>
     /// <param name="productId">Product identifier; pass null to load all records</param>
     /// <param name="createdFromUtc">Created date from (UTC); pass null to load all records</param>
@@ -63,14 +62,13 @@ public partial interface IShoppingCartService
     /// A task that represents the asynchronous operation
     /// The task result contains the shopping Cart
     /// </returns>
-    Task<IList<ShoppingCartItem>> GetShoppingCartAsync(Customer customer, ShoppingCartType? shoppingCartType = null,
+    Task<IList<ShoppingCartItem>> GetShoppingCartAsync(Customer customer,
         int storeId = 0, int? productId = null, DateTime? createdFromUtc = null, DateTime? createdToUtc = null);
 
     /// <summary>
     /// Validates shopping cart item attributes
     /// </summary>
     /// <param name="customer">Customer</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="product">Product</param>
     /// <param name="quantity">Quantity</param>
     /// <param name="attributesXml">Attributes in XML format</param>
@@ -83,7 +81,6 @@ public partial interface IShoppingCartService
     /// The task result contains the warnings
     /// </returns>
     Task<IList<string>> GetShoppingCartItemAttributeWarningsAsync(Customer customer,
-        ShoppingCartType shoppingCartType,
         Product product,
         int quantity = 1,
         string attributesXml = "",
@@ -95,14 +92,13 @@ public partial interface IShoppingCartService
     /// <summary>
     /// Validates shopping cart item (gift card)
     /// </summary>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="product">Product</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the warnings
     /// </returns>
-    Task<IList<string>> GetShoppingCartItemGiftCardWarningsAsync(ShoppingCartType shoppingCartType,
+    Task<IList<string>> GetShoppingCartItemGiftCardWarningsAsync(
         GiftCard product, string attributesXml);
 
 
@@ -111,7 +107,6 @@ public partial interface IShoppingCartService
     /// Validates shopping cart item
     /// </summary>
     /// <param name="customer">Customer</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="product">Product</param>
     /// <param name="storeId">Store identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
@@ -126,7 +121,7 @@ public partial interface IShoppingCartService
     /// A task that represents the asynchronous operation
     /// The task result contains the warnings
     /// </returns>
-    Task<IList<string>> GetShoppingCartItemWarningsAsync(Customer customer, ShoppingCartType shoppingCartType,
+    Task<IList<string>> GetShoppingCartItemWarningsAsync(Customer customer,
         Product product, int storeId,
         string attributesXml, 
         int quantity = 1, bool addRequiredProducts = true, int shoppingCartItemId = 0,
@@ -163,7 +158,6 @@ public partial interface IShoppingCartService
     /// </summary>
     /// <param name="product">Product</param>
     /// <param name="customer">Customer</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="quantity">Quantity</param>
     /// <param name="attributesXml">Product attributes (XML format)</param>
     /// <param name="includeDiscounts">A value indicating whether include discounts or not for price computation</param>
@@ -174,7 +168,6 @@ public partial interface IShoppingCartService
     Task<(decimal unitPrice, decimal discountAmount, List<Discount> appliedDiscounts)> GetUnitPriceAsync(Product product,
         Customer customer,
         Store store,
-        ShoppingCartType shoppingCartType,
         int quantity,
         string attributesXml,
         bool includeDiscounts);
@@ -195,7 +188,6 @@ public partial interface IShoppingCartService
     /// Finds a shopping cart item in the cart
     /// </summary>
     /// <param name="shoppingCart">Shopping cart</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="product">Product</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <returns>
@@ -203,7 +195,6 @@ public partial interface IShoppingCartService
     /// The task result contains the found shopping cart item
     /// </returns>
     Task<ShoppingCartItem> FindShoppingCartItemInTheCartAsync(IList<ShoppingCartItem> shoppingCart,
-        ShoppingCartType shoppingCartType,
         Product product,
         string attributesXml = "");
 
@@ -212,7 +203,6 @@ public partial interface IShoppingCartService
     /// </summary>
     /// <param name="customer">Customer</param>
     /// <param name="product">Product</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="storeId">Store identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="quantity">Quantity</param>
@@ -221,7 +211,7 @@ public partial interface IShoppingCartService
     /// The task result contains the warnings
     /// </returns>
     Task<IList<string>> AddToCartAsync(Customer customer, Product product,
-        ShoppingCartType shoppingCartType, int storeId, string attributesXml = null,
+         int storeId, string attributesXml = null,
         int quantity = 1, bool addRequiredProducts = true);
 
     /// <summary>

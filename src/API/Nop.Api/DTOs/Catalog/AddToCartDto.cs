@@ -46,8 +46,5 @@ public partial record AddToCartDto : BaseNopDto
 
     [JsonProperty("updated_shopping_cart_item_id")]
     public int UpdatedShoppingCartItemId { get; set; }
-
-    [JsonProperty("update_shopping_cart_item_type")]
-    public ShoppingCartType? UpdateShoppingCartItemType { get; set; }
 }
 

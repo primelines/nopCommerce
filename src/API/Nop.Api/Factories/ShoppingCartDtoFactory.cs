@@ -451,7 +451,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
         //item warnings
         var itemWarnings = await _shoppingCartService.GetShoppingCartItemWarningsAsync(
             await _workContext.GetCurrentCustomerAsync(),
-            sci.ShoppingCartType,
             product,
             sci.StoreId,
             sci.AttributesXml,
@@ -792,7 +791,7 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
         if (customer.HasShoppingCartItems)
         {
             var store = await _storeContext.GetCurrentStoreAsync();
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
 
             if (cart.Any())
             {

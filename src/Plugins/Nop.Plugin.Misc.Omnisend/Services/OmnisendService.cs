@@ -741,10 +741,10 @@ public class OmnisendService
     public async Task SyncCartsAsync()
     {
         var store = await _storeContext.GetCurrentStoreAsync();
-        var customers = await _customerService.GetCustomersWithShoppingCartsAsync(ShoppingCartType.ShoppingCart, store.Id);
+        var customers = await _customerService.GetCustomersWithShoppingCartsAsync( store.Id);
         foreach (var customer in customers)
         {
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
             await CreateCartAsync(cart);
         }
     }
@@ -973,7 +973,7 @@ public class OmnisendService
 
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
 
         foreach (var cartProduct in restoredCart.Products)
         {
@@ -997,7 +997,7 @@ public class OmnisendService
             if (shoppingCartItem is not null)
                 continue;
 
-            await _shoppingCartService.AddToCartAsync(customer, product, ShoppingCartType.ShoppingCart, store.Id,
+            await _shoppingCartService.AddToCartAsync(customer, product, store.Id,
                 combination?.AttributesXml, quantity: cartProduct.Quantity);
         }
     }
@@ -1013,7 +1013,7 @@ public class OmnisendService
         if (!await CanSendRequestAsync(customer))
             return;
 
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, shoppingCartItem.StoreId);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, shoppingCartItem.StoreId);
 
         if (cart.Count == 1)
             await CreateCartAsync(cart);
@@ -1050,7 +1050,7 @@ public class OmnisendService
         if (!await CanSendRequestAsync(customer))
             return;
 
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, shoppingCartItem.StoreId);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, shoppingCartItem.StoreId);
 
         //var sendRequest = await _omnisendCustomerService.IsNeedToSendDeleteShoppingCartEventAsync(customer);
 
@@ -1114,7 +1114,7 @@ public class OmnisendService
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
 
         if (cart.Any(sci =>
                 sci.ProductId == entity.ProductId &&

@@ -284,7 +284,6 @@ public partial class ProductController : BasePublicController
         var wrappedProduct = new ShoppingCartItem()
         {
             StoreId = store.Id,
-            ShoppingCartTypeId = (int)ShoppingCartType.ShoppingCart,
             CustomerId = customer.Id,
             ProductId = product.Id,
             CreatedOnUtc = DateTime.UtcNow

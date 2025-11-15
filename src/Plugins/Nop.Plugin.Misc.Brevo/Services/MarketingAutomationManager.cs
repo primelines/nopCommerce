@@ -126,7 +126,7 @@ public class MarketingAutomationManager
             //get current customer's shopping cart
             var store = await _storeContext.GetCurrentStoreAsync();
             var cart = await _shoppingCartService
-                .GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+                .GetShoppingCartAsync(customer, store.Id);
 
             if (cart.Any())
             {

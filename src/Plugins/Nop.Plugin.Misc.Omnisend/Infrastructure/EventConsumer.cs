@@ -170,9 +170,6 @@ internal class EventConsumer : IConsumer<CustomerLoggedinEvent>,
 
         var entity = eventMessage.Entity;
 
-        if (entity.ShoppingCartType != ShoppingCartType.ShoppingCart)
-            return;
-
         await _omnisendEventsService.SendAddedProductToCartEventAsync(entity);
         //await _omnisendService.AddShoppingCartItemAsync(eventMessage.Entity);
     }

@@ -69,11 +69,11 @@ public class CheckoutModelFactoryTests : ServiceTest
 
         _orderSettings = GetService<OrderSettings>();
 
-        await _shoppingCartService.AddToCartAsync(_customer, await _productService.GetProductByIdAsync(1), ShoppingCartType.ShoppingCart, 1);
-        await _shoppingCartService.AddToCartAsync(_customer, await _productService.GetProductByIdAsync(2), ShoppingCartType.ShoppingCart, 1);
-        await _shoppingCartService.AddToCartAsync(_customer, await _productService.GetProductByIdAsync(3), ShoppingCartType.ShoppingCart, 1);
+        await _shoppingCartService.AddToCartAsync(_customer, await _productService.GetProductByIdAsync(1), 1);
+        await _shoppingCartService.AddToCartAsync(_customer, await _productService.GetProductByIdAsync(2), 1);
+        await _shoppingCartService.AddToCartAsync(_customer, await _productService.GetProductByIdAsync(3), 1);
 
-        _cart = await _shoppingCartService.GetShoppingCartAsync(_customer, ShoppingCartType.ShoppingCart);
+        _cart = await _shoppingCartService.GetShoppingCartAsync(_customer);
 
         _paymentMethod = (await GetService<IPaymentPluginManager>().LoadActivePluginsAsync(["Payments.TestMethod"])).FirstOrDefault();
         _orderService = GetService<IOrderService>();

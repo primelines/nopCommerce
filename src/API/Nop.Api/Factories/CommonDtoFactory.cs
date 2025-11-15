@@ -302,7 +302,7 @@ public partial class CommonDtoFactory : ICommonDtoFactory
         //performance optimization (use "HasShoppingCartItems" property)
         if (customer.HasShoppingCartItems)
         {
-            model.ShoppingCartItems = (await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id))
+            model.ShoppingCartItems = (await _shoppingCartService.GetShoppingCartAsync(customer, store.Id))
                 .Sum(item => item.Quantity);        }
 
         return model;

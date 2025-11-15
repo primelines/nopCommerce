@@ -358,7 +358,7 @@ public partial class ProductDtoFactory : IProductDtoFactory
                     {
                         var warnings = new List<string>();
                         warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(customer,
-                            ShoppingCartType.ShoppingCart, product, 1, attributesXml, true, true, true));
+                             product, 1, attributesXml, true, true, true));
                         if (warnings.Any())
                             continue;
 
@@ -711,7 +711,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
         if (updatecartitem != null)
         {
             model.UpdatedShoppingCartItemId = updatecartitem.Id;
-            model.UpdateShoppingCartItemType = updatecartitem.ShoppingCartType;
         }
 
         //quantity
@@ -1422,7 +1421,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
             var wrappedProduct = new ShoppingCartItem
             {
                 StoreId = store.Id,
-                ShoppingCartTypeId = (int)ShoppingCartType.ShoppingCart,
                 CustomerId = customer.Id,
                 ProductId = product.Id,
                 CreatedOnUtc = DateTime.UtcNow

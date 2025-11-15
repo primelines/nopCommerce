@@ -143,7 +143,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel
 
         //updating existing shopping cart?
         public int UpdatedShoppingCartItemId { get; set; }
-        public ShoppingCartType? UpdateShoppingCartItemType { get; set; }
     }
     
     public partial record GiftCardModel : BaseNopModel

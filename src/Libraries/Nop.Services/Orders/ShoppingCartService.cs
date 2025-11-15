@@ -177,7 +177,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// Validates a product for standard properties
     /// </summary>
     /// <param name="customer">Customer</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="product">Product</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="quantity">Quantity</param>
@@ -187,7 +186,7 @@ public partial class ShoppingCartService : IShoppingCartService
     /// A task that represents the asynchronous operation
     /// The task result contains the warnings
     /// </returns>
-    protected virtual async Task<IList<string>> GetStandardWarningsAsync(Customer customer, ShoppingCartType shoppingCartType, Product product,
+    protected virtual async Task<IList<string>> GetStandardWarningsAsync(Customer customer, Product product,
         string attributesXml, int quantity, int shoppingCartItemId, int storeId)
     {
         ArgumentNullException.ThrowIfNull(customer);
@@ -222,7 +221,7 @@ public partial class ShoppingCartService : IShoppingCartService
         }
 
         //disabled "add to cart" button
-        if (shoppingCartType == ShoppingCartType.ShoppingCart && product.DisableBuyButton)
+        if (product.DisableBuyButton)
         {
             warnings.Add(await _localizationService.GetResourceAsync("ShoppingCart.BuyingDisabled"));
         }
@@ -247,8 +246,7 @@ public partial class ShoppingCartService : IShoppingCartService
             warnings.Add(string.Format(await _localizationService.GetResourceAsync("ShoppingCart.AllowedQuantities"), string.Join(", ", allowedQuantities)));
         }
 
-        var validateOutOfStock = shoppingCartType == ShoppingCartType.ShoppingCart;
-        if (validateOutOfStock && !hasQtyWarnings)
+        if (!hasQtyWarnings)
         {
 
             if (product.BackorderMode == BackorderMode.NoBackorders)
@@ -267,7 +265,7 @@ public partial class ShoppingCartService : IShoppingCartService
                     var onlyCombinableAttributes = productAttributeMappings.All(mapping => !mapping.IsNonCombinable());
                     if (!onlyCombinableAttributes)
                     {
-                        var cart = await GetShoppingCartAsync(customer, shoppingCartType, storeId);
+                        var cart = await GetShoppingCartAsync(customer, storeId);
                         var totalAddedQuantity = cart
                             .Where(item => item.ProductId == product.Id && item.Id != shoppingCartItemId)
                             .Sum(product => product.Quantity);
@@ -295,7 +293,7 @@ public partial class ShoppingCartService : IShoppingCartService
                 //validate product quantity and product quantity into bundles
                 if (string.IsNullOrEmpty(attributesXml))
                 {
-                    var cart = await GetShoppingCartAsync(customer, shoppingCartType, storeId);
+                    var cart = await GetShoppingCartAsync(customer, storeId);
                     var totalQuantityInCart = cart.Where(item => item.ProductId == product.Id && item.Id != shoppingCartItemId && string.IsNullOrEmpty(item.AttributesXml))
                         .Sum(product => product.Quantity);
 
@@ -417,11 +415,9 @@ public partial class ShoppingCartService : IShoppingCartService
         }
 
         //validate checkout attributes
-        if (ensureOnlyActiveCheckoutAttributes &&
-            //only for shopping cart items 
-            shoppingCartItem.ShoppingCartType == ShoppingCartType.ShoppingCart)
+        if (ensureOnlyActiveCheckoutAttributes)
         {
-            var cart = await GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, storeId);
+            var cart = await GetShoppingCartAsync(customer, storeId);
 
             var checkoutAttributesXml =
                 await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CheckoutAttributes,
@@ -447,7 +443,7 @@ public partial class ShoppingCartService : IShoppingCartService
     {
         ArgumentNullException.ThrowIfNull(customer);
 
-        var cart = await GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, storeId);
+        var cart = await GetShoppingCartAsync(customer, storeId);
 
         //delete items
         await _sciRepository.DeleteAsync(cart, publishEvent: false);
@@ -503,7 +499,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// Gets shopping cart
     /// </summary>
     /// <param name="customer">Customer</param>
-    /// <param name="shoppingCartType">Shopping cart type; pass null to load all records</param>
     /// <param name="storeId">Store identifier; pass 0 to load all records</param>
     /// <param name="productId">Product identifier; pass null to load all records</param>
     /// <param name="createdFromUtc">Created date from (UTC); pass null to load all records</param>
@@ -512,16 +507,12 @@ public partial class ShoppingCartService : IShoppingCartService
     /// A task that represents the asynchronous operation
     /// The task result contains the shopping Cart
     /// </returns>
-    public virtual async Task<IList<ShoppingCartItem>> GetShoppingCartAsync(Customer customer, ShoppingCartType? shoppingCartType = null,
+    public virtual async Task<IList<ShoppingCartItem>> GetShoppingCartAsync(Customer customer,
         int storeId = 0, int? productId = null, DateTime? createdFromUtc = null, DateTime? createdToUtc = null)
     {
         ArgumentNullException.ThrowIfNull(customer);
 
         var items = _sciRepository.Table.Where(sci => sci.CustomerId == customer.Id);
-
-        //filter by type
-        if (shoppingCartType.HasValue)
-            items = items.Where(item => item.ShoppingCartTypeId == (int)shoppingCartType.Value);
 
         //filter shopping cart items by store
         if (storeId > 0 && !_shoppingCartSettings.CartsSharedBetweenStores)
@@ -537,14 +528,13 @@ public partial class ShoppingCartService : IShoppingCartService
         if (createdToUtc.HasValue)
             items = items.Where(item => createdToUtc.Value >= item.CreatedOnUtc);
 
-        return await _shortTermCacheManager.GetAsync(async () => await items.ToListAsync(), NopOrderDefaults.ShoppingCartItemsAllCacheKey, customer, shoppingCartType, storeId, productId, createdFromUtc, createdToUtc);
+        return await _shortTermCacheManager.GetAsync(async () => await items.ToListAsync(), NopOrderDefaults.ShoppingCartItemsAllCacheKey, customer, storeId, productId, createdFromUtc, createdToUtc);
     }
 
     /// <summary>
     /// Validates shopping cart item attributes
     /// </summary>
     /// <param name="customer">Customer</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="product">Product</param>
     /// <param name="quantity">Quantity</param>
     /// <param name="attributesXml">Attributes in XML format</param>
@@ -557,7 +547,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// The task result contains the warnings
     /// </returns>
     public virtual async Task<IList<string>> GetShoppingCartItemAttributeWarningsAsync(Customer customer,
-        ShoppingCartType shoppingCartType,
         Product product,
         int quantity = 1,
         string attributesXml = "",
@@ -739,7 +728,7 @@ public partial class ShoppingCartService : IShoppingCartService
                 var store = await _storeContext.GetCurrentStoreAsync();
                 var totalQty = quantity * attributeValue.Quantity;
                 var associatedProductWarnings = await GetShoppingCartItemWarningsAsync(customer,
-                    shoppingCartType, associatedProduct, store.Id,
+                     associatedProduct, store.Id,
                     string.Empty, totalQty, false, shoppingCartItemId);
 
                 var productAttribute = await _productAttributeService.GetProductAttributeByIdAsync(productAttributeMapping.ProductAttributeId);
@@ -763,14 +752,13 @@ public partial class ShoppingCartService : IShoppingCartService
     /// <summary>
     /// Validates shopping cart item (gift card)
     /// </summary>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="product">Product</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the warnings
     /// </returns>
-    public virtual async Task<IList<string>> GetShoppingCartItemGiftCardWarningsAsync(ShoppingCartType shoppingCartType,
+    public virtual async Task<IList<string>> GetShoppingCartItemGiftCardWarningsAsync(
         GiftCard product, string attributesXml)
     {
         ArgumentNullException.ThrowIfNull(product);
@@ -811,7 +799,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// Validates shopping cart item
     /// </summary>
     /// <param name="customer">Customer</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="product">Product</param>
     /// <param name="storeId">Store identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
@@ -826,7 +813,7 @@ public partial class ShoppingCartService : IShoppingCartService
     /// A task that represents the asynchronous operation
     /// The task result contains the warnings
     /// </returns>
-    public virtual async Task<IList<string>> GetShoppingCartItemWarningsAsync(Customer customer, ShoppingCartType shoppingCartType,
+    public virtual async Task<IList<string>> GetShoppingCartItemWarningsAsync(Customer customer, 
         Product product, int storeId,
         string attributesXml,
         int quantity = 1, bool addRequiredProducts = true, int shoppingCartItemId = 0,
@@ -839,11 +826,11 @@ public partial class ShoppingCartService : IShoppingCartService
 
         //standard properties
         if (getStandardWarnings)
-            warnings.AddRange(await GetStandardWarningsAsync(customer, shoppingCartType, product, attributesXml, quantity, shoppingCartItemId, storeId));
+            warnings.AddRange(await GetStandardWarningsAsync(customer, product, attributesXml, quantity, shoppingCartItemId, storeId));
 
         //selected attributes
         if (getAttributesWarnings)
-            warnings.AddRange(await GetShoppingCartItemAttributeWarningsAsync(customer, shoppingCartType, product, quantity, attributesXml, false, false, false, shoppingCartItemId));
+            warnings.AddRange(await GetShoppingCartItemAttributeWarningsAsync(customer, product, quantity, attributesXml, false, false, false, shoppingCartItemId));
 
         return warnings;
     }
@@ -1052,7 +1039,6 @@ public partial class ShoppingCartService : IShoppingCartService
         return await GetUnitPriceAsync(product,
             customer,
             store,
-            shoppingCartItem.ShoppingCartType,
             shoppingCartItem.Quantity,
             shoppingCartItem.AttributesXml,
             includeDiscounts);
@@ -1064,7 +1050,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// <param name="product">Product</param>
     /// <param name="customer">Customer</param>
     /// <param name="store">Store</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="quantity">Quantity</param>
     /// <param name="attributesXml">Product attributes (XML format)</param>
     /// <param name="includeDiscounts">A value indicating whether include discounts or not for price computation</param>
@@ -1075,7 +1060,6 @@ public partial class ShoppingCartService : IShoppingCartService
     public virtual async Task<(decimal unitPrice, decimal discountAmount, List<Discount> appliedDiscounts)> GetUnitPriceAsync(Product product,
         Customer customer,
         Store store,
-        ShoppingCartType shoppingCartType,
         int quantity,
         string attributesXml,
         bool includeDiscounts)
@@ -1122,7 +1106,7 @@ public partial class ShoppingCartService : IShoppingCartService
             {
                 //the same products with distinct product attributes could be stored as distinct "ShoppingCartItem" records
                 //so let's find how many of the current products are in the cart                        
-                qty = (await GetShoppingCartAsync(customer, shoppingCartType: shoppingCartType, productId: product.Id))
+                qty = (await GetShoppingCartAsync(customer, productId: product.Id))
                     .Sum(x => x.Quantity);
 
                 if (qty == 0)
@@ -1155,7 +1139,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// Finds a shopping cart item in the cart
     /// </summary>
     /// <param name="shoppingCart">Shopping cart</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="product">Product</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <returns>
@@ -1163,14 +1146,13 @@ public partial class ShoppingCartService : IShoppingCartService
     /// The task result contains the found shopping cart item
     /// </returns>
     public virtual async Task<ShoppingCartItem> FindShoppingCartItemInTheCartAsync(IList<ShoppingCartItem> shoppingCart,
-        ShoppingCartType shoppingCartType,
         Product product,
         string attributesXml = "")
     {
         ArgumentNullException.ThrowIfNull(shoppingCart);
         ArgumentNullException.ThrowIfNull(product);
 
-        return await shoppingCart.Where(sci => sci.ShoppingCartType == shoppingCartType)
+        return await shoppingCart
             .FirstOrDefaultAwaitAsync(async sci => await ShoppingCartItemIsEqualAsync(sci, product, attributesXml));
     }
 
@@ -1179,7 +1161,6 @@ public partial class ShoppingCartService : IShoppingCartService
     /// </summary>
     /// <param name="customer">Customer</param>
     /// <param name="product">Product</param>
-    /// <param name="shoppingCartType">Shopping cart type</param>
     /// <param name="storeId">Store identifier</param>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="quantity">Quantity</param>
@@ -1189,7 +1170,7 @@ public partial class ShoppingCartService : IShoppingCartService
     /// The task result contains the warnings
     /// </returns>
     public virtual async Task<IList<string>> AddToCartAsync(Customer customer, Product product,
-        ShoppingCartType shoppingCartType, int storeId, string attributesXml = null,
+         int storeId, string attributesXml = null,
         int quantity = 1, bool addRequiredProducts = true)
     {
         ArgumentNullException.ThrowIfNull(customer);
@@ -1197,7 +1178,7 @@ public partial class ShoppingCartService : IShoppingCartService
         ArgumentNullException.ThrowIfNull(product);
 
         var warnings = new List<string>();
-        if (shoppingCartType == ShoppingCartType.ShoppingCart && !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART, customer))
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART, customer))
         {
             warnings.Add("Shopping cart is disabled");
             return warnings;
@@ -1218,10 +1199,10 @@ public partial class ShoppingCartService : IShoppingCartService
         //reset checkout info
         await _customerService.ResetCheckoutDataAsync(customer, storeId);
 
-        var cart = await GetShoppingCartAsync(customer, shoppingCartType, storeId);
+        var cart = await GetShoppingCartAsync(customer, storeId);
 
         var shoppingCartItem = await FindShoppingCartItemInTheCartAsync(cart,
-            shoppingCartType, product, attributesXml);
+             product, attributesXml);
 
         if (shoppingCartItem != null)
         {
@@ -1231,7 +1212,7 @@ public partial class ShoppingCartService : IShoppingCartService
             if (warnings.Any())
                 return warnings;
 
-            warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, shoppingCartType, product,
+            warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, product,
                 storeId, attributesXml,
                 newQuantity, addRequiredProducts, shoppingCartItem.Id));
 
@@ -1247,7 +1228,7 @@ public partial class ShoppingCartService : IShoppingCartService
         else
         {
             //new shopping cart item
-            warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, shoppingCartType, product,
+            warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, product,
                 storeId, attributesXml,
                 quantity, addRequiredProducts));
 
@@ -1257,25 +1238,16 @@ public partial class ShoppingCartService : IShoppingCartService
             if (warnings.Any())
                 return warnings;
 
-            //maximum items validation
-            switch (shoppingCartType)
-            {
-                case ShoppingCartType.ShoppingCart:
-                    if (cart.Count >= _shoppingCartSettings.MaximumShoppingCartItems)
-                    {
-                        warnings.Add(string.Format(await _localizationService.GetResourceAsync("ShoppingCart.MaximumShoppingCartItems"), _shoppingCartSettings.MaximumShoppingCartItems));
-                        return warnings;
-                    }
 
-                    break;
-                default:
-                    break;
+            if (cart.Count >= _shoppingCartSettings.MaximumShoppingCartItems)
+            {
+                warnings.Add(string.Format(await _localizationService.GetResourceAsync("ShoppingCart.MaximumShoppingCartItems"), _shoppingCartSettings.MaximumShoppingCartItems));
+                return warnings;
             }
 
             var now = DateTime.UtcNow;
             shoppingCartItem = new ShoppingCartItem
             {
-                ShoppingCartType = shoppingCartType,
                 StoreId = storeId,
                 ProductId = product.Id,
                 AttributesXml = attributesXml,
@@ -1336,7 +1308,7 @@ public partial class ShoppingCartService : IShoppingCartService
         if (quantity > 0)
         {
             //check warnings
-            warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, shoppingCartItem.ShoppingCartType,
+            warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, 
                 product, shoppingCartItem.StoreId,
                 attributesXml,quantity, false, shoppingCartItemId));
             if (warnings.Any())
@@ -1381,7 +1353,7 @@ public partial class ShoppingCartService : IShoppingCartService
             var sci = fromCart[i];
             var product = await _productService.GetProductByIdAsync(sci.ProductId);
 
-            await AddToCartAsync(toCustomer, product, sci.ShoppingCartType, sci.StoreId,
+            await AddToCartAsync(toCustomer, product, sci.StoreId,
                 sci.AttributesXml, sci.Quantity, false);
         }
 

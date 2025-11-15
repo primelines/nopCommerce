@@ -11,11 +11,6 @@ public partial class ShoppingCartItem : BaseEntity
     public int StoreId { get; set; }
 
     /// <summary>
-    /// Gets or sets the shopping cart type identifier
-    /// </summary>
-    public int ShoppingCartTypeId { get; set; }
-
-    /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
     public int CustomerId { get; set; }
@@ -44,13 +39,4 @@ public partial class ShoppingCartItem : BaseEntity
     /// Gets or sets the date and time of instance update
     /// </summary>
     public DateTime UpdatedOnUtc { get; set; }
-
-    /// <summary>
-    /// Gets the log type
-    /// </summary>
-    public ShoppingCartType ShoppingCartType
-    {
-        get => (ShoppingCartType)ShoppingCartTypeId;
-        set => ShoppingCartTypeId = (int)value;
-    }
 }

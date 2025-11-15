@@ -225,7 +225,7 @@ public class ProductModelFactoryTests : WebTest
                             {
                                 var warnings = new List<string>();
                                 warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(customer,
-                                    ShoppingCartType.ShoppingCart, product, 1, attributesXml, true, true, true));
+                                    product, 1, attributesXml, true, true, true));
                                 if (warnings.Any())
                                     continue;
 

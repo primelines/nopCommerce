@@ -28,7 +28,7 @@ public partial class OrderTotalsViewComponent : NopViewComponent
     public async Task<IViewComponentResult> InvokeAsync(bool isEditable)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), store.Id);
 
         var model = await _shoppingCartModelFactory.PrepareOrderTotalsModelAsync(cart, isEditable);
         return View(model);

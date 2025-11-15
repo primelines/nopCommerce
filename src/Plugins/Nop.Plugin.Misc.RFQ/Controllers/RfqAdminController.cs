@@ -164,7 +164,7 @@ public class RfqAdminController : BasePluginController
             ?? throw new ArgumentException("No customer found with the specified id");
 
         //warnings
-        warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(customer, ShoppingCartType.ShoppingCart, product, quantity, attributesXml));
+        warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(customer, product, quantity, attributesXml));
 
         if (!warnings.Any())
         {

@@ -243,7 +243,7 @@ public class RfqService
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, store.Id);
 
         if (!cart.Any())
             return (null, null);
@@ -782,7 +782,6 @@ public class RfqService
             var now = DateTime.UtcNow;
             var shoppingCartItem = new ShoppingCartItem
             {
-                ShoppingCartType = ShoppingCartType.ShoppingCart,
                 StoreId = store.Id,
                 ProductId = quoteItem.ProductId,
                 AttributesXml = quoteItem.AttributesXml,

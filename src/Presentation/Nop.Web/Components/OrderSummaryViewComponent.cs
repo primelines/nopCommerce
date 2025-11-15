@@ -34,7 +34,7 @@ public partial class OrderSummaryViewComponent : NopViewComponent
 
         //if not passed, then create a new model
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), store.Id);
 
         var model = new ShoppingCartModel();
         model = await _shoppingCartModelFactory.PrepareShoppingCartModelAsync(model, cart,

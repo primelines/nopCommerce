@@ -626,28 +626,6 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
     }
 
     /// <summary>
-    /// Prepare available shopping cart types
-    /// </summary>
-    /// <param name="items">Shopping cart type items</param>
-    /// <param name="withSpecialDefaultItem">Whether to insert the first special item for the default value</param>
-    /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task PrepareShoppingCartTypesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
-    {
-        ArgumentNullException.ThrowIfNull(items);
-
-        //prepare available shopping cart types
-        var availableShoppingCartTypeItems = await ShoppingCartType.ShoppingCart.ToSelectListAsync(false);
-        foreach (var shoppingCartTypeItem in availableShoppingCartTypeItems)
-        {
-            items.Add(shoppingCartTypeItem);
-        }
-
-        //insert special item for the default value
-        await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
-    }
-
-    /// <summary>
     /// Prepare available tax display types
     /// </summary>
     /// <param name="items">Tax display type items</param>

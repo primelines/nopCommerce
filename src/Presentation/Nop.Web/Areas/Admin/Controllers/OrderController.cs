@@ -1423,7 +1423,7 @@ public partial class OrderController : BaseAdminController
 
 
         //warnings
-        warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(customer, ShoppingCartType.ShoppingCart, product, model.Quantity, attributesXml));
+        warnings.AddRange(await _shoppingCartService.GetShoppingCartItemAttributeWarningsAsync(customer, product, model.Quantity, attributesXml));
 
         if (!warnings.Any())
         {

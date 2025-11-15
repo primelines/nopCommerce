@@ -11,15 +11,14 @@
 @{
     //prepare "Add to cart" AJAX link
     var addtocartlink = "";
-    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
     var quantity = 1;
     if (Model.ProductPrice.ForceRedirectionAfterAddingToCart)
     {
-        addtocartlink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart });
+        addtocartlink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, quantity = quantity, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart });
     }
     else
     {
-        addtocartlink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity });
+        addtocartlink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, quantity = quantity });
     }
 
     var addtocomparelink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_COMPARE, new { productId = Model.Id });

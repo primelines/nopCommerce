@@ -514,8 +514,7 @@ public partial class DiscountService : IDiscountService
 
             //do not inject IShoppingCartService via constructor because it'll cause circular references
             var shoppingCartService = EngineContext.Current.Resolve<IShoppingCartService>();
-            var cart = await shoppingCartService.GetShoppingCartAsync(customer,
-                ShoppingCartType.ShoppingCart, storeId: store.Id);
+            var cart = await shoppingCartService.GetShoppingCartAsync(customer,storeId: store.Id);
 
             var cartProductIds = cart.Select(ci => ci.ProductId).ToArray();
         }

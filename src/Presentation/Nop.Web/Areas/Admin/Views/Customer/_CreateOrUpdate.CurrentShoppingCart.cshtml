@@ -2,16 +2,6 @@
 @model CustomerModel
 @inject IStoreService storeService
 
-<div class="card-body">
-    <div class="form-group row">
-        <div class="col-md-3">
-            <nop-label asp-for="CustomerShoppingCartSearchModel.ShoppingCartTypeId" />
-        </div>
-        <div class="col-md-9">
-            <nop-select asp-for="CustomerShoppingCartSearchModel.ShoppingCartTypeId" asp-items="@Model.CustomerShoppingCartSearchModel.AvailableShoppingCartTypes" />
-        </div>
-    </div>
-</div>
 
 <div class="card-body">
     @await Html.PartialAsync("Table", new DataTablesModel
@@ -22,7 +12,7 @@
         LengthMenu = Model.CustomerShoppingCartSearchModel.AvailablePageSizes,
         Filters = new List<FilterParameter>
         {
-            new FilterParameter(nameof(CustomerShoppingCartSearchModel.ShoppingCartTypeId), nameof(CustomerShoppingCartSearchModel))
+            new FilterParameter(nameof(CustomerShoppingCartSearchModel))
         },
         ColumnCollection = new List<ColumnProperty>
         {
@@ -61,14 +51,6 @@
             }
         }
     })
-
-    <script>
-        $(function() {
-            $('#@Html.IdFor(model => model.CustomerShoppingCartSearchModel.ShoppingCartTypeId)').change(function() {
-                updateTable('#currentshoppingcart-grid');
-            });
-        });
-    </script>
 
     <script>
         function renderProductName(data, type, row, meta) {

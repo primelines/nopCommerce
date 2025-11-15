@@ -225,7 +225,7 @@ public class PayPalCommerceServiceManager
         {
             var store = await _storeContext.GetCurrentStoreAsync();
             var product = await _productService.GetProductByIdAsync(productId ?? 0);
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer,  store.Id);
 
             var (_, _, _, subTotal, _) = await _orderTotalCalculationService.GetShoppingCartSubTotalAsync(cart, true);
 
@@ -293,7 +293,7 @@ public class PayPalCommerceServiceManager
         //get customer shopping cart
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer,  store.Id);
         if (!cart.Any())
             throw new NopException("Shopping cart is empty");
 
@@ -1363,7 +1363,7 @@ public class PayPalCommerceServiceManager
 
             var customer = await _workContext.GetCurrentCustomerAsync();
             var store = await _storeContext.GetCurrentStoreAsync();
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer,  store.Id);
             if (!cart.Any())
                 return (false, false, null);
 
@@ -1390,7 +1390,7 @@ public class PayPalCommerceServiceManager
         {
             var customer = await _workContext.GetCurrentCustomerAsync();
             var store = await _storeContext.GetCurrentStoreAsync();
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer,  store.Id);
             if (!cart.Any())
                 throw new NopException("Shopping cart is empty");
 
@@ -1407,7 +1407,7 @@ public class PayPalCommerceServiceManager
                 var product = await _productService.GetProductByIdAsync(item.ProductId);
 
                 var itemWarnings = await _shoppingCartService
-                    .GetShoppingCartItemWarningsAsync(customer, item.ShoppingCartType, product, item.StoreId, item.AttributesXml,
+                    .GetShoppingCartItemWarningsAsync(customer, product, item.StoreId, item.AttributesXml,
                     item.Quantity, false, item.Id);
                 if (itemWarnings.Any())
                     return itemWarnings;
@@ -1431,7 +1431,7 @@ public class PayPalCommerceServiceManager
         {
             var customer = await _workContext.GetCurrentCustomerAsync();
             var store = await _storeContext.GetCurrentStoreAsync();
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer,  store.Id);
             var shippingIsRequired = await _shoppingCartService.ShoppingCartRequiresShippingAsync(cart);
 
             if (!shippingIsRequired && await _productService.GetProductByIdAsync(productId ?? 0) is Product product)
@@ -1741,7 +1741,7 @@ public class PayPalCommerceServiceManager
 
             var customer = await _workContext.GetCurrentCustomerAsync();
             var store = await _storeContext.GetCurrentStoreAsync();
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer,  store.Id);
             if (!cart.Any())
                 throw new NopException("Shopping cart is empty");
 
@@ -1855,7 +1855,7 @@ public class PayPalCommerceServiceManager
 
             var customer = await _workContext.GetCurrentCustomerAsync();
             var store = await _storeContext.GetCurrentStoreAsync();
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer,  store.Id);
             if (!cart.Any())
                 throw new NopException("Shopping cart is empty");
 
@@ -2031,7 +2031,7 @@ public class PayPalCommerceServiceManager
 
             var customer = await _workContext.GetCurrentCustomerAsync();
             var store = await _storeContext.GetCurrentStoreAsync();
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(customer,  store.Id);
             if (!cart.Any())
                 throw new NopException("Shopping cart is empty");
 

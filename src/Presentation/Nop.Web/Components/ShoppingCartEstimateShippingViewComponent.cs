@@ -38,7 +38,7 @@ public partial class ShoppingCartEstimateShippingViewComponent : NopViewComponen
             return Content(string.Empty);
 
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), store.Id);
 
         var model = await _shoppingCartModelFactory.PrepareEstimateShippingModelAsync(cart);
         if (!model.Enabled)

@@ -413,10 +413,6 @@ public partial class CustomerModelFactory : ICustomerModelFactory
 
         searchModel.CustomerId = customer.Id;
 
-        //prepare available shopping cart types (search shopping cart by default)
-        searchModel.ShoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
-        await _baseAdminModelFactory.PrepareShoppingCartTypesAsync(searchModel.AvailableShoppingCartTypes, false);
-
         //prepare page parameters
         searchModel.SetGridPageSize();
 
@@ -981,7 +977,7 @@ public partial class CustomerModelFactory : ICustomerModelFactory
 
         //get customer shopping cart
         var shoppingCart = (await _shoppingCartService
-            .GetShoppingCartAsync(customer, (ShoppingCartType)searchModel.ShoppingCartTypeId))
+            .GetShoppingCartAsync(customer))
             .ToPagedList(searchModel);
 
         //prepare list model

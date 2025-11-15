@@ -263,7 +263,6 @@ public partial class CustomerService : ICustomerService
     /// <summary>
     /// Gets customers with shopping carts
     /// </summary>
-    /// <param name="shoppingCartType">Shopping cart type; pass null to load all records</param>
     /// <param name="storeId">Store identifier; pass 0 to load all records</param>
     /// <param name="productId">Product identifier; pass null to load all records</param>
     /// <param name="createdFromUtc">Created date from (UTC); pass null to load all records</param>
@@ -275,17 +274,13 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customers
     /// </returns>
-    public virtual async Task<IPagedList<Customer>> GetCustomersWithShoppingCartsAsync(ShoppingCartType? shoppingCartType = null,
+    public virtual async Task<IPagedList<Customer>> GetCustomersWithShoppingCartsAsync(
         int storeId = 0, int? productId = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null, int? countryId = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         //get all shopping cart items
         var items = _shoppingCartRepository.Table;
-
-        //filter by type
-        if (shoppingCartType.HasValue)
-            items = items.Where(item => item.ShoppingCartTypeId == (int)shoppingCartType.Value);
 
         //filter shopping cart items by store
         if (storeId > 0 && !_shoppingCartSettings.CartsSharedBetweenStores)

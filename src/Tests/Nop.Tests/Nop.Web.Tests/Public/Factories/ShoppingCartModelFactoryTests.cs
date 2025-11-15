@@ -42,7 +42,6 @@ public class ShoppingCartModelFactoryTests : WebTest
             ProductId = 1,
             Quantity = 1,
             CustomerId = customer.Id,
-            ShoppingCartType = ShoppingCartType.ShoppingCart,
             StoreId = store.Id
         };
 

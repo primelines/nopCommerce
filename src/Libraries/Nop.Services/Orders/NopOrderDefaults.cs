@@ -29,13 +29,12 @@ public static partial class NopOrderDefaults
     /// </summary>
     /// <remarks>
     /// {0} : customer ID
-    /// {1} : shopping cart type
     /// {2} : store ID
     /// {3} : product ID
     /// {4} : created from date
     /// {5} : created to date
     /// </remarks>
-    public static CacheKey ShoppingCartItemsAllCacheKey => new("Nop.shoppingcartitem.all.{0}-{1}-{2}-{3}-{4}-{5}");
+    public static CacheKey ShoppingCartItemsAllCacheKey => new("Nop.shoppingcartitem.all.{0}-{1}-{2}-{3}-{4}");
 
     /// <summary>
     /// Gets a key pattern to clear cache
