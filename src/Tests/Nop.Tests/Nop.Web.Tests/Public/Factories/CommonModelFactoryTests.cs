@@ -113,12 +113,10 @@ public class CommonModelFactoryTests : BaseNopTest
         model.IsAuthenticated.Should().BeTrue();
         model.CustomerName.Should().Be("John");
         model.ShoppingCartEnabled.Should().BeTrue();
-        model.WishlistEnabled.Should().BeTrue();
         model.AllowPrivateMessages.Should().Be(_forumSettings.AllowPrivateMessages);
         model.UnreadPrivateMessages.Should().BeEmpty();
         model.AlertMessage.Should().BeEmpty();
         model.ShoppingCartItems.Should().Be(0);
-        model.WishlistItems.Should().Be(0);
     }
 
     [Test]
@@ -245,6 +243,6 @@ public class CommonModelFactoryTests : BaseNopTest
         var model = await _commonModelFactory.PrepareRobotsTextFileAsync();
         model.Should().NotBeNullOrEmpty();
 
-        model.Trim().Split(Environment.NewLine).Length.Should().Be(163);
+        model.Trim().Split(Environment.NewLine).Length.Should().Be(159);
     }
 }

@@ -203,7 +203,6 @@ public partial class NopStartup : INopStartup
         services.AddScoped<IReturnRequestService, ReturnRequestService>();
         services.AddScoped<IRewardPointService, RewardPointService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
-        services.AddScoped<ICustomWishlistService, CustomWishlistService>();
         services.AddScoped<ICustomNumberFormatter, CustomNumberFormatter>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IEncryptionService, EncryptionService>();

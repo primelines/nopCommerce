@@ -90,11 +90,6 @@ public class FacebookPixelDefaults
     public const string VIEW_CONTENT = "ViewContent";
 
     /// <summary>
-    /// Gets the name of an event when a product is added to the wishlist
-    /// </summary>
-    public const string ADD_TO_WISHLIST = "AddToWishlist";
-
-    /// <summary>
     /// Gets the name of an event when a person enters the checkout flow prior to completing the checkout flow
     /// </summary>
     public const string INITIATE_CHECKOUT = "InitiateCheckout";

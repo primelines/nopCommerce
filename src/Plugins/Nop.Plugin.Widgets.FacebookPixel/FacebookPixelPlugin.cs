@@ -116,8 +116,6 @@ public class FacebookPixelPlugin : BasePlugin, IWidgetPlugin
             ["Plugins.Widgets.FacebookPixel.Configuration.Fields.Store.Hint"] = "Choose a store in which the Facebook Pixel is used.",
             ["Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackAddToCart"] = "Track \"AddToCart\" event",
             ["Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackAddToCart.Hint"] = "Check to enable tracking standard event, when a product is added to the shopping cart.",
-            ["Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackAddToWishlist"] = "Track \"AddToWishlist\" event",
-            ["Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackAddToWishlist.Hint"] = "Check to enable tracking standard event, when a product is added to the wishlist.",
             ["Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackCompleteRegistration"] = "Track \"CompleteRegistration\" event",
             ["Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackCompleteRegistration.Hint"] = "Check to enable tracking standard event, when a registration form is completed.",
             ["Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackContact"] = "Track \"Contact\" event",

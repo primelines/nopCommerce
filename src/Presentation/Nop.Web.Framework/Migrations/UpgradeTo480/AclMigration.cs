@@ -150,7 +150,6 @@ public class AclMigration : Migration
 
         insertMappings("DisplayPrices", StandardPermission.PublicStore.DISPLAY_PRICES);
         insertMappings("EnableShoppingCart", StandardPermission.PublicStore.ENABLE_SHOPPING_CART);
-        insertMappings("EnableWishlist", StandardPermission.PublicStore.ENABLE_WISHLIST);
         insertMappings("PublicStoreAllowNavigation", StandardPermission.PublicStore.PUBLIC_STORE_ALLOW_NAVIGATION);
         insertMappings("AccessClosedStore", StandardPermission.PublicStore.ACCESS_CLOSED_STORE);
 

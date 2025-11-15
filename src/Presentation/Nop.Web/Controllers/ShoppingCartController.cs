@@ -53,7 +53,6 @@ public partial class ShoppingCartController : BasePublicController
     protected readonly ICurrencyService _currencyService;
     protected readonly ICustomerActivityService _customerActivityService;
     protected readonly ICustomerService _customerService;
-    protected readonly ICustomWishlistService _customWishlistService;
     protected readonly IDiscountService _discountService;
     protected readonly IDownloadService _downloadService;
     protected readonly IGenericAttributeService _genericAttributeService;
@@ -96,7 +95,6 @@ public partial class ShoppingCartController : BasePublicController
         ICurrencyService currencyService,
         ICustomerActivityService customerActivityService,
         ICustomerService customerService,
-        ICustomWishlistService customWishlistService,
         IDiscountService discountService,
         IDownloadService downloadService,
         IGenericAttributeService genericAttributeService,
@@ -134,7 +132,6 @@ public partial class ShoppingCartController : BasePublicController
         _currencyService = currencyService;
         _customerActivityService = customerActivityService;
         _customerService = customerService;
-        _customWishlistService = customWishlistService;
         _discountService = discountService;
         _downloadService = downloadService;
         _genericAttributeService = genericAttributeService;
@@ -336,7 +333,7 @@ public partial class ShoppingCartController : BasePublicController
     {
         if (addToCartWarnings.Any())
         {
-            //cannot be added to the cart/wishlist
+            //cannot be added to the cart
             //let's display warnings
             return Json(new
             {
@@ -345,58 +342,11 @@ public partial class ShoppingCartController : BasePublicController
             });
         }
 
-        //added to the cart/wishlist
+        //added to the cart
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
         switch (cartType)
         {
-            case ShoppingCartType.Wishlist:
-            {
-                var wishlistRouteUrl = Url.RouteUrl(NopRouteNames.General.WISHLIST);
-                //activity log
-                await _customerActivityService.InsertActivityAsync("PublicStore.AddToWishlist",
-                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.AddToWishlist"), product.Name), product);
-
-                if (_shoppingCartSettings.DisplayWishlistAfterAddingProduct)
-                {
-                    //redirect to the wishlist page
-                    return Json(new
-                    {
-                        redirect = wishlistRouteUrl
-                    });
-                }
-
-                //display notification message and update appropriate blocks
-                var shoppingCarts = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id);
-
-                var updateTopWishlistSectionHtml = string.Format(
-                    await _localizationService.GetResourceAsync("Wishlist.HeaderQuantity"),
-                    shoppingCarts.Sum(item => item.Quantity));
-
-                var customWishlists = await _customWishlistService.GetAllCustomWishlistsAsync(customer.Id);
-                var isGuest = await _customerService.IsGuestAsync(customer);
-
-                if (!isGuest && customWishlists.Any())
-                {
-                    var onclick = $"showMoveToWishlistModal({product.Id}); return false;";
-                    return Json(new
-                    {
-                        success = true,
-                        message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheWishlistAndMoved.Link"), wishlistRouteUrl, onclick),
-                        updatetopwishlistsectionhtml = updateTopWishlistSectionHtml
-                    });
-                }
-                else
-                {
-                    return Json(new
-                    {
-                        success = true,
-                        message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheWishlist.Link"), wishlistRouteUrl),
-                        updatetopwishlistsectionhtml = updateTopWishlistSectionHtml
-                    });
-                }
-            }
-
             case ShoppingCartType.ShoppingCart:
             default:
             {
@@ -620,56 +570,9 @@ public partial class ShoppingCartController : BasePublicController
             return Json(new { redirect = redirectUrl });
         }
 
-        //added to the cart/wishlist
+        //added to the cart
         switch (cartType)
         {
-            case ShoppingCartType.Wishlist:
-            {
-
-                var wishlistRouteUrl = Url.RouteUrl(NopRouteNames.General.WISHLIST);
-                //activity log
-                await _customerActivityService.InsertActivityAsync("PublicStore.AddToWishlist",
-                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.AddToWishlist"), product.Name), product);
-
-                if (_shoppingCartSettings.DisplayWishlistAfterAddingProduct || forceredirection)
-                {
-                    //redirect to the wishlist page
-                    return Json(new
-                    {
-                        redirect = wishlistRouteUrl
-                    });
-                }
-
-                //display notification message and update appropriate blocks
-                var shoppingCarts = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id);
-
-                var updatetopwishlistsectionhtml = string.Format(await _localizationService.GetResourceAsync("Wishlist.HeaderQuantity"),
-                    shoppingCarts.Sum(item => item.Quantity));
-
-                var customWishlists = await _customWishlistService.GetAllCustomWishlistsAsync(customer.Id);
-                var isGuest = await _customerService.IsGuestAsync(customer);
-
-                if (!isGuest && customWishlists.Any())
-                {
-                    var onclick = $"showMoveToWishlistModal({productId}); return false;";
-                    return Json(new
-                    {
-                        success = true,
-                        message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheWishlistAndMoved.Link"), wishlistRouteUrl, onclick),
-                        updatetopwishlistsectionhtml
-                    });
-                }
-                else
-                {
-                    return Json(new
-                    {
-                        success = true,
-                        message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheWishlist.Link"), wishlistRouteUrl),
-                        updatetopwishlistsectionhtml
-                    });
-                }
-            }
-
             case ShoppingCartType.ShoppingCart:
             default:
             {
@@ -1387,407 +1290,6 @@ public partial class ShoppingCartController : BasePublicController
 
         model = await _shoppingCartModelFactory.PrepareShoppingCartModelAsync(model, cart);
         return View(model);
-    }
-
-    #endregion
-
-    #region Wishlist
-
-    public virtual async Task<IActionResult> Wishlist(Guid? customerGuid, int? list)
-    {
-        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST))
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var customer = customerGuid.HasValue
-            ? await _customerService.GetCustomerByGuidAsync(customerGuid.Value)
-            : await _workContext.GetCurrentCustomerAsync();
-        if (customer == null)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id, customWishlistId: list);
-
-        var model = new WishlistModel();
-        model = await _shoppingCartModelFactory.PrepareWishlistModelAsync(model, cart, !customerGuid.HasValue, list);
-        return View(model);
-    }
-
-    [HttpPost, ActionName("Wishlist")]
-    [FormValueRequired("updatecart")]
-    public virtual async Task<IActionResult> UpdateWishlist(WishlistModel wishlistModel, IFormCollection form)
-    {
-        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST))
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id, customWishlistId: wishlistModel.ListId);
-
-        var allIdsToRemove = form.ContainsKey("removefromcart")
-            ? form["removefromcart"].ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
-                .ToList()
-            : new List<int>();
-
-        //current warnings <cart item identifier, warnings>
-        var innerWarnings = new Dictionary<int, IList<string>>();
-        foreach (var sci in cart)
-        {
-            var remove = allIdsToRemove.Contains(sci.Id);
-            if (remove)
-                await _shoppingCartService.DeleteShoppingCartItemAsync(sci);
-            else
-            {
-                foreach (var formKey in form.Keys)
-                    if (formKey.Equals($"itemquantity{sci.Id}", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        if (int.TryParse(form[formKey], out var newQuantity))
-                        {
-                            var currSciWarnings = await _shoppingCartService.UpdateShoppingCartItemAsync(customer,
-                                sci.Id, sci.AttributesXml, 
-                                newQuantity, true);
-                            innerWarnings.Add(sci.Id, currSciWarnings);
-                        }
-
-                        break;
-                    }
-            }
-        }
-
-        //updated wishlist
-        cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id, customWishlistId: wishlistModel.ListId);
-        var model = new WishlistModel();
-        model = await _shoppingCartModelFactory.PrepareWishlistModelAsync(model, cart, list: wishlistModel.ListId);
-        //update current warnings
-        foreach (var kvp in innerWarnings)
-        {
-            //kvp = <cart item identifier, warnings>
-            var sciId = kvp.Key;
-            var warnings = kvp.Value;
-            //find model
-            var sciModel = model.Items.FirstOrDefault(x => x.Id == sciId);
-            if (sciModel != null)
-                foreach (var w in warnings)
-                    if (!sciModel.Warnings.Contains(w))
-                        sciModel.Warnings.Add(w);
-        }
-
-        return View(model);
-    }
-
-    [HttpPost, ActionName("Wishlist")]
-    [FormValueRequired("addtocartbutton")]
-    public virtual async Task<IActionResult> AddItemsToCartFromWishlist(Guid? customerGuid, WishlistModel wishlistModel, IFormCollection form)
-    {
-        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART))
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST))
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var pageCustomer = customerGuid.HasValue
-            ? await _customerService.GetCustomerByGuidAsync(customerGuid.Value)
-            : customer;
-        if (pageCustomer == null)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var pageCart = await _shoppingCartService.GetShoppingCartAsync(pageCustomer, ShoppingCartType.Wishlist, store.Id, customWishlistId: wishlistModel.ListId);
-
-        var allWarnings = new List<string>();
-        var countOfAddedItems = 0;
-        var allIdsToAdd = form.ContainsKey("addtocart")
-            ? form["addtocart"].ToString().Split(_separator, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()
-            : [];
-        foreach (var sci in pageCart)
-        {
-            if (allIdsToAdd.Contains(sci.Id))
-            {
-                var product = await _productService.GetProductByIdAsync(sci.ProductId);
-
-                var warnings = await _shoppingCartService.AddToCartAsync(customer,
-                    product, ShoppingCartType.ShoppingCart,
-                    store.Id,
-                    sci.AttributesXml, sci.Quantity, true);
-                if (!warnings.Any())
-                    countOfAddedItems++;
-                if (_shoppingCartSettings.MoveItemsFromWishlistToCart && //settings enabled
-                    !customerGuid.HasValue && //own wishlist
-                    !warnings.Any()) //no warnings ( already in the cart)
-                {
-                    //let's remove the item from wishlist
-                    await _shoppingCartService.DeleteShoppingCartItemAsync(sci);
-                }
-
-                allWarnings.AddRange(warnings);
-            }
-        }
-
-        if (countOfAddedItems > 0)
-        {
-            //redirect to the shopping cart page
-
-            if (allWarnings.Any())
-            {
-                _notificationService.ErrorNotification(await _localizationService.GetResourceAsync("Wishlist.AddToCart.Error"));
-            }
-
-            return RedirectToRoute(NopRouteNames.General.CART);
-        }
-        else
-        {
-            _notificationService.WarningNotification(await _localizationService.GetResourceAsync("Wishlist.AddToCart.NoAddedItems"));
-        }
-        //no items added. redisplay the wishlist page
-
-        if (allWarnings.Any())
-        {
-            _notificationService.ErrorNotification(await _localizationService.GetResourceAsync("Wishlist.AddToCart.Error"));
-        }
-
-        var cart = await _shoppingCartService.GetShoppingCartAsync(pageCustomer, ShoppingCartType.Wishlist, store.Id, customWishlistId: wishlistModel.ListId);
-
-        var model = new WishlistModel();
-        model = await _shoppingCartModelFactory.PrepareWishlistModelAsync(model, cart, !customerGuid.HasValue, list: wishlistModel.ListId);
-        return View(model);
-    }
-
-    public virtual async Task<IActionResult> EmailWishlist(int? wishlistId = null)
-    {
-        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST) || !_shoppingCartSettings.EmailWishlistEnabled)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), ShoppingCartType.Wishlist, store.Id, customWishlistId: wishlistId);
-
-        if (!cart.Any())
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var model = new WishlistEmailAFriendModel();
-        model = await _shoppingCartModelFactory.PrepareWishlistEmailAFriendModelAsync(model, false, wishlistId);
-        return View(model);
-    }
-
-    [HttpPost, ActionName("EmailWishlist")]
-    [FormValueRequired("send-email")]
-    [ValidateCaptcha]
-    public virtual async Task<IActionResult> EmailWishlistSend(WishlistEmailAFriendModel model, bool captchaValid)
-    {
-        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST) || !_shoppingCartSettings.EmailWishlistEnabled)
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id, customWishlistId: model.ListId);
-
-        if (!cart.Any())
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        //validate CAPTCHA
-        if (_captchaSettings.Enabled && _captchaSettings.ShowOnEmailWishlistToFriendPage && !captchaValid)
-        {
-            ModelState.AddModelError(string.Empty, await _localizationService.GetResourceAsync("Common.WrongCaptchaMessage"));
-        }
-
-        //check whether the current customer is guest and is allowed to email wishlist
-        if (await _customerService.IsGuestAsync(customer) && !_shoppingCartSettings.AllowAnonymousUsersToEmailWishlist)
-        {
-            ModelState.AddModelError(string.Empty, await _localizationService.GetResourceAsync("Wishlist.EmailAFriend.OnlyRegisteredUsers"));
-        }
-
-        if (ModelState.IsValid)
-        {
-            //email
-            var wishlistUrl = Url.RouteUrl(NopRouteNames.General.WISHLIST, new { customerGuid = customer.CustomerGuid, list = model.ListId }, _webHelper.GetCurrentRequestProtocol());
-
-            await _workflowMessageService.SendWishlistEmailAFriendMessageAsync(customer,
-                (await _workContext.GetWorkingLanguageAsync()).Id,
-                model.YourEmailAddress,
-                model.FriendEmail,
-                _htmlFormatter.FormatText(model.PersonalMessage, false, true, false, false, false, false),
-                wishlistUrl);
-
-            model.SuccessfullySent = true;
-            model.Result = await _localizationService.GetResourceAsync("Wishlist.EmailAFriend.SuccessfullySent");
-
-            return View(model);
-        }
-
-        //If we got this far, something failed, redisplay form
-        model = await _shoppingCartModelFactory.PrepareWishlistEmailAFriendModelAsync(model, true);
-
-        return View(model);
-    }
-
-    [HttpPost]
-    public virtual async Task<IActionResult> AddWishlist(string name, int productId)
-    {
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var isGuest = await _customerService.IsGuestAsync(customer);
-
-        if (isGuest)
-        {
-            return Json(new
-            {
-                success = false,
-                message = await _localizationService.GetResourceAsync("Wishlist.MultipleWishlistNotForGuest")
-            });
-        }
-
-        if (!_shoppingCartSettings.AllowMultipleWishlist)
-        {
-            return Json(new
-            {
-                success = false,
-                message = await _localizationService.GetResourceAsync("Wishlist.NotAllowMultipleWishlist")
-            });
-        }
-
-        // Check if customer has reached the maximum number of custom wishlists allowed
-        var currentWishlists = await _customWishlistService.GetAllCustomWishlistsAsync(customer.Id);
-        var maximumNumberOfCustomWishlist = _shoppingCartSettings.MaximumNumberOfCustomWishlist;
-        if (currentWishlists.Count >= maximumNumberOfCustomWishlist)
-        {
-            return Json(new
-            {
-                success = false,
-                message = string.Format(await _localizationService.GetResourceAsync("Wishlist.MaximumNumberReached"), maximumNumberOfCustomWishlist)
-            });
-        }
-
-        var customWishlist = new CustomWishlist
-        {
-            CustomerId = customer.Id,
-            Name = name.Trim(),
-            CreatedOnUtc = DateTime.UtcNow
-        };
-
-        // add a new wishlist
-        await _customWishlistService.AddCustomWishlistAsync(customWishlist);
-
-        var product = await _productService.GetProductByIdAsync(productId);
-        if (product != null)
-        {
-            await MoveProductToCustomWishlist(product.Id, customWishlist.Id);
-        }
-
-        return Json(new
-        {
-            success = true,
-            redirect = Url.RouteUrl(NopRouteNames.General.WISHLIST, new { list = customWishlist.Id })
-        });
-    }
-
-    [HttpPost]
-    public virtual async Task<IActionResult> MoveProductToCustomWishlist(int productId, int wishlistId)
-    {
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var isGuest = await _customerService.IsGuestAsync(customer);
-
-        if (isGuest)
-        {
-            return Json(new
-            {
-                success = false,
-                message = await _localizationService.GetResourceAsync("Wishlist.MultipleWishlistNotForGuest")
-            });
-        }
-
-        if (!_shoppingCartSettings.AllowMultipleWishlist)
-        {
-            return Json(new
-            {
-                success = false,
-                message = await _localizationService.GetResourceAsync("Wishlist.NotAllowMultipleWishlist")
-            });
-        }
-
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var shoppingCarts = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id);
-
-        var product = await _productService.GetProductByIdAsync(productId);
-        if (product != null)
-        {
-            var shoppingCartItem = shoppingCarts
-                .Where(sci => sci.ProductId == product.Id
-                    && sci.ShoppingCartType == ShoppingCartType.Wishlist
-                    && sci.CustomWishlistId == null)
-                .OrderByDescending(sci => sci.UpdatedOnUtc)
-                .FirstOrDefault();
-
-            if (shoppingCartItem != null)
-                await MoveToCustomWishlist(shoppingCartItem.Id, wishlistId);
-        }
-        var redirectUrl = Url.RouteUrl(NopRouteNames.General.WISHLIST, new { list = wishlistId });
-        var customWishlist = await _customWishlistService.GetCustomWishlistByIdAsync(wishlistId);
-
-        return Json(new
-        {
-            success = true,
-            message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheCustomWishlist.Link"), redirectUrl, WebUtility.HtmlEncode(customWishlist?.Name) ?? "")
-        });
-    }
-
-    [HttpPost]
-    public virtual async Task<IActionResult> MoveToCustomWishlist(int shoppingCartItemId, int customWishlistId)
-    {
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var redirectUrl = Url.RouteUrl(NopRouteNames.General.WISHLIST, new { list = customWishlistId });
-        if (customWishlistId > 0)
-        {
-            var wishlist = await _customWishlistService.GetCustomWishlistByIdAsync(customWishlistId);
-
-            if (wishlist == null || wishlist.CustomerId != customer.Id)
-                return Json(new
-                {
-                    success = false,
-                    message = await _localizationService.GetResourceAsync("Wishlist.NotFound")
-                });
-
-            await _shoppingCartService.MoveItemToCustomWishlistAsync(shoppingCartItemId, wishlist.Id);
-        }
-        else
-        {
-            await _shoppingCartService.MoveItemToCustomWishlistAsync(shoppingCartItemId);
-            redirectUrl = Url.RouteUrl(NopRouteNames.General.WISHLIST);
-        }
-        return Json(new
-        {
-            redirect = redirectUrl
-        });
-    }
-
-    [HttpPost]
-    public virtual async Task<IActionResult> DeleteWishlist(int wishlistId)
-    {
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var wishlist = await _customWishlistService.GetCustomWishlistByIdAsync(wishlistId);
-
-        if (wishlist == null || wishlist.CustomerId != customer.Id)
-        {
-            return Json(new
-            {
-                success = false,
-                message = await _localizationService.GetResourceAsync("Wishlist.NotFound")
-            });
-        }
-
-        // Delete all shopping cart items associated with this wishlist
-        var store = await _storeContext.GetCurrentStoreAsync();
-        var cartItems = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id, customWishlistId: wishlist.Id);
-        foreach (var item in cartItems)
-        {
-            await _shoppingCartService.DeleteShoppingCartItemAsync(item);
-        }
-
-        // Delete the wishlist itself
-        await _customWishlistService.RemoveCustomWishlistAsync(wishlist.Id);
-
-        return Json(new
-        {
-            redirect = Url.RouteUrl(NopRouteNames.General.WISHLIST)
-        });
     }
 
     #endregion

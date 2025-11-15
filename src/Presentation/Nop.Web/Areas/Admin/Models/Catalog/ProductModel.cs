@@ -166,9 +166,6 @@ public partial record ProductModel : BaseNopEntityModel,
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.DisableBuyButton")]
     public bool DisableBuyButton { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Products.Fields.DisableWishlistButton")]
-    public bool DisableWishlistButton { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.AvailableForPreOrder")]
     public bool AvailableForPreOrder { get; set; }
 

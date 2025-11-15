@@ -147,7 +147,7 @@ public partial class ProductController : BasePublicController
         if (notAvailable && !hasAdminAccess)
             return InvokeHttp404();
 
-        //update existing shopping cart or wishlist  item?
+        //update existing shopping cart ?
         ShoppingCartItem updatecartitem = null;
         if (_shoppingCartSettings.AllowCartItemEditing && updatecartitemid > 0)
         {

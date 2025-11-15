@@ -164,7 +164,6 @@ public partial class DefaultPermissionConfigManager : IPermissionConfigManager
         
         new ("Public store. Display Prices", StandardPermission.PublicStore.DISPLAY_PRICES, nameof(StandardPermission.PublicStore), NopCustomerDefaults.AdministratorsRoleName, NopCustomerDefaults.RegisteredRoleName, NopCustomerDefaults.GuestsRoleName, NopCustomerDefaults.ForumModeratorsRoleName),
         new ("Public store. Enable shopping cart", StandardPermission.PublicStore.ENABLE_SHOPPING_CART, nameof(StandardPermission.PublicStore), NopCustomerDefaults.AdministratorsRoleName, NopCustomerDefaults.RegisteredRoleName, NopCustomerDefaults.GuestsRoleName, NopCustomerDefaults.ForumModeratorsRoleName),
-        new ("Public store. Enable wishlist", StandardPermission.PublicStore.ENABLE_WISHLIST, nameof(StandardPermission.PublicStore), NopCustomerDefaults.AdministratorsRoleName, NopCustomerDefaults.RegisteredRoleName, NopCustomerDefaults.GuestsRoleName, NopCustomerDefaults.ForumModeratorsRoleName),
         new ("Public store. Allow navigation", StandardPermission.PublicStore.PUBLIC_STORE_ALLOW_NAVIGATION, nameof(StandardPermission.PublicStore), NopCustomerDefaults.AdministratorsRoleName, NopCustomerDefaults.RegisteredRoleName, NopCustomerDefaults.GuestsRoleName, NopCustomerDefaults.ForumModeratorsRoleName),
         new ("Public store. Access a closed store", StandardPermission.PublicStore.ACCESS_CLOSED_STORE, nameof(StandardPermission.PublicStore), NopCustomerDefaults.AdministratorsRoleName),
 

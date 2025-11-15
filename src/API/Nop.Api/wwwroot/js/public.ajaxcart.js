@@ -7,15 +7,13 @@ var AjaxCart = {
     loadWaiting: false,
     usepopupnotifications: false,
     topcartselector: '',
-    topwishlistselector: '',
     flyoutcartselector: '',
     localized_data: false,
 
-    init: function (usepopupnotifications, topcartselector, topwishlistselector, flyoutcartselector, localized_data) {
+    init: function (usepopupnotifications, topcartselector, flyoutcartselector, localized_data) {
         this.loadWaiting = false;
         this.usepopupnotifications = usepopupnotifications;
         this.topcartselector = topcartselector;
-        this.topwishlistselector = topwishlistselector;
         this.flyoutcartselector = flyoutcartselector;
         this.localized_data = localized_data;
     },
@@ -25,7 +23,7 @@ var AjaxCart = {
         this.loadWaiting = display;
     },
 
-    //add a product to the cart/wishlist from the catalog pages
+    //add a product to the cart from the catalog pages
     addproducttocart_catalog: function (urladd) {
         if (this.loadWaiting !== false) {
             return;
@@ -46,7 +44,7 @@ var AjaxCart = {
         });
     },
 
-    //add a product to the cart/wishlist from the product details page
+    //add a product to the cart from the product details page
     addproducttocart_details: function (urladd, formselector) {
         if (this.loadWaiting !== false) {
             return;
@@ -88,9 +86,6 @@ var AjaxCart = {
     success_process: function (response) {
         if (response.updatetopcartsectionhtml) {
             $(AjaxCart.topcartselector).html(response.updatetopcartsectionhtml);
-        }
-        if (response.updatetopwishlistsectionhtml) {
-            $(AjaxCart.topwishlistselector).html(response.updatetopwishlistsectionhtml);
         }
         if (response.updateflyoutcartsectionhtml) {
             $(AjaxCart.flyoutcartselector).replaceWith(response.updateflyoutcartsectionhtml);

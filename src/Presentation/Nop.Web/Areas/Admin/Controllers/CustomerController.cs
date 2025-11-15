@@ -1307,7 +1307,7 @@ public partial class CustomerController : BaseAdminController
 
     #endregion
 
-    #region Current shopping cart/ wishlist
+    #region Current shopping cart
 
     [HttpPost]
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_VIEW)]

@@ -9,7 +9,6 @@ public partial record ProductPriceModel : BaseNopModel
     public string Price { get; set; }
     public decimal? PriceValue { get; set; }
     public bool DisableBuyButton { get; set; }
-    public bool DisableWishlistButton { get; set; }
     public bool DisableAddToCompareListButton { get; set; }
 
     public bool AvailableForPreOrder { get; set; }

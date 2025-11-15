@@ -64,9 +64,6 @@ public record FacebookPixelModel : BaseNopEntityModel
     [NopResourceDisplayName("Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackViewContent")]
     public bool TrackViewContent { get; set; }
 
-    [NopResourceDisplayName("Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackAddToWishlist")]
-    public bool TrackAddToWishlist { get; set; }
-
     [NopResourceDisplayName("Plugins.Widgets.FacebookPixel.Configuration.Fields.TrackInitiateCheckout")]
     public bool TrackInitiateCheckout { get; set; }
 

@@ -127,7 +127,6 @@ public partial record ProductDetailsModel : BaseNopEntityModel
         public AddToCartModel()
         {
             AllowedQuantities = new List<SelectListItem>();
-            ProductToWishlist = new ProductToWishlistModel();
         }
         public int ProductId { get; set; }
 
@@ -137,17 +136,15 @@ public partial record ProductDetailsModel : BaseNopEntityModel
         public string MinimumQuantityNotification { get; set; }
         public List<SelectListItem> AllowedQuantities { get; set; }
         public bool DisableBuyButton { get; set; }
-        public bool DisableWishlistButton { get; set; }
 
         //pre-order
         public bool AvailableForPreOrder { get; set; }
         public DateTime? PreOrderAvailabilityStartDateTimeUtc { get; set; }
         public string PreOrderAvailabilityStartDateTimeUserTime { get; set; }
 
-        //updating existing shopping cart or wishlist item?
+        //updating existing shopping cart?
         public int UpdatedShoppingCartItemId { get; set; }
         public ShoppingCartType? UpdateShoppingCartItemType { get; set; }
-        public ProductToWishlistModel ProductToWishlist { get; set; }
     }
     
     public partial record GiftCardModel : BaseNopModel

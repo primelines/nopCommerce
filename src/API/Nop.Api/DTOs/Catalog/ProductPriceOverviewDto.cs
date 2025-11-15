@@ -23,8 +23,6 @@ public partial record ProductPriceOverviewDto : BaseNopDto
         [JsonProperty("disable_buy_button")]
         public bool DisableBuyButton { get; set; }
 
-        [JsonProperty("disable_wishlist_button")]
-        public bool DisableWishlistButton { get; set; }
 
         [JsonProperty("disable_add_to_compare_list_button")]
         public bool DisableAddToCompareListButton { get; set; }

@@ -74,16 +74,6 @@
                 <span asp-validation-for="CaptchaSettings.ShowOnContactUsPage"></span>
             </div>
         </div>
-        <div class="form-group row" id="ssCaptchaShowOnEmailWishlistToFriendPagepnl">
-            <div class="col-md-3">
-                <nop-override-store-checkbox asp-for="CaptchaSettings.ShowOnEmailWishlistToFriendPage_OverrideForStore" asp-input="CaptchaSettings.ShowOnEmailWishlistToFriendPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
-                <nop-label asp-for="CaptchaSettings.ShowOnEmailWishlistToFriendPage" />
-            </div>
-            <div class="col-md-9">
-                <nop-editor asp-for="CaptchaSettings.ShowOnEmailWishlistToFriendPage" />
-                <span asp-validation-for="CaptchaSettings.ShowOnEmailWishlistToFriendPage"></span>
-            </div>
-        </div>
         <div class="form-group row" id="ssCaptchaShowOnEmailProductToFriendPagepnl">
             <div class="col-md-3">
                 <nop-override-store-checkbox asp-for="CaptchaSettings.ShowOnEmailProductToFriendPage_OverrideForStore" asp-input="CaptchaSettings.ShowOnEmailProductToFriendPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
@@ -218,7 +208,6 @@
             $('#ssCaptchaShowOnRegistrationPagepnl').showElement();
             $('#ssCaptchaShowOnForgotPassworPagepnl').showElement();
             $('#ssCaptchaShowOnContactUsPagepnl').showElement();
-            $('#ssCaptchaShowOnEmailWishlistToFriendPagepnl').showElement();
             $('#ssCaptchaShowOnEmailProductToFriendPagepnl').showElement();
             $('#ssCaptchaShowOnBlogCommentPagepnl').showElement();
             $('#ssCaptchaShowOnNewsCommentPagepnl').showElement();
@@ -238,7 +227,6 @@
             $('#ssCaptchaShowOnRegistrationPagepnl').hideElement();
             $('#ssCaptchaShowOnForgotPassworPagepnl').hideElement();
             $('#ssCaptchaShowOnContactUsPagepnl').hideElement();
-            $('#ssCaptchaShowOnEmailWishlistToFriendPagepnl').hideElement();
             $('#ssCaptchaShowOnEmailProductToFriendPagepnl').hideElement();
             $('#ssCaptchaShowOnBlogCommentPagepnl').hideElement();
             $('#ssCaptchaShowOnNewsCommentPagepnl').hideElement();

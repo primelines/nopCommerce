@@ -31,9 +31,6 @@ public partial record AddToCartDto : BaseNopDto
     [JsonProperty("disable_buy_button")]
     public bool DisableBuyButton { get; set; }
 
-    [JsonProperty("disable_wishlist_button")]
-    public bool DisableWishlistButton { get; set; }
-
     //pre-order
 
     [JsonProperty("available_for_pre_order")]
@@ -45,7 +42,7 @@ public partial record AddToCartDto : BaseNopDto
     [JsonProperty("pre_order_availability_start_date_time_user_time")]
     public string PreOrderAvailabilityStartDateTimeUserTime { get; set; }
 
-    //updating existing shopping cart or wishlist item?
+    //updating existing shopping cart?
 
     [JsonProperty("updated_shopping_cart_item_id")]
     public int UpdatedShoppingCartItemId { get; set; }

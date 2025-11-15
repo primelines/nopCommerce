@@ -68,11 +68,6 @@ public class FacebookPixelConfiguration : BaseEntity
     public bool TrackViewContent { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to track AddToWishlist event
-    /// </summary>
-    public bool TrackAddToWishlist { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether to track InitiateCheckout event
     /// </summary>
     public bool TrackInitiateCheckout { get; set; }

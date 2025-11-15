@@ -42,9 +42,6 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.DisableBuyButton")]
     public bool DisableBuyButton { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.DisableWishlistButton")]
-    public bool DisableWishlistButton { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.AvailableForPreOrder")]
     public bool AvailableForPreOrder { get; set; }
 

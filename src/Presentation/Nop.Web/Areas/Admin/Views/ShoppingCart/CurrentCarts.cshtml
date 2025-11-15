@@ -9,7 +9,7 @@
     //page title
     ViewBag.PageTitle = T("Admin.CurrentCarts.CartsAndWishlists").Text;
     //active menu item (system name)
-    NopHtml.SetActiveMenuItemSystemName("Current shopping carts and wishlists");
+    NopHtml.SetActiveMenuItemSystemName("Current shopping carts");
 }
 
 @{
@@ -136,7 +136,6 @@
 
             <div class="card card-default">
                 <div class="card-body">
-                    <nop-doc-reference asp-string-resource="@T("Admin.Documentation.Reference.ShoppingCartsAndWishlists", Docs.ShoppingCartsAndWishlists + Utm.OnAdmin)" />
 
                     @await Html.PartialAsync("Table", new DataTablesModel
                     {
@@ -246,11 +245,6 @@
         
                         if (row.AttributeInfo && row.AttributeInfo.length > 0)
                             div = "<div>" + row.AttributeInfo + "</div>";
-
-                        if (row.CustomWishlistName && row.CustomWishlistName.length > 0)
-                        {
-                            div += "<div>" + "@T("Enums.Nop.Core.Domain.Orders.ShoppingCartType.Wishlist")" + ": " + $('<div/>').text(row.CustomWishlistName).html() + "</div>";
-                        }
 
                         return '<a href="' + link + '">' + data + '</a>'+div;
                     }

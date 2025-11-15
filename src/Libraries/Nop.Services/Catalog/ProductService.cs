@@ -150,7 +150,6 @@ public partial class ProductService : IProductService
         {
             case (int) LowStockActivity.DisableBuyButton:
                 product.DisableBuyButton = isMinimumStockReached;
-                product.DisableWishlistButton = isMinimumStockReached;
                 await UpdateProductAsync(product);
                 break;
 

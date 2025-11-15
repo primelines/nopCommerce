@@ -343,7 +343,6 @@ public class FacebookPixelService
                 FacebookPixelDefaults.ADD_TO_CART => configurations.Where(configuration => configuration.TrackAddToCart).ToList(),
                 FacebookPixelDefaults.PURCHASE => configurations.Where(configuration => configuration.TrackPurchase).ToList(),
                 FacebookPixelDefaults.VIEW_CONTENT => configurations.Where(configuration => configuration.TrackViewContent).ToList(),
-                FacebookPixelDefaults.ADD_TO_WISHLIST => configurations.Where(configuration => configuration.TrackAddToWishlist).ToList(),
                 FacebookPixelDefaults.INITIATE_CHECKOUT => configurations.Where(configuration => configuration.TrackInitiateCheckout).ToList(),
                 FacebookPixelDefaults.SEARCH => configurations.Where(configuration => configuration.TrackSearch).ToList(),
                 FacebookPixelDefaults.CONTACT => configurations.Where(configuration => configuration.TrackContact).ToList(),
@@ -556,7 +555,6 @@ public class FacebookPixelService
         var configurations = (await GetConfigurationsAsync(storeId ?? 0)).Where(configuration => eventName switch
         {
             FacebookPixelDefaults.ADD_TO_CART => configuration.TrackAddToCart,
-            FacebookPixelDefaults.ADD_TO_WISHLIST => configuration.TrackAddToWishlist,
             FacebookPixelDefaults.PURCHASE => configuration.TrackPurchase,
             FacebookPixelDefaults.VIEW_CONTENT => configuration.TrackViewContent,
             FacebookPixelDefaults.INITIATE_CHECKOUT => configuration.TrackInitiateCheckout,
@@ -650,9 +648,7 @@ public class FacebookPixelService
         if (item.CustomerId != customer.Id)
             throw new NopException("Shopping was not initiated by customer");
 
-        var eventName = item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart
-            ? FacebookPixelDefaults.ADD_TO_CART
-            : FacebookPixelDefaults.ADD_TO_WISHLIST;
+        var eventName = FacebookPixelDefaults.ADD_TO_CART;
 
         var product = await _productService.GetProductByIdAsync(item.ProductId);
         var categoryMapping = (await _categoryService.GetProductCategoriesByProductIdAsync(product?.Id ?? 0)).FirstOrDefault();
@@ -1109,9 +1105,7 @@ public class FacebookPixelService
     {
         await HandleFunctionAsync(async () =>
         {
-            var eventName = shoppingCartItem.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart
-                ? FacebookPixelDefaults.ADD_TO_CART
-                : FacebookPixelDefaults.ADD_TO_WISHLIST;
+            var eventName =FacebookPixelDefaults.ADD_TO_CART;
 
             return await HandleEventAsync(() => PrepareAddToCartEventModelAsync(shoppingCartItem), eventName, shoppingCartItem.StoreId);
         });

@@ -223,7 +223,7 @@ public partial class AdminMenu : IAdminMenu
                         },
                         new()
                         {
-                            SystemName = "Current shopping carts and wishlists",
+                            SystemName = "Current shopping carts",
                             Title = await _localizationService.GetResourceAsync("Admin.CurrentCarts.CartsAndWishlists"),
                             PermissionNames = new List<string> { StandardPermission.Orders.CURRENT_CARTS_MANAGE },
                             Url = GetMenuItemUrl("ShoppingCart", "CurrentCarts"),

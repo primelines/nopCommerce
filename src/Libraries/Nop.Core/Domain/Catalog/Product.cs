@@ -240,11 +240,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// </summary>
     public bool DisableBuyButton { get; set; }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether to disable "Add to wishlist" button
-    /// </summary>
-    public bool DisableWishlistButton { get; set; }
-
     #endregion
 
     #region Pre-order

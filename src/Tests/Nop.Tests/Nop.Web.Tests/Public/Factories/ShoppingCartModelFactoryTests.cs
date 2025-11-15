@@ -21,7 +21,6 @@ public class ShoppingCartModelFactoryTests : WebTest
     private IProductService _producService;
     private ILocalizationService _localizationService;
     private ShoppingCartItem _shoppingCartItem;
-    private ShoppingCartItem _wishlistItem;
     private ICustomerService _customerService;
 
     [OneTimeSetUp]
@@ -47,17 +46,10 @@ public class ShoppingCartModelFactoryTests : WebTest
             StoreId = store.Id
         };
 
-        _wishlistItem = new ShoppingCartItem
-        {
-            ProductId = 2,
-            Quantity = 1,
-            CustomerId = customer.Id,
-            ShoppingCartType = ShoppingCartType.Wishlist
-        };
 
         var shoppingCartRepo = GetService<IRepository<ShoppingCartItem>>();
 
-        await shoppingCartRepo.InsertAsync(new List<ShoppingCartItem> { _shoppingCartItem, _wishlistItem });
+        await shoppingCartRepo.InsertAsync(new List<ShoppingCartItem> { _shoppingCartItem });
 
         customer.HasShoppingCartItems = true;
         await _customerService.UpdateCustomerAsync(customer);
@@ -67,7 +59,6 @@ public class ShoppingCartModelFactoryTests : WebTest
     public async Task TearDown()
     {
         await _shoppingCartService.DeleteShoppingCartItemAsync(_shoppingCartItem);
-        await _shoppingCartService.DeleteShoppingCartItemAsync(_wishlistItem);
 
         var customer = await _workContext.GetCurrentCustomerAsync();
         customer.HasShoppingCartItems = false;
@@ -106,22 +97,6 @@ public class ShoppingCartModelFactoryTests : WebTest
         model.OrderReviewData.Display.Should().BeTrue();
     }
 
-    [Test]
-    public async Task CanPrepareWishlistModel()
-    {
-        var model = await _shoppingCartModelFactory.PrepareWishlistModelAsync(new WishlistModel(),
-            new List<ShoppingCartItem> { _wishlistItem });
-
-        var customer = await _workContext.GetCurrentCustomerAsync();
-
-        model.CustomerFullname.Should().Be("John Smith");
-        model.CustomerGuid.Should().Be(customer.CustomerGuid);
-        model.EmailWishlistEnabled.Should().BeTrue();
-        model.IsEditable.Should().BeTrue();
-        model.Items.Any().Should().BeTrue();
-        model.Items.Count.Should().Be(1);
-        model.Warnings.Count.Should().Be(0);
-    }
 
     [Test]
     public async Task CanPrepareMiniShoppingCartModel()
@@ -154,15 +129,6 @@ public class ShoppingCartModelFactoryTests : WebTest
     {
         var model = await _shoppingCartModelFactory.PrepareEstimateShippingResultModelAsync(new List<ShoppingCartItem> { _shoppingCartItem }, new EstimateShippingModel(), true);
         model.Errors.Any().Should().BeFalse();
-    }
-
-    [Test]
-    public async Task CanPrepareWishlistEmailAFriendModel()
-    {
-        var model = await _shoppingCartModelFactory.PrepareWishlistEmailAFriendModelAsync(new WishlistEmailAFriendModel(),
-            false);
-
-        model.YourEmailAddress.Should().Be(NopTestsDefaults.AdminEmail);
     }
 
     [Test]

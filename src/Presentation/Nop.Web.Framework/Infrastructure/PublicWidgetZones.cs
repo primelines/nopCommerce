@@ -229,6 +229,4 @@ public static partial class PublicWidgetZones
     public static string VendorDetailsTop => "vendordetails_top";
     public static string VendorInfoBottom => "vendor_info_bottom";
     public static string VendorInfoTop => "vendor_info_top";
-    public static string WishlistBottom => "wishlist_bottom";
-    public static string WishlistTop => "wishlist_top";
 }

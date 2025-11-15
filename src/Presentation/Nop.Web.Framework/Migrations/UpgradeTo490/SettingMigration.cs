@@ -253,19 +253,6 @@ public class SettingMigration : MigrationBase
         robotsTxtSettings.DisallowPaths.Sort();
         settingService.SaveSetting(robotsTxtSettings, settings => settings.DisallowPaths);
 
-        //#1921
-        var shoppingCartSettings = settingService.LoadSetting<ShoppingCartSettings>();
-        if (!settingService.SettingExists(shoppingCartSettings, settings => settings.AllowMultipleWishlist))
-        {
-            shoppingCartSettings.AllowMultipleWishlist = true;
-            settingService.SaveSetting(shoppingCartSettings, settings => settings.AllowMultipleWishlist);
-        }
-        if (!settingService.SettingExists(shoppingCartSettings, settings => settings.MaximumNumberOfCustomWishlist))
-        {
-            shoppingCartSettings.MaximumNumberOfCustomWishlist = 10;
-            settingService.SaveSetting(shoppingCartSettings, settings => settings.MaximumNumberOfCustomWishlist);
-        }
-
         //#7730
         var aiSettings = settingService.LoadSetting<ArtificialIntelligenceSettings>();
 

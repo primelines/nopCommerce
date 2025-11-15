@@ -106,11 +106,6 @@ public static partial class NopRouteNames
         public const string CART = "ShoppingCart";
 
         /// <summary>
-        /// Gets the wishlist route name
-        /// </summary>
-        public const string WISHLIST = "Wishlist";
-
-        /// <summary>
         /// Gets the gift card balance route name
         /// </summary>
         public const string CHECK_GIFT_CARD_BALANCE = "CheckGiftCardBalance";
@@ -220,11 +215,6 @@ public static partial class NopRouteNames
         /// Gets the file upload route name
         /// </summary>
         public const string DOWNLOAD_GET_FILE_UPLOAD = "DownloadGetFileUpload";
-
-        /// <summary>
-        /// Gets the email wishlist route name
-        /// </summary>
-        public const string EMAIL_WISHLIST = "EmailWishlist";
 
         /// <summary>
         /// Gets the sample download route name
@@ -648,10 +638,6 @@ public static partial class NopRouteNames
         /// </summary>
         public const string ADD_PRODUCT_TO_COMPARE = "AddProductToCompare";
 
-        /// <summary>
-        /// Gets the add custom wishlist route name
-        /// </summary>
-        public const string ADD_WISHLIST = "AddWishlist";
 
         /// <summary>
         /// Gets the back in stock subscribe send route name
@@ -689,24 +675,9 @@ public static partial class NopRouteNames
         public const string CUSTOMER_REMOVE_EXTERNAL_ASSOCIATION = "CustomerRemoveExternalAssociation";
 
         /// <summary>
-        /// Gets the delete custom wishlist route name
-        /// </summary>
-        public const string DELETE_CUSTOM_WISHLIST = "DeleteCustomWishlist";
-
-        /// <summary>
         /// Gets the estimate shipping route name
         /// </summary>
         public const string ESTIMATE_SHIPPING = "EstimateShipping";
-
-        /// <summary>
-        /// Gets the move product to custom wishlist route name. Used on catalog/product detail page.
-        /// </summary>
-        public const string MOVE_PRODUCT_TO_CUSTOM_WISHLIST = "MoveProductToCustomWishList";
-
-        /// <summary>
-        /// Gets the move shopping cart to custom wishlist route name. Used on catalog/product detail page.
-        /// </summary>
-        public const string MOVE_CART_TO_CUSTOM_WISHLIST = "MoveToCustomWishlist";
 
         /// <summary>
         /// Gets the product estimate shipping route name

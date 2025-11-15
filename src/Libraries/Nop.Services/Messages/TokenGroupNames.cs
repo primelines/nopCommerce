@@ -111,11 +111,6 @@ public static partial class TokenGroupNames
     public static string EmailAFriendTokens => "Email a friend tokens";
 
     /// <summary>
-    /// Represents tokens with information about the sending wishlist to a friend
-    /// </summary>
-    public static string WishlistToFriendTokens => "Wishlist to friend tokens";
-
-    /// <summary>
     /// Represents tokens with information about validation of the VAT request
     /// </summary>
     public static string VatValidation => "VAT validation tokens";

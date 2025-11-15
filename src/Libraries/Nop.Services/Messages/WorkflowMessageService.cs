@@ -1597,53 +1597,6 @@ public partial class WorkflowMessageService : IWorkflowMessageService
         }).ToListAsync();
     }
 
-    /// <summary>
-    /// Sends wishlist "email a friend" message
-    /// </summary>
-    /// <param name="customer">Customer</param>
-    /// <param name="languageId">Message language identifier</param>
-    /// <param name="customerEmail">Customer's email</param>
-    /// <param name="friendsEmail">Friend's email</param>
-    /// <param name="personalMessage">Personal message</param>
-    /// <param name="wishlistUrl">Wishlist URL</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the queued email identifier
-    /// </returns>
-    public virtual async Task<IList<int>> SendWishlistEmailAFriendMessageAsync(Customer customer, int languageId,
-        string customerEmail, string friendsEmail, string personalMessage, string wishlistUrl)
-    {
-        ArgumentNullException.ThrowIfNull(customer);
-
-        var store = await _storeContext.GetCurrentStoreAsync();
-        languageId = await EnsureLanguageIsActiveAsync(languageId, store.Id);
-
-        var messageTemplates = await GetActiveMessageTemplatesAsync(MessageTemplateSystemNames.WISHLIST_TO_FRIEND_MESSAGE, store.Id);
-        if (!messageTemplates.Any())
-            return new List<int>();
-
-        //tokens
-        var commonTokens = new List<Token>();
-        await _messageTokenProvider.AddCustomerTokensAsync(commonTokens, customer);
-        commonTokens.Add(new Token("Wishlist.PersonalMessage", personalMessage, true));
-        commonTokens.Add(new Token("Wishlist.Email", customerEmail));
-        commonTokens.Add(new Token("Wishlist.URLForCustomer", wishlistUrl, true));
-
-        return await messageTemplates.SelectAwait(async messageTemplate =>
-        {
-            //email account
-            var emailAccount = await GetEmailAccountOfMessageTemplateAsync(messageTemplate, languageId);
-
-            var tokens = new List<Token>(commonTokens);
-            await _messageTokenProvider.AddStoreTokensAsync(tokens, store, emailAccount, languageId);
-
-            //event notification
-            await _eventPublisher.MessageTokensAddedAsync(messageTemplate, tokens);
-
-            return await SendNotificationAsync(messageTemplate, emailAccount, languageId, tokens, friendsEmail, string.Empty);
-        }).ToListAsync();
-    }
-
     #endregion
 
     #region Return requests

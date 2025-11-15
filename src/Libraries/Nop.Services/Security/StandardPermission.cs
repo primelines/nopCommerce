@@ -150,7 +150,6 @@ public partial class StandardPermission
     {
         public const string DISPLAY_PRICES = $"{nameof(PublicStore)}.DisplayPrices";
         public const string ENABLE_SHOPPING_CART = $"{nameof(PublicStore)}.EnableShoppingCart";
-        public const string ENABLE_WISHLIST = $"{nameof(PublicStore)}.EnableWishlist";
         public const string PUBLIC_STORE_ALLOW_NAVIGATION = $"{nameof(PublicStore)}.PublicStoreAllowNavigation";
         public const string ACCESS_CLOSED_STORE = $"{nameof(PublicStore)}.AccessClosedStore";
     }

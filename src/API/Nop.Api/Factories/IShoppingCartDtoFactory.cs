@@ -1,4 +1,4 @@
-using Nop.Core.Domain.Orders;
+﻿using Nop.Core.Domain.Orders;
 using Nop.Api.DTOs.Media;
 using Nop.Api.DTOs.ShoppingCart;
 
@@ -36,18 +36,6 @@ public partial interface IShoppingCartDtoFactory
         IList<ShoppingCartItem> cart, bool isEditable = true,
         bool validateCheckoutAttributes = false,
         bool prepareAndDisplayOrderReviewData = false);
-
-    /// <summary>
-    /// Prepare the wishlist model
-    /// </summary>
-    /// <param name="model">Wishlist model</param>
-    /// <param name="cart">List of the shopping cart item</param>
-    /// <param name="isEditable">Whether model is editable</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the wishlist model
-    /// </returns>
-    Task<WishlistDto> PrepareWishlistDtoAsync(WishlistDto model, IList<ShoppingCartItem> cart, bool isEditable = true);
 
     /// <summary>
     /// Prepare the mini shopping cart model
@@ -90,16 +78,6 @@ public partial interface IShoppingCartDtoFactory
     /// </returns>
     Task<EstimateShippingResultDto> PrepareEstimateShippingResultModelAsync(IList<ShoppingCartItem> cart, EstimateShippingDto request, bool cacheOfferedShippingOptions);
 
-    /// <summary>
-    /// Prepare the wishlist email a friend model
-    /// </summary>
-    /// <param name="model">Wishlist email a friend model</param>
-    /// <param name="excludeProperties">Whether to exclude populating of model properties from the entity</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the wishlist email a friend model
-    /// </returns>
-    Task<WishlistEmailAFriendDto> PrepareWishlistEmailAFriendDtoAsync(WishlistEmailAFriendDto model, bool excludeProperties);
 
     /// <summary>
     /// Prepare the cart item picture model

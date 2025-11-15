@@ -295,7 +295,6 @@ public partial class CommonDtoFactory : ICommonDtoFactory
             IsAuthenticated = await _customerService.IsRegisteredAsync(customer),
             CustomerName = await _customerService.IsRegisteredAsync(customer) ? await _customerService.FormatUsernameAsync(customer) : string.Empty,
             ShoppingCartEnabled = await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART),
-            WishlistEnabled = await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST),
             AllowPrivateMessages = await _customerService.IsRegisteredAsync(customer) && _forumSettings.AllowPrivateMessages,
             UnreadPrivateMessages = unreadMessage,
             AlertMessage = alertMessage,
@@ -304,11 +303,7 @@ public partial class CommonDtoFactory : ICommonDtoFactory
         if (customer.HasShoppingCartItems)
         {
             model.ShoppingCartItems = (await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id))
-                .Sum(item => item.Quantity);
-
-            model.WishlistItems = (await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id))
-                .Sum(item => item.Quantity);
-        }
+                .Sum(item => item.Quantity);        }
 
         return model;
     }
@@ -383,7 +378,6 @@ public partial class CommonDtoFactory : ICommonDtoFactory
     //    var model = new FooterDto
     //    {
     //        StoreName = await _localizationService.GetLocalizedAsync(store, x => x.Name),
-    //        WishlistEnabled = await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST),
     //        ShoppingCartEnabled = await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART),
     //        SitemapEnabled = _sitemapSettings.SitemapEnabled,
     //        SearchEnabled = _catalogSettings.ProductSearchEnabled,
@@ -413,7 +407,6 @@ public partial class CommonDtoFactory : ICommonDtoFactory
     //        DisplayCustomerOrdersFooterItem = _displayDefaultFooterItemSettings.DisplayCustomerOrdersFooterItem,
     //        DisplayCustomerAddressesFooterItem = _displayDefaultFooterItemSettings.DisplayCustomerAddressesFooterItem,
     //        DisplayShoppingCartFooterItem = _displayDefaultFooterItemSettings.DisplayShoppingCartFooterItem,
-    //        DisplayWishlistFooterItem = _displayDefaultFooterItemSettings.DisplayWishlistFooterItem,
     //        DisplayApplyVendorAccountFooterItem = _displayDefaultFooterItemSettings.DisplayApplyVendorAccountFooterItem
     //    };
 

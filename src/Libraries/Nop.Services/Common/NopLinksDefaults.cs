@@ -137,11 +137,6 @@ public static partial class NopLinksDefaults
         public static string ReturnRequests => "https://docs.nopcommerce.com/running-your-store/order-management/return-requests.html";
 
         /// <summary>
-        /// Gets a URL of the shopping carts and wishlists docs page
-        /// </summary>
-        public static string ShoppingCartsAndWishlists => "https://docs.nopcommerce.com/running-your-store/order-management/shopping-carts-and-wishlists.html";
-
-        /// <summary>
         /// Gets a URL of the RFQ docs page
         /// </summary>
         public static string RFQ => "https://docs.nopcommerce.com/running-your-store/order-management/rfq.html";

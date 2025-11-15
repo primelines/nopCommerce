@@ -347,7 +347,6 @@ public partial class CommonModelFactory : ICommonModelFactory
             CustomerName = await _customerService.IsRegisteredAsync(customer) ? await _customerService.FormatUsernameAsync(customer) : string.Empty,
             ShoppingCartEnabled = await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART),
             UsePopupNotifications = _messagesSettings.UsePopupNotifications,
-            WishlistEnabled = await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST),
             AllowPrivateMessages = await _customerService.IsRegisteredAsync(customer) && _forumSettings.AllowPrivateMessages,
             UnreadPrivateMessages = unreadMessage,
             AlertMessage = alertMessage,
@@ -356,9 +355,6 @@ public partial class CommonModelFactory : ICommonModelFactory
         if (customer.HasShoppingCartItems)
         {
             model.ShoppingCartItems = (await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id))
-                .Sum(item => item.Quantity);
-
-            model.WishlistItems = (await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.Wishlist, store.Id))
                 .Sum(item => item.Quantity);
         }
 

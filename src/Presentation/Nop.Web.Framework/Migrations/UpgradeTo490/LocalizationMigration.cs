@@ -87,8 +87,6 @@ public class LocalizationMigration : MigrationBase
             "Admin.Configuration.Settings.GeneralCommon.DisplayDefaultFooterItemSettingsModel.DisplayShoppingCartFooterItem.Hint",
             "Admin.Configuration.Settings.GeneralCommon.DisplayDefaultFooterItemSettingsModel.DisplaySitemapFooterItem",
             "Admin.Configuration.Settings.GeneralCommon.DisplayDefaultFooterItemSettingsModel.DisplaySitemapFooterItem.Hint",
-            "Admin.Configuration.Settings.GeneralCommon.DisplayDefaultFooterItemSettingsModel.DisplayWishlistFooterItem",
-            "Admin.Configuration.Settings.GeneralCommon.DisplayDefaultFooterItemSettingsModel.DisplayWishlistFooterItem.Hint",
             "Admin.Configuration.Settings.GeneralCommon.DisplayDefaultMenuItemSettings.DisplayBlogMenuItem",
             "Admin.Configuration.Settings.GeneralCommon.DisplayDefaultMenuItemSettings.DisplayBlogMenuItem.Hint",
             "Admin.Configuration.Settings.GeneralCommon.DisplayDefaultMenuItemSettings.DisplayContactUsMenuItem",
@@ -439,7 +437,6 @@ public class LocalizationMigration : MigrationBase
             ["Literals.Nop.Core.Http.NopRouteNames.General.Vendors"] = "Vendors",
             ["Literals.Nop.Core.Http.NopRouteNames.General.Sitemap"] = "Sitemap",
             ["Literals.Nop.Core.Http.NopRouteNames.General.Cart"] = "Shopping cart",
-            ["Literals.Nop.Core.Http.NopRouteNames.General.Wishlist"] = "Wishlist",
 
             //#5199
             ["Enums.Nop.Core.Domain.Forums.EditorType.MarkdownEditor"] = "Markdown editor",
@@ -470,26 +467,6 @@ public class LocalizationMigration : MigrationBase
             ["Admin.Translation.Translated.Success"] = "Pre-translation has been completed (all possible fields are pre-filled)",
             ["Admin.Translation.Translated.Warning"] = "Errors occurred during pre-translation, see details in the log",
             ["Admin.Translation.Translated.NothingToTranslate"] = "Nothing to translate as all fields contain text",
-
-            //#1921
-            ["Admin.Configuration.Settings.ShoppingCart.AllowMultipleWishlist"] = "Allow multiple wishlists",
-            ["Admin.Configuration.Settings.ShoppingCart.AllowMultipleWishlist.Hint"] = "A value indicating whether customers can use multiple wishlists.",
-            ["Admin.Configuration.Settings.ShoppingCart.MaximumNumberOfCustomWishlist"] = "Maximum number of custom wishlists",
-            ["Admin.Configuration.Settings.ShoppingCart.MaximumNumberOfCustomWishlist.Hint"] = "Specify the maximum number of custom wishlists a customer can use.",
-            ["Wishlist.AddNewWishlist"] = "Add new wishlist",
-            ["Wishlist.AddCustomWishlist"] = "Custom wishlist",
-            ["Wishlist.EnterWishlistName"] = "Enter wishlist name",
-            ["Wishlist.Default"] = "Wishlist",
-            ["Wishlist.MoveToCustomWishlist"] = "Move to wishlist",
-            ["Wishlist.NotFound"] = "Wishlist not found.",
-            ["Wishlist.DeleteWishlist"] = "Delete wishlist",
-            ["Wishlist.SelectWishlist"] = "Specify your wishlist",
-            ["Wishlist.MaximumNumberReached"] = "You cannot create more than {0} custom wishlists.",
-            ["Wishlist.NameRequired"] = "A wishlist name is required.",
-            ["Products.ProductHasBeenAddedToTheCustomWishlist.Link"] = "The product has been added to your <a href=\"{0}\">{1}</a>",
-            ["Products.ProductHasBeenAddedToTheWishlistAndMoved.Link"] = "The product has been added to your <a href=\"{0}\">wishlist</a>. Want to move it to a <a href=\"#\" onclick=\"{1}\">custom wishlist</a>?",
-            ["Wishlist.MultipleWishlistNotForGuest"] = "The multiple wishlist functionality is only available to registered customers.",
-            ["Wishlist.NotAllowMultipleWishlist"] = "Multiple wishlist functionality is disabled.",
 
             //#7739
             ["Admin.System.Maintenance.DeleteThumbFiles.FilesCount"] = "Total files: {0}",

@@ -378,22 +378,6 @@ public partial interface IWorkflowMessageService
     Task<IList<int>> SendProductEmailAFriendMessageAsync(Customer customer, int languageId,
         Product product, string customerEmail, string friendsEmail, string personalMessage);
 
-    /// <summary>
-    /// Sends wishlist "email a friend" message
-    /// </summary>
-    /// <param name="customer">Customer</param>
-    /// <param name="languageId">Message language identifier</param>
-    /// <param name="customerEmail">Customer's email</param>
-    /// <param name="friendsEmail">Friend's email</param>
-    /// <param name="personalMessage">Personal message</param>
-    /// <param name="wishlistUrl">Wishlist URL</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the queued email identifier
-    /// </returns>
-    Task<IList<int>> SendWishlistEmailAFriendMessageAsync(Customer customer, int languageId,
-        string customerEmail, string friendsEmail, string personalMessage, string wishlistUrl);
-
     #endregion
 
     #region Return requests

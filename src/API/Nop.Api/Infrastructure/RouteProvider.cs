@@ -65,11 +65,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"cart/selectshippingoption",
             defaults: new { controller = "ShoppingCart", action = "SelectShippingOption" });
 
-        //wishlist
-        endpointRouteBuilder.MapControllerRoute(name: "Wishlist",
-            pattern: $"{lang}/wishlist/{{customerGuid?}}",
-            defaults: new { controller = "ShoppingCart", action = "Wishlist" });
-
         //checkout attribute change (AJAX)
         endpointRouteBuilder.MapControllerRoute(name: "CheckoutAttributeChange",
             pattern: "shoppingcart/checkoutattributechange/{{isEditable}}",
@@ -281,10 +276,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"subscribenewsletter",
             defaults: new { controller = "Newsletter", action = "SubscribeNewsletter" });
 
-        //email wishlist
-        endpointRouteBuilder.MapControllerRoute(name: "EmailWishlist",
-            pattern: $"{lang}/emailwishlist",
-            defaults: new { controller = "ShoppingCart", action = "EmailWishlist" });
 
         //login page for checkout as guest
         endpointRouteBuilder.MapControllerRoute(name: "LoginCheckoutAsGuest",

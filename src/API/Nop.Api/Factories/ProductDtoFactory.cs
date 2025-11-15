@@ -313,10 +313,6 @@ public partial class ProductDtoFactory : IProductDtoFactory
                                       !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART) ||
                                       !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES);
 
-        //add to wishlist button
-        priceModel.DisableWishlistButton = product.DisableWishlistButton ||
-                                           !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST) ||
-                                           !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES);
         //compare products
         priceModel.DisableAddToCompareListButton = !_catalogSettings.CompareProductsEnabled;
 
@@ -739,13 +735,11 @@ public partial class ProductDtoFactory : IProductDtoFactory
             model.MinimumQuantityNotification = string.Format(await _localizationService.GetResourceAsync("Products.MinimumQuantityNotification"), product.OrderMinimumQuantity);
         }
 
-        //'add to cart', 'add to wishlist' buttons
+        //'add to cart' button
         model.DisableBuyButton = product.DisableBuyButton || !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART);
-        model.DisableWishlistButton = product.DisableWishlistButton || !await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST);
         if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
         {
             model.DisableBuyButton = true;
-            model.DisableWishlistButton = true;
         }
         //pre-order
         if (product.AvailableForPreOrder)

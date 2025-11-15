@@ -105,7 +105,6 @@ public class LocalizationMigration : MigrationBase
             "PrivateMessages.Sent.ToColumn",
             "Profile.FullName",
             "RewardPoints.Message.Expired",
-            "ShoppingCart.AddToWishlist.Update",
             "ShoppingCart.UpdateCartItem",
             "Tax.SelectType",
             "Admin.Configuration.Settings.GeneralCommon.BlockTitle.FullText",

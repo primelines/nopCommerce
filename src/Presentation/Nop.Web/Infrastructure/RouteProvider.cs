@@ -66,10 +66,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"cart/selectshippingoption",
             defaults: new { controller = "ShoppingCart", action = "SelectShippingOption" });
 
-        //wishlist
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.General.WISHLIST,
-            pattern: $"{lang}/wishlist/{{customerGuid?}}",
-            defaults: new { controller = "ShoppingCart", action = "Wishlist" });
 
         //checkout attribute change (AJAX)
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.CHECKOUT_ATTRIBUTE_CHANGE,
@@ -202,26 +198,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"addproducttocart/details/{{productId:min(0)}}/{{shoppingCartTypeId:min(0)}}",
             defaults: new { controller = "ShoppingCart", action = "AddProductToCart_Details" });
 
-        //move product to custom wishlist - catalog/product detail page. (AJAX)
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.MOVE_PRODUCT_TO_CUSTOM_WISHLIST,
-            pattern: $"moveproducttocustomwishlist/{{productId:min(0)}}",
-            defaults: new { controller = "ShoppingCart", action = "MoveProductToCustomWishlist" });
-
-        //move shopping cart to wishlist. (AJAX)
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.MOVE_CART_TO_CUSTOM_WISHLIST,
-            pattern: $"movetocustomwishlist",
-            defaults: new { controller = "ShoppingCart", action = "MoveToCustomWishlist" });
-
-        //delete custom wishlist. (AJAX)
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.DELETE_CUSTOM_WISHLIST,
-            pattern: $"deletecustomwishlist/{{wishlistId:min(0)}}",
-            defaults: new { controller = "ShoppingCart", action = "DeleteWishlist" });
-
-        // add custom wishlist. (AJAX)
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.ADD_WISHLIST,
-            pattern: $"addcustomwishlist",
-            defaults: new { controller = "ShoppingCart", action = "AddWishlist" });
-
         //comparing products (AJAX)
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.ADD_PRODUCT_TO_COMPARE,
             pattern: $"compareproducts/add/{{productId:min(0)}}",
@@ -314,11 +290,6 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.SUBSCRIBE_NEWSLETTER,
             pattern: $"subscribenewsletter",
             defaults: new { controller = "Newsletter", action = "SubscribeNewsletter" });
-
-        //email wishlist
-        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Standard.EMAIL_WISHLIST,
-            pattern: $"{lang}/emailwishlist",
-            defaults: new { controller = "ShoppingCart", action = "EmailWishlist" });
 
         //login page for checkout as guest
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Standard.LOGIN_CHECKOUT_AS_GUEST,

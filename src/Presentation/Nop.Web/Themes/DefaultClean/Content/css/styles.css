@@ -2013,8 +2013,7 @@ label, label + * {
   background-color: var(--accent-blue-active-color);
 }
 
-.item-box .add-to-compare-list-button,
-.item-box .add-to-wishlist-button {
+.item-box .add-to-compare-list-button{
   width: 20%;
   border-left: 1px solid #fff !important;
   background-color: #eaeaea;

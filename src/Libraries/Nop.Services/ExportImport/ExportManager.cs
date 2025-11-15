@@ -1260,7 +1260,6 @@ public partial class ExportManager : IExportManager
             await xmlWriter.WriteStringAsync("AllowedQuantities", product.AllowedQuantities, await IgnoreExportProductPropertyAsync(p => p.AllowedQuantities));
             await xmlWriter.WriteStringAsync("NotReturnable", product.NotReturnable, await IgnoreExportProductPropertyAsync(p => p.NotReturnable));
             await xmlWriter.WriteStringAsync("DisableBuyButton", product.DisableBuyButton, await IgnoreExportProductPropertyAsync(p => p.DisableBuyButton));
-            await xmlWriter.WriteStringAsync("DisableWishlistButton", product.DisableWishlistButton, await IgnoreExportProductPropertyAsync(p => p.DisableWishlistButton));
             await xmlWriter.WriteStringAsync("AvailableForPreOrder", product.AvailableForPreOrder, await IgnoreExportProductPropertyAsync(p => p.AvailableForPreOrder));
             await xmlWriter.WriteStringAsync("PreOrderAvailabilityStartDateTimeUtc", product.PreOrderAvailabilityStartDateTimeUtc, await IgnoreExportProductPropertyAsync(p => p.AvailableForPreOrder));
             await xmlWriter.WriteStringAsync("Price", product.Price);
@@ -1565,7 +1564,6 @@ public partial class ExportManager : IExportManager
             new PropertyByName<Product>("AllowedQuantities", (p, _) => p.AllowedQuantities, await IgnoreExportProductPropertyAsync(p => p.AllowedQuantities)),
             new PropertyByName<Product>("NotReturnable", (p, _) => p.NotReturnable, await IgnoreExportProductPropertyAsync(p => p.NotReturnable)),
             new PropertyByName<Product>("DisableBuyButton", (p, _) => p.DisableBuyButton, await IgnoreExportProductPropertyAsync(p => p.DisableBuyButton)),
-            new PropertyByName<Product>("DisableWishlistButton", (p, _) => p.DisableWishlistButton, await IgnoreExportProductPropertyAsync(p => p.DisableWishlistButton)),
             new PropertyByName<Product>("AvailableForPreOrder", (p, _) => p.AvailableForPreOrder, await IgnoreExportProductPropertyAsync(p => p.AvailableForPreOrder)),
             new PropertyByName<Product>("PreOrderAvailabilityStartDateTimeUtc", (p, _) => p.PreOrderAvailabilityStartDateTimeUtc, await IgnoreExportProductPropertyAsync(p => p.AvailableForPreOrder)),
             new PropertyByName<Product>("Price", (p, _) => p.Price),

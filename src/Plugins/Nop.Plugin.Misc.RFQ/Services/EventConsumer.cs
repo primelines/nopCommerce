@@ -86,7 +86,7 @@ public class EventConsumer : IConsumer<AdminMenuCreatedEvent>,
         if (plugin == null || !_pluginManager.IsPluginActive(plugin))
             return;
 
-        var menuItemSystemName = "Current shopping carts and wishlists";
+        var menuItemSystemName = "Current shopping carts";
 
         var baseMenuItem = eventMessage.RootMenuItem.GetItemBySystemName("Sales");
         baseMenuItem.InsertAfter(menuItemSystemName, new AdminMenuItem

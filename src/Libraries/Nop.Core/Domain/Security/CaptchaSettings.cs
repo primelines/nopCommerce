@@ -33,11 +33,6 @@ public partial class CaptchaSettings : ISettings
     public bool ShowOnContactUsPage { get; set; }
 
     /// <summary>
-    /// A value indicating whether CAPTCHA should be displayed on the wishlist page
-    /// </summary>
-    public bool ShowOnEmailWishlistToFriendPage { get; set; }
-
-    /// <summary>
     /// A value indicating whether CAPTCHA should be displayed on the "email a friend" page
     /// </summary>
     public bool ShowOnEmailProductToFriendPage { get; set; }

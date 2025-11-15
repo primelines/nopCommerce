@@ -59,11 +59,6 @@ public partial class ProductEditorSettings : ISettings
     public bool DisableBuyButton { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether 'Disable wishlist button' field is shown
-    /// </summary>
-    public bool DisableWishlistButton { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether 'Available for pre-order' field is shown
     /// </summary>
     public bool AvailableForPreOrder { get; set; }

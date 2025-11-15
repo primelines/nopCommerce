@@ -89,7 +89,6 @@ public class SchemaMigration : ForwardOnlyMigration
         Create.TableFor<GiftCard>();
         Create.TableFor<GiftCardUsageHistory>();
         Create.TableFor<OrderNote>();
-        Create.TableFor<CustomWishlist>();
         Create.TableFor<ShoppingCartItem>();
         Create.TableFor<Store>();
         Create.TableFor<StoreMapping>();

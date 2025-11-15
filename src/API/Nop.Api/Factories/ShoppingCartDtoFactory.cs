@@ -465,104 +465,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
     }
 
     /// <summary>
-    /// Prepare the wishlist item model
-    /// </summary>
-    /// <param name="sci">Shopping cart item</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the shopping cart item model
-    /// </returns>
-    protected virtual async Task<ShoppingCartItemDto> PrepareWishlistItemModelAsync(ShoppingCartItem sci)
-    {
-        ArgumentNullException.ThrowIfNull(sci);
-
-        var product = await _productService.GetProductByIdAsync(sci.ProductId);
-
-        var cartItemModel = new ShoppingCartItemDto
-        {
-            Id = sci.Id,
-            Sku = await _productService.FormatSkuAsync(product, sci.AttributesXml),
-            ProductId = product.Id,
-            ProductName = await _localizationService.GetLocalizedAsync(product, x => x.Name),
-            ProductSeName = await _urlRecordService.GetSeNameAsync(product),
-            Quantity = sci.Quantity,
-            AttributeInfo = await _productAttributeFormatter.FormatAttributesAsync(product, sci.AttributesXml),
-        };
-
-        //allow editing?
-        //1. setting enabled?
-        //2. simple product?
-        //3. has attribute or gift card?
-        //4. visible individually?
-        cartItemModel.AllowItemEditing = _shoppingCartSettings.AllowCartItemEditing &&
-                                         !string.IsNullOrEmpty(cartItemModel.AttributeInfo);
-
-        //allowed quantities
-        var allowedQuantities = _productService.ParseAllowedQuantities(product);
-        foreach (var qty in allowedQuantities)
-        {
-            cartItemModel.AllowedQuantities.Add(new SelectListItemDto
-            {
-                Text = qty.ToString(),
-                Value = qty.ToString(),
-                Selected = sci.Quantity == qty
-            });
-        }
-
-        //unit prices
-        var currentCurrency = await _workContext.GetWorkingCurrencyAsync();
-
-        var (shoppingCartUnitPriceWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, (await _shoppingCartService.GetUnitPriceAsync(sci, true)).unitPrice);
-        var shoppingCartUnitPriceWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(shoppingCartUnitPriceWithDiscountBase, currentCurrency);
-        cartItemModel.UnitPrice = await _priceFormatter.FormatPriceAsync(shoppingCartUnitPriceWithDiscount);
-        cartItemModel.UnitPriceValue = shoppingCartUnitPriceWithDiscount;
-        
-
-        //sub total
-        var (subTotal, shoppingCartItemDiscountBase, _, maximumDiscountQty) = await _shoppingCartService.GetSubTotalAsync(sci, true);
-        var (shoppingCartItemSubTotalWithDiscountBase, _) = await _taxService.GetProductPriceAsync(product, subTotal);
-        var shoppingCartItemSubTotalWithDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(shoppingCartItemSubTotalWithDiscountBase, currentCurrency);
-        cartItemModel.SubTotal = await _priceFormatter.FormatPriceAsync(shoppingCartItemSubTotalWithDiscount);
-        cartItemModel.SubTotalValue = shoppingCartItemSubTotalWithDiscount;
-        cartItemModel.MaximumDiscountedQty = maximumDiscountQty;
-
-        //display an applied discount amount
-        if (shoppingCartItemDiscountBase > decimal.Zero)
-        {
-            (shoppingCartItemDiscountBase, _) = await _taxService.GetProductPriceAsync(product, shoppingCartItemDiscountBase);
-            if (shoppingCartItemDiscountBase > decimal.Zero)
-            {
-                var shoppingCartItemDiscount = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(shoppingCartItemDiscountBase, currentCurrency);
-                cartItemModel.Discount = await _priceFormatter.FormatPriceAsync(shoppingCartItemDiscount);
-                cartItemModel.DiscountValue = shoppingCartItemDiscount;
-            }
-        }
-        
-
-        //picture
-        if (_shoppingCartSettings.ShowProductImagesOnWishList)
-        {
-            cartItemModel.Picture = await PrepareCartItemPictureDtoAsync(sci,
-                _mediaSettings.CartThumbPictureSize, true, cartItemModel.ProductName);
-        }
-
-        //item warnings
-        var itemWarnings = await _shoppingCartService.GetShoppingCartItemWarningsAsync(
-            await _workContext.GetCurrentCustomerAsync(),
-            sci.ShoppingCartType,
-            product,
-            sci.StoreId,
-            sci.AttributesXml,
-            sci.Quantity,
-            false,
-            sci.Id);
-        foreach (var warning in itemWarnings)
-            cartItemModel.Warnings.Add(warning);
-
-        return cartItemModel;
-    }
-
-    /// <summary>
     /// Prepare the order review data model
     /// </summary>
     /// <param name="cart">List of the shopping cart item</param>
@@ -862,53 +764,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
         if (prepareAndDisplayOrderReviewData)
         {
             model.OrderReviewData = await PrepareOrderReviewDataModelAsync(cart);
-        }
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare the wishlist model
-    /// </summary>
-    /// <param name="model">Wishlist model</param>
-    /// <param name="cart">List of the shopping cart item</param>
-    /// <param name="isEditable">Whether model is editable</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the wishlist model
-    /// </returns>
-    public virtual async Task<WishlistDto> PrepareWishlistDtoAsync(WishlistDto model, IList<ShoppingCartItem> cart, bool isEditable = true)
-    {
-        ArgumentNullException.ThrowIfNull(cart);
-
-        ArgumentNullException.ThrowIfNull(model);
-
-        model.EmailWishlistEnabled = _shoppingCartSettings.EmailWishlistEnabled;
-        model.IsEditable = isEditable;
-        model.DisplayAddToCart = await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART);
-        model.DisplayTaxShippingInfo = _catalogSettings.DisplayTaxShippingInfoWishlist;
-
-        if (!cart.Any())
-            return model;
-
-        //simple properties
-        var customer = await _customerService.GetShoppingCartCustomerAsync(cart);
-
-        model.CustomerGuid = customer.CustomerGuid;
-        model.CustomerFullname = await _customerService.GetCustomerFullNameAsync(customer);
-        model.ShowProductImages = _shoppingCartSettings.ShowProductImagesOnWishList;
-        model.ShowSku = _catalogSettings.ShowSkuOnProductDetailsPage;
-
-        //cart warnings
-        var cartWarnings = await _shoppingCartService.GetShoppingCartWarningsAsync(cart, string.Empty, false);
-        foreach (var warning in cartWarnings)
-            model.Warnings.Add(warning);
-
-        //cart items
-        foreach (var sci in cart)
-        {
-            var cartItemModel = await PrepareWishlistItemModelAsync(sci);
-            model.Items.Add(cartItemModel);
         }
 
         return model;
@@ -1346,29 +1201,6 @@ public partial class ShoppingCartDtoFactory : IShoppingCartDtoFactory
                 if (!model.ShippingOptions.Any(so => so.Selected))
                     model.ShippingOptions.First().Selected = true;
             }
-        }
-
-        return model;
-    }
-
-    /// <summary>
-    /// Prepare the wishlist email a friend model
-    /// </summary>
-    /// <param name="model">Wishlist email a friend model</param>
-    /// <param name="excludeProperties">Whether to exclude populating of model properties from the entity</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the wishlist email a friend model
-    /// </returns>
-    public virtual async Task<WishlistEmailAFriendDto> PrepareWishlistEmailAFriendDtoAsync(WishlistEmailAFriendDto model, bool excludeProperties)
-    {
-        ArgumentNullException.ThrowIfNull(model);
-
-        model.DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnEmailWishlistToFriendPage;
-        if (!excludeProperties)
-        {
-            var customer = await _workContext.GetCurrentCustomerAsync();
-            model.YourEmailAddress = customer.Email;
         }
 
         return model;

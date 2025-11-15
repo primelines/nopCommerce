@@ -24,7 +24,7 @@ public partial class CatalogSettings : ISettings
     public bool DisplayDiscontinuedMessageForUnpublishedProducts { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether "Published" or "Disable buy/wishlist buttons" flags should be updated after order cancellation (deletion).
+    /// Gets or sets a value indicating whether "Published" or "Disable buy buttons" flags should be updated after order cancellation (deletion).
     /// Of course, when qty > configured minimum stock level
     /// </summary>
     public bool PublishBackProductWhenCancellingOrders { get; set; }
@@ -423,11 +423,6 @@ public partial class CatalogSettings : ISettings
     /// Gets or sets a value indicating whether to display information about shipping and tax on shopping cart page (used in Germany)
     /// </summary>
     public bool DisplayTaxShippingInfoShoppingCart { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to display information about shipping and tax on wishlist page (used in Germany)
-    /// </summary>
-    public bool DisplayTaxShippingInfoWishlist { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to display information about shipping and tax on order details page (used in Germany)

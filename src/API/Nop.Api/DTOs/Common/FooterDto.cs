@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Nop.Api.Framework.Dtos;
 
 namespace Nop.Api.DTOs.Common;
@@ -17,9 +17,6 @@ public partial record FooterDto : BaseNopDto
 
     [JsonProperty("is_home_page")]
     public bool IsHomePage { get; set; }
-
-    [JsonProperty("wishlist_enabled")]
-    public bool WishlistEnabled { get; set; }
 
     [JsonProperty("shopping_cart_enabled")]
     public bool ShoppingCartEnabled { get; set; }
@@ -108,8 +105,6 @@ public partial record FooterDto : BaseNopDto
     [JsonProperty("display_shopping_cart_footer_item")]
     public bool DisplayShoppingCartFooterItem { get; set; }
 
-    [JsonProperty("display_wishlist_footer_item")]
-    public bool DisplayWishlistFooterItem { get; set; }
 
     [JsonProperty("display_apply_vendor_account_footer_item")]
     public bool DisplayApplyVendorAccountFooterItem { get; set; }

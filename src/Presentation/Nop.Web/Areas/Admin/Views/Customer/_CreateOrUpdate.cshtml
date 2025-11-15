@@ -14,9 +14,6 @@
     const string hideAddressesBlockAttributeName = "CustomerPage.HideAddressesBlock";
     var hideAddressesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideAddressesBlockAttributeName, defaultValue: true);
 
-    const string hideShoppingCartAndWishlistBlockAttributeName = "CustomerPage.HideShoppingCartAndWishlistBlock";
-    var hideShoppingCartAndWishlistBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideShoppingCartAndWishlistBlockAttributeName, defaultValue: true);
-
     const string hideActivityLogBlockAttributeName = "CustomerPage.HideActivityLogBlock";
     var hideActivityLogBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideActivityLogBlockAttributeName, defaultValue: true);
 
@@ -46,7 +43,6 @@
                         <nop-card asp-name="customer-orders" asp-icon="fas fa-cart-plus" asp-title="@T("Admin.Customers.Customers.Orders")" asp-hide-block-attribute-name="@hideOrdersBlockAttributeName" asp-hide="@hideOrdersBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Orders", Model)</nop-card>
                     }
                     <nop-card asp-name="customer-address" asp-icon="far fa-address-book" asp-title="@T("Admin.Customers.Customers.Addresses")" asp-hide-block-attribute-name="@hideAddressesBlockAttributeName" asp-hide="@hideAddressesBlock" asp-advanced="true">@await Html.PartialAsync("_CreateOrUpdate.Addresses", Model)</nop-card>
-                    <nop-card asp-name="customer-cart" asp-icon="fas fa-cart-shopping" asp-title="@T("Admin.Customers.Customers.ShoppingCartAndWishlist")" asp-hide-block-attribute-name="@hideShoppingCartAndWishlistBlockAttributeName" asp-hide="@hideShoppingCartAndWishlistBlock" asp-advanced="true">@await Html.PartialAsync("_CreateOrUpdate.CurrentShoppingCart", Model)</nop-card>
                     @if (hasViewCustomerActivityPermission)
                     {
                         <nop-card asp-name="customer-activitylog" asp-icon="fas fa-list-alt" asp-title="@T("Admin.Customers.Customers.ActivityLog")" asp-hide-block-attribute-name="@hideActivityLogBlockAttributeName" asp-hide="@hideActivityLogBlock" asp-advanced="true">@await Html.PartialAsync("_CreateOrUpdate.ActivityLog", Model)</nop-card>

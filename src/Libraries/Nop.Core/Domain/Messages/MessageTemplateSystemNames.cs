@@ -169,11 +169,6 @@ public static partial class MessageTemplateSystemNames
     /// </summary>
     public const string EMAIL_A_FRIEND_MESSAGE = "Service.EmailAFriend";
 
-    /// <summary>
-    /// Represents system name of 'Email a friend' message with wishlist
-    /// </summary>
-    public const string WISHLIST_TO_FRIEND_MESSAGE = "Wishlist.EmailAFriend";
-
     #endregion
 
     #region Return requests

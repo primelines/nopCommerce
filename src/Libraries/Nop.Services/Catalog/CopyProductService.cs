@@ -567,7 +567,6 @@ public partial class CopyProductService : ICopyProductService
             AllowedQuantities = product.AllowedQuantities,
             NotReturnable = product.NotReturnable,
             DisableBuyButton = product.DisableBuyButton,
-            DisableWishlistButton = product.DisableWishlistButton,
             AvailableForPreOrder = product.AvailableForPreOrder,
             PreOrderAvailabilityStartDateTimeUtc = product.PreOrderAvailabilityStartDateTimeUtc,
             Price = product.Price,

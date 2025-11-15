@@ -976,13 +976,6 @@ public partial class InstallationService
                     EmailAccountId = eaGeneral.Id
                 },
                 new() {
-                    Name = MessageTemplateSystemNames.WISHLIST_TO_FRIEND_MESSAGE,
-                    Subject = "%Store.Name%. Wishlist",
-                    Body = $"<p>{Environment.NewLine}<a href=\"%Store.URL%\"> %Store.Name%</a>{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}%Wishlist.Email% was shopping on %Store.Name% and wanted to share a wishlist with you.{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}For more info click <a target=\"_blank\" href=\"%Wishlist.URLForCustomer%\">here</a>{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}%Wishlist.PersonalMessage%{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}%Store.Name%{Environment.NewLine}</p>{Environment.NewLine}",
-                    IsActive = true,
-                    EmailAccountId = eaGeneral.Id
-                },
-                new() {
                     Name = MessageTemplateSystemNames.NEW_ORDER_NOTE_ADDED_CUSTOMER_NOTIFICATION,
                     Subject = "%Store.Name%. New order note has been added",
                     Body = $"<p>{Environment.NewLine}<a href=\"%Store.URL%\">%Store.Name%</a>{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}Hello %Customer.FullName%,{Environment.NewLine}<br />{Environment.NewLine}New order note has been added to your account:{Environment.NewLine}<br />{Environment.NewLine}\"%Order.NewNoteText%\".{Environment.NewLine}<br />{Environment.NewLine}<a target=\"_blank\" href=\"%Order.OrderURLForCustomer%\">%Order.OrderURLForCustomer%</a>{Environment.NewLine}</p>{Environment.NewLine}",
@@ -1430,7 +1423,6 @@ public partial class InstallationService
             DisplayTaxShippingInfoProductDetailsPage = isGermany,
             DisplayTaxShippingInfoProductBoxes = isGermany,
             DisplayTaxShippingInfoShoppingCart = isGermany,
-            DisplayTaxShippingInfoWishlist = isGermany,
             DisplayTaxShippingInfoOrderDetailsPage = isGermany,
             DefaultCategoryPageSizeOptions = "6, 3, 9",
             DefaultCategoryPageSize = 6,
@@ -1694,20 +1686,11 @@ public partial class InstallationService
         await SaveSettingAsync(dictionary, new ShoppingCartSettings
         {
             DisplayCartAfterAddingProduct = false,
-            DisplayWishlistAfterAddingProduct = false,
             MaximumShoppingCartItems = 1000,
-            MaximumWishlistItems = 1000,
-            AllowMultipleWishlist = true,
-            MaximumNumberOfCustomWishlist = 10,
-            AllowOutOfStockItemsToBeAddedToWishlist = false,
-            MoveItemsFromWishlistToCart = true,
             CartsSharedBetweenStores = false,
             ShowProductImagesOnShoppingCart = true,
-            ShowProductImagesOnWishList = true,
             ShowDiscountBox = true,
             ShowGiftCardBox = true,
-            EmailWishlistEnabled = true,
-            AllowAnonymousUsersToEmailWishlist = false,
             MiniShoppingCartEnabled = true,
             ShowProductImagesInMiniShoppingCart = true,
             MiniShoppingCartProductNumber = 5,
@@ -1943,7 +1926,6 @@ public partial class InstallationService
             ShowOnBlogCommentPage = false,
             ShowOnContactUsPage = false,
             ShowOnEmailProductToFriendPage = false,
-            ShowOnEmailWishlistToFriendPage = false,
             ShowOnForgotPasswordPage = false,
             ShowOnForum = false,
             ShowOnLoginPage = false,
@@ -2055,7 +2037,6 @@ public partial class InstallationService
                 "/customer/info",
                 "/customer/productreviews",
                 "/deletepm",
-                "/emailwishlist",
                 "/eucookielawaccept",
                 "/inboxupdate",
                 "/newsletter/subscriptionactivation",
@@ -2080,7 +2061,6 @@ public partial class InstallationService
                 "/uploadfilecheckoutattribute",
                 "/uploadfileproductattribute",
                 "/uploadfilereturnrequest",
-                "/wishlist"
             ]
         });
 
@@ -3230,11 +3210,6 @@ public partial class InstallationService
                     Name = "Public store. Add to shopping cart"
                 },
                 new() {
-                    SystemKeyword = "PublicStore.AddToWishlist",
-                    Enabled = false,
-                    Name = "Public store. Add to wishlist"
-                },
-                new() {
                     SystemKeyword = "PublicStore.SuccessfulLogin",
                     Enabled = false,
                     Name = "Public store. Successful login"
@@ -3732,14 +3707,6 @@ public partial class InstallationService
                 MenuItemType = MenuItemType.StandardPage,
                 RouteName = NopRouteNames.General.CART,
                 Title = "Shopping cart",
-                Published = true
-            },
-            new MenuItem
-            {
-                MenuId = footerMyAccount.Id,
-                MenuItemType = MenuItemType.StandardPage,
-                RouteName = NopRouteNames.General.WISHLIST,
-                Title = "Wishlist",
                 Published = true
             },
             new MenuItem

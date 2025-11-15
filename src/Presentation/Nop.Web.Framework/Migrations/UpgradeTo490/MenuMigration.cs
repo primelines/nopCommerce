@@ -318,18 +318,6 @@ public class MenuMigration : Migration
         {
             MenuId = footerMyAccount.Id,
             MenuItemType = MenuItemType.StandardPage,
-            RouteName = NopRouteNames.General.WISHLIST,
-            Title = "Wishlist",
-            Published = IsSettingEnabled("displaydefaultfooteritemsettings.displaywishlistfooteritem", out var displaywishlistfooteritem)
-        });
-
-        if (displaywishlistfooteritem is not null)
-            _settingService.DeleteSetting(displaywishlistfooteritem);
-
-        _menuItemRepository.Insert(new M.MenuItem
-        {
-            MenuId = footerMyAccount.Id,
-            MenuItemType = MenuItemType.StandardPage,
             RouteName = NopRouteNames.General.APPLY_VENDOR_ACCOUNT,
             Title = "Apply for vendor account",
             Published = IsSettingEnabled("displaydefaultfooteritemsettings.displayapplyvendoraccountfooteritem", out var displayapplyvendoraccountfooteritem) &&

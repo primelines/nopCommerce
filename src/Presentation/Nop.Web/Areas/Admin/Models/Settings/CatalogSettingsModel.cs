@@ -303,10 +303,6 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     public bool DisplayTaxShippingInfoShoppingCart { get; set; }
     public bool DisplayTaxShippingInfoShoppingCart_OverrideForStore { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.DisplayTaxShippingInfoWishlist")]
-    public bool DisplayTaxShippingInfoWishlist { get; set; }
-    public bool DisplayTaxShippingInfoWishlist_OverrideForStore { get; set; }
-
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.DisplayTaxShippingInfoOrderDetailsPage")]
     public bool DisplayTaxShippingInfoOrderDetailsPage { get; set; }
     public bool DisplayTaxShippingInfoOrderDetailsPage_OverrideForStore { get; set; }

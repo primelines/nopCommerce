@@ -224,7 +224,6 @@ public partial class MessageTokenProvider : IMessageTokenProvider
                         "%Customer.PasswordRecoveryURL%",
                         "%Customer.AccountActivationURL%",
                         "%Customer.EmailRevalidationURL%",
-                        "%Wishlist.URLForCustomer%"
                     }
                 },
 
@@ -481,16 +480,6 @@ public partial class MessageTokenProvider : IMessageTokenProvider
                     {
                         "%EmailAFriend.PersonalMessage%",
                         "%EmailAFriend.Email%"
-                    }
-                },
-
-                //wishlist to friend tokens
-                {
-                    TokenGroupNames.WishlistToFriendTokens,
-                    new[]
-                    {
-                        "%Wishlist.PersonalMessage%",
-                        "%Wishlist.Email%"
                     }
                 },
 
@@ -1594,7 +1583,6 @@ public partial class MessageTokenProvider : IMessageTokenProvider
             MessageTemplateSystemNames.NEWSLETTER_SUBSCRIPTION_DEACTIVATION_MESSAGE => [TokenGroupNames.StoreTokens, TokenGroupNames.SubscriptionTokens],
 
             MessageTemplateSystemNames.EMAIL_A_FRIEND_MESSAGE => [TokenGroupNames.StoreTokens, TokenGroupNames.CustomerTokens, TokenGroupNames.ProductTokens, TokenGroupNames.EmailAFriendTokens],
-            MessageTemplateSystemNames.WISHLIST_TO_FRIEND_MESSAGE => [TokenGroupNames.StoreTokens, TokenGroupNames.CustomerTokens, TokenGroupNames.WishlistToFriendTokens],
 
             MessageTemplateSystemNames.NEW_RETURN_REQUEST_STORE_OWNER_NOTIFICATION or
             MessageTemplateSystemNames.NEW_RETURN_REQUEST_CUSTOMER_NOTIFICATION or

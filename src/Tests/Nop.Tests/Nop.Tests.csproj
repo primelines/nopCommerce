@@ -34,4 +34,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Nop.Web.Tests\Public\Validators\ShoppingCart\" />
+  </ItemGroup>
+
 </Project>
